@@ -1,0 +1,41 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "extendscript-debug",
+            "request": "launch",
+            "name": "Launch Current JSX in InDesign",
+            "hostAppSpecifier": "indesign-20.064",
+            "engineName": "main",
+            "bringToFront": true,
+            "debugLevel": 1
+        },
+        {
+            "type": "extendscript-debug",
+            "request": "launch",
+            "name": "Launch Selected JSX in InDesign",
+            "hostAppSpecifier": "indesign-20.064",
+            "engineName": "main",
+            "script": "${workspaceFolder}/lib/adobe/${input:scriptName}",
+            "bringToFront": true,
+            "debugLevel": 1
+        },
+        {
+            "type": "extendscript-debug",
+            "request": "attach",
+            "name": "Attach to InDesign Engine",
+            "hostAppSpecifier": "indesign-20.064",
+            "engineName": "main"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "scriptName",
+            "description": "Select a JSX script to run",
+            "type": "pickString",
+            "options": [
+                "test.jsx"
+            ]
+        }
+    ]
+}

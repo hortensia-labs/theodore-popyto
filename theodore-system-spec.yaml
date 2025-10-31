@@ -1,0 +1,927 @@
+# Theodore Thesis Build System - Operation Specification
+# This file defines all system operations, their dependencies, and implementation details
+# Version: 1.0.0
+# Last Updated: 2024-12-19
+
+metadata:
+  system_name: "Theodore Thesis Build System"
+  version: "1.0.0"
+  description: "Modern thesis build system using Just + Python"
+  architecture: "Just orchestration + Python business logic"
+  supported_platforms: ["macOS", "Linux", "Windows"]
+
+# Global system configuration
+global_config:
+  python_version: ">=3.8"
+  required_tools:
+    - name: "just"
+      version: ">=1.0.0"
+      description: "Command runner for recipe orchestration"
+    - name: "python3"
+      version: ">=3.8"
+      description: "Python interpreter for business logic"
+    - name: "pandoc"
+      version: ">=2.0"
+      description: "Document conversion engine"
+    - name: "gum"
+      version: ">=0.10.0"
+      description: "Beautiful terminal UI components"
+      optional: true
+    - name: "fzf"
+      version: ">=0.40.0"
+      description: "Fuzzy finder for interactive selection"
+      optional: true
+
+  directories:
+    project_root: "."
+    sections_dir: "sections" # this is the directory where the sections are stored
+    generated_dir: "generated" # this is the directory where the compiled files are stored
+    output_dir: "output" # this is the directory where the final publishing files are stored
+    references_dir: "references" # this is the directory where the bibliography references files are stored
+    book_dir: "book" # this is the directory where the InDesign files are stored
+    chapters_dir: "book/chapters" # this is the directory where the InDesign book documents (.indd) are stored
+    styles_dir: "styles" # this is the directory where the InDesign templates and styles are stored
+    media_dir: "media" # this is the directory where the media files are stored
+    scripts_dir: "lib/python"
+    recipes_dir: "lib/recipes"
+    tests_dir: "tests"
+    docs_dir: "docs"
+
+# System operations organized by category
+operations:
+  # ============================================================================
+  #> CORE SYSTEM OPERATIONS
+  # ============================================================================
+
+  system:
+    setup:
+      name: "System Setup"
+      description: "First-time system setup with intelligent defaults"
+      just_recipe: "setup"
+      python_module: "theodore.core.setup"
+      category: "system"
+      user_facing: true
+      interactive: true
+      dependencies:
+        system: []
+        external: ["python3"]
+      inputs:
+        - name: "project_path"
+          type: "path"
+          required: false
+          description: "Project root directory"
+        - name: "interactive"
+          type: "boolean"
+          default: true
+          description: "Run interactive setup wizard"
+      outputs:
+        - ".env file with project configuration"
+        - "Directory structure creation"
+        - "Initial project templates"
+      steps:
+        - "Detect existing project structure"
+        - "Create missing directories"
+        - "Generate .env from template"
+        - "Install Python dependencies"
+        - "Validate tool availability"
+        - "Create sample configuration"
+      error_handling:
+        - "Missing dependencies: Install automatically or provide instructions"
+        - "Permission errors: Suggest alternative locations"
+        - "Existing project: Offer merge or backup options"
+      performance_target: "< 30 seconds"
+
+    doctor:
+      name: "System Health Check"
+      description: "Comprehensive system health check and auto-repair"
+      just_recipe: "doctor"
+      python_module: "theodore.core.doctor"
+      category: "system"
+      user_facing: true
+      interactive: false
+      dependencies:
+        system: []
+        external: ["python3"]
+      inputs: []
+      outputs:
+        - "System health report"
+        - "Automatic fixes applied"
+        - "Manual fix recommendations"
+      steps:
+        - "Check tool availability and versions"
+        - "Validate directory structure"
+        - "Test file permissions"
+        - "Verify configuration files"
+        - "Check Python module availability"
+        - "Test external tool integration"
+        - "Generate health report"
+      error_handling:
+        - "Missing tools: Provide installation instructions"
+        - "Version conflicts: Suggest upgrade paths"
+        - "Permission issues: Suggest fixes"
+      performance_target: "< 10 seconds"
+
+    config:
+      name: "Interactive Configuration"
+      description: "Interactive configuration wizard for system customization"
+      just_recipe: "config"
+      python_module: "theodore.interactive.setup"
+      category: "system"
+      user_facing: true
+      interactive: true
+      dependencies:
+        system: []
+        external: ["python3", "gum"]
+      inputs:
+        - name: "section"
+          type: "string"
+          required: false
+          description: "Specific configuration section to modify"
+      outputs:
+        - "Updated .env configuration"
+        - "Configuration validation report"
+      steps:
+        - "Load current configuration"
+        - "Present interactive configuration menu"
+        - "Validate user inputs"
+        - "Update configuration files"
+        - "Test configuration changes"
+      error_handling:
+        - "Invalid inputs: Re-prompt with validation"
+        - "Configuration conflicts: Show current vs new values"
+      performance_target: "< 5 seconds startup"
+
+  # ============================================================================
+  #> COMPILATION OPERATIONS
+  # ============================================================================
+
+  compilation:
+    compile_interactive:
+      name: "Interactive Section Compilation"
+      description: "Interactive compilation with checkbox step selection"
+      just_recipe: "compile-interactive"
+      python_module: "theodore.interactive.compilation"
+      category: "compilation"
+      user_facing: true
+      interactive: true
+      dependencies:
+        system: ["validate_section"]
+        external: ["python3", "gum", "pandoc"]
+      inputs:
+        - name: "section"
+          type: "string"
+          required: true
+          description: "Section folder name (e.g., '2-marco-teorico')"
+      outputs:
+        - "Compiled markdown file in generated/markdown/"
+        - "Converted ICML file in generated/icml/"
+        - "Processing log with step details"
+      steps:
+        - "Validate section structure"
+        - "Present checkbox interface for optional steps"
+        - "Execute base compilation (validate + merge + convert)"
+        - "Execute selected optional steps"
+        - "Generate compilation report"
+      optional_steps:
+        - name: "remove_numbers"
+          description: "Remove heading numbers from generated files"
+          default: false
+        - name: "update_links"
+          description: "Update InDesign book document links"
+          default: false
+        - name: "scan_references"
+          description: "Build cross-reference registry"
+          default: true
+        - name: "validate_output"
+          description: "Validate generated ICML files"
+          default: true
+        - name: "format_bibliography"
+          description: "Apply bibliography-specific formatting"
+          default: false
+        - name: "open_indesign"
+          description: "Open InDesign after compilation"
+          default: false
+      error_handling:
+        - "Section not found: List available sections"
+        - "Validation failure: Show specific errors and fixes"
+        - "Conversion errors: Provide pandoc troubleshooting"
+      performance_target: "< 15 seconds for typical section"
+
+    choose_compile:
+      name: "Section Selection + Interactive Compilation"
+      description: "Two-step interactive: select section then compilation options"
+      just_recipe: "choose-compile"
+      python_module: "theodore.interactive.compilation"
+      category: "compilation"
+      user_facing: true
+      interactive: true
+      dependencies:
+        system: ["compile_interactive", "list_sections"]
+        external: ["python3", "fzf", "gum"]
+      inputs: []
+      outputs:
+        - "Same as compile_interactive for selected section"
+      steps:
+        - "Present fzf interface for section selection"
+        - "Call compile_interactive with selected section"
+      error_handling:
+        - "No sections available: Guide user to create sections"
+        - "Selection cancelled: Exit gracefully"
+      performance_target: "< 2 seconds for section list generation"
+
+    compile_section:
+      name: "Direct Section Compilation"
+      description: "Non-interactive compilation of specific section"
+      just_recipe: "compile-section"
+      python_module: "theodore.processors.compilation"
+      category: "compilation"
+      user_facing: true
+      interactive: false
+      dependencies:
+        system: ["validate_section", "merge_section", "convert_icml"]
+        external: ["python3", "pandoc"]
+      inputs:
+        - name: "section"
+          type: "string"
+          required: true
+          description: "Section folder name"
+        - name: "options"
+          type: "object"
+          required: false
+          description: "Compilation options"
+      outputs:
+        - "Merged markdown file"
+        - "Converted ICML file"
+        - "Processing log"
+      steps:
+        - "Validate section structure and files"
+        - "Merge markdown files in order"
+        - "Convert merged markdown to ICML"
+        - "Post-process ICML for InDesign compatibility"
+      error_handling:
+        - "Section validation failure: Detailed error report"
+        - "Merge conflicts: Manual resolution guidance"
+        - "Conversion errors: Pandoc debugging assistance"
+      performance_target: "< 10 seconds for typical section"
+
+    compile_all:
+      name: "Compile All Sections"
+      description: "Batch compilation of all valid sections"
+      just_recipe: "compile-all"
+      python_module: "theodore.processors.batch_compilation"
+      category: "compilation"
+      user_facing: true
+      interactive: false
+      dependencies:
+        system: ["compile_section", "list_sections"]
+        external: ["python3", "pandoc"]
+      inputs:
+        - name: "parallel"
+          type: "boolean"
+          default: true
+          description: "Enable parallel processing"
+        - name: "max_workers"
+          type: "integer"
+          default: 4
+          description: "Maximum parallel workers"
+      outputs:
+        - "Compiled files for all sections"
+        - "Batch processing report"
+        - "Error summary for failed sections"
+      steps:
+        - "Discover all valid sections"
+        - "Sort sections by dependencies"
+        - "Execute compilation (parallel or sequential)"
+        - "Generate comprehensive report"
+      error_handling:
+        - "Partial failures: Continue with remaining sections"
+        - "Dependency conflicts: Show resolution order"
+      performance_target: "< 60 seconds for typical thesis"
+
+  # ============================================================================
+  #> VALIDATION OPERATIONS
+  # ============================================================================
+
+  validation:
+    validate_section:
+      name: "Section Structure Validation"
+      description: "Validate section directory structure and files"
+      just_recipe: "validate-section"
+      python_module: "theodore.core.validation"
+      category: "validation"
+      user_facing: true
+      interactive: false
+      dependencies:
+        system: []
+        external: ["python3"]
+      inputs:
+        - name: "section"
+          type: "string"
+          required: true
+          description: "Section folder name"
+      outputs:
+        - "Validation report with pass/fail status"
+        - "Detailed error descriptions"
+        - "Suggested fixes for issues"
+      steps:
+        - "Check section directory exists"
+        - "Validate content/ subdirectory structure"
+        - "Check for required markdown files"
+        - "Validate file encoding and syntax"
+        - "Check for common formatting issues"
+      error_handling:
+        - "Missing directories: Offer to create structure"
+        - "Invalid files: Specific error locations"
+        - "Encoding issues: Suggest conversion tools"
+      performance_target: "< 3 seconds per section"
+
+    validate_all:
+      name: "Full Project Validation"
+      description: "Comprehensive validation of entire project"
+      just_recipe: "validate"
+      python_module: "theodore.core.validation"
+      category: "validation"
+      user_facing: true
+      interactive: false
+      dependencies:
+        system: ["validate_section"]
+        external: ["python3"]
+      inputs:
+        - name: "strict"
+          type: "boolean"
+          default: false
+          description: "Enable strict validation mode"
+      outputs:
+        - "Project-wide validation report"
+        - "Section-by-section breakdown"
+        - "Overall health score"
+      steps:
+        - "Validate project structure"
+        - "Check configuration files"
+        - "Validate all sections"
+        - "Check cross-references"
+        - "Validate bibliography references"
+        - "Generate summary report"
+      error_handling:
+        - "Multiple section failures: Prioritized fix list"
+        - "Configuration errors: Step-by-step repair"
+      performance_target: "< 30 seconds for full project"
+
+  # ============================================================================
+  #> BIBLIOGRAPHY OPERATIONS
+  # ============================================================================
+
+  bibliography:
+    bibliography_interactive:
+      name: "Interactive Bibliography Management"
+      description: "Interactive interface for bibliography operations"
+      just_recipe: "bibliography-interactive"
+      python_module: "theodore.interactive.bibliography"
+      category: "bibliography"
+      user_facing: true
+      interactive: true
+      dependencies:
+        system:
+          ["validate_bibliography", "sort_bibliography", "format_bibliography"]
+        external: ["python3", "gum"]
+      inputs: []
+      outputs:
+        - "Processed bibliography files"
+        - "Operation summary report"
+      steps:
+        - "Present bibliography operation menu"
+        - "Execute selected operations"
+        - "Show results and recommendations"
+      available_operations:
+        - "Sort bibliography entries alphabetically"
+        - "Validate bibliography references"
+        - "Format bibliography ICML"
+        - "Check for duplicate entries"
+        - "Validate citation format"
+      error_handling:
+        - "Invalid bibliography format: Suggest corrections"
+        - "Missing references: Show unfound citations"
+      performance_target: "< 5 seconds menu startup"
+
+    sort_bibliography:
+      name: "Sort Bibliography File"
+      description: "Alphabetically sort bibliography entries"
+      just_recipe: "sort-bibliography"
+      python_module: "theodore.processors.bibliography"
+      category: "bibliography"
+      user_facing: true
+      interactive: false
+      dependencies:
+        system: []
+        external: ["python3"]
+      inputs:
+        - name: "file_path"
+          type: "path"
+          required: true
+          description: "Path to bibliography markdown file"
+        - name: "output_path"
+          type: "path"
+          required: false
+          description: "Output file path (default: add -sorted suffix)"
+      outputs:
+        - "Sorted bibliography file"
+        - "Sort operation log"
+      steps:
+        - "Load bibliography file"
+        - "Parse bibliography entries"
+        - "Sort entries alphabetically by key"
+        - "Preserve entry formatting"
+        - "Write sorted file"
+      error_handling:
+        - "File not found: Verify path and permissions"
+        - "Parse errors: Show problematic entries"
+      performance_target: "< 2 seconds for typical bibliography"
+
+    validate_bibliography:
+      name: "Bibliography Reference Validation"
+      description: "Validate bibliography references and citations"
+      just_recipe: "validate-bibliography"
+      python_module: "theodore.processors.bibliography"
+      category: "bibliography"
+      user_facing: true
+      interactive: false
+      dependencies:
+        system: []
+        external: ["python3"]
+      inputs:
+        - name: "bibliography_file"
+          type: "path"
+          required: true
+          description: "Path to bibliography file"
+        - name: "sections_dir"
+          type: "path"
+          required: false
+          description: "Sections directory to check citations"
+      outputs:
+        - "Validation report with issues found"
+        - "List of unused bibliography entries"
+        - "List of missing citations"
+      steps:
+        - "Parse bibliography entries"
+        - "Extract citation keys from sections"
+        - "Cross-reference citations with bibliography"
+        - "Check for formatting consistency"
+        - "Generate validation report"
+      error_handling:
+        - "Parse errors: Show line numbers and issues"
+        - "Missing citations: Show usage locations"
+      performance_target: "< 10 seconds for full validation"
+
+    format_bibliography_icml:
+      name: "Format Bibliography ICML"
+      description: "Apply bibliography-specific formatting to ICML files"
+      just_recipe: "format-bibliography-icml"
+      python_module: "theodore.processors.bibliography"
+      category: "bibliography"
+      user_facing: true
+      interactive: false
+      dependencies:
+        system: []
+        external: ["python3"]
+      inputs:
+        - name: "section"
+          type: "string"
+          required: true
+          description: "Bibliography section name"
+        - name: "icml_file"
+          type: "path"
+          required: false
+          description: "ICML file path (default: from section)"
+      outputs:
+        - "Formatted ICML file with bibliography styles"
+        - "Formatting operation log"
+      steps:
+        - "Load ICML file"
+        - "Apply bibliography paragraph styles"
+        - "Format citation entries"
+        - "Save formatted file"
+      error_handling:
+        - "ICML parse errors: Show problematic tags"
+        - "Style conflicts: Show resolution options"
+      performance_target: "< 3 seconds per file"
+
+  # ============================================================================
+  #> INDESIGN OPERATIONS
+  # ============================================================================
+
+  indesign:
+    indesign_interactive:
+      name: "Interactive InDesign Operations"
+      description: "Interactive interface for InDesign automation"
+      just_recipe: "indesign-interactive"
+      python_module: "theodore.interactive.indesign"
+      category: "indesign"
+      user_facing: true
+      interactive: true
+      dependencies:
+        system: ["sync_book", "update_links", "crossref_process"]
+        external: ["python3", "osascript", "gum"]
+      inputs: []
+      outputs:
+        - "InDesign operation results"
+        - "Operation summary"
+      steps:
+        - "Check InDesign availability"
+        - "Present operation menu"
+        - "Execute selected operations"
+        - "Report results"
+      available_operations:
+        - "Synchronize book styles and numbering"
+        - "Update document links"
+        - "Process cross-references"
+        - "Run preflight checks"
+        - "Export documents"
+      error_handling:
+        - "InDesign not running: Offer to launch"
+        - "Script errors: Show detailed error messages"
+      performance_target: "< 3 seconds menu startup"
+
+    sync_book:
+      name: "Synchronize InDesign Book"
+      description: "Synchronize styles, numbering, and preflight in book"
+      just_recipe: "sync-book"
+      python_module:
+      category: "indesign"
+      user_facing: true
+      interactive: false
+      dependencies:
+        system: []
+        external: ["osascript"]
+      inputs:
+        - name: "book_path"
+          type: "path"
+          required: false
+          description: "Path to InDesign book file"
+      outputs:
+        - "Book synchronization report"
+        - "Style update summary"
+      steps:
+        - "Execute AppleScript for book sync"
+        - "Monitor operation progress"
+        - "Generate completion report"
+      error_handling:
+        - "Book not found: Show search paths"
+        - "InDesign errors: Parse and display clearly"
+      performance_target: "< 60 seconds for typical book"
+
+    update_links:
+      name: "Update Document Links"
+      description: "Update all document links in InDesign book"
+      just_recipe: "update-links"
+      python_module: "theodore.integrations.indesign"
+      category: "indesign"
+      user_facing: true
+      interactive: false
+      dependencies:
+        system: []
+        external: ["osascript", "python3"]
+      inputs:
+        - name: "book_path"
+          type: "path"
+          required: false
+          description: "Path to InDesign book file"
+      outputs:
+        - "Link update report"
+        - "Missing link warnings"
+      steps:
+        - "Scan book for document links"
+        - "Update outdated links"
+        - "Report missing files"
+        - "Generate summary"
+      error_handling:
+        - "Missing files: Show expected locations"
+        - "Permission errors: Suggest solutions"
+      performance_target: "< 30 seconds"
+
+    crossref_process:
+      name: "Process Cross-References"
+      description: "Convert markdown links to InDesign cross-references"
+      just_recipe: "crossref-process"
+      python_module: "theodore.processors.crossref"
+      category: "indesign"
+      user_facing: true
+      interactive: false
+      dependencies:
+        system: ["scan_references"]
+        external: ["osascript", "python3"]
+      inputs:
+        - name: "registry_file"
+          type: "path"
+          required: false
+          description: "Cross-reference registry file"
+      outputs:
+        - "Cross-reference conversion report"
+        - "Manual resolution list"
+      steps:
+        - "Load cross-reference registry"
+        - "Execute JSX script in InDesign"
+        - "Process conversion results"
+        - "Generate manual resolution report"
+      error_handling:
+        - "Registry not found: Suggest regeneration"
+        - "Conversion failures: Detailed error analysis"
+      performance_target: "< 120 seconds for full book"
+
+  # ============================================================================
+  #> UTILITY OPERATIONS
+  # ============================================================================
+
+  utilities:
+    list_sections:
+      name: "List Available Sections"
+      description: "Display all available sections with status"
+      just_recipe: "list-sections"
+      python_module: "theodore.core.discovery"
+      category: "utilities"
+      user_facing: true
+      interactive: false
+      dependencies:
+        system: []
+        external: ["python3"]
+      inputs:
+        - name: "format"
+          type: "string"
+          default: "table"
+          options: ["table", "simple", "json"]
+          description: "Output format"
+      outputs:
+        - "Formatted section list"
+        - "Section status indicators"
+      steps:
+        - "Scan sections directory"
+        - "Check section validity"
+        - "Count files per section"
+        - "Format output"
+      error_handling:
+        - "No sections found: Guide to section creation"
+      performance_target: "< 2 seconds"
+
+    clean:
+      name: "Clean Generated Files"
+      description: "Remove generated files and caches"
+      just_recipe: "clean"
+      python_module: "theodore.core.cleanup"
+      category: "utilities"
+      user_facing: true
+      interactive: false
+      dependencies:
+        system: []
+        external: ["python3"]
+      inputs:
+        - name: "scope"
+          type: "string"
+          default: "generated"
+          options: ["generated", "cache", "all"]
+          description: "Cleanup scope"
+      outputs:
+        - "Cleanup summary"
+        - "Freed space report"
+      steps:
+        - "Identify files to remove"
+        - "Confirm deletion (if interactive)"
+        - "Remove files safely"
+        - "Report results"
+      error_handling:
+        - "Permission errors: Show required permissions"
+        - "Files in use: Skip and report"
+      performance_target: "< 5 seconds"
+
+    scan_references:
+      name: "Scan Cross-References"
+      description: "Build cross-reference registry from markdown files"
+      just_recipe: "scan-ref"
+      python_module: "theodore.processors.crossref"
+      category: "utilities"
+      user_facing: true
+      interactive: false
+      dependencies:
+        system: []
+        external: ["python3"]
+      inputs:
+        - name: "sections_dir"
+          type: "path"
+          required: false
+          description: "Sections directory to scan"
+      outputs:
+        - "Cross-reference registry JSON file"
+        - "Anchor discovery report"
+      steps:
+        - "Scan markdown files for anchors"
+        - "Extract cross-reference patterns"
+        - "Build registry mapping"
+        - "Save registry file"
+        - "Generate discovery report"
+      error_handling:
+        - "Invalid anchor format: Show problematic patterns"
+        - "Duplicate anchors: Report conflicts"
+      performance_target: "< 15 seconds for full project"
+
+  # ============================================================================
+  #> TESTING OPERATIONS
+  # ============================================================================
+
+  testing:
+    test_all:
+      name: "Run All Tests"
+      description: "Execute complete test suite"
+      just_recipe: "test"
+      python_module: "pytest"
+      category: "testing"
+      user_facing: true
+      interactive: false
+      dependencies:
+        system: []
+        external: ["python3", "pytest"]
+      inputs:
+        - name: "verbose"
+          type: "boolean"
+          default: false
+          description: "Enable verbose output"
+        - name: "coverage"
+          type: "boolean"
+          default: true
+          description: "Generate coverage report"
+      outputs:
+        - "Test results summary"
+        - "Coverage report"
+        - "Failed test details"
+      steps:
+        - "Discover test files"
+        - "Execute test suite"
+        - "Generate coverage report"
+        - "Format results"
+      error_handling:
+        - "Test failures: Show detailed output"
+        - "Missing dependencies: Installation guidance"
+      performance_target: "< 60 seconds for full suite"
+
+    test_component:
+      name: "Test Specific Component"
+      description: "Run tests for specific system component"
+      just_recipe: "test-component"
+      python_module: "pytest"
+      category: "testing"
+      user_facing: true
+      interactive: false
+      dependencies:
+        system: []
+        external: ["python3", "pytest"]
+      inputs:
+        - name: "component"
+          type: "string"
+          required: true
+          description: "Component name to test"
+      outputs:
+        - "Component test results"
+        - "Performance metrics"
+      steps:
+        - "Locate component tests"
+        - "Execute component test suite"
+        - "Generate component report"
+      error_handling:
+        - "Component not found: List available components"
+      performance_target: "< 15 seconds per component"
+
+# ============================================================================
+#> WORKFLOW DEFINITIONS
+# ============================================================================
+
+workflows:
+  typical_compilation:
+    name: "Typical Section Compilation"
+    description: "Standard workflow for compiling a thesis section"
+    steps:
+      - operation: "validate_section"
+        required: true
+      - operation: "compile_section"
+        required: true
+      - operation: "scan_references"
+        required: false
+      - operation: "validate_output"
+        required: false
+    estimated_time: "< 15 seconds"
+
+  full_thesis_build:
+    name: "Complete Thesis Build"
+    description: "Full compilation and validation workflow"
+    steps:
+      - operation: "validate_all"
+        required: true
+      - operation: "compile_all"
+        required: true
+      - operation: "validate_bibliography"
+        required: true
+      - operation: "scan_references"
+        required: true
+      - operation: "format_bibliography_icml"
+        required: false
+      - operation: "sync_book"
+        required: false
+    estimated_time: "< 120 seconds"
+
+  bibliography_management:
+    name: "Bibliography Management Workflow"
+    description: "Complete bibliography processing workflow"
+    steps:
+      - operation: "validate_bibliography"
+        required: true
+      - operation: "sort_bibliography"
+        required: false
+      - operation: "format_bibliography_icml"
+        required: false
+    estimated_time: "< 30 seconds"
+
+  publication_ready:
+    name: "Publication Ready Workflow"
+    description: "Final preparation for publication"
+    steps:
+      - operation: "validate_all"
+        required: true
+      - operation: "compile_all"
+        required: true
+      - operation: "validate_bibliography"
+        required: true
+      - operation: "format_bibliography_icml"
+        required: true
+      - operation: "sync_book"
+        required: true
+      - operation: "crossref_process"
+        required: true
+      - operation: "test_all"
+        required: false
+    estimated_time: "< 300 seconds"
+
+# ============================================================================
+#> ERROR CODES AND RECOVERY
+# ============================================================================
+
+error_codes:
+  THEODORE_001:
+    name: "Section Not Found"
+    description: "Specified section directory does not exist"
+    recovery_actions:
+      - "List available sections with 'just list-sections'"
+      - "Check section name spelling"
+      - "Create section with 'just create-section <name>'"
+
+  THEODORE_002:
+    name: "Invalid Section Structure"
+    description: "Section directory missing required structure"
+    recovery_actions:
+      - "Run 'just validate-section <name>' for detailed errors"
+      - "Create missing directories"
+      - "Check file permissions"
+
+  THEODORE_003:
+    name: "Pandoc Conversion Failed"
+    description: "Document conversion to ICML failed"
+    recovery_actions:
+      - "Check Pandoc installation with 'pandoc --version'"
+      - "Validate markdown syntax"
+      - "Check for unsupported formatting"
+
+  THEODORE_004:
+    name: "InDesign Script Error"
+    description: "InDesign automation script failed"
+    recovery_actions:
+      - "Ensure InDesign is running"
+      - "Check book file is accessible"
+      - "Verify script permissions"
+
+  THEODORE_005:
+    name: "Bibliography Validation Failed"
+    description: "Bibliography contains invalid or missing references"
+    recovery_actions:
+      - "Run 'just validate-bibliography' for details"
+      - "Check citation format consistency"
+      - "Verify all citations have bibliography entries"
+
+# ============================================================================
+#> EXTENSION POINTS
+# ============================================================================
+
+extension_points:
+  custom_processors:
+    description: "Add custom document processors"
+    interface: "theodore.processors.base.BaseProcessor"
+    example: "theodore.processors.custom.LatexProcessor"
+
+  custom_validators:
+    description: "Add custom validation rules"
+    interface: "theodore.core.validation.BaseValidator"
+    example: "theodore.validators.custom.StyleGuideValidator"
+
+  custom_integrations:
+    description: "Add integrations with external tools"
+    interface: "theodore.integrations.base.BaseIntegration"
+    example: "theodore.integrations.custom.ZoteroIntegration"
+
+  custom_workflows:
+    description: "Define custom operation workflows"
+    interface: "YAML workflow definition"
+    example: "workflows/custom_publication.yaml"

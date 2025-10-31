@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?aid style="50" type="snippet" readerVersion="6.0" featureSet="257" product="20.5(48)" ?>
+<?aid SnippetType="InCopyInterchange"?>
+<Document DOMVersion="20.4" Self="d">
+	<Ink Self="Ink/$ID/Process Cyan" Name="$ID/Process Cyan" Angle="75" ConvertToProcess="false" Frequency="70" NeutralDensity="0.61" PrintInk="true" TrapOrder="1" InkType="Normal" />
+	<Ink Self="Ink/$ID/Process Magenta" Name="$ID/Process Magenta" Angle="15" ConvertToProcess="false" Frequency="70" NeutralDensity="0.76" PrintInk="true" TrapOrder="2" InkType="Normal" />
+	<Ink Self="Ink/$ID/Process Yellow" Name="$ID/Process Yellow" Angle="0" ConvertToProcess="false" Frequency="70" NeutralDensity="0.16" PrintInk="true" TrapOrder="3" InkType="Normal" />
+	<Ink Self="Ink/$ID/Process Black" Name="$ID/Process Black" Angle="45" ConvertToProcess="false" Frequency="70" NeutralDensity="1.7" PrintInk="true" TrapOrder="4" InkType="Normal" />
+	<FontFamily Self="di3f" Name="Minion Pro">
+		<Font Self="di3fFontnMinion Pro Regular" FontFamily="Minion Pro" Name="Minion Pro Regular" PostScriptName="MinionPro-Regular" Status="Installed" FontStyleName="Regular" FontType="OpenTypeCFF" WritingScript="0" FullName="Minion Pro" FullNameNative="Minion Pro" FontStyleNameNative="Regular" PlatformName="$ID/" Version="Version 2.112;PS 2.000;hotconv 1.0.70;makeotf.lib2.5.5900" TypekitID="$ID/" />
+		<Font Self="di3fFontnMinion Pro Bold Cond" FontFamily="Minion Pro" Name="Minion Pro Bold Cond" PostScriptName="MinionPro-BoldCn" Status="Installed" FontStyleName="Bold Cond" FontType="OpenTypeCFF" WritingScript="0" FullName="Minion Pro Bold Cond" FullNameNative="Minion Pro Bold Cond" FontStyleNameNative="Bold Cond" PlatformName="$ID/" Version="Version 2.068;PS 2.000;hotconv 1.0.57;makeotf.lib2.0.21895" TypekitID="$ID/" />
+		<Font Self="di3fFontnMinion Pro Bold Cond Italic" FontFamily="Minion Pro" Name="Minion Pro Bold Cond Italic" PostScriptName="MinionPro-BoldCnIt" Status="Installed" FontStyleName="Bold Cond Italic" FontType="OpenTypeCFF" WritingScript="0" FullName="Minion Pro Bold Cond Italic" FullNameNative="Minion Pro Bold Cond Italic" FontStyleNameNative="Bold Cond Italic" PlatformName="$ID/" Version="Version 2.068;PS 2.000;hotconv 1.0.57;makeotf.lib2.0.21895" TypekitID="$ID/" />
+		<Font Self="di3fFontnMinion Pro Italic" FontFamily="Minion Pro" Name="Minion Pro Italic" PostScriptName="MinionPro-It" Status="Installed" FontStyleName="Italic" FontType="OpenTypeCFF" WritingScript="0" FullName="Minion Pro Italic" FullNameNative="Minion Pro Italic" FontStyleNameNative="Italic" PlatformName="$ID/" Version="Version 2.068;PS 2.000;hotconv 1.0.57;makeotf.lib2.0.21895" TypekitID="$ID/" />
+		<Font Self="di3fFontnMinion Pro Medium" FontFamily="Minion Pro" Name="Minion Pro Medium" PostScriptName="MinionPro-Medium" Status="Installed" FontStyleName="Medium" FontType="OpenTypeCFF" WritingScript="0" FullName="Minion Pro Medium" FullNameNative="Minion Pro Medium" FontStyleNameNative="Medium" PlatformName="$ID/" Version="Version 2.068;PS 2.000;hotconv 1.0.57;makeotf.lib2.0.21895" TypekitID="$ID/" />
+		<Font Self="di3fFontnMinion Pro Medium Italic" FontFamily="Minion Pro" Name="Minion Pro Medium Italic" PostScriptName="MinionPro-MediumIt" Status="Installed" FontStyleName="Medium Italic" FontType="OpenTypeCFF" WritingScript="0" FullName="Minion Pro Medium Italic" FullNameNative="Minion Pro Medium Italic" FontStyleNameNative="Medium Italic" PlatformName="$ID/" Version="Version 2.068;PS 2.000;hotconv 1.0.57;makeotf.lib2.0.21895" TypekitID="$ID/" />
+		<Font Self="di3fFontnMinion Pro Semibold" FontFamily="Minion Pro" Name="Minion Pro Semibold" PostScriptName="MinionPro-Semibold" Status="Installed" FontStyleName="Semibold" FontType="OpenTypeCFF" WritingScript="0" FullName="Minion Pro Semibold" FullNameNative="Minion Pro Semibold" FontStyleNameNative="Semibold" PlatformName="$ID/" Version="Version 2.068;PS 2.000;hotconv 1.0.57;makeotf.lib2.0.21895" TypekitID="$ID/" />
+		<Font Self="di3fFontnMinion Pro Semibold Italic" FontFamily="Minion Pro" Name="Minion Pro Semibold Italic" PostScriptName="MinionPro-SemiboldIt" Status="Installed" FontStyleName="Semibold Italic" FontType="OpenTypeCFF" WritingScript="0" FullName="Minion Pro Semibold Italic" FullNameNative="Minion Pro Semibold Italic" FontStyleNameNative="Semibold Italic" PlatformName="$ID/" Version="Version 2.068;PS 2.000;hotconv 1.0.57;makeotf.lib2.0.21895" TypekitID="$ID/" />
+		<Font Self="di3fFontnMinion Pro Bold" FontFamily="Minion Pro" Name="Minion Pro Bold" PostScriptName="MinionPro-Bold" Status="Installed" FontStyleName="Bold" FontType="OpenTypeCFF" WritingScript="0" FullName="Minion Pro Bold" FullNameNative="Minion Pro Bold" FontStyleNameNative="Bold" PlatformName="$ID/" Version="Version 2.068;PS 2.000;hotconv 1.0.57;makeotf.lib2.0.21895" TypekitID="$ID/" />
+		<Font Self="di3fFontnMinion Pro Bold Italic" FontFamily="Minion Pro" Name="Minion Pro Bold Italic" PostScriptName="MinionPro-BoldIt" Status="Installed" FontStyleName="Bold Italic" FontType="OpenTypeCFF" WritingScript="0" FullName="Minion Pro Bold Italic" FullNameNative="Minion Pro Bold Italic" FontStyleNameNative="Bold Italic" PlatformName="$ID/" Version="Version 2.068;PS 2.000;hotconv 1.0.57;makeotf.lib2.0.21895" TypekitID="$ID/" />
+	</FontFamily>
+	<FontFamily Self="di9e" Name="Myriad Pro">
+		<Font Self="di9eFontnMyriad Pro SemiCondensed" FontFamily="Myriad Pro" Name="Myriad Pro SemiCondensed" PostScriptName="MyriadPro-SemiCn" Status="Installed" FontStyleName="SemiCondensed" FontType="OpenTypeCFF" WritingScript="0" FullName="Myriad Pro SemiCondensed" FullNameNative="Myriad Pro SemiCondensed" FontStyleNameNative="SemiCondensed" PlatformName="$ID/" Version="OTF 1.003;PS 001.000;Core 1.0.31;makeotf.lib1.4.1585" TypekitID="$ID/" />
+		<Font Self="di9eFontnMyriad Pro SemiCondensed Italic" FontFamily="Myriad Pro" Name="Myriad Pro SemiCondensed Italic" PostScriptName="MyriadPro-SemiCnIt" Status="Installed" FontStyleName="SemiCondensed Italic" FontType="OpenTypeCFF" WritingScript="0" FullName="Myriad Pro SemiCondensed Italic" FullNameNative="Myriad Pro SemiCondensed Italic" FontStyleNameNative="SemiCondensed Italic" PlatformName="$ID/" Version="OTF 1.003;PS 001.000;Core 1.0.31;makeotf.lib1.4.1585" TypekitID="$ID/" />
+		<Font Self="di9eFontnMyriad Pro Light" FontFamily="Myriad Pro" Name="Myriad Pro Light" PostScriptName="MyriadPro-Light" Status="Installed" FontStyleName="Light" FontType="OpenTypeCFF" WritingScript="0" FullName="Myriad Pro Light" FullNameNative="Myriad Pro Light" FontStyleNameNative="Light" PlatformName="$ID/" Version="OTF 1.006;PS 001.000;Core 1.0.23;hotunix 1.28" TypekitID="$ID/" />
+		<Font Self="di9eFontnMyriad Pro Regular" FontFamily="Myriad Pro" Name="Myriad Pro Regular" PostScriptName="MyriadPro-Regular" Status="Installed" FontStyleName="Regular" FontType="OpenTypeCFF" WritingScript="0" FullName="Myriad Pro" FullNameNative="Myriad Pro" FontStyleNameNative="Regular" PlatformName="$ID/" Version="OTF 1.006;PS 001.000;Core 1.0.23;hotunix 1.28" TypekitID="$ID/" />
+		<Font Self="di9eFontnMyriad Pro Italic" FontFamily="Myriad Pro" Name="Myriad Pro Italic" PostScriptName="MyriadPro-It" Status="Installed" FontStyleName="Italic" FontType="OpenTypeCFF" WritingScript="0" FullName="Myriad Pro Italic" FullNameNative="Myriad Pro Italic" FontStyleNameNative="Italic" PlatformName="$ID/" Version="Version 2.106;PS 2.000;hotconv 1.0.70;makeotf.lib2.5.58329" TypekitID="$ID/" />
+		<Font Self="di9eFontnMyriad Pro Bold" FontFamily="Myriad Pro" Name="Myriad Pro Bold" PostScriptName="MyriadPro-Bold" Status="Installed" FontStyleName="Bold" FontType="OpenTypeCFF" WritingScript="0" FullName="Myriad Pro Bold" FullNameNative="Myriad Pro Bold" FontStyleNameNative="Bold" PlatformName="$ID/" Version="Version 2.106;PS 2.000;hotconv 1.0.70;makeotf.lib2.5.58329" TypekitID="$ID/" />
+		<Font Self="di9eFontnMyriad Pro Bold Italic" FontFamily="Myriad Pro" Name="Myriad Pro Bold Italic" PostScriptName="MyriadPro-BoldIt" Status="Installed" FontStyleName="Bold Italic" FontType="OpenTypeCFF" WritingScript="0" FullName="Myriad Pro Bold Italic" FullNameNative="Myriad Pro Bold Italic" FontStyleNameNative="Bold Italic" PlatformName="$ID/" Version="Version 2.106;PS 2.000;hotconv 1.0.70;makeotf.lib2.5.58329" TypekitID="$ID/" />
+		<Font Self="di9eFontnMyriad Pro Black" FontFamily="Myriad Pro" Name="Myriad Pro Black" PostScriptName="MyriadPro-Black" Status="Installed" FontStyleName="Black" FontType="OpenTypeCFF" WritingScript="0" FullName="Myriad Pro Black" FullNameNative="Myriad Pro Black" FontStyleNameNative="Black" PlatformName="$ID/" Version="OTF 1.006;PS 001.000;Core 1.0.23;hotunix 1.28" TypekitID="$ID/" />
+	</FontFamily>
+	<FontFamily Self="diab" Name="Kozuka Mincho Pr6N">
+		<Font Self="diabFontnKozuka Mincho Pr6N R" FontFamily="Kozuka Mincho Pr6N" Name="Kozuka Mincho Pr6N R" PostScriptName="KozMinPr6N-Regular" Status="Installed" FontStyleName="R" FontType="OpenTypeCID" WritingScript="1" FullName="KozMinPr6N-Regular" FullNameNative="小塚明朝 Pr6N R" FontStyleNameNative="R" PlatformName="$ID/" Version="Version 7.001;hotconv 1.0.107;makeotfexe 2.5.65593" TypekitID="$ID/" />
+	</FontFamily>
+	<FontFamily Self="di219" Name="Garamond Premier Pro">
+		<Font Self="di219FontnGaramond Premier Pro Regular" FontFamily="Garamond Premier Pro" Name="Garamond Premier Pro Regular" PostScriptName="GaramondPremrPro" Status="Installed" FontStyleName="Regular" FontType="OpenTypeCFF" WritingScript="0" FullName="Garamond Premier Pro" FullNameNative="Garamond Premier Pro" FontStyleNameNative="Regular" PlatformName="$ID/" Version="Version 2.000;PS 2.000;hotconv 1.0.50;makeotf.lib2.0.16970" TypekitID="$ID/" />
+		<Font Self="di219FontnGaramond Premier Pro Italic" FontFamily="Garamond Premier Pro" Name="Garamond Premier Pro Italic" PostScriptName="GaramondPremrPro-It" Status="Installed" FontStyleName="Italic" FontType="OpenTypeCFF" WritingScript="0" FullName="Garamond Premier Pro Italic" FullNameNative="Garamond Premier Pro Italic" FontStyleNameNative="Italic" PlatformName="$ID/" Version="Version 2.000;PS 2.000;hotconv 1.0.50;makeotf.lib2.0.16970" TypekitID="$ID/" />
+		<Font Self="di219FontnGaramond Premier Pro Medium" FontFamily="Garamond Premier Pro" Name="Garamond Premier Pro Medium" PostScriptName="GaramondPremrPro-Med" Status="Installed" FontStyleName="Medium" FontType="OpenTypeCFF" WritingScript="0" FullName="Garamond Premier Pro Medium" FullNameNative="Garamond Premier Pro Medium" FontStyleNameNative="Medium" PlatformName="$ID/" Version="Version 2.000;PS 2.000;hotconv 1.0.50;makeotf.lib2.0.16970" TypekitID="$ID/" />
+		<Font Self="di219FontnGaramond Premier Pro Semibold" FontFamily="Garamond Premier Pro" Name="Garamond Premier Pro Semibold" PostScriptName="GaramondPremrPro-Smbd" Status="Installed" FontStyleName="Semibold" FontType="OpenTypeCFF" WritingScript="0" FullName="Garamond Premier Pro Semibold" FullNameNative="Garamond Premier Pro Semibold" FontStyleNameNative="Semibold" PlatformName="$ID/" Version="Version 2.000;PS 2.000;hotconv 1.0.50;makeotf.lib2.0.16970" TypekitID="$ID/" />
+		<Font Self="di219FontnGaramond Premier Pro Bold Caption" FontFamily="Garamond Premier Pro" Name="Garamond Premier Pro Bold Caption" PostScriptName="GaramondPremrPro-BdCapt" Status="Installed" FontStyleName="Bold Caption" FontType="OpenTypeCFF" WritingScript="0" FullName="Garamond Premier Pro Bold Caption" FullNameNative="Garamond Premier Pro Bold Caption" FontStyleNameNative="Bold Caption" PlatformName="$ID/" Version="Version 2.000;PS 2.000;hotconv 1.0.50;makeotf.lib2.0.16970" TypekitID="$ID/" />
+		<Font Self="di219FontnGaramond Premier Pro Bold" FontFamily="Garamond Premier Pro" Name="Garamond Premier Pro Bold" PostScriptName="GaramondPremrPro-Bd" Status="Installed" FontStyleName="Bold" FontType="OpenTypeCFF" WritingScript="0" FullName="Garamond Premier Pro Bold" FullNameNative="Garamond Premier Pro Bold" FontStyleNameNative="Bold" PlatformName="$ID/" Version="Version 2.000;PS 2.000;hotconv 1.0.50;makeotf.lib2.0.16970" TypekitID="$ID/" />
+	</FontFamily>
+	<FontFamily Self="di24e" Name="SF Mono">
+		<Font Self="di24eFontnSF Mono Light" FontFamily="SF Mono" Name="SF Mono Light" PostScriptName="SFMono-Light" Status="Installed" FontStyleName="Light" FontType="OpenTypeCFF" WritingScript="0" FullName="SF Mono Light" FullNameNative="SF Mono Light" FontStyleNameNative="Light" PlatformName="$ID/" Version="Version 18.0d1e1" TypekitID="$ID/" />
+		<Font Self="di24eFontnSF Mono Light Italic" FontFamily="SF Mono" Name="SF Mono Light Italic" PostScriptName="SFMono-LightItalic" Status="Installed" FontStyleName="Light Italic" FontType="OpenTypeCFF" WritingScript="0" FullName="SF Mono Light Italic" FullNameNative="SF Mono Light Italic" FontStyleNameNative="Light Italic" PlatformName="$ID/" Version="Version 18.0d1e1" TypekitID="$ID/" />
+		<Font Self="di24eFontnSF Mono Regular" FontFamily="SF Mono" Name="SF Mono Regular" PostScriptName="SFMono-Regular" Status="Installed" FontStyleName="Regular" FontType="OpenTypeCFF" WritingScript="0" FullName="SF Mono Regular" FullNameNative="SF Mono Regular" FontStyleNameNative="Regular" PlatformName="$ID/" Version="Version 18.0d1e1" TypekitID="$ID/" />
+		<Font Self="di24eFontnSF Mono Regular Italic" FontFamily="SF Mono" Name="SF Mono Regular Italic" PostScriptName="SFMono-RegularItalic" Status="Installed" FontStyleName="Regular Italic" FontType="OpenTypeCFF" WritingScript="0" FullName="SF Mono Regular Italic" FullNameNative="SF Mono Regular Italic" FontStyleNameNative="Regular Italic" PlatformName="$ID/" Version="Version 18.0d1e1" TypekitID="$ID/" />
+		<Font Self="di24eFontnSF Mono Medium" FontFamily="SF Mono" Name="SF Mono Medium" PostScriptName="SFMono-Medium" Status="Installed" FontStyleName="Medium" FontType="OpenTypeCFF" WritingScript="0" FullName="SF Mono Medium" FullNameNative="SF Mono Medium" FontStyleNameNative="Medium" PlatformName="$ID/" Version="Version 18.0d1e1" TypekitID="$ID/" />
+		<Font Self="di24eFontnSF Mono Medium Italic" FontFamily="SF Mono" Name="SF Mono Medium Italic" PostScriptName="SFMono-MediumItalic" Status="Installed" FontStyleName="Medium Italic" FontType="OpenTypeCFF" WritingScript="0" FullName="SF Mono Medium Italic" FullNameNative="SF Mono Medium Italic" FontStyleNameNative="Medium Italic" PlatformName="$ID/" Version="Version 18.0d1e1" TypekitID="$ID/" />
+		<Font Self="di24eFontnSF Mono Semibold" FontFamily="SF Mono" Name="SF Mono Semibold" PostScriptName="SFMono-Semibold" Status="Installed" FontStyleName="Semibold" FontType="OpenTypeCFF" WritingScript="0" FullName="SF Mono Semibold" FullNameNative="SF Mono Semibold" FontStyleNameNative="Semibold" PlatformName="$ID/" Version="Version 18.0d1e1" TypekitID="$ID/" />
+		<Font Self="di24eFontnSF Mono Semibold Italic" FontFamily="SF Mono" Name="SF Mono Semibold Italic" PostScriptName="SFMono-SemiboldItalic" Status="Installed" FontStyleName="Semibold Italic" FontType="OpenTypeCFF" WritingScript="0" FullName="SF Mono Semibold Italic" FullNameNative="SF Mono Semibold Italic" FontStyleNameNative="Semibold Italic" PlatformName="$ID/" Version="Version 18.0d1e1" TypekitID="$ID/" />
+		<Font Self="di24eFontnSF Mono Bold" FontFamily="SF Mono" Name="SF Mono Bold" PostScriptName="SFMono-Bold" Status="Installed" FontStyleName="Bold" FontType="OpenTypeCFF" WritingScript="0" FullName="SF Mono Bold" FullNameNative="SF Mono Bold" FontStyleNameNative="Bold" PlatformName="$ID/" Version="Version 18.0d1e1" TypekitID="$ID/" />
+		<Font Self="di24eFontnSF Mono Bold Italic" FontFamily="SF Mono" Name="SF Mono Bold Italic" PostScriptName="SFMono-BoldItalic" Status="Installed" FontStyleName="Bold Italic" FontType="OpenTypeCFF" WritingScript="0" FullName="SF Mono Bold Italic" FullNameNative="SF Mono Bold Italic" FontStyleNameNative="Bold Italic" PlatformName="$ID/" Version="Version 18.0d1e1" TypekitID="$ID/" />
+		<Font Self="di24eFontnSF Mono Heavy" FontFamily="SF Mono" Name="SF Mono Heavy" PostScriptName="SFMono-Heavy" Status="Installed" FontStyleName="Heavy" FontType="OpenTypeCFF" WritingScript="0" FullName="SF Mono Heavy" FullNameNative="SF Mono Heavy" FontStyleNameNative="Heavy" PlatformName="$ID/" Version="Version 18.0d1e1" TypekitID="$ID/" />
+		<Font Self="di24eFontnSF Mono Heavy Italic" FontFamily="SF Mono" Name="SF Mono Heavy Italic" PostScriptName="SFMono-HeavyItalic" Status="Installed" FontStyleName="Heavy Italic" FontType="OpenTypeCFF" WritingScript="0" FullName="SF Mono Heavy Italic" FullNameNative="SF Mono Heavy Italic" FontStyleNameNative="Heavy Italic" PlatformName="$ID/" Version="Version 18.0d1e1" TypekitID="$ID/" />
+	</FontFamily>
+	<FontFamily Self="di2e5" Name="Courier New">
+		<Font Self="di2e5FontnCourier New Regular" FontFamily="Courier New" Name="Courier New Regular" PostScriptName="CourierNewPSMT" Status="Installed" FontStyleName="Regular" FontType="OpenTypeTT" WritingScript="0" FullName="Courier New" FullNameNative="Courier New" FontStyleNameNative="Regular" PlatformName="$ID/" Version="Version 5.00.2x" TypekitID="$ID/" />
+		<Font Self="di2e5FontnCourier New Italic" FontFamily="Courier New" Name="Courier New Italic" PostScriptName="CourierNewPS-ItalicMT" Status="Installed" FontStyleName="Italic" FontType="OpenTypeTT" WritingScript="0" FullName="Courier New Italic" FullNameNative="Courier New Italic" FontStyleNameNative="Italic" PlatformName="$ID/" Version="Version 5.00.1x" TypekitID="$ID/" />
+		<Font Self="di2e5FontnCourier New Bold" FontFamily="Courier New" Name="Courier New Bold" PostScriptName="CourierNewPS-BoldMT" Status="Installed" FontStyleName="Bold" FontType="OpenTypeTT" WritingScript="0" FullName="Courier New Bold" FullNameNative="Courier New Bold" FontStyleNameNative="Bold" PlatformName="$ID/" Version="Version 5.00.2x" TypekitID="$ID/" />
+		<Font Self="di2e5FontnCourier New Bold Italic" FontFamily="Courier New" Name="Courier New Bold Italic" PostScriptName="CourierNewPS-BoldItalicMT" Status="Installed" FontStyleName="Bold Italic" FontType="OpenTypeTT" WritingScript="0" FullName="Courier New Bold Italic" FullNameNative="Courier New Bold Italic" FontStyleNameNative="Bold Italic" PlatformName="$ID/" Version="Version 5.00x" TypekitID="$ID/" />
+	</FontFamily>
+	<CompositeFont Self="CompositeFont/$ID/[No composite font]" Name="$ID/[No composite font]">
+		<CompositeFontEntry Self="uaa" Name="$ID/Kanji" FontStyle="$ID/R" RelativeSize="100" HorizontalScale="100" VerticalScale="100" Locked="true" ScaleOption="true" BaselineShift="0">
+			<Properties>
+				<AppliedFont type="string">Kozuka Mincho Pr6N</AppliedFont>
+			</Properties>
+		</CompositeFontEntry>
+		<CompositeFontEntry Self="uac" Name="$ID/Kana" FontStyle="$ID/R" RelativeSize="100" HorizontalScale="100" VerticalScale="100" CustomCharacters="ぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜそぞただちぢっつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもゃやゅゆょよらりるれろゎわゐゑをんゔゕゖゝゞァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶヷヸヹヺーヽヾ" Locked="true" ScaleOption="true" BaselineShift="0">
+			<Properties>
+				<AppliedFont type="string">Kozuka Mincho Pr6N</AppliedFont>
+			</Properties>
+		</CompositeFontEntry>
+		<CompositeFontEntry Self="uad" Name="$ID/Punctuation" FontStyle="$ID/R" RelativeSize="100" HorizontalScale="100" VerticalScale="100" CustomCharacters="—―‖‘’“”‥…′″∥、。〈〉《》「」『』【】〔〕〜・！（），．／：；？［］｛｝～" Locked="true" ScaleOption="true" BaselineShift="0">
+			<Properties>
+				<AppliedFont type="string">Kozuka Mincho Pr6N</AppliedFont>
+			</Properties>
+		</CompositeFontEntry>
+		<CompositeFontEntry Self="uae" Name="$ID/Symbols" FontStyle="$ID/R" RelativeSize="100" HorizontalScale="100" VerticalScale="100" CustomCharacters="¢£§¨¬°±´¶×÷ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρστυφχψωЁАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюяё‐†‡‰※℃Å←↑→↓⇒⇔∀∂∃∇∈∋−√∝∞∠∧∨∩∪∫∬∴∵∽≒≠≡≦≧≪≫⊂⊃⊆⊇⊥⌒■□▲△▼▽◆◇○◎●◯★☆♀♂♪♭♯〃〆〇〒〓゛゜＃＄％＆＊＋－０１２３４５６７８９＜＝＞＠ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ＼＾＿｀ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ｜￠￡￢￣￥" Locked="true" ScaleOption="true" BaselineShift="0">
+			<Properties>
+				<AppliedFont type="string">Kozuka Mincho Pr6N</AppliedFont>
+			</Properties>
+		</CompositeFontEntry>
+		<CompositeFontEntry Self="uaf" Name="$ID/Alphabetic" FontStyle="$ID/Regular" RelativeSize="100" HorizontalScale="100" VerticalScale="100" CustomCharacters=" !&quot;#$%&amp;&apos;()*+,-./:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~ ¡¤¥¦©ª«­®¯²³µ·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿıŒœŠšŸŽžƒˆˇ˘˙˚˛˜˝–‚„•‹›⁄€™∆∏∑≈≤≥◊ﬀﬁﬂﬃﬄﬅﬆ" Locked="true" ScaleOption="false" BaselineShift="0">
+			<Properties>
+				<AppliedFont type="string">Minion Pro</AppliedFont>
+			</Properties>
+		</CompositeFontEntry>
+		<CompositeFontEntry Self="ub0" Name="$ID/Numbers" FontStyle="$ID/Regular" RelativeSize="100" HorizontalScale="100" VerticalScale="100" CustomCharacters="0123456789" Locked="true" ScaleOption="false" BaselineShift="0">
+			<Properties>
+				<AppliedFont type="string">Minion Pro</AppliedFont>
+			</Properties>
+		</CompositeFontEntry>
+	</CompositeFont>
+	<RootCharacterStyleGroup Self="u80">
+		<CharacterStyle Self="CharacterStyle/$ID/[No character style]" Imported="false" SplitDocument="false" EmitCss="true" StyleUniqueId="$ID/" IncludeClass="true" ExtendedKeyboardShortcut="0 0 0" Name="$ID/[No character style]" />
+	</RootCharacterStyleGroup>
+	<NumberingList Self="NumberingList/Chapters" Name="Chapters" ContinueNumbersAcrossStories="true" ContinueNumbersAcrossDocuments="true" />
+	<NumberingList Self="NumberingList/Running Lists" Name="Running Lists" ContinueNumbersAcrossStories="true" ContinueNumbersAcrossDocuments="true" />
+	<RootParagraphStyleGroup Self="u7f">
+		<ParagraphStyle Self="ParagraphStyle/Header1" Name="Header1" Imported="false" NextStyle="ParagraphStyle/Paragraph" SplitDocument="false" EmitCss="true" StyleUniqueId="e6a0a1a6-df13-4e65-921a-3b450001896a" IncludeClass="true" ExtendedKeyboardShortcut="0 0 0" EmptyNestedStyles="true" EmptyLineStyles="true" EmptyGrepStyles="true" KeyboardShortcut="0 0" FontStyle="Bold Caption" PointSize="22" LeftIndent="50.00031496062993" FirstLineIndent="-49.00031496062993" SpaceAfter="68.03149606299213" StartParagraph="NextOddPage" KeepAllLinesTogether="true" KeepLinesTogether="true" GridAlignFirstLineOnly="true" GridAlignment="AlignBaseline" BulletsAndNumberingListType="NumberedList">
+			<Properties>
+				<BasedOn type="string">$ID/[No paragraph style]</BasedOn>
+				<PreviewColor type="enumeration">Nothing</PreviewColor>
+				<TabList type="list">
+					<ListItem type="record">
+						<Alignment type="enumeration">LeftAlign</Alignment>
+						<AlignmentCharacter type="string">.</AlignmentCharacter>
+						<Leader type="string"></Leader>
+						<Position type="unit">50.00031496062993</Position>
+					</ListItem>
+				</TabList>
+				<AppliedFont type="string">Garamond Premier Pro</AppliedFont>
+				<AppliedNumberingList type="object">NumberingList/Chapters</AppliedNumberingList>
+			</Properties>
+		</ParagraphStyle>
+		<ParagraphStyle Self="ParagraphStyle/Paragraph" Name="Paragraph" Imported="false" NextStyle="ParagraphStyle/Paragraph" SplitDocument="false" EmitCss="true" StyleUniqueId="32d0b0fc-1256-42aa-97cb-0de8b6e863a8" IncludeClass="true" ExtendedKeyboardShortcut="0 0 0" EmptyNestedStyles="true" EmptyLineStyles="true" EmptyGrepStyles="true" KeyboardShortcut="0 0" PointSize="13" FirstLineIndent="49" AppliedLanguage="$ID/Spanish: Castilian" KeepLinesTogether="true" Justification="LeftJustified" GridAlignment="AlignBaseline" BulletsAndNumberingListType="NumberedList" NumberingContinue="false" NumberingExpression="">
+			<Properties>
+				<BasedOn type="string">$ID/[No paragraph style]</BasedOn>
+				<PreviewColor type="enumeration">Nothing</PreviewColor>
+				<Leading type="unit">18</Leading>
+				<AppliedFont type="string">Garamond Premier Pro</AppliedFont>
+				<AppliedNumberingList type="object">NumberingList/Running Lists</AppliedNumberingList>
+			</Properties>
+		</ParagraphStyle>
+		<ParagraphStyle Self="ParagraphStyle/Header2" Name="Header2" Imported="false" NextStyle="ParagraphStyle/Paragraph" SplitDocument="false" EmitCss="true" StyleUniqueId="fa5b0567-bf11-45ed-929b-b4f48c357a9c" IncludeClass="true" ExtendedKeyboardShortcut="0 0 0" EmptyNestedStyles="true" EmptyLineStyles="true" EmptyGrepStyles="true" KeyboardShortcut="0 0" FontStyle="Medium" SpaceAfter="56.69291338582676" StartParagraph="NextColumn" KeepWithNext="3" NumberingLevel="2" NumberingExpression="^1.^#^t">
+			<Properties>
+				<BasedOn type="object">ParagraphStyle/Header1</BasedOn>
+				<PreviewColor type="enumeration">Nothing</PreviewColor>
+			</Properties>
+		</ParagraphStyle>
+		<ParagraphStyle Self="ParagraphStyle/Header3" Name="Header3" Imported="false" NextStyle="ParagraphStyle/Paragraph" SplitDocument="false" EmitCss="true" StyleUniqueId="fd2ca059-6096-4fe2-8f90-89fd109c3021" IncludeClass="true" ExtendedKeyboardShortcut="0 0 0" EmptyNestedStyles="true" EmptyLineStyles="true" EmptyGrepStyles="true" KeyboardShortcut="0 0" FontStyle="Semibold" PointSize="18" SpaceBefore="90.70866141732284" SpaceAfter="34.01574803149606" StartParagraph="Anywhere" NumberingLevel="3" NumberingExpression="^1.^2.^#^t">
+			<Properties>
+				<BasedOn type="object">ParagraphStyle/Header2</BasedOn>
+				<PreviewColor type="enumeration">Nothing</PreviewColor>
+			</Properties>
+		</ParagraphStyle>
+	</RootParagraphStyleGroup>
+	<TinDocumentDataObject>
+		<Properties>
+			<GaijiRefMaps><![CDATA[/////wAAAAAAAAAA]]></GaijiRefMaps>
+		</Properties>
+	</TinDocumentDataObject>
+	<TextVariable Self="dTextVariablen&lt;?AID 001b?&gt;TV XRefPageNumber" Name="&lt;?AID 001b?&gt;TV XRefPageNumber" VariableType="XrefPageNumberType" />
+	<CrossReferenceFormat Self="u9f" Name="Full Paragraph &amp; Page Number" AppliedCharacterStyle="n">
+		<BuildingBlock Self="u9fBuildingBlock0" BlockType="CustomStringBuildingBlock" AppliedCharacterStyle="n" CustomText="&quot;" AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+		<BuildingBlock Self="u9fBuildingBlock1" BlockType="FullParagraphBuildingBlock" AppliedCharacterStyle="n" CustomText="$ID/" AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+		<BuildingBlock Self="u9fBuildingBlock2" BlockType="CustomStringBuildingBlock" AppliedCharacterStyle="n" CustomText="&quot; on page " AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+		<BuildingBlock Self="u9fBuildingBlock3" BlockType="PageNumberBuildingBlock" AppliedCharacterStyle="n" CustomText="$ID/" AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+	</CrossReferenceFormat>
+	<CrossReferenceFormat Self="ua0" Name="Full Paragraph" AppliedCharacterStyle="n">
+		<BuildingBlock Self="ua0BuildingBlock0" BlockType="CustomStringBuildingBlock" AppliedCharacterStyle="n" CustomText="&quot;" AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+		<BuildingBlock Self="ua0BuildingBlock1" BlockType="FullParagraphBuildingBlock" AppliedCharacterStyle="n" CustomText="$ID/" AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+		<BuildingBlock Self="ua0BuildingBlock2" BlockType="CustomStringBuildingBlock" AppliedCharacterStyle="n" CustomText="&quot;" AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+	</CrossReferenceFormat>
+	<CrossReferenceFormat Self="ua1" Name="Paragraph Text &amp; Page Number" AppliedCharacterStyle="n">
+		<BuildingBlock Self="ua1BuildingBlock0" BlockType="CustomStringBuildingBlock" AppliedCharacterStyle="n" CustomText="&quot;" AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+		<BuildingBlock Self="ua1BuildingBlock1" BlockType="ParagraphTextBuildingBlock" AppliedCharacterStyle="n" CustomText="$ID/" AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+		<BuildingBlock Self="ua1BuildingBlock2" BlockType="CustomStringBuildingBlock" AppliedCharacterStyle="n" CustomText="&quot; on page " AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+		<BuildingBlock Self="ua1BuildingBlock3" BlockType="PageNumberBuildingBlock" AppliedCharacterStyle="n" CustomText="$ID/" AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+	</CrossReferenceFormat>
+	<CrossReferenceFormat Self="ua2" Name="Paragraph Text" AppliedCharacterStyle="n">
+		<BuildingBlock Self="ua2BuildingBlock0" BlockType="CustomStringBuildingBlock" AppliedCharacterStyle="n" CustomText="&quot;" AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+		<BuildingBlock Self="ua2BuildingBlock1" BlockType="ParagraphTextBuildingBlock" AppliedCharacterStyle="n" CustomText="$ID/" AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+		<BuildingBlock Self="ua2BuildingBlock2" BlockType="CustomStringBuildingBlock" AppliedCharacterStyle="n" CustomText="&quot;" AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+	</CrossReferenceFormat>
+	<CrossReferenceFormat Self="ua3" Name="Paragraph Number &amp; Page Number" AppliedCharacterStyle="n">
+		<BuildingBlock Self="ua3BuildingBlock0" BlockType="ParagraphNumberBuildingBlock" AppliedCharacterStyle="n" CustomText="$ID/" AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+		<BuildingBlock Self="ua3BuildingBlock1" BlockType="CustomStringBuildingBlock" AppliedCharacterStyle="n" CustomText=" on page " AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+		<BuildingBlock Self="ua3BuildingBlock2" BlockType="PageNumberBuildingBlock" AppliedCharacterStyle="n" CustomText="$ID/" AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+	</CrossReferenceFormat>
+	<CrossReferenceFormat Self="ua4" Name="Paragraph Number" AppliedCharacterStyle="n">
+		<BuildingBlock Self="ua4BuildingBlock0" BlockType="ParagraphNumberBuildingBlock" AppliedCharacterStyle="n" CustomText="$ID/" AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+	</CrossReferenceFormat>
+	<CrossReferenceFormat Self="ua5" Name="Text Anchor Name &amp; Page Number" AppliedCharacterStyle="n">
+		<BuildingBlock Self="ua5BuildingBlock0" BlockType="CustomStringBuildingBlock" AppliedCharacterStyle="n" CustomText="&quot;" AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+		<BuildingBlock Self="ua5BuildingBlock1" BlockType="BookmarkNameBuildingBlock" AppliedCharacterStyle="n" CustomText="$ID/" AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+		<BuildingBlock Self="ua5BuildingBlock2" BlockType="CustomStringBuildingBlock" AppliedCharacterStyle="n" CustomText="&quot; on page " AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+		<BuildingBlock Self="ua5BuildingBlock3" BlockType="PageNumberBuildingBlock" AppliedCharacterStyle="n" CustomText="$ID/" AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+	</CrossReferenceFormat>
+	<CrossReferenceFormat Self="ua6" Name="Text Anchor Name" AppliedCharacterStyle="n">
+		<BuildingBlock Self="ua6BuildingBlock0" BlockType="CustomStringBuildingBlock" AppliedCharacterStyle="n" CustomText="&quot;" AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+		<BuildingBlock Self="ua6BuildingBlock1" BlockType="BookmarkNameBuildingBlock" AppliedCharacterStyle="n" CustomText="$ID/" AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+		<BuildingBlock Self="ua6BuildingBlock2" BlockType="CustomStringBuildingBlock" AppliedCharacterStyle="n" CustomText="&quot;" AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+	</CrossReferenceFormat>
+	<CrossReferenceFormat Self="ua7" Name="Page Number" AppliedCharacterStyle="n">
+		<BuildingBlock Self="ua7BuildingBlock0" BlockType="CustomStringBuildingBlock" AppliedCharacterStyle="n" CustomText="page " AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+		<BuildingBlock Self="ua7BuildingBlock1" BlockType="PageNumberBuildingBlock" AppliedCharacterStyle="n" CustomText="$ID/" AppliedDelimiter="$ID/" IncludeDelimiter="false" />
+	</CrossReferenceFormat>
+	<Story Self="ub09" UserText="true" IsEndnoteStory="false" AppliedTOCStyle="n" TrackChanges="false" StoryTitle="crossref-anchor" AppliedNamedGrid="n">
+		<StoryPreference OpticalMarginAlignment="false" OpticalMarginSize="12" FrameType="TextFrameType" StoryOrientation="Horizontal" StoryDirection="LeftToRightDirection" />
+		<MetadataPacketPreference>
+			<Properties>
+				<Contents><![CDATA[<?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 9.1-c003 79.9690a87, 2025/03/06-19:12:03        ">
+   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about=""
+            xmlns:xmp="http://ns.adobe.com/xap/1.0/"
+            xmlns:xmpGImg="http://ns.adobe.com/xap/1.0/g/img/"
+            xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"
+            xmlns:stEvt="http://ns.adobe.com/xap/1.0/sType/ResourceEvent#"
+            xmlns:dc="http://purl.org/dc/elements/1.1/"
+            xmlns:xmpTPg="http://ns.adobe.com/xap/1.0/t/pg/"
+            xmlns:xmpG="http://ns.adobe.com/xap/1.0/g/"
+            xmlns:stFnt="http://ns.adobe.com/xap/1.0/sType/Font#">
+         <xmp:CreateDate>2025-09-14T10:38:38+02:00</xmp:CreateDate>
+         <xmp:MetadataDate>2025-09-14T10:45:04+02:00</xmp:MetadataDate>
+         <xmp:ModifyDate>2025-09-14T10:45:04+02:00</xmp:ModifyDate>
+         <xmp:CreatorTool>Adobe InDesign 20.5 (Macintosh)</xmp:CreatorTool>
+         <xmp:Thumbnails>
+            <rdf:Alt>
+               <rdf:li rdf:parseType="Resource">
+                  <xmpGImg:format>JPEG</xmpGImg:format>
+                  <xmpGImg:width>512</xmpGImg:width>
+                  <xmpGImg:height>512</xmpGImg:height>
+                  <xmpGImg:image>/9j/4AAQSkZJRgABAgEASABIAAD/7QAsUGhvdG9zaG9wIDMuMAA4QklNA+0AAAAAABAASAAAAAEA&#xA;AQBIAAAAAQAB/+4AE0Fkb2JlAGQAAAAAAQUAAklE/9sAhAAKBwcHBwcKBwcKDgkJCQ4RDAsLDBEU&#xA;EBAQEBAUEQ8RERERDxERFxoaGhcRHyEhISEfKy0tLSsyMjIyMjIyMjIyAQsJCQ4MDh8XFx8rIx0j&#xA;KzIrKysrMjIyMjIyMjIyMjIyMjIyMjI+Pj4+PjJAQEBAQEBAQEBAQEBAQEBAQEBAQED/wAARCAD/&#xA;AKUDAREAAhEBAxEB/8QBogAAAAcBAQEBAQAAAAAAAAAABAUDAgYBAAcICQoLAQACAgMBAQEBAQAA&#xA;AAAAAAABAAIDBAUGBwgJCgsQAAIBAwMCBAIGBwMEAgYCcwECAxEEAAUhEjFBUQYTYSJxgRQykaEH&#xA;FbFCI8FS0eEzFmLwJHKC8SVDNFOSorJjc8I1RCeTo7M2F1RkdMPS4ggmgwkKGBmElEVGpLRW01Uo&#xA;GvLj88TU5PRldYWVpbXF1eX1ZnaGlqa2xtbm9jdHV2d3h5ent8fX5/c4SFhoeIiYqLjI2Oj4KTlJ&#xA;WWl5iZmpucnZ6fkqOkpaanqKmqq6ytrq+hEAAgIBAgMFBQQFBgQIAwNtAQACEQMEIRIxQQVRE2Ei&#xA;BnGBkTKhsfAUwdHhI0IVUmJy8TMkNEOCFpJTJaJjssIHc9I14kSDF1STCAkKGBkmNkUaJ2R0VTfy&#xA;o7PDKCnT4/OElKS0xNTk9GV1hZWltcXV5fVGVmZ2hpamtsbW5vZHV2d3h5ent8fX5/c4SFhoeIiY&#xA;qLjI2Oj4OUlZaXmJmam5ydnp+So6SlpqeoqaqrrK2ur6/9oADAMBAAIRAxEAPwDrkOo2dxfXOmxS&#xA;crqyWJ7iPiw4LNzMZqRQ19M9DiqKxVLbzzDpFhqdvpF3OYry7UPCnpyFWDOsI/eKhQfG4G7dxiqH&#xA;i826DKqlLtPUPpc4aj1IxLJ6CmRa/CA+zeHfFUZYa1pmpRJJa3EZZ4hOYiyiRYzSjOlSQN8VQun+&#xA;aNG1I3CwXCKYLprJOckYE8qJFJ+4IkIcUmXFVHSvOOi6tG8schtokgtrn1LrhEpS79X0gCXPxfuW&#xA;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&#xA;f4D8tf8ALM3/ACNf/mrFXf4D8tf8szf8jX/5qxV3+A/LX/LM3/I1/wDmrFXf4D8tf8szf8jX/wCa&#xA;sVa/wH5Z/wCWZ/8AkbJ/zVirf+A/LX/LM3/I1/8AmrFXf4D8tf8ALM3/ACNf/mrFWv8AAfln/lmf&#xA;/kbJ/wA1Yq3/AID8tf8ALM3/ACNf/mrFVw8j+XBG0Qt34swYj1X6qGA/a/yjiqXv5Z82M7MuuuoJ&#xA;JAq+w8OuKtf4Y82/9X5/vf8Arirv8Mebf+r+/wB7/wBcVd/hjzb/ANX5/vf+uKu/wx5t/wCr+/3v&#xA;/XFXf4Y82/8AV+f73/rirv8ADHm3/q/v97/1xV3+GPNv/V/f73/rirv8Mebf+r8/3v8A1xV3+GPN&#xA;v/V+f73/AK4q7/DHm3/q/v8Ae/8AXFXf4Y82/wDV/f73/rirv8Mebf8Aq/P97/1xV3+GPNv/AFf3&#xA;+9/64q7/AAx5t/6vz/e/9cVd/hjzb/1fn+9/64q7/DHm3/q/P97/ANcVd/hjzb/1fn+9/wCuKu/w&#xA;x5t/6v7/AHv/AFxV3+GPNv8A1fn+9/64qvHlrzWIWQ665dmUhqvsAGqOveoxVRk8yec1dlXRKqCQ&#xA;D6cm4/4LFWv8Tedf+rH/AMk5P+asVd/ibzr/ANWP/knJ/wA1Yq7/ABN51/6sf/JOT/mrFXf4m86/&#xA;9WP/AJJyf81Yq7/E3nX/AKsf/JOT/mrFXf4m86/9WP8A5Jyf81Yq7/E3nX/qx/8AJOT/AJqxVG6R&#xA;r3mW6vo4NS0r6tbvsZeLrQ9t2JGThASvfoxlIimUZBk7FXYq7FXYq7FXYq7FXYq7FXYq7FXYq7FU&#xA;i1HzhoulXslhdvIJoePIKhI+JQ43+TYqhv8AlYHlz/fkv/Is4q7/AJWB5c/35L/yLOKu/wCVgeXP&#xA;9+S/8izirv8AlYHlz/fkv/Is4q7/AJWB5c/35L/yLOKu/wCVgeXP9+S/8izirv8AlYHlz/fkv/Is&#xA;4q7/AJWB5c/35L/yLOKu/wCVgeXP9+S/8izirv8AlYHlz/fkv/Is4q7/AJWB5c/35L/yLOKu/wCV&#xA;geXP9+S/8izirv8AlYHlz/fkv/Is4q7/AJWB5c/35L/yLOKu/wCVgeXP9+S/8izirv8AlYHlz/fk&#xA;v/Is4q7/AJWB5c/35L/yLOKrh588vmNpecvBWVSfTPVgxH/EcNbWi92QevB/vxf+CGBLvXg/34n/&#xA;AAQxVDy2ukzyGWeG2lkbq7qjMaCm5IxVZ9Q0P/lmtP8AkXH/AExV31DQ/wDlmtP+Rcf9MVd9Q0P/&#xA;AJZrT/kXH/TFXfUND/5ZrT/kXH/TFXfUND/5ZrT/AJFx/wBMVd9Q0P8A5ZrT/kXH/TFXfUND/wCW&#xA;a0/5Fx/0xV31DQ/+Wa0/5Fx/0xV31DQ/+Wa0/wCRcf8ATFXfUND/AOWa0/5Fx/0xV31DQ/8AlmtP&#xA;+Rcf9MVd9Q0P/lmtP+Rcf9MVd9Q0P/lmtP8AkXH/AExV31DQ/wDlmtP+Rcf9MVd9Q0P/AJZrT/kX&#xA;H/TFXfUND/5ZrT/kXH/TFXfUND/5ZrT/AJFx/wBMVb+o6LxI+r2vEkEjhHSorTtiqQP+XGhu7OZ7&#xA;qrEsRzjpv/zxxVr/AJVtoX+/7v8A4OP/AKo4q7/lW2hf7/u/+Dj/AOqOKu/5VtoX+/7v/g4/+qOK&#xA;u/5VtoX+/wC7/wCDj/6o4q7/AJVtoX+/7v8A4OP/AKo4q7/lW2hf7/u/+Dj/AOqOKu/5VtoX+/7v&#xA;/g4/+qOKu/5VtoX+/wC7/wCDj/6o4q7/AJVtoX+/7v8A4OP/AKo4q7/lW2hf7/u/+Dj/AOqOKu/5&#xA;VtoX+/7v/g4/+qOKu/5VtoX+/wC7/wCDj/6o4q7/AJVtoX+/7v8A4OP/AKo4q7/lW2hf7/u/+Dj/&#xA;AOqOKu/5VtoX+/7v/g4/+qOKu/5VtoX+/wC7/wCDj/6o4q7/AJVtoX+/7v8A4OP/AKo4q7/lW2hf&#xA;7/u/+Dj/AOqOKu/5VtoX+/7v/g4/+qOKrx+XWiCJoRPdcXZXPxx1qoYD/dP+Xiqk9l+YpdimoW4W&#xA;p4jjH07f8e+KrfqX5j/9XC3/AOBj/wCyfFXfUvzI/wCrhb/8DH/2T4q76l+Y/wD1cLf/AIGP/snx&#xA;V31L8yP+rhb/APAx/wDZPirvqX5kf9XC3/4GP/snxVkukpqUdkiatIs10PtugAB/4FVH4ZPIYmq7&#xA;mMBLqjcgydirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdi&#xA;rsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdir&#xA;sVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirs&#xA;VdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsV&#xA;dirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVd&#xA;irsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdi&#xA;rsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdir&#xA;sVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirs&#xA;VdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsV&#xA;dirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVd&#xA;irsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVdirsVf/Z</xmpGImg:image>
+               </rdf:li>
+            </rdf:Alt>
+         </xmp:Thumbnails>
+         <xmpMM:InstanceID>xmp.iid:66df3c75-bba5-464c-a9d4-0a54c2a94e98</xmpMM:InstanceID>
+         <xmpMM:DocumentID>xmp.did:51bd51b6-3b78-4c31-8886-69149567234e</xmpMM:DocumentID>
+         <xmpMM:OriginalDocumentID>xmp.did:51bd51b6-3b78-4c31-8886-69149567234e</xmpMM:OriginalDocumentID>
+         <xmpMM:History>
+            <rdf:Seq>
+               <rdf:li rdf:parseType="Resource">
+                  <stEvt:action>created</stEvt:action>
+                  <stEvt:instanceID>xmp.iid:51bd51b6-3b78-4c31-8886-69149567234e</stEvt:instanceID>
+                  <stEvt:when>2025-09-14T10:38:38+02:00</stEvt:when>
+                  <stEvt:softwareAgent>Adobe InDesign 20.5 (Macintosh)</stEvt:softwareAgent>
+               </rdf:li>
+               <rdf:li rdf:parseType="Resource">
+                  <stEvt:action>saved</stEvt:action>
+                  <stEvt:instanceID>xmp.iid:d19baa0b-806a-4c30-99a7-35e8063a9e23</stEvt:instanceID>
+                  <stEvt:when>2025-09-14T10:38:38+02:00</stEvt:when>
+                  <stEvt:softwareAgent>Adobe InDesign 20.5 (Macintosh)</stEvt:softwareAgent>
+                  <stEvt:changed>/</stEvt:changed>
+               </rdf:li>
+               <rdf:li rdf:parseType="Resource">
+                  <stEvt:action>saved</stEvt:action>
+                  <stEvt:instanceID>xmp.iid:66df3c75-bba5-464c-a9d4-0a54c2a94e98</stEvt:instanceID>
+                  <stEvt:when>2025-09-14T10:45:04+02:00</stEvt:when>
+                  <stEvt:softwareAgent>Adobe InDesign 20.5 (Macintosh)</stEvt:softwareAgent>
+                  <stEvt:changed>/</stEvt:changed>
+               </rdf:li>
+            </rdf:Seq>
+         </xmpMM:History>
+         <dc:format>application/x-indesign</dc:format>
+         <dc:title>
+            <rdf:Alt>
+               <rdf:li xml:lang="x-default">crossref-anchor</rdf:li>
+            </rdf:Alt>
+         </dc:title>
+         <xmpTPg:Colorants>
+            <rdf:Seq>
+               <rdf:li rdf:parseType="Resource">
+                  <xmpG:swatchName>Black</xmpG:swatchName>
+                  <xmpG:mode>CMYK</xmpG:mode>
+                  <xmpG:type>Process</xmpG:type>
+                  <xmpG:cyan>0</xmpG:cyan>
+                  <xmpG:magenta>0</xmpG:magenta>
+                  <xmpG:yellow>0</xmpG:yellow>
+                  <xmpG:black>100</xmpG:black>
+               </rdf:li>
+               <rdf:li rdf:parseType="Resource">
+                  <xmpG:swatchName>Paper</xmpG:swatchName>
+                  <xmpG:mode>CMYK</xmpG:mode>
+                  <xmpG:type>Process</xmpG:type>
+                  <xmpG:cyan>0</xmpG:cyan>
+                  <xmpG:magenta>0</xmpG:magenta>
+                  <xmpG:yellow>0</xmpG:yellow>
+                  <xmpG:black>0</xmpG:black>
+               </rdf:li>
+               <rdf:li rdf:parseType="Resource">
+                  <xmpG:swatchName>Registration</xmpG:swatchName>
+                  <xmpG:mode>CMYK</xmpG:mode>
+                  <xmpG:type>Process</xmpG:type>
+                  <xmpG:cyan>100</xmpG:cyan>
+                  <xmpG:magenta>100</xmpG:magenta>
+                  <xmpG:yellow>100</xmpG:yellow>
+                  <xmpG:black>100</xmpG:black>
+               </rdf:li>
+            </rdf:Seq>
+         </xmpTPg:Colorants>
+         <xmpTPg:Fonts>
+            <rdf:Bag>
+               <rdf:li rdf:parseType="Resource">
+                  <stFnt:fontName>GaramondPremrPro-BdCapt</stFnt:fontName>
+                  <stFnt:fontFamily>Garamond Premier Pro</stFnt:fontFamily>
+                  <stFnt:fontFace>Bold Caption</stFnt:fontFace>
+                  <stFnt:fontType>OpenTypeCFF</stFnt:fontType>
+                  <stFnt:versionString>GaramondPremrPro-BdCaptVersion 2.000;PS 2.000;hotconv 1.0.50;makeotf.lib2.0.16970</stFnt:versionString>
+                  <stFnt:composite>false</stFnt:composite>
+                  <stFnt:fontFileName>GaramondPremrPro-BdCapt.otf</stFnt:fontFileName>
+               </rdf:li>
+               <rdf:li rdf:parseType="Resource">
+                  <stFnt:fontName>GaramondPremrPro</stFnt:fontName>
+                  <stFnt:fontFamily>Garamond Premier Pro</stFnt:fontFamily>
+                  <stFnt:fontFace>Regular</stFnt:fontFace>
+                  <stFnt:fontType>OpenTypeCFF</stFnt:fontType>
+                  <stFnt:versionString>GaramondPremrProVersion 2.000;PS 2.000;hotconv 1.0.50;makeotf.lib2.0.16970</stFnt:versionString>
+                  <stFnt:composite>false</stFnt:composite>
+                  <stFnt:fontFileName>GaramondPremrPro.otf</stFnt:fontFileName>
+               </rdf:li>
+               <rdf:li rdf:parseType="Resource">
+                  <stFnt:fontName>GaramondPremrPro-Med</stFnt:fontName>
+                  <stFnt:fontFamily>Garamond Premier Pro</stFnt:fontFamily>
+                  <stFnt:fontFace>Medium</stFnt:fontFace>
+                  <stFnt:fontType>OpenTypeCFF</stFnt:fontType>
+                  <stFnt:versionString>GaramondPremrPro-MedVersion 2.000;PS 2.000;hotconv 1.0.50;makeotf.lib2.0.16970</stFnt:versionString>
+                  <stFnt:composite>false</stFnt:composite>
+                  <stFnt:fontFileName>GaramondPremrPro-Med.otf</stFnt:fontFileName>
+               </rdf:li>
+               <rdf:li rdf:parseType="Resource">
+                  <stFnt:fontName>GaramondPremrPro-Smbd</stFnt:fontName>
+                  <stFnt:fontFamily>Garamond Premier Pro</stFnt:fontFamily>
+                  <stFnt:fontFace>Semibold</stFnt:fontFace>
+                  <stFnt:fontType>OpenTypeCFF</stFnt:fontType>
+                  <stFnt:versionString>GaramondPremrPro-SmbdVersion 2.000;PS 2.000;hotconv 1.0.50;makeotf.lib2.0.16970</stFnt:versionString>
+                  <stFnt:composite>false</stFnt:composite>
+                  <stFnt:fontFileName>GaramondPremrPro-Smbd.otf</stFnt:fontFileName>
+               </rdf:li>
+            </rdf:Bag>
+         </xmpTPg:Fonts>
+      </rdf:Description>
+   </rdf:RDF>
+</x:xmpmeta>
+<?xpacket end="r"?>]]></Contents>
+			</Properties>
+		</MetadataPacketPreference>
+		<InCopyExportOption IncludeGraphicProxies="true" IncludeAllResources="false" />
+		<ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/Header1">
+			<CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+				<Content>Bitiis dolla cones venisse cestiis re, cum quiaectius.</Content>
+				<Br />
+			</CharacterStyleRange>
+		</ParagraphStyleRange>
+		<ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/Paragraph">
+			<CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+				<Content>Tendebit et eos adipsa volesci atemquis et fugitat iissit opta ipsam, nem faccabo repudit ad molor sit inci alignisinti qui te dolesse vernamus re cum inte illatent pe doluptas autem duntion eseque acienis autent fugitaquunt lat et audita num dolum apellit atiure nonse ea a conseditin comniene omnihiti num faccaboribus aliquatia pore ma que volenim dolla voluptate volorepel int labore lab ipsus.</Content>
+				<Br />
+				<Content>Nus ipitiat ioriatendere plaborem solorrum fuga. Itaerspe maiorehendi as enisimperiae omniaep elictur, sa ipit, soloriate inctatia cus renisi volor simenihillit venis apedic to molo comniet esequam culluptat.</Content>
+				<Br />
+			</CharacterStyleRange>
+		</ParagraphStyleRange>
+		<ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/Header2">
+			<CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+				<ParagraphDestination Self="ParagraphDestination/Anchor" Name="Anchor" Hidden="false" DestinationUniqueKey="233" />
+				<Content>Ga. Nemporr ovidus audipic ipsunt.</Content>
+				<Br />
+			</CharacterStyleRange>
+		</ParagraphStyleRange>
+		<ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/Paragraph">
+			<CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+				<Content>Ihiciisqui ommolor as duci adit perum faccaesequia pla conseque veles sitiumquia prati ommolore simpor ressin et eic tempos essincit aut experibus et erchill igenis dolumquam, cor a si atus pe quae pe omnianimus ero te sint.</Content>
+				<Br />
+				<Content>Incienist, ut rempel illab is imaions ediatqui soles exero ipist ut et quiscip sapedi blabo. Mus int ratur sincturia volum idelest, sit estistem vellat dem dunt ped exeria dolum hicident dus et prat.</Content>
+				<Br />
+				<Content>Olorerspel iliquas et poreiuscima destiae invelia ectorrovid mi, temo id excea quam quis estibus adictibus voluptatum quis venima dolupic to culluptati officti aspernam volorenis unti que ene verestibus abo. Et voluptios porrovitatur adiciistrum repratione est doloribus, sitat experumqui dolupit, ommossum in ratinimo in con pa consenes re etur ma alit, nusamet lab iurem sin estiumquam aboreprati andi omnist explam est alicto quia plandiae dolende volor sit rem hillatisciis a id qui rem hilibust iliberro tem faccuptas et esequis doles dolestiones doluptature, volla conectatem delessimus, toreium quamus dolori a eium facim voluptas es seque nobiscid utecus alistem eumquia ecuptibus, es aligend antiandit expliqui sim quo blam a alibus dit alique nem et et eveliquod quatis nia nis et hillatur?</Content>
+				<Br />
+				<Content>Lupta coribus, occume dolorem apersperum ium dolupta tisseces reptaquas endi inienia temporrore, endis core minciminulpa voluptur, volo enimole ssitibus et ut exces dipsum dolorro bla consed ut aboreped quae. Ut que nos nimil eume vendis aceatur, is ant.</Content>
+				<Br />
+				<Content>Itae re escidebit occus ius, nam volupta tatibustis mos nos ut liquame volor alitatumet quam etusa esequiae seque volupti oriorestin et ut enitint aute laccabo. Ut alignat.</Content>
+				<Br />
+			</CharacterStyleRange>
+		</ParagraphStyleRange>
+		<ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/Header2">
+			<CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+				<Content>Tem quam ellicabor repro explia volenim denitat.</Content>
+				<HyperlinkTextDestination Self="HyperlinkTextDestination/anchor-1" Name="anchor-1" Hidden="false" DestinationUniqueKey="234" />
+				<Br />
+			</CharacterStyleRange>
+		</ParagraphStyleRange>
+		<ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/Paragraph">
+			<CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+				<Content>Aut arum nam net im reptaep tatus, soluptat ilis et, quiatur? Optamus, optatur? Ihillor modigenet eostius dolor aspissed molorum voluptas ent aliquam, officabor as consequi aut dolore resequi cum volesequat quatus aut el ius di dolum ius ressero resedio tem veritio stibus endae inis apic to coriate mquatib usaectatem fugiam iligenientur aut entibust perspienet, cus aut eos digenim aionem. Itatem. Arum, vel ipitiatent, aut acea sanderibus a volutem porioresti del incti ide quid enda quis dolorum aut quo vollabore nis re eost voluptatur?</Content>
+				<Br />
+				<Content>Estiatibus ent aut volum quam dolum quibus paruptatest resci quis ad estis ipsanimossi commolessunt voluptiscide a vent et omnihil moluptam qui dolest liam fuga. Otatent lacerate sequate rerunt.</Content>
+				<Br />
+				<Content>Icilit eost, con cone et, quosto tor aut utat ania sed quam, cuscit lique nonem venda qui dolum, quos ilibus eatus, ut estiumque quist excea velis sum faccum rem accum expliat usciene mperor aut volupta sit volor sitas alit aspieni sciisqui quostiis exceped quatur, sumquis ad ma volupta testion serferum quatur, to dent.</Content>
+				<Br />
+				<Content>Gendion sequam restionsed magnimos et aut eat am fuga. Dunto maior mo imosam harum aces moluptatur magnis moluptae eum quodige ndignih itatem vitatem aceari ant.</Content>
+				<Br />
+				<Content>Lores quia cum que quam re mo voluptata que coritiis vendi asperum qui aliciis simus et officaeped etur? Quis endam, conseque ped es atiunt ea doluptaqui illuptae. Volor modit aut et, corit, sunt quis dolorem verum rentorrum audigenis miliquibus mint ex et odiaspe reiunt estio incia nem di qui reium dolorrumquis derro blab ideniae peliqui ommolupta volest unturempores et ped maxim faccaescid quamene mporepe quatus esequia dolest peribus ipsant volum qui dus et offic to con reriorae.</Content>
+				<Br />
+				<Content>Ceratiatur, as nus nus ernatus, eumquis volor rem coriber itatur, ut volorest re volo que nestias sed modit pelendunti doloribus, alia quis nonsequ odipsunt, comnit dus alibustiatis dolorpo rescid esto tempos etus et quidebistrum faccusa eperum quodis dusci tet aut arum rem qui officipieni ne non eumquas explam, autem. Ut oditatur, asperci mintem estias ut pre veri reped quam fuga. Et vollupt ibusdae roribus qui quatusanis eum qui doluptaque voluptat vendici llescides core cus ad etur, torehenis nosant.</Content>
+				<Br />
+				<Content>Gitatiam laborporeped quas maionsequae aut magnam volorem exeruptatur, nus autat eriamusam hit, voleniam rest quaectaspis eum ipicil is ese ad moluptatiusa dolupta ersperro qui abori di que site prorepedi cum debisci dendit id qui sincips amustion et laboriatio. Gia serovit earum iduntus, cor arumqui quamend andebit atatquam ut vit, nempelit, sequaes tiorecum fugit faccatur reptati opti id qui venet que simagnatem landuntibus, quamend iaspid unde perum et rem sinihit quae provitas audaerist ipsanimi, sequis adit voleseq uidelicium venissit ut erit la nessit, cullissum quo cuptates conserum qui ut escieturerio quis et odis repero intem fugiati ssequasi dolluptatur, culles abore vendae sum quam endis eostianduci ande incte inction ectotasped minctia ndantem aut res ipiet plabor solupta tiusam et mos et andes duntotas doluptatin nam, te remquam quibus quassus a quatur si dolupta temporum et lantur?</Content>
+				<Br />
+				<Content>Cestion placcus volupis que lit res persper feruntur modipis cus essimpo stotae explab illa quam expel eum, cor arum et liquat voluptatiis maio. Nam, as nest lab ius, quidem rest, cum volectende pelles alicaep tatincto quiant volum faccullore porerup tatem. Et qui dem doluptam fugia dit et earume sequunt rerspic illibuscim reserita venit harchitae consernam doluptaquid ma poriant otatqui atiuscid que perissum fugitasincia sim que veruptaque delibus perepel ea aut quibus, non conet fuga. Nequo eario tentem vit am ium et ero blaut idereprae cus.</Content>
+			</CharacterStyleRange>
+			<CrossReferenceSource Self="uba7" AppliedFormat="ua3" Name="Hyperlink 1" Hidden="false" AppliedCharacterStyle="n">
+				<CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+					<Content>1.2 on page </Content>
+				</CharacterStyleRange>
+				<CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]" PageNumberType="TextVariable">
+					<TextVariableInstance Self="ubab" Name="&lt;?AID 001b?&gt;TV XRefPageNumber" ResultText="3" AssociatedTextVariable="dTextVariablen&lt;?AID 001b?&gt;TV XRefPageNumber" />
+				</CharacterStyleRange>
+			</CrossReferenceSource>
+			<CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+				<Br />
+			</CharacterStyleRange>
+		</ParagraphStyleRange>
+		<ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/Header3">
+			<CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+				<Content>On cor acilique aut ent.</Content>
+				<Br />
+			</CharacterStyleRange>
+		</ParagraphStyleRange>
+		<ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/Paragraph">
+			<CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+				<Content>Ehendam vendit optur, core, serum volorpo ritatiunt qui ditius nossimolorem eatem des re magnamus eaquam sunt.</Content>
+				<Br />
+				<Content>Usandanda volupiento coreici ut molorepero in estiassus, santecae. Bearciatus et fugit debit vidunto dolorum faces aut milla conse nonsedi tecatios a consedite od es sit aligenia voluptatus a volupta tibero consequodi dollab ium reheniet liquas simus dolest rehenistotae omnime accusapicius reped et pernatur?</Content>
+				<Br />
+				<Content>Tem eris experum quibusdam cus dolecta dicatum volorenimil inihici pidunt aceperf erspidenet ipsant od unt labore etus sit, sim quis eat.</Content>
+				<Br />
+				<Content>Aximpos unt. Temporent.</Content>
+				<Br />
+				<Content>Udae nos et oditae porrum quid modisquid quunt utat exces eossimusa aped quodit volupient volore mil moluptae vollupt atectem poreperum quia del molestrum derum sim que perchitate eatiuntur?</Content>
+				<Br />
+				<Content>Ut aut et eate quuntor iorrumque reperci psamet ipiet quunt.</Content>
+				<Br />
+				<Content>Am sim qui reptior ectempore cor sa dempediore que dolor sum, eveleste dundendae rem evelitia pratatet, to eribea sam asiti quiam, sitas dipienist asperum simpori rectust incit, ut harumquo blam velitatem inum endit mo dunt quis aut verum re officipsunt poriberum volupta voluptatem ne iunt, volore et veles quo estota voluptatis qui doluptas ad et oditaerunde et quam ullias eius moluptat pre pero el mint volorehent iur moluptumet rectium quidenihilla quis delestiunt eaquidi doloriae doloresequi non corem facim ulluptatist la non exeria doluptat.</Content>
+			</CharacterStyleRange>
+		</ParagraphStyleRange>
+	</Story>
+	<HyperlinkURLDestination Self="HyperlinkURLDestination/link" Name="link" DestinationURL="http://example.com" Hidden="false" DestinationUniqueKey="57" />
+	<HyperlinkURLDestination Self="HyperlinkURLDestination/URL 1" Name="URL 1" DestinationURL="http://example.com" Hidden="false" DestinationUniqueKey="58" />
+	<HyperlinkURLDestination Self="HyperlinkURLDestination/URL 2" Name="URL 2" DestinationURL="https://www.apple.com" Hidden="false" DestinationUniqueKey="59" />
+	<HyperlinkURLDestination Self="HyperlinkURLDestination/URL 3" Name="URL 3" DestinationURL="mailto:email@example.com" Hidden="false" DestinationUniqueKey="60" />
+	<HyperlinkURLDestination Self="HyperlinkURLDestination/URL 4" Name="URL 4" DestinationURL="https://www.apple.com" Hidden="false" DestinationUniqueKey="61" />
+	<HyperlinkURLDestination Self="HyperlinkURLDestination/URL 5" Name="URL 5" DestinationURL="https://www.apple.com/case" Hidden="false" DestinationUniqueKey="62" />
+	<HyperlinkURLDestination Self="HyperlinkURLDestination/URL 6" Name="URL 6" DestinationURL="https://www.apple.com/page" Hidden="false" DestinationUniqueKey="63" />
+	<HyperlinkURLDestination Self="HyperlinkURLDestination/URL 7" Name="URL 7" DestinationURL="https://www.apple.com" Hidden="false" DestinationUniqueKey="64" />
+	<HyperlinkURLDestination Self="HyperlinkURLDestination/URL 8" Name="URL 8" DestinationURL="https://www.apple.com" Hidden="false" DestinationUniqueKey="65" />
+	<HyperlinkURLDestination Self="HyperlinkURLDestination/URL 9" Name="URL 9" DestinationURL="https://www.apple.com" Hidden="false" DestinationUniqueKey="66" />
+	<HyperlinkURLDestination Self="HyperlinkURLDestination/URL 10" Name="URL 10" DestinationURL="http://example.com" Hidden="false" DestinationUniqueKey="122" />
+	<HyperlinkURLDestination Self="HyperlinkURLDestination/URL 11" Name="URL 11" DestinationURL="https://www.apple.com" Hidden="false" DestinationUniqueKey="123" />
+	<HyperlinkURLDestination Self="HyperlinkURLDestination/URL 12" Name="URL 12" DestinationURL="mailto:email@example.com" Hidden="false" DestinationUniqueKey="124" />
+	<HyperlinkURLDestination Self="HyperlinkURLDestination/URL 13" Name="URL 13" DestinationURL="https://www.apple.com" Hidden="false" DestinationUniqueKey="125" />
+	<HyperlinkURLDestination Self="HyperlinkURLDestination/URL 14" Name="URL 14" DestinationURL="https://www.apple.com/case" Hidden="false" DestinationUniqueKey="126" />
+	<HyperlinkURLDestination Self="HyperlinkURLDestination/URL 15" Name="URL 15" DestinationURL="https://www.apple.com/page" Hidden="false" DestinationUniqueKey="127" />
+	<HyperlinkURLDestination Self="HyperlinkURLDestination/URL 16" Name="URL 16" DestinationURL="https://www.apple.com" Hidden="false" DestinationUniqueKey="128" />
+	<HyperlinkURLDestination Self="HyperlinkURLDestination/URL 17" Name="URL 17" DestinationURL="https://www.apple.com" Hidden="false" DestinationUniqueKey="129" />
+	<HyperlinkURLDestination Self="HyperlinkURLDestination/URL 18" Name="URL 18" DestinationURL="https://www.apple.com" Hidden="false" DestinationUniqueKey="130" />
+	<Hyperlink Self="ubaa" Name="Cross-Reference" Source="uba7" Visible="false" Highlight="None" Width="Thin" BorderStyle="Solid" Hidden="false" DestinationUniqueKey="234">
+		<Properties>
+			<BorderColor type="enumeration">Black</BorderColor>
+			<Destination type="object">HyperlinkTextDestination/anchor-1</Destination>
+		</Properties>
+	</Hyperlink>
+</Document>

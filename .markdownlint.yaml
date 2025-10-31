@@ -1,0 +1,153 @@
+# >Markdownlint Configuration for Theodore Thesis System
+#: Optimized for academic writing, documentation, and multi-language content
+
+# Line length - Disabled for academic writing with long citations and references
+MD013: false
+
+# First line in file should be a top level header - Relaxed for content files
+MD041: false
+
+# Multiple top level headers in the same document - Allow for thesis sections
+MD025: false
+
+# Multiple headers with the same content - Allow duplicates in different sections
+MD024:
+  siblings_only: true
+
+# Trailing punctuation in header - Allow for academic style
+MD026:
+  punctuation: ".,;:"
+
+# Code block style - Enforce fenced code blocks for consistency
+MD046:
+  style: fenced
+
+# Hard tabs - Allow tabs for certain formatting needs
+MD010: false
+
+# Trailing spaces - Allow two trailing spaces for line breaks
+MD009:
+  br_spaces: 2
+  list_item_empty_lines: false
+  strict: false
+
+# No space after hash on atx style header - Be flexible with spacing
+MD018: false
+
+# Multiple spaces after hash on atx style header - Be flexible
+MD019: false
+
+# No space inside hashes on closed atx style header - Be flexible
+MD020: false
+
+# Multiple spaces inside hashes on closed atx style header - Be flexible
+MD021: false
+
+# Headers should be surrounded by blank lines - Enforce for readability
+MD022: true
+
+# Headers must start at the beginning of the line - Enforce
+MD023: true
+
+# Ordered list item prefix - Use ordered numbering for consistency
+MD029:
+  style: ordered
+
+# Spaces after list markers - Enforce single space
+MD030:
+  ul_single: 1
+  ol_single: 1
+  ul_multi: 1
+  ol_multi: 1
+
+# Fenced code blocks should be surrounded by blank lines - Enforce
+MD031: true
+
+# Lists should be surrounded by blank lines - Enforce for readability
+MD032: true
+
+# Inline HTML - Specific elements allowed for academic content
+MD033:
+  allowed_elements:
+    [
+      "a",
+      "abbr",
+      "acronym",
+      "b",
+      "br",
+      "code",
+      "div",
+      "em",
+      "i",
+      "img",
+      "kbd",
+      "span",
+      "strong",
+      "sub",
+      "sup",
+      "table",
+      "tbody",
+      "td",
+      "th",
+      "thead",
+      "tr",
+      "ul",
+      "ol",
+      "li",
+      "p",
+      "pre",
+    ]
+
+# Bare URL used - Allow bare URLs for bibliography and references
+MD034: false
+
+# Horizontal rule style - Enforce consistent style
+MD035:
+  style: "---"
+
+# Emphasis used instead of header - Allow for academic writing patterns
+MD036: false
+
+# Spaces inside emphasis markers - Enforce no spaces
+MD037: true
+
+# Spaces inside code span elements - Enforce no spaces
+MD038: true
+
+# Spaces inside link text - Enforce no spaces
+MD039: true
+
+# Fenced code blocks should specify a language - Relaxed for examples
+MD040: false
+
+# No empty links - Enforce
+MD042: true
+
+# Required files - Don't require specific files
+MD043: false
+
+# Proper names should have the correct capitalization - Disabled for multilingual content
+MD044: false
+
+# Images should have alternate text (alt text) - Enforce for accessibility
+MD045: true
+
+# Files should end with a single newline character - Enforce
+MD047: true
+
+# Code fence style - Enforce backticks for consistency
+MD048:
+  style: backtick
+
+# Emphasis used instead of header - Allow for academic patterns
+MD049:
+  style: asterisk
+
+# Link fragments should be valid - Disabled for complex academic references
+MD051: false
+
+# Reference links and images should use a label that is defined - Enforce
+MD052: true
+
+# Link and image reference definitions should be needed - Enforce
+MD053: true
