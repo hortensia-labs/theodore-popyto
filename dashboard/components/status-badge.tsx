@@ -24,7 +24,8 @@ export function StatusBadge({ status, showLabel = true, className, tooltipConten
   const badge = (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border',
+        'inline-flex items-center gap-1.5 rounded-full text-xs font-medium border',
+        showLabel ? ' px-2.5 py-0.5' : ' px-1.5 py-1.5',
         colorClasses[config.color],
         className
       )}

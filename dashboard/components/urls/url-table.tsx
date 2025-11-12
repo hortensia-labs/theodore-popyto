@@ -15,6 +15,7 @@ import { URLDetailPanel } from './url-detail-panel';
 import { ProcessingProgressModal, type ProcessingLogEntry } from './processing-progress-modal';
 import { UnlinkConfirmationModal } from './unlink-confirmation-modal';
 import { CitationStatusIndicator, type CitationStatus } from './citation-status-indicator';
+import { formatUrlForDisplay } from '@/lib/utils';
 
 interface URLTableProps {
   initialUrls?: UrlWithStatus[];
@@ -479,9 +480,11 @@ export function URLTable({ initialUrls = [], initialTotalPages = 1 }: URLTablePr
     );
   }
 
+  const isDetailPaneOpen = selectedUrlForDetail !== null;
+
   return (
-    <div className="flex gap-4">
-      <div className={selectedUrlForDetail ? 'flex-1 space-y-4' : 'w-full space-y-4'}>
+    <div className="flex gap-4 h-full overflow-hidden">
+      <div className={isDetailPaneOpen ? 'flex-1 space-y-4 min-w-0 overflow-hidden' : 'w-full space-y-4'}>
       {/* Filters */}
       <div className="bg-white border rounded-lg p-4">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
@@ -641,12 +644,12 @@ export function URLTable({ initialUrls = [], initialTotalPages = 1 }: URLTablePr
       )}
 
       {/* Table */}
-      <div className="bg-white border rounded-lg overflow-hidden">
-        <div className="overflow-x-auto">
+      <div className="bg-white border rounded-lg overflow-hidden flex-1 min-h-0 flex flex-col">
+        <div className="overflow-auto flex-1">
           <table className="w-full">
             <thead className="bg-gray-50 border-b">
               <tr>
-                <th className="px-4 py-3 text-left">
+                <th className="px-4 py-3 text-left w-[50px]">
                   <input
                     type="checkbox"
                     checked={selectedUrls.size === urls.length && urls.length > 0}
@@ -654,22 +657,19 @@ export function URLTable({ initialUrls = [], initialTotalPages = 1 }: URLTablePr
                     className="rounded"
                   />
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase min-w-[150px] max-w-[250px]">
                   URL
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase w-[100px]">
                   Status
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">
-                  Valid IDs
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase w-[100px]">
+                  IDs
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">
-                  Custom IDs
-                </th>
-                <th className="px-4 py-3 text-center text-xs font-medium text-gray-700 uppercase">
+                <th className="px-4 py-3 text-center text-xs font-medium text-gray-700 uppercase w-[80px]">
                   Citation
                 </th>
-                <th className="px-4 py-3 text-right text-xs font-medium text-gray-700 uppercase">
+                <th className="px-4 py-3 text-right text-xs font-medium text-gray-700 uppercase w-[100px]">
                   Actions
                 </th>
               </tr>
@@ -677,7 +677,7 @@ export function URLTable({ initialUrls = [], initialTotalPages = 1 }: URLTablePr
             <tbody className="divide-y">
               {urls.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-4 py-8 text-center text-gray-500">
+                  <td colSpan={6} className="px-4 py-8 text-center text-gray-500">
                     {isPending ? 'Loading...' : 'No URLs found'}
                   </td>
                 </tr>
@@ -701,20 +701,20 @@ export function URLTable({ initialUrls = [], initialTotalPages = 1 }: URLTablePr
                           className="rounded"
                         />
                       </td>
-                      <td className="px-4 py-3">
+                      <td className="px-4 py-3 w-[220px] min-w-[220px] max-w-[220px] overflow-hidden">
                         <a
                           href={url.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-blue-600 hover:underline text-sm max-w-md truncate block"
+                          className="text-blue-600 hover:underline text-sm truncate block max-w-full"
                           title={url.url}
                         >
-                          {url.url}
+                          {formatUrlForDisplay(url.url)}
                         </a>
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
-                          <StatusBadge status={url.status} tooltipContent={tooltipContent} />
+                          <StatusBadge status={url.status} tooltipContent={tooltipContent} showLabel={!isDetailPaneOpen} />
                           {url.status === 'extractable' && url.analysisData?.validIdentifiers && url.analysisData.validIdentifiers.length > 0 && (
                             <button
                               onClick={(e) => {
@@ -757,17 +757,17 @@ export function URLTable({ initialUrls = [], initialTotalPages = 1 }: URLTablePr
                           )}
                         </div>
                       </td>
-                      <td className="px-4 py-3 text-sm text-gray-600">
-                        {url.analysisData?.validIdentifiers?.length || 0}
-                      </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
-                          <span className="text-sm text-gray-600">
-                            {customIdsCount}
+                          <span className="text-sm text-gray-600 whitespace-nowrap">
+                            {url.analysisData?.validIdentifiers?.length || 0} / {customIdsCount}
                           </span>
                           <button
-                            onClick={() => handleAddIdentifier(url.id)}
-                            className="p-1 hover:bg-gray-100 rounded transition-colors"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleAddIdentifier(url.id);
+                            }}
+                            className="p-1 hover:bg-gray-100 rounded transition-colors shrink-0"
                             title="Add custom identifier"
                           >
                             <Plus className="h-4 w-4 text-gray-600" />
@@ -796,8 +796,8 @@ export function URLTable({ initialUrls = [], initialTotalPages = 1 }: URLTablePr
                               title="Process with Zotero"
                               className="text-white cursor-pointer"
                             >
-                              <Database className="h-4 w-4 mr-1" />
-                              Process
+                              <Database className="h-4 w-4" />
+                              {!isDetailPaneOpen && <span className="ml-1">Process</span>}
                             </Button>
                           )}
                           {url.zoteroProcessingStatus === 'failed' && (
@@ -909,7 +909,7 @@ export function URLTable({ initialUrls = [], initialTotalPages = 1 }: URLTablePr
 
       {/* Detail Panel */}
       {selectedUrlForDetail && (
-        <div className="w-1/2 border-l border-gray-200 h-[calc(100vh-8rem)]">
+        <div className="w-[500px] rounded-lg shrink-0 border bg-gray-50 border-gray-200 h-[calc(100vh-8rem)] overflow-hidden">
           <URLDetailPanel
             url={selectedUrlForDetail}
             onClose={handleCloseDetailPanel}

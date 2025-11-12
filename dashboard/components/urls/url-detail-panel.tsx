@@ -238,18 +238,18 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
   }
 
   return (
-    <div className="h-full bg-white border-l border-gray-200 flex flex-col">
-      <div className="flex-1 overflow-y-auto">
+    <div className="h-full flex flex-col w-full overflow-hidden">
+      <div className="flex-1 overflow-y-auto min-w-0">
         <div className="p-6 space-y-6">
           {/* Header */}
-          <div className="flex items-start justify-between sticky top-0 bg-white pb-4">
-            <div className="flex-1 pr-4">
+          <div className="flex items-start bg-gray-50 border-b justify-between sticky top-0 pb-8 min-w-0">
+            <div className="flex-1 pr-4 min-w-0">
               <h2 className="text-xl font-semibold mb-2">URL Details</h2>
               <a
                 href={url.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 hover:underline text-sm break-all"
+                className="text-blue-600 hover:underline text-sm wrap-break-word break-all"
               >
                 {url.url}
               </a>
@@ -258,7 +258,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
               {zoteroItemMetadata?.citation && (
                 <div className="mt-3 pt-3 border-t">
                   <div className="items-center flex-row-reverse gap-2 text-sm">
-                  <p className="py-1 rounded text-lg font-serif">
+                  <p className="py-1 rounded text-lg font-serif wrap-break-word break-all">
                       {zoteroItemMetadata.citation}
                     </p>    
                   {zoteroItemMetadata.itemType && (
@@ -300,7 +300,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
           )}
 
           {/* URL Info */}
-          <div className="border rounded-lg mt-10 p-4 space-y-3">
+          <div className="border rounded-lg bg-white mt-10 p-4 space-y-3">
             <h3 className="font-medium">URL Information</h3>
             
             <div className="grid grid-cols-2 gap-4 text-sm">
@@ -333,7 +333,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
               
               <div>
                 <span className="text-gray-600">Final URL:</span>
-                <div className="mt-1 font-medium break-all">{url.finalUrl || '-'}</div>
+                <div className="mt-1 font-medium wrap-break-word break-all">{url.finalUrl || '-'}</div>
               </div>
               
               {url.redirectCount !== null && url.redirectCount !== undefined && (
@@ -346,7 +346,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
           </div>
 
           {/* Zotero Processing */}
-          <div className="border rounded-lg p-4 space-y-3">
+          <div className="border rounded-lg bg-white p-4 space-y-3">
             <h3 className="font-medium">Zotero Processing</h3>
             
             <div className="space-y-3 text-sm">
@@ -363,9 +363,9 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
                   
                   {/* Title */}
                   {zoteroItemMetadata && getTitleFromFields(zoteroItemMetadata.fields) && (
-                    <div className="flex flex-col gap-2 mt-10">
+                    <div className="flex flex-col gap-2 mt-10 min-w-0">
                       <span className="text-gray-600">Title:</span>
-                      <div className="mt-1 font-medium text-lg font-serif">
+                      <div className="mt-1 font-medium text-lg font-serif wrap-break-word break-all">
                         {getTitleFromFields(zoteroItemMetadata.fields)}
                       </div>
                     </div>
@@ -373,9 +373,9 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
                   
                   {/* Creators */}
                   {zoteroItemMetadata?.creators && zoteroItemMetadata.creators.length > 0 && (
-                    <div className="flex flex-col gap-2 mt-4">
+                    <div className="flex flex-col gap-2 mt-4 min-w-0">
                       <span className="text-gray-600">Authors:</span>
-                      <div className="mt-1 font-medium font-serif">
+                      <div className="mt-1 font-medium font-serif wrap-break-word break-all">
                         {formatCreators(zoteroItemMetadata.creators)}
                       </div>
                     </div>
@@ -383,9 +383,9 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
                   
                   {/* Date */}
                   {zoteroItemMetadata && getDateFromFields(zoteroItemMetadata.fields) && (
-                    <div className="flex flex-col gap-2 mt-4">
+                    <div className="flex flex-col gap-2 mt-4 min-w-0">
                       <span className="text-gray-600">Date:</span>
-                      <div className="mt-1 font-medium font-serif">
+                      <div className="mt-1 font-medium font-serif wrap-break-word break-all">
                         {getDateFromFields(zoteroItemMetadata.fields)}
                       </div>
                     </div>
@@ -394,7 +394,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
                   <div className="flex flex-col gap-2 mt-8 border-t pt-8">
                     <span className="text-gray-600">Zotero Item Key:</span>
                     <div className="mt-1 flex items-center gap-2">
-                      <code className="flex-1 bg-gray-50 px-2 py-1 rounded font-mono text-xs">
+                      <code className="flex-1 bg-gray-50 px-2 py-1 rounded font-mono text-xs break-all min-w-0">
                         {url.zoteroItemKey}
                       </code>
                       <a
@@ -487,9 +487,9 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
                   </div>
                   
                   {url.zoteroProcessingError && (
-                    <div>
+                    <div className="min-w-0">
                       <span className="text-gray-600">Error:</span>
-                      <div className="mt-1 bg-red-50 text-red-800 px-3 py-2 rounded text-xs">
+                      <div className="mt-1 bg-red-50 text-red-800 px-3 py-2 rounded text-xs wrap-break-word break-all">
                         {url.zoteroProcessingError}
                       </div>
                     </div>
@@ -570,7 +570,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
 
           {/* ZOTERO Analysis Response */}
           {rawMetadata && (
-            <div className="border rounded-lg p-4 space-y-3">
+            <div className="border rounded-lg bg-white p-4 space-y-3">
               <h3 className="font-medium">ZOTERO Analysis Response</h3>
               
               <div className="space-y-3 text-sm">
@@ -677,7 +677,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
           )}
 
           {/* Analysis Data */}
-          <div className="border rounded-lg p-4 space-y-3">
+          <div className="border rounded-lg bg-white p-4 space-y-3">
             <h3 className="font-medium">Analysis Data</h3>
             
             <div className="space-y-2 text-sm">
@@ -742,7 +742,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
           </div>
 
           {/* Custom Identifiers */}
-          <div className="border rounded-lg p-4 space-y-3">
+          <div className="border rounded-lg bg-white p-4 space-y-3">
             <h3 className="font-medium">Custom Identifiers</h3>
             
             <div className="flex gap-2">
@@ -785,7 +785,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
           </div>
 
           {/* Notes */}
-          <div className="border rounded-lg p-4 space-y-3">
+          <div className="border rounded-lg bg-white p-4 space-y-3">
             <h3 className="font-medium">Notes</h3>
             
             <textarea
