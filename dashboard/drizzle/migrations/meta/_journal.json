@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1762804804856,
+      "tag": "0000_heavy_giant_girl",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1762865188546,
+      "tag": "0001_black_captain_america",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1762905769938,
+      "tag": "0002_clumsy_proteus",
+      "breakpoints": true
+    }
+  ]
+}
