@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { useState, useTransition, useEffect } from 'react';
@@ -6,11 +7,16 @@ import { type UrlWithStatus } from '@/lib/db/computed';
 import { type UrlEnrichment } from '@/lib/db/schema';
 import { updateEnrichment, addIdentifier, removeIdentifier, getEnrichment } from '@/lib/actions/enrichments';
 import { processUrlWithZotero, unlinkUrlFromZotero, deleteZoteroItemAndUnlink, getZoteroItemMetadata, revalidateCitation } from '@/lib/actions/zotero';
+import { processSingleUrl } from '@/lib/actions/process-url-action';
+import { getIdentifiersWithPreviews, selectAndProcessIdentifier, refreshIdentifierPreview, fetchAllPreviews } from '@/lib/actions/identifier-selection-action';
+import { getExtractedMetadata, approveAndStoreMetadata, rejectMetadata } from '@/lib/actions/metadata-approval-action';
 import { getZoteroWebUrl, type ZoteroItemResponse } from '@/lib/zotero-client';
 import { StatusBadge } from '../status-badge';
 import { Button } from '../ui/button';
 import { UnlinkConfirmationModal } from './unlink-confirmation-modal';
 import { CitationStatusIndicator, type CitationStatus } from './citation-status-indicator';
+import { PreviewComparison } from './preview-comparison';
+import { MetadataReview } from './metadata-review';
 
 interface URLDetailPanelProps {
   url: UrlWithStatus;
@@ -28,6 +34,8 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
   const [isProcessing, setIsProcessing] = useState(false);
   const [unlinkModalOpen, setUnlinkModalOpen] = useState(false);
   const [zoteroItemMetadata, setZoteroItemMetadata] = useState<ZoteroItemResponse | null>(null);
+  const [identifiersWithPreviews, setIdentifiersWithPreviews] = useState<any[]>([]);
+  const [extractedMetadata, setExtractedMetadata] = useState<any>(null);
 
   useEffect(() => {
     async function loadEnrichment() {
@@ -53,6 +61,30 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
     }
     loadZoteroMetadata();
   }, [url.zoteroItemKey, url.status]);
+
+  useEffect(() => {
+    async function loadIdentifiers() {
+      if (url.zoteroProcessingStatus === 'identifiers_found' || url.identifierCount && url.identifierCount > 0) {
+        const identifiers = await getIdentifiersWithPreviews(url.id);
+        setIdentifiersWithPreviews(identifiers);
+      } else {
+        setIdentifiersWithPreviews([]);
+      }
+    }
+    loadIdentifiers();
+  }, [url.id, url.zoteroProcessingStatus, url.identifierCount]);
+
+  useEffect(() => {
+    async function loadExtractedMetadata() {
+      if (url.zoteroProcessingStatus === 'no_identifiers' && url.hasExtractedMetadata) {
+        const metadata = await getExtractedMetadata(url.id);
+        setExtractedMetadata(metadata);
+      } else {
+        setExtractedMetadata(null);
+      }
+    }
+    loadExtractedMetadata();
+  }, [url.id, url.zoteroProcessingStatus, url.hasExtractedMetadata]);
 
   // Extract ZOTERO analysis data from rawMetadata
   const rawMetadata = url.analysisData?.rawMetadata as Record<string, unknown> | undefined;
@@ -234,6 +266,114 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
       onUpdate?.();
     } else {
       setError(result.error || 'Validation failed');
+    }
+  }
+
+  async function handleProcessUrlContent() {
+    setIsProcessing(true);
+    setError(null);
+    setSuccessMessage(null);
+    
+    const result = await processSingleUrl(url.id);
+    
+    setIsProcessing(false);
+    
+    if (result.success) {
+      setSuccessMessage(
+        `URL processed: ${result.state}` +
+        (result.identifierCount ? ` - Found ${result.identifierCount} identifier(s)` : '')
+      );
+      
+      // Reload identifiers if found
+      if (result.identifierCount && result.identifierCount > 0) {
+        const identifiers = await getIdentifiersWithPreviews(url.id);
+        setIdentifiersWithPreviews(identifiers);
+      }
+      
+      onUpdate?.();
+    } else {
+      setError(result.error || 'Processing failed');
+    }
+  }
+
+  async function handleSelectIdentifier(identifierId: number) {
+    setIsProcessing(true);
+    setError(null);
+    setSuccessMessage(null);
+    
+    const result = await selectAndProcessIdentifier(url.id, identifierId);
+    
+    setIsProcessing(false);
+    
+    if (result.success) {
+      setSuccessMessage(`Item stored in Zotero: ${result.itemKey}`);
+      onUpdate?.();
+    } else {
+      setError(result.error || 'Failed to process identifier');
+    }
+  }
+
+  async function handleRefreshPreview(identifierId: number) {
+    const result = await refreshIdentifierPreview(identifierId);
+    
+    if (result.success) {
+      // Reload identifiers
+      const identifiers = await getIdentifiersWithPreviews(url.id);
+      setIdentifiersWithPreviews(identifiers);
+    } else {
+      setError(result.error || 'Failed to refresh preview');
+    }
+  }
+
+  async function handleFetchAllPreviews() {
+    setIsProcessing(true);
+    setError(null);
+    
+    const result = await fetchAllPreviews(url.id);
+    
+    setIsProcessing(false);
+    
+    if (result.success) {
+      setSuccessMessage(`Fetched ${result.count} preview(s)`);
+      // Reload identifiers
+      const identifiers = await getIdentifiersWithPreviews(url.id);
+      setIdentifiersWithPreviews(identifiers);
+    } else {
+      setError(result.error || 'Failed to fetch previews');
+    }
+  }
+
+  async function handleApproveMetadata(attachSnapshot: boolean) {
+    setIsProcessing(true);
+    setError(null);
+    setSuccessMessage(null);
+    
+    const result = await approveAndStoreMetadata(url.id, attachSnapshot);
+    
+    setIsProcessing(false);
+    
+    if (result.success) {
+      setSuccessMessage(`Item created in Zotero: ${result.itemKey}`);
+      onUpdate?.();
+    } else {
+      setError(result.error || 'Failed to create item');
+    }
+  }
+
+  async function handleRejectMetadata(reason?: string) {
+    setIsProcessing(true);
+    setError(null);
+    setSuccessMessage(null);
+    
+    const result = await rejectMetadata(url.id, reason);
+    
+    setIsProcessing(false);
+    
+    if (result.success) {
+      setSuccessMessage('Metadata rejected');
+      onUpdate?.();
+    } else {
+      setError(result.error || 'Failed to reject metadata');
     }
   }
 
@@ -515,7 +655,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
                     )}
                   </Button>
                 </>
-              ) : (url.status === 'extractable' || url.status === 'translatable') ? (
+              ) : (url.status === 'extractable' || url.status === 'translatable' || url.status === 'resolvable') ? (
                 <>
                   <div>
                     <span className="text-gray-600">Status:</span>
@@ -548,6 +688,38 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
                       </>
                     )}
                   </Button>
+                  
+                  <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-gray-200"></div>
+                    </div>
+                    <div className="relative flex justify-center text-xs">
+                      <span className="bg-white px-2 text-gray-500">Or</span>
+                    </div>
+                  </div>
+                  
+                  <Button
+                    onClick={handleProcessUrlContent}
+                    disabled={isProcessing}
+                    size="sm"
+                    variant="outline"
+                    className="w-full"
+                  >
+                    {isProcessing ? (
+                      <>
+                        <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <Database className="h-4 w-4 mr-2" />
+                        Process URL Content (Phase 1)
+                      </>
+                    )}
+                  </Button>
+                  <p className="text-gray-600 text-xs italic">
+                    Extracts identifiers from URL content (DOI, PMID, ArXiv, ISBN)
+                  </p>
                 </>
               ) : (
                 <>
@@ -567,6 +739,43 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
               )}
             </div>
           </div>
+
+          {/* Identifier Previews */}
+          {identifiersWithPreviews.length > 0 && (
+            <div className="border rounded-lg bg-white p-4 space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="font-medium">Identifier Previews</h3>
+                <Button
+                  onClick={handleFetchAllPreviews}
+                  disabled={isProcessing}
+                  size="sm"
+                  variant="outline"
+                >
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  Refresh All Previews
+                </Button>
+              </div>
+              
+              <PreviewComparison
+                identifiers={identifiersWithPreviews}
+                onSelectIdentifier={handleSelectIdentifier}
+                onRefreshPreview={handleRefreshPreview}
+                isProcessing={isProcessing}
+              />
+            </div>
+          )}
+
+          {/* Extracted Metadata Review */}
+          {extractedMetadata && (
+            <div className="border rounded-lg bg-white p-4">
+              <MetadataReview
+                metadata={extractedMetadata}
+                onApprove={handleApproveMetadata}
+                onReject={handleRejectMetadata}
+                isProcessing={isProcessing}
+              />
+            </div>
+          )}
 
           {/* ZOTERO Analysis Response */}
           {rawMetadata && (

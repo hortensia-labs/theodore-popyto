@@ -22,6 +22,13 @@
       "when": 1762905769938,
       "tag": "0002_clumsy_proteus",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1762980360847,
+      "tag": "0003_previous_lake",
+      "breakpoints": true
     }
   ]
 }

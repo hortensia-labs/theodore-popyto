@@ -48,6 +48,13 @@ export const urls = sqliteTable('urls', {
   citationValidatedAt: integer('citation_validated_at', { mode: 'timestamp' }),
   citationValidationDetails: text('citation_validation_details', { mode: 'json' }).$type<{ missingFields?: string[] }>(),
   
+  // Workflow tracking
+  processWorkflowVersion: text('process_workflow_version'), // Track which version processed this
+  contentFetchAttempts: integer('content_fetch_attempts').default(0),
+  lastFetchError: text('last_fetch_error'),
+  identifierCount: integer('identifier_count').default(0), // Denormalized for quick filtering
+  hasExtractedMetadata: integer('has_extracted_metadata', { mode: 'boolean' }).default(false),
+  
   // Timestamps
   discoveredAt: integer('discovered_at', { mode: 'timestamp' }),
   lastCheckedAt: integer('last_checked_at', { mode: 'timestamp' }),
@@ -163,4 +170,132 @@ export type NewUrlMetadata = typeof urlMetadata.$inferInsert;
 
 export type ImportHistory = typeof importHistory.$inferSelect;
 export type NewImportHistory = typeof importHistory.$inferInsert;
+
+/**
+ * URL Content Cache - tracks cached content files and metadata
+ */
+export const urlContentCache = sqliteTable('url_content_cache', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  urlId: integer('url_id').notNull().references(() => urls.id, { onDelete: 'cascade' }).unique(),
+  
+  // Content metadata
+  contentHash: text('content_hash').notNull(), // SHA-256 of content
+  contentType: text('content_type').notNull(), // MIME type
+  contentSize: integer('content_size').notNull(), // bytes
+  contentLanguage: text('content_language'), // detected language
+  
+  // File paths
+  rawContentPath: text('raw_content_path').notNull(), // path to cached file
+  processedContentPath: text('processed_content_path'), // path to processed/cleaned version
+  
+  // HTTP metadata
+  statusCode: integer('status_code').notNull(),
+  redirectChain: text('redirect_chain', { mode: 'json' }).$type<string[]>(),
+  responseHeaders: text('response_headers', { mode: 'json' }).$type<Record<string, string>>(),
+  
+  // Timestamps
+  fetchedAt: integer('fetched_at', { mode: 'timestamp' }).notNull(),
+  lastAccessedAt: integer('last_accessed_at', { mode: 'timestamp' }).notNull(),
+  expiresAt: integer('expires_at', { mode: 'timestamp' }), // cache expiry
+  
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
+}, (table) => ({
+  contentHashIdx: index('url_content_cache_hash_idx').on(table.contentHash),
+  fetchedAtIdx: index('url_content_cache_fetched_at_idx').on(table.fetchedAt),
+  urlIdIdx: index('url_content_cache_url_id_idx').on(table.urlId),
+}));
+
+/**
+ * URL Identifiers - stores all identifiers found for each URL
+ */
+export const urlIdentifiers = sqliteTable('url_identifiers', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  urlId: integer('url_id').notNull().references(() => urls.id, { onDelete: 'cascade' }),
+  
+  // Identifier data
+  identifierType: text('identifier_type').notNull(), // 'DOI', 'PMID', 'ARXIV', 'ISBN'
+  identifierValue: text('identifier_value').notNull(),
+  
+  // Extraction metadata
+  extractionMethod: text('extraction_method').notNull(), // 'pdf_metadata', 'html_meta_tag', 'regex_content', 'zotero_pdf'
+  extractionSource: text('extraction_source'), // 'page_1', 'meta[name="citation_doi"]', etc.
+  confidence: text('confidence').notNull(), // 'high', 'medium', 'low'
+  
+  // Preview data (cached from Zotero)
+  previewFetched: integer('preview_fetched', { mode: 'boolean' }).default(false),
+  previewData: text('preview_data', { mode: 'json' }).$type<any>(),
+  previewQualityScore: integer('preview_quality_score'), // 0-100
+  previewError: text('preview_error'),
+  previewFetchedAt: integer('preview_fetched_at', { mode: 'timestamp' }),
+  
+  // Selection tracking
+  userSelected: integer('user_selected', { mode: 'boolean' }).default(false),
+  selectedAt: integer('selected_at', { mode: 'timestamp' }),
+  
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
+}, (table) => ({
+  urlIdIdx: index('url_identifiers_url_id_idx').on(table.urlId),
+  typeValueIdx: uniqueIndex('url_identifiers_type_value_idx').on(table.identifierType, table.identifierValue, table.urlId),
+  previewFetchedIdx: index('url_identifiers_preview_fetched_idx').on(table.previewFetched),
+  identifierTypeIdx: index('url_identifiers_type_idx').on(table.identifierType),
+}));
+
+/**
+ * URL Extracted Metadata - stores metadata extracted from content (for Path 2)
+ */
+export const urlExtractedMetadata = sqliteTable('url_extracted_metadata', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  urlId: integer('url_id').notNull().references(() => urls.id, { onDelete: 'cascade' }).unique(),
+  
+  // Core bibliographic fields
+  title: text('title'),
+  creators: text('creators', { mode: 'json' }).$type<Array<{
+    creatorType: string;
+    firstName?: string;
+    lastName?: string;
+    name?: string;
+  }>>(),
+  date: text('date'),
+  itemType: text('item_type'), // 'journalArticle', 'blogPost', 'webpage', etc.
+  
+  // Additional fields
+  abstractNote: text('abstract_note'),
+  publicationTitle: text('publication_title'),
+  url: text('url'),
+  accessDate: text('access_date'),
+  language: text('language'),
+  
+  // Extraction metadata
+  extractionMethod: text('extraction_method').notNull(), // 'html_meta_tags', 'pdf_metadata', 'opengraph', 'json_ld'
+  extractionSources: text('extraction_sources', { mode: 'json' }).$type<Record<string, string>>(), // field -> source mapping
+  qualityScore: integer('quality_score'), // 0-100
+  
+  // Validation
+  validationStatus: text('validation_status'), // 'valid', 'incomplete', 'invalid'
+  validationErrors: text('validation_errors', { mode: 'json' }).$type<string[]>(),
+  missingFields: text('missing_fields', { mode: 'json' }).$type<string[]>(),
+  
+  // User review
+  userReviewed: integer('user_reviewed', { mode: 'boolean' }).default(false),
+  userApproved: integer('user_approved', { mode: 'boolean' }),
+  reviewedAt: integer('reviewed_at', { mode: 'timestamp' }),
+  
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
+}, (table) => ({
+  urlIdIdx: index('url_extracted_metadata_url_id_idx').on(table.urlId),
+  validationStatusIdx: index('url_extracted_metadata_validation_status_idx').on(table.validationStatus),
+}));
+
+// Type exports for new tables
+export type UrlContentCache = typeof urlContentCache.$inferSelect;
+export type NewUrlContentCache = typeof urlContentCache.$inferInsert;
+
+export type UrlIdentifier = typeof urlIdentifiers.$inferSelect;
+export type NewUrlIdentifier = typeof urlIdentifiers.$inferInsert;
+
+export type UrlExtractedMetadata = typeof urlExtractedMetadata.$inferSelect;
+export type NewUrlExtractedMetadata = typeof urlExtractedMetadata.$inferInsert;
 

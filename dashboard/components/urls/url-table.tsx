@@ -909,7 +909,7 @@ export function URLTable({ initialUrls = [], initialTotalPages = 1 }: URLTablePr
 
       {/* Detail Panel */}
       {selectedUrlForDetail && (
-        <div className="w-[500px] rounded-lg shrink-0 border bg-gray-50 border-gray-200 h-[calc(100vh-8rem)] overflow-hidden">
+        <div className="w-[500px] rounded-lg shrink-0 border bg-gray-50 border-gray-200 h-[calc(100vh-8rem)] overflow-hidden sticky top-0 self-start">
           <URLDetailPanel
             url={selectedUrlForDetail}
             onClose={handleCloseDetailPanel}
