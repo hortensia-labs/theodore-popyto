@@ -54,6 +54,13 @@ export const urls = sqliteTable('urls', {
   lastFetchError: text('last_fetch_error'),
   identifierCount: integer('identifier_count').default(0), // Denormalized for quick filtering
   hasExtractedMetadata: integer('has_extracted_metadata', { mode: 'boolean' }).default(false),
+
+  // LLM extraction tracking
+  llmExtractionStatus: text('llm_extraction_status'), // 'not_needed', 'pending', 'completed', 'failed'
+  llmExtractionProvider: text('llm_extraction_provider'), // 'ollama:llama3.2', 'anthropic:claude-3-5-haiku'
+  llmExtractionAttempts: integer('llm_extraction_attempts').default(0),
+  llmExtractedAt: integer('llm_extracted_at', { mode: 'timestamp' }),
+  llmExtractionError: text('llm_extraction_error'),
   
   // Timestamps
   discoveredAt: integer('discovered_at', { mode: 'timestamp' }),
