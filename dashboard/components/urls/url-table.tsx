@@ -483,375 +483,395 @@ export function URLTable({ initialUrls = [], initialTotalPages = 1 }: URLTablePr
   const isDetailPaneOpen = selectedUrlForDetail !== null;
 
   return (
-    <div className="flex gap-4 h-full overflow-hidden">
-      <div className={isDetailPaneOpen ? 'flex-1 space-y-4 min-w-0 overflow-hidden' : 'w-full space-y-4'}>
-      {/* Filters */}
-      <div className="bg-white border rounded-lg p-4">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Search
-            </label>
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search URLs..."
-              className="w-full px-3 py-2 border rounded-md text-sm"
+    <div className="flex gap-4 h-[calc(100vh-12rem)]">
+      {/* Left Column - Main scrollable area */}
+      <div className={isDetailPaneOpen ? 'flex-1 overflow-y-auto overflow-x-hidden min-w-0' : 'w-full overflow-y-auto overflow-x-hidden'}>
+        {/* Sticky Header Zone - Contains filters, messages, and bulk actions */}
+        <div className="sticky top-0 z-20 bg-gray-50 pb-4 space-y-4">
+          {/* Filters */}
+          <div className="bg-white border rounded-lg p-4 shadow-sm">
+            <div className="grid grid-cols-5 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Search
+                </label>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search URLs..."
+                  className="w-full px-3 py-2 border rounded-md text-sm"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Section
+                </label>
+                <select
+                  value={selectedSection}
+                  onChange={(e) => setSelectedSection(e.target.value)}
+                  className="w-full px-3 py-2 border rounded-md text-sm"
+                >
+                  <option value="">All sections</option>
+                  {sections.map(section => (
+                    <option key={section.id} value={section.name}>
+                      {section.title || section.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Status
+                </label>
+                <select
+                  value={selectedStatus}
+                  onChange={(e) => setSelectedStatus(e.target.value as UrlStatus | '')}
+                  className="w-full px-3 py-2 border rounded-md text-sm"
+                >
+                  <option value="">All statuses</option>
+                  <option value="stored">Stored</option>
+                  <option value="extractable">Extractable</option>
+                  <option value="translatable">Translatable</option>
+                  <option value="resolvable">Resolvable</option>
+                  <option value="error">Error</option>
+                  <option value="unknown">Unknown</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Domain
+                </label>
+                <select
+                  value={selectedDomain}
+                  onChange={(e) => setSelectedDomain(e.target.value)}
+                  className="w-full px-3 py-2 border rounded-md text-sm"
+                >
+                  <option value="">All domains</option>
+                  {domains.slice(0, 50).map(domain => (
+                    <option key={domain} value={domain}>
+                      {domain}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Citation
+                </label>
+                <select
+                  value={selectedCitationStatus}
+                  onChange={(e) => setSelectedCitationStatus(e.target.value as 'valid' | 'incomplete' | '')}
+                  className="w-full px-3 py-2 border rounded-md text-sm"
+                >
+                  <option value="">All citations</option>
+                  <option value="valid">Valid</option>
+                  <option value="incomplete">Incomplete</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="mt-4 flex gap-2">
+              <Button onClick={handleFilterChange} disabled={isPending}>
+                Apply Filters
+              </Button>
+              <Button
+                onClick={() => {
+                  setSearchQuery('');
+                  setSelectedSection('');
+                  setSelectedStatus('');
+                  setSelectedDomain('');
+                  setSelectedCitationStatus('');
+                  loadUrls(1);
+                }}
+                variant="outline"
+                disabled={isPending}
+              >
+                Clear Filters
+              </Button>
+            </div>
+          </div>
+
+          {/* Messages */}
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-md text-sm">
+              {error}
+            </div>
+          )}
+
+          {successMessage && (
+            <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-md text-sm">
+              {successMessage}
+            </div>
+          )}
+
+          {/* Bulk actions */}
+          {selectedUrls.size > 0 && (
+            <div className="bg-blue-50 border border-blue-200 rounded-md px-4 py-3 flex items-center justify-between">
+              <span className="text-sm text-blue-900">
+                {selectedUrls.size} URL(s) selected
+              </span>
+              <div className="flex gap-2">
+                <Button
+                  onClick={handleBulkProcess}
+                  variant="default"
+                  size="sm"
+                  disabled={isPending || isProcessing}
+                >
+                  <Database className="h-4 w-4 mr-2" />
+                  Process with Zotero
+                </Button>
+                <Button
+                  onClick={handleBulkUnlink}
+                  variant="outline"
+                  size="sm"
+                  disabled={isPending || isProcessing}
+                >
+                  <Unlink className="h-4 w-4 mr-2" />
+                  Unlink from Zotero
+                </Button>
+                <Button
+                  onClick={handleBulkDelete}
+                  variant="outline"
+                  size="sm"
+                  disabled={isPending || isProcessing}
+                >
+                  Delete Selected
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Flowing Content - Table and pagination */}
+        <div className="space-y-4">
+          {/* Table */}
+          <div className="bg-white border rounded-lg overflow-hidden">
+            <table className="w-full">
+              <thead className="bg-gray-50 border-b sticky top-0 z-10">
+                <tr>
+                  <th className="px-4 py-3 text-left w-[50px] bg-gray-50">
+                    <input
+                      type="checkbox"
+                      checked={selectedUrls.size === urls.length && urls.length > 0}
+                      onChange={(e) => handleSelectAll(e.target.checked)}
+                      className="rounded"
+                    />
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase min-w-[150px] max-w-[250px] bg-gray-50">
+                    URL
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase w-[100px] bg-gray-50">
+                    Status
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase w-[100px] bg-gray-50">
+                    IDs
+                  </th>
+                  <th className="px-4 py-3 text-center text-xs font-medium text-gray-700 uppercase w-[80px] bg-gray-50">
+                    Citation
+                  </th>
+                  <th className="px-4 py-3 text-right text-xs font-medium text-gray-700 uppercase w-[100px] bg-gray-50">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y">
+                {urls.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="px-4 py-8 text-center text-gray-500">
+                      {isPending ? 'Loading...' : 'No URLs found'}
+                    </td>
+                  </tr>
+                ) : (
+                  urls.map((url) => {
+                    const enrichment = enrichments[url.id];
+                    const customIdsCount = enrichment?.customIdentifiers?.length || 0;
+                    const tooltipContent = getTooltipContent(url);
+                    
+                    return (
+                      <tr
+                        key={url.id}
+                        className="hover:bg-gray-50 cursor-pointer"
+                        onClick={(e) => handleRowClick(url, e)}
+                      >
+                        <td className="px-4 py-3">
+                          <input
+                            type="checkbox"
+                            checked={selectedUrls.has(url.id)}
+                            onChange={(e) => handleSelectUrl(url.id, e.target.checked)}
+                            className="rounded"
+                          />
+                        </td>
+                        <td className="px-4 py-3 w-[220px] min-w-[220px] max-w-[220px] overflow-hidden">
+                          <a
+                            href={url.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:underline text-sm truncate block max-w-full"
+                            title={url.url}
+                          >
+                            {formatUrlForDisplay(url.url)}
+                          </a>
+                        </td>
+                        <td className="px-4 py-3">
+                          <div className="flex items-center gap-2">
+                            <StatusBadge status={url.status} tooltipContent={tooltipContent} showLabel={!isDetailPaneOpen} />
+                            {url.status === 'extractable' && url.analysisData?.validIdentifiers && url.analysisData.validIdentifiers.length > 0 && (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  // Use the first valid identifier for preview
+                                  const firstIdentifier = url.analysisData?.validIdentifiers?.[0];
+                                  if (firstIdentifier) {
+                                    setPreviewIdentifier(firstIdentifier);
+                                  }
+                                }}
+                                className="p-1 hover:bg-gray-100 rounded transition-colors"
+                                title="Preview identifier extraction"
+                              >
+                                <Eye className="h-4 w-4 text-gray-600" />
+                              </button>
+                            )}
+                            {url.status === 'translatable' && (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setPreviewUrl(url.url);
+                                }}
+                                className="p-1 hover:bg-gray-100 rounded transition-colors"
+                                title="Preview URL translation"
+                              >
+                                <Eye className="h-4 w-4 text-gray-600" />
+                              </button>
+                            )}
+                            {url.status === 'stored' && (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleUnlinkSingle(url.id);
+                                }}
+                                className="p-1 hover:bg-gray-100 rounded transition-colors cursor-pointer"
+                                title="Unlink from Zotero"
+                              >
+                                <Unlink className="h-4 w-4 text-red-600" />
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-4 py-3">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-600 whitespace-nowrap">
+                              {url.analysisData?.validIdentifiers?.length || 0} / {customIdsCount}
+                            </span>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleAddIdentifier(url.id);
+                              }}
+                              className="p-1 hover:bg-gray-100 rounded transition-colors shrink-0"
+                              title="Add custom identifier"
+                            >
+                              <Plus className="h-4 w-4 text-gray-600" />
+                            </button>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 text-center">
+                          {url.status === 'stored' && url.citationValidationStatus && (
+                            <CitationStatusIndicator 
+                              status={url.citationValidationStatus as CitationStatus}
+                              missingFields={url.citationValidationDetails?.missingFields}
+                            />
+                          )}
+                        </td>
+                        <td className="px-4 py-3 text-right">
+                          <div className="flex justify-end gap-2">
+                            {(url.status === 'extractable' || url.status === 'translatable') && (
+                              <Button
+                                size="sm"
+                                variant="default"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleProcessSingle(url);
+                                }}
+                                disabled={isPending || isProcessing}
+                                title="Process with Zotero"
+                                className="text-white cursor-pointer"
+                              >
+                                <Database className="h-4 w-4" />
+                                {!isDetailPaneOpen && <span className="ml-1">Process</span>}
+                              </Button>
+                            )}
+                            {url.zoteroProcessingStatus === 'failed' && (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleProcessSingle(url);
+                                }}
+                                disabled={isPending || isProcessing}
+                                title="Retry processing"
+                              >
+                                <RefreshCw className="h-4 w-4" />
+                              </Button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="bg-white border rounded-lg px-4 py-3 flex items-center justify-between">
+              <div className="text-sm text-gray-700">
+                Page {currentPage} of {totalPages} ({totalCount} total)
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => loadUrls(currentPage - 1)}
+                  disabled={currentPage === 1 || isPending}
+                >
+                  Previous
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => loadUrls(currentPage + 1)}
+                  disabled={currentPage === totalPages || isPending}
+                >
+                  Next
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Right Column - Detail Panel */}
+      {selectedUrlForDetail && (
+        <div className="w-[500px] shrink-0">
+          <div className="sticky top-0 h-[calc(100vh-12rem)] overflow-y-auto rounded-lg border bg-gray-50 border-gray-200">
+            <URLDetailPanel
+              url={selectedUrlForDetail}
+              onClose={handleCloseDetailPanel}
+              onUpdate={handleDetailUpdate}
             />
           </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Section
-            </label>
-            <select
-              value={selectedSection}
-              onChange={(e) => setSelectedSection(e.target.value)}
-              className="w-full px-3 py-2 border rounded-md text-sm"
-            >
-              <option value="">All sections</option>
-              {sections.map(section => (
-                <option key={section.id} value={section.name}>
-                  {section.title || section.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Status
-            </label>
-            <select
-              value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value as UrlStatus | '')}
-              className="w-full px-3 py-2 border rounded-md text-sm"
-            >
-              <option value="">All statuses</option>
-              <option value="stored">Stored</option>
-              <option value="extractable">Extractable</option>
-              <option value="translatable">Translatable</option>
-              <option value="resolvable">Resolvable</option>
-              <option value="error">Error</option>
-              <option value="unknown">Unknown</option>
-            </select>
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Domain
-            </label>
-            <select
-              value={selectedDomain}
-              onChange={(e) => setSelectedDomain(e.target.value)}
-              className="w-full px-3 py-2 border rounded-md text-sm"
-            >
-              <option value="">All domains</option>
-              {domains.slice(0, 50).map(domain => (
-                <option key={domain} value={domain}>
-                  {domain}
-                </option>
-              ))}
-            </select>
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Citation
-            </label>
-            <select
-              value={selectedCitationStatus}
-              onChange={(e) => setSelectedCitationStatus(e.target.value as 'valid' | 'incomplete' | '')}
-              className="w-full px-3 py-2 border rounded-md text-sm"
-            >
-              <option value="">All citations</option>
-              <option value="valid">Valid</option>
-              <option value="incomplete">Incomplete</option>
-            </select>
-          </div>
-        </div>
-        
-        <div className="mt-4 flex gap-2">
-          <Button onClick={handleFilterChange} disabled={isPending}>
-            Apply Filters
-          </Button>
-          <Button
-            onClick={() => {
-              setSearchQuery('');
-              setSelectedSection('');
-              setSelectedStatus('');
-              setSelectedDomain('');
-              setSelectedCitationStatus('');
-              loadUrls(1);
-            }}
-            variant="outline"
-            disabled={isPending}
-          >
-            Clear Filters
-          </Button>
-        </div>
-      </div>
-
-      {/* Messages */}
-      {error && (
-        <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-md text-sm">
-          {error}
         </div>
       )}
 
-      {successMessage && (
-        <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-md text-sm">
-          {successMessage}
-        </div>
-      )}
-
-      {/* Bulk actions */}
-      {selectedUrls.size > 0 && (
-        <div className="bg-blue-50 border border-blue-200 rounded-md px-4 py-3 flex items-center justify-between">
-          <span className="text-sm text-blue-900">
-            {selectedUrls.size} URL(s) selected
-          </span>
-          <div className="flex gap-2">
-            <Button
-              onClick={handleBulkProcess}
-              variant="default"
-              size="sm"
-              disabled={isPending || isProcessing}
-            >
-              <Database className="h-4 w-4 mr-2" />
-              Process with Zotero
-            </Button>
-            <Button
-              onClick={handleBulkUnlink}
-              variant="outline"
-              size="sm"
-              disabled={isPending || isProcessing}
-            >
-              <Unlink className="h-4 w-4 mr-2" />
-              Unlink from Zotero
-            </Button>
-            <Button
-              onClick={handleBulkDelete}
-              variant="outline"
-              size="sm"
-              disabled={isPending || isProcessing}
-            >
-              Delete Selected
-            </Button>
-          </div>
-        </div>
-      )}
-
-      {/* Table */}
-      <div className="bg-white border rounded-lg overflow-hidden flex-1 min-h-0 flex flex-col">
-        <div className="overflow-auto flex-1">
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b">
-              <tr>
-                <th className="px-4 py-3 text-left w-[50px]">
-                  <input
-                    type="checkbox"
-                    checked={selectedUrls.size === urls.length && urls.length > 0}
-                    onChange={(e) => handleSelectAll(e.target.checked)}
-                    className="rounded"
-                  />
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase min-w-[150px] max-w-[250px]">
-                  URL
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase w-[100px]">
-                  Status
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase w-[100px]">
-                  IDs
-                </th>
-                <th className="px-4 py-3 text-center text-xs font-medium text-gray-700 uppercase w-[80px]">
-                  Citation
-                </th>
-                <th className="px-4 py-3 text-right text-xs font-medium text-gray-700 uppercase w-[100px]">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y">
-              {urls.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="px-4 py-8 text-center text-gray-500">
-                    {isPending ? 'Loading...' : 'No URLs found'}
-                  </td>
-                </tr>
-              ) : (
-                urls.map((url) => {
-                  const enrichment = enrichments[url.id];
-                  const customIdsCount = enrichment?.customIdentifiers?.length || 0;
-                  const tooltipContent = getTooltipContent(url);
-                  
-                  return (
-                    <tr
-                      key={url.id}
-                      className="hover:bg-gray-50 cursor-pointer"
-                      onClick={(e) => handleRowClick(url, e)}
-                    >
-                      <td className="px-4 py-3">
-                        <input
-                          type="checkbox"
-                          checked={selectedUrls.has(url.id)}
-                          onChange={(e) => handleSelectUrl(url.id, e.target.checked)}
-                          className="rounded"
-                        />
-                      </td>
-                      <td className="px-4 py-3 w-[220px] min-w-[220px] max-w-[220px] overflow-hidden">
-                        <a
-                          href={url.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:underline text-sm truncate block max-w-full"
-                          title={url.url}
-                        >
-                          {formatUrlForDisplay(url.url)}
-                        </a>
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className="flex items-center gap-2">
-                          <StatusBadge status={url.status} tooltipContent={tooltipContent} showLabel={!isDetailPaneOpen} />
-                          {url.status === 'extractable' && url.analysisData?.validIdentifiers && url.analysisData.validIdentifiers.length > 0 && (
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                // Use the first valid identifier for preview
-                                const firstIdentifier = url.analysisData?.validIdentifiers?.[0];
-                                if (firstIdentifier) {
-                                  setPreviewIdentifier(firstIdentifier);
-                                }
-                              }}
-                              className="p-1 hover:bg-gray-100 rounded transition-colors"
-                              title="Preview identifier extraction"
-                            >
-                              <Eye className="h-4 w-4 text-gray-600" />
-                            </button>
-                          )}
-                          {url.status === 'translatable' && (
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setPreviewUrl(url.url);
-                              }}
-                              className="p-1 hover:bg-gray-100 rounded transition-colors"
-                              title="Preview URL translation"
-                            >
-                              <Eye className="h-4 w-4 text-gray-600" />
-                            </button>
-                          )}
-                          {url.status === 'stored' && (
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleUnlinkSingle(url.id);
-                              }}
-                              className="p-1 hover:bg-gray-100 rounded transition-colors cursor-pointer"
-                              title="Unlink from Zotero"
-                            >
-                              <Unlink className="h-4 w-4 text-red-600" />
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm text-gray-600 whitespace-nowrap">
-                            {url.analysisData?.validIdentifiers?.length || 0} / {customIdsCount}
-                          </span>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleAddIdentifier(url.id);
-                            }}
-                            className="p-1 hover:bg-gray-100 rounded transition-colors shrink-0"
-                            title="Add custom identifier"
-                          >
-                            <Plus className="h-4 w-4 text-gray-600" />
-                          </button>
-                        </div>
-                      </td>
-                      <td className="px-4 py-3 text-center">
-                        {url.status === 'stored' && url.citationValidationStatus && (
-                          <CitationStatusIndicator 
-                            status={url.citationValidationStatus as CitationStatus}
-                            missingFields={url.citationValidationDetails?.missingFields}
-                          />
-                        )}
-                      </td>
-                      <td className="px-4 py-3 text-right">
-                        <div className="flex justify-end gap-2">
-                          {(url.status === 'extractable' || url.status === 'translatable') && (
-                            <Button
-                              size="sm"
-                              variant="default"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleProcessSingle(url);
-                              }}
-                              disabled={isPending || isProcessing}
-                              title="Process with Zotero"
-                              className="text-white cursor-pointer"
-                            >
-                              <Database className="h-4 w-4" />
-                              {!isDetailPaneOpen && <span className="ml-1">Process</span>}
-                            </Button>
-                          )}
-                          {url.zoteroProcessingStatus === 'failed' && (
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleProcessSingle(url);
-                              }}
-                              disabled={isPending || isProcessing}
-                              title="Retry processing"
-                            >
-                              <RefreshCw className="h-4 w-4" />
-                            </Button>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="border-t px-4 py-3 flex items-center justify-between">
-            <div className="text-sm text-gray-700">
-              Page {currentPage} of {totalPages} ({totalCount} total)
-            </div>
-            <div className="flex gap-2">
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => loadUrls(currentPage - 1)}
-                disabled={currentPage === 1 || isPending}
-              >
-                Previous
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => loadUrls(currentPage + 1)}
-                disabled={currentPage === totalPages || isPending}
-              >
-                Next
-              </Button>
-            </div>
-          </div>
-        )}
-      </div>
-
+      {/* Modals */}
       {/* Add Identifier Modal */}
       {modalUrlId !== null && (
         <AddIdentifierModal
@@ -905,18 +925,6 @@ export function URLTable({ initialUrls = [], initialTotalPages = 1 }: URLTablePr
         onUnlinkAndDelete={handleUnlinkAndDelete}
         isProcessing={isPending}
       />
-      </div>
-
-      {/* Detail Panel */}
-      {selectedUrlForDetail && (
-        <div className="w-[500px] rounded-lg shrink-0 border bg-gray-50 border-gray-200 h-[calc(100vh-8rem)] overflow-hidden sticky top-0 self-start">
-          <URLDetailPanel
-            url={selectedUrlForDetail}
-            onClose={handleCloseDetailPanel}
-            onUpdate={handleDetailUpdate}
-          />
-        </div>
-      )}
     </div>
   );
 }

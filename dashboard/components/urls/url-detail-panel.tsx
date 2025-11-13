@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { useState, useTransition, useEffect } from 'react';
@@ -378,9 +377,9 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
   }
 
   return (
-    <div className="h-full flex flex-col w-full overflow-hidden">
+    <div className="h-full flex flex-col w-full overflow-hidden pt-6">
       <div className="flex-1 overflow-y-auto min-w-0">
-        <div className="p-6 space-y-6">
+        <div className="px-6 space-y-6">
           {/* Header */}
           <div className="flex items-start bg-gray-50 border-b justify-between sticky top-0 pb-8 min-w-0">
             <div className="flex-1 pr-4 min-w-0">

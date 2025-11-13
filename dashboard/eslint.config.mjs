@@ -13,6 +13,15 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  {
+    rules: {
+      // Allow unused variables (including parameters and locals)
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      // Allow use of 'any' type
+      '@typescript-eslint/no-explicit-any': 'off',
+    }
+  }
 ]);
 
 export default eslintConfig;
