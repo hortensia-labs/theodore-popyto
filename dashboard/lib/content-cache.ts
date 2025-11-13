@@ -392,7 +392,7 @@ export async function cachePdfText(
 }
 
 /**
- * Get cached PDF text content
+ * Get cached PDF text content (for LLM extraction)
  */
 export async function getCachedPdfText(
   urlId: number

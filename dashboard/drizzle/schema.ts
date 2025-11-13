@@ -54,10 +54,10 @@ export const urls = sqliteTable('urls', {
   lastFetchError: text('last_fetch_error'),
   identifierCount: integer('identifier_count').default(0), // Denormalized for quick filtering
   hasExtractedMetadata: integer('has_extracted_metadata', { mode: 'boolean' }).default(false),
-
+  
   // LLM extraction tracking
   llmExtractionStatus: text('llm_extraction_status'), // 'not_needed', 'pending', 'completed', 'failed'
-  llmExtractionProvider: text('llm_extraction_provider'), // 'ollama:llama3.2', 'anthropic:claude-3-5-haiku'
+  llmExtractionProvider: text('llm_extraction_provider'), // Provider used (e.g., 'ollama:llama3.2', 'anthropic:claude-3-5-haiku')
   llmExtractionAttempts: integer('llm_extraction_attempts').default(0),
   llmExtractedAt: integer('llm_extracted_at', { mode: 'timestamp' }),
   llmExtractionError: text('llm_extraction_error'),
@@ -275,9 +275,11 @@ export const urlExtractedMetadata = sqliteTable('url_extracted_metadata', {
   language: text('language'),
   
   // Extraction metadata
-  extractionMethod: text('extraction_method').notNull(), // 'html_meta_tags', 'pdf_metadata', 'opengraph', 'json_ld'
+  extractionMethod: text('extraction_method').notNull(), // 'html_meta_tags', 'pdf_metadata', 'opengraph', 'json_ld', 'llm', 'hybrid'
   extractionSources: text('extraction_sources', { mode: 'json' }).$type<Record<string, string>>(), // field -> source mapping
   qualityScore: integer('quality_score'), // 0-100
+  confidenceScores: text('confidence_scores', { mode: 'json' }).$type<Record<string, number>>(), // Per-field confidence from LLM
+  llmProvider: text('llm_provider'), // Provider used if LLM extraction
   
   // Validation
   validationStatus: text('validation_status'), // 'valid', 'incomplete', 'invalid'
