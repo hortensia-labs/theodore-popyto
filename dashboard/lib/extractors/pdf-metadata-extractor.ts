@@ -13,7 +13,8 @@ import { extractIdentifiersFromPdf } from './pdf-identifier-extractor';
 export async function extractMetadataFromPdf(
   pdfContent: Buffer,
   url: string,
-  filename: string = 'document.pdf'
+  filename: string = 'document.pdf',
+  urlId?: number
 ): Promise<ExtractedMetadata> {
   const metadata: ExtractedMetadata = {
     url,
@@ -21,50 +22,168 @@ export async function extractMetadataFromPdf(
     extractionSources: {},
     itemType: 'document', // Default for PDFs
   };
-  
+
   try {
     // Use Zotero's PDF preview to extract
-    const result = await extractIdentifiersFromPdf(pdfContent, filename);
-    
+    const result = await extractIdentifiersFromPdf(pdfContent, filename, urlId);
+
     // Extract from PDF metadata
     if (result.metadata) {
       if (result.metadata.title) {
         metadata.title = result.metadata.title;
         metadata.extractionSources.title = 'pdf_metadata';
       }
-      
+
       if (result.metadata.author) {
         metadata.creators = parseAuthorString(result.metadata.author);
         metadata.extractionSources.creators = 'pdf_metadata';
       }
     }
-    
+
     // Extract from text sample if metadata is incomplete
     if (result.rawData?.pages && (!metadata.title || !metadata.creators)) {
       const textMetadata = extractFromPdfText(result.rawData.pages);
-      
+
       if (textMetadata.title && !metadata.title) {
         metadata.title = textMetadata.title;
         metadata.extractionSources.title = 'pdf_text_analysis';
       }
-      
+
       if (textMetadata.authors && !metadata.creators) {
         metadata.creators = textMetadata.authors;
         metadata.extractionSources.creators = 'pdf_text_analysis';
       }
-      
+
       if (textMetadata.date && !metadata.date) {
         metadata.date = textMetadata.date;
         metadata.extractionSources.date = 'pdf_text_analysis';
       }
     }
-    
   } catch (error) {
     console.error('PDF metadata extraction failed:', error);
     // Return what we have
   }
-  
+
   return metadata;
+}
+
+/**
+ * Extract metadata from PDF with LLM fallback
+ * Uses Zotero/text extraction first, falls back to LLM if incomplete
+ */
+export async function extractMetadataFromPdfWithLlmFallback(
+  pdfContent: Buffer,
+  url: string,
+  filename: string = 'document.pdf',
+  urlId?: number
+): Promise<{
+  metadata: ExtractedMetadata;
+  extractionMethod: 'structured' | 'llm' | 'hybrid';
+  llmResult?: import('./llm/providers/types').LlmExtractionResult;
+}> {
+  // First try structured extraction
+  const structuredMetadata = await extractMetadataFromPdf(pdfContent, url, filename, urlId);
+
+  // Check if metadata is complete
+  const isComplete =
+    structuredMetadata.title &&
+    structuredMetadata.creators &&
+    structuredMetadata.creators.length > 0 &&
+    structuredMetadata.date &&
+    structuredMetadata.itemType;
+
+  if (isComplete) {
+    return {
+      metadata: structuredMetadata,
+      extractionMethod: 'structured',
+    };
+  }
+
+  // Try LLM extraction as fallback using cached PDF text
+  try {
+    // Get cached PDF text if available
+    const { getCachedPdfText } = await import('../content-cache');
+    const cachedText = urlId ? await getCachedPdfText(urlId) : null;
+
+    if (!cachedText) {
+      console.log('[PDF Extractor] No cached PDF text available for LLM extraction');
+      return {
+        metadata: structuredMetadata,
+        extractionMethod: 'structured',
+      };
+    }
+
+    const { extractMetadataWithLlm } = await import('./llm/llm-metadata-extractor');
+
+    const llmResult = await extractMetadataWithLlm({
+      text: cachedText,
+      contentType: 'pdf',
+      url,
+      metadata: {
+        domain: new URL(url).hostname,
+        title: structuredMetadata.title,
+      },
+    });
+
+    if (!llmResult.success) {
+      console.log('[PDF Extractor] LLM extraction failed:', llmResult.error);
+      return {
+        metadata: structuredMetadata,
+        extractionMethod: 'structured',
+        llmResult,
+      };
+    }
+
+    // Merge results
+    const mergedMetadata: ExtractedMetadata = {
+      ...structuredMetadata,
+    };
+
+    if (!mergedMetadata.itemType && llmResult.metadata?.itemType) {
+      mergedMetadata.itemType = llmResult.metadata.itemType;
+      mergedMetadata.extractionSources.itemType = 'llm';
+    }
+
+    if (!mergedMetadata.title && llmResult.metadata?.title) {
+      mergedMetadata.title = llmResult.metadata.title;
+      mergedMetadata.extractionSources.title = 'llm';
+    }
+
+    if (
+      (!mergedMetadata.creators || mergedMetadata.creators.length === 0) &&
+      llmResult.metadata?.creators
+    ) {
+      mergedMetadata.creators = llmResult.metadata.creators;
+      mergedMetadata.extractionSources.creators = 'llm';
+    }
+
+    if (!mergedMetadata.date && llmResult.metadata?.date) {
+      mergedMetadata.date = llmResult.metadata.date;
+      mergedMetadata.extractionSources.date = 'llm';
+    }
+
+    // Determine extraction method
+    const usedLlmData =
+      (!structuredMetadata.itemType && llmResult.metadata?.itemType) ||
+      (!structuredMetadata.title && llmResult.metadata?.title) ||
+      ((!structuredMetadata.creators || structuredMetadata.creators.length === 0) &&
+        llmResult.metadata?.creators) ||
+      (!structuredMetadata.date && llmResult.metadata?.date);
+
+    const extractionMethod = usedLlmData ? 'hybrid' : 'structured';
+
+    return {
+      metadata: mergedMetadata,
+      extractionMethod,
+      llmResult,
+    };
+  } catch (error) {
+    console.error('[PDF Extractor] LLM extraction error:', error);
+    return {
+      metadata: structuredMetadata,
+      extractionMethod: 'structured',
+    };
+  }
 }
 
 /**

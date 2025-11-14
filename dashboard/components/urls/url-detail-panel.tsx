@@ -9,6 +9,7 @@ import { processUrlWithZotero, unlinkUrlFromZotero, deleteZoteroItemAndUnlink, g
 import { processSingleUrl } from '@/lib/actions/process-url-action';
 import { getIdentifiersWithPreviews, selectAndProcessIdentifier, refreshIdentifierPreview, fetchAllPreviews } from '@/lib/actions/identifier-selection-action';
 import { getExtractedMetadata, approveAndStoreMetadata, rejectMetadata } from '@/lib/actions/metadata-approval-action';
+import { checkHasCachedContent } from '@/lib/actions/cache-check-action';
 import { getZoteroWebUrl, type ZoteroItemResponse } from '@/lib/zotero-client';
 import { StatusBadge } from '../status-badge';
 import { Button } from '../ui/button';
@@ -16,6 +17,8 @@ import { UnlinkConfirmationModal } from './unlink-confirmation-modal';
 import { CitationStatusIndicator, type CitationStatus } from './citation-status-indicator';
 import { PreviewComparison } from './preview-comparison';
 import { MetadataReview } from './metadata-review';
+import { useRouter } from 'next/navigation';
+import { Sparkles } from 'lucide-react';
 
 interface URLDetailPanelProps {
   url: UrlWithStatus;
@@ -24,6 +27,7 @@ interface URLDetailPanelProps {
 }
 
 export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [enrichment, setEnrichment] = useState<UrlEnrichment | null>(null);
   const [notes, setNotes] = useState('');
@@ -35,6 +39,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
   const [zoteroItemMetadata, setZoteroItemMetadata] = useState<ZoteroItemResponse | null>(null);
   const [identifiersWithPreviews, setIdentifiersWithPreviews] = useState<any[]>([]);
   const [extractedMetadata, setExtractedMetadata] = useState<any>(null);
+  const [canUseLlm, setCanUseLlm] = useState(false);
 
   useEffect(() => {
     async function loadEnrichment() {
@@ -84,6 +89,41 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
     }
     loadExtractedMetadata();
   }, [url.id, url.zoteroProcessingStatus, url.hasExtractedMetadata]);
+
+  useEffect(() => {
+    async function checkLlmEligibility() {
+      // URL is eligible for LLM extraction if it meets ANY of these conditions:
+      // 1. Has cached content from automated workflow with issues
+      // 2. Has incomplete citation (stored but incomplete validation)
+      // 3. Zotero processing failed (cached or can cache)
+      // 4. Is extractable/translatable but not stored (can process to cache first)
+      
+      const cached = await checkHasCachedContent(url.id);
+      
+      const eligible =
+        // Condition 1: Cached content with metadata issues
+        (cached && url.zoteroProcessingStatus === 'no_identifiers' && 
+         extractedMetadata?.validationStatus === 'incomplete') ||
+        (cached && url.zoteroProcessingStatus === 'no_identifiers' &&
+         extractedMetadata?.qualityScore && extractedMetadata.qualityScore < 80) ||
+        (cached && url.zoteroProcessingStatus === 'failed_parse') ||
+        (cached && url.zoteroProcessingStatus === 'failed_fetch') ||
+        
+        // Condition 2: Zotero processing failed - always show LLM as alternative
+        (url.zoteroProcessingStatus === 'failed') ||
+        
+        // Condition 3: Stored in Zotero but incomplete citation
+        (url.zoteroItemKey && url.citationValidationStatus === 'incomplete') ||
+        
+        // Condition 4: Not yet processed but extractable/translatable (show LLM as option)
+        (!url.zoteroItemKey && 
+         (url.status === 'extractable' || url.status === 'translatable' || url.status === 'resolvable'));
+      
+      setCanUseLlm(eligible);
+    }
+    
+    checkLlmEligibility();
+  }, [url.id, url.zoteroProcessingStatus, extractedMetadata, url.zoteroItemKey, url.citationValidationStatus, url.status]);
 
   // Extract ZOTERO analysis data from rawMetadata
   const rawMetadata = url.analysisData?.rawMetadata as Record<string, unknown> | undefined;
@@ -196,6 +236,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
       }
       
       onUpdate?.();
+      router.refresh(); // Refresh to get updated citation status
     } else {
       setError(result.error || 'Processing failed');
     }
@@ -262,7 +303,11 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
         }
       }
       
+      // Trigger parent update
       onUpdate?.();
+      
+      // Force router refresh to get updated citation status
+      router.refresh();
     } else {
       setError(result.error || 'Validation failed');
     }
@@ -307,6 +352,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
     if (result.success) {
       setSuccessMessage(`Item stored in Zotero: ${result.itemKey}`);
       onUpdate?.();
+      router.refresh(); // Refresh to get updated citation status
     } else {
       setError(result.error || 'Failed to process identifier');
     }
@@ -354,6 +400,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
     if (result.success) {
       setSuccessMessage(`Item created in Zotero: ${result.itemKey}`);
       onUpdate?.();
+      router.refresh(); // Refresh to get updated citation status
     } else {
       setError(result.error || 'Failed to create item');
     }
@@ -491,12 +538,52 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
             <div className="space-y-3 text-sm">
               {url.zoteroItemKey ? (
                 <>
-                  <div>
-                    <span className="text-gray-600">Status:</span>
-                    <div className="mt-1">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-black text-white">
-                        Stored
-                      </span>
+                  <div className="grid grid-cols-2 gap-4">
+                    {/* Processing Status */}
+                    <div>
+                      <span className="text-gray-600">Status:</span>
+                      <div className="mt-1">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-black text-white">
+                          Stored
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {/* Citation Status */}
+                    <div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-600">Citation Status:</span>
+                        <Button
+                          onClick={handleRevalidateCitation}
+                          disabled={isProcessing}
+                          size="sm"
+                          variant="ghost"
+                          className="h-6 w-6 p-0"
+                          title="Revalidate citation"
+                        >
+                          <RefreshCw className="h-3 w-3" />
+                        </Button>
+                      </div>
+                      <div className="mt-1">
+                        {url.citationValidationStatus ? (
+                          <div className="flex flex-col gap-1">
+                            <CitationStatusIndicator 
+                              status={url.citationValidationStatus as CitationStatus}
+                              missingFields={url.citationValidationDetails?.missingFields}
+                              showLabel={false}
+                              size="sm"
+                            />
+                            {url.citationValidationDetails?.missingFields && 
+                             url.citationValidationDetails.missingFields.length > 0 && (
+                              <div className="text-xs text-amber-700">
+                                Missing: {url.citationValidationDetails.missingFields.join(', ')}
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="text-xs text-gray-400 italic">Not validated</span>
+                        )}
+                      </div>
                     </div>
                   </div>
                   
@@ -548,45 +635,6 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
                     </div>
                   </div>
                   
-                  {/* Citation Validation Status */}
-                  {url.citationValidationStatus && (
-                    <div className="border-t pt-3 mt-3">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <span className="text-gray-600">Citation Status:</span>
-                          <div className="mt-2 flex items-center gap-2">
-                            <CitationStatusIndicator 
-                              status={url.citationValidationStatus as CitationStatus}
-                              missingFields={url.citationValidationDetails?.missingFields}
-                              showLabel={true}
-                              size="md"
-                            />
-                          </div>
-                          {url.citationValidationDetails?.missingFields && 
-                           url.citationValidationDetails.missingFields.length > 0 && (
-                            <div className="mt-2 text-xs text-amber-700">
-                              Missing: {url.citationValidationDetails.missingFields.join(', ')}
-                            </div>
-                          )}
-                          {url.citationValidatedAt && (
-                            <div className="mt-1 text-xs text-gray-500">
-                              Validated: {new Date(url.citationValidatedAt).toLocaleString()}
-                            </div>
-                          )}
-                        </div>
-                        <Button
-                          onClick={handleRevalidateCitation}
-                          disabled={isProcessing}
-                          size="sm"
-                          variant="outline"
-                          title="Revalidate citation (refresh from Zotero)"
-                        >
-                          <RefreshCw className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-                  
                   {url.zoteroProcessingMethod && (
                     <div className="mt-3">
                       <span className="text-gray-600">Processing Method:</span>
@@ -620,7 +668,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
                     <span className="text-gray-600">Status:</span>
                     <div className="mt-1">
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                        Failed
+                        Zotero Processing Failed
                       </span>
                     </div>
                   </div>
@@ -634,25 +682,84 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
                     </div>
                   )}
                   
-                  <Button
-                    onClick={handleProcessWithZotero}
-                    disabled={isProcessing}
-                    size="sm"
-                    variant="outline"
-                    className="w-full"
-                  >
-                    {isProcessing ? (
+                  <div className="space-y-3">
+                    <p className="text-gray-600 text-xs">
+                      Zotero couldn&apos;t process this URL. Try alternative methods:
+                    </p>
+                    
+                    {/* Retry Original Method */}
+                    <Button
+                      onClick={handleProcessWithZotero}
+                      disabled={isProcessing}
+                      size="sm"
+                      variant="outline"
+                      className="w-full"
+                    >
+                      {isProcessing ? (
+                        <>
+                          <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                          Retrying...
+                        </>
+                      ) : (
+                        <>
+                          <RefreshCw className="h-4 w-4 mr-2" />
+                          Retry Zotero Processing
+                        </>
+                      )}
+                    </Button>
+                    
+                    <div className="relative">
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-gray-200"></div>
+                      </div>
+                      <div className="relative flex justify-center text-xs">
+                        <span className="bg-white px-2 text-gray-500">Or try alternative methods</span>
+                      </div>
+                    </div>
+                    
+                    {/* Content Analysis Method */}
+                    <Button
+                      onClick={handleProcessUrlContent}
+                      disabled={isProcessing}
+                      size="sm"
+                      variant="outline"
+                      className="w-full border-blue-300 text-blue-700 hover:bg-blue-50"
+                    >
+                      {isProcessing ? (
+                        <>
+                          <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                          Processing...
+                        </>
+                      ) : (
+                        <>
+                          <Database className="h-4 w-4 mr-2" />
+                          Extract Identifiers from Content
+                        </>
+                      )}
+                    </Button>
+                    <p className="text-xs text-gray-500 italic">
+                      Analyzes content for DOI, PMID, ArXiv, ISBN and metadata
+                    </p>
+                    
+                    {/* LLM Extraction Method */}
+                    {canUseLlm && (
                       <>
-                        <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                        Processing...
-                      </>
-                    ) : (
-                      <>
-                        <RefreshCw className="h-4 w-4 mr-2" />
-                        Retry Processing
+                        <Button
+                          onClick={() => router.push(`/urls/${url.id}/llm-extract`)}
+                          disabled={isProcessing}
+                          size="sm"
+                          variant="default"
+                          className="w-full bg-purple-600 hover:bg-purple-700"
+                        >
+                          <Sparkles className="h-4 w-4 mr-2" />
+                          Extract with LLM (AI)
+                        </Button>
+                        <p className="text-xs text-gray-500 italic">
+                          Use AI to extract metadata from the page content
+                        </p>
                       </>
                     )}
-                  </Button>
+                  </div>
                 </>
               ) : (url.status === 'extractable' || url.status === 'translatable' || url.status === 'resolvable') ? (
                 <>
@@ -719,6 +826,39 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
                   <p className="text-gray-600 text-xs italic">
                     Extracts identifiers from URL content (DOI, PMID, ArXiv, ISBN)
                   </p>
+                  
+                  {/* LLM Extraction Option for Unprocessed URLs */}
+                  {canUseLlm && (
+                    <>
+                      <div className="relative my-4">
+                        <div className="absolute inset-0 flex items-center">
+                          <div className="w-full border-t border-gray-200"></div>
+                        </div>
+                        <div className="relative flex justify-center text-xs">
+                          <span className="bg-white px-2 text-gray-500">Advanced</span>
+                        </div>
+                      </div>
+                      
+                      <div className="bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <h4 className="font-medium text-purple-900 flex items-center gap-2 text-sm mb-2">
+                          <Sparkles className="h-4 w-4" />
+                          Extract with AI
+                        </h4>
+                        <p className="text-xs text-purple-700 mb-3">
+                          Use LLM to extract metadata directly from the page content
+                        </p>
+                        <Button
+                          onClick={() => router.push(`/urls/${url.id}/llm-extract`)}
+                          variant="outline"
+                          size="sm"
+                          className="w-full border-purple-300 text-purple-700 hover:bg-purple-100"
+                        >
+                          <Sparkles className="h-4 w-4 mr-2" />
+                          Try LLM Extraction
+                        </Button>
+                      </div>
+                    </>
+                  )}
                 </>
               ) : (
                 <>
@@ -741,7 +881,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
 
           {/* Identifier Previews */}
           {identifiersWithPreviews.length > 0 && (
-            <div className="border rounded-lg bg-white p-4 space-y-4">
+            <div className="w-full border rounded-lg bg-white p-4 space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="font-medium">Identifier Previews</h3>
                 <Button
@@ -766,13 +906,68 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
 
           {/* Extracted Metadata Review */}
           {extractedMetadata && (
-            <div className="border rounded-lg bg-white p-4">
+            <div className="border rounded-lg bg-white p-4 space-y-4">
               <MetadataReview
                 metadata={extractedMetadata}
                 onApprove={handleApproveMetadata}
                 onReject={handleRejectMetadata}
                 isProcessing={isProcessing}
               />
+              
+              {/* LLM Extraction Option */}
+              {canUseLlm && (extractedMetadata.validationStatus === 'incomplete' || 
+                             extractedMetadata.qualityScore < 80) && (
+                <div className="border-t pt-4">
+                  <div className="bg-purple-50 border border-purple-200 rounded-md p-4">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <h4 className="font-medium text-purple-900 flex items-center gap-2">
+                          <Sparkles className="h-4 w-4" />
+                          Improve with LLM Extraction
+                        </h4>
+                        <p className="text-sm text-purple-700 mt-1">
+                          Use AI to extract missing or incomplete metadata fields
+                        </p>
+                      </div>
+                      <Button
+                        onClick={() => router.push(`/urls/${url.id}/llm-extract`)}
+                        variant="outline"
+                        size="sm"
+                        className="border-purple-300 text-purple-700 hover:bg-purple-50"
+                      >
+                        <Sparkles className="h-4 w-4 mr-2" />
+                        Try LLM
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+          
+          {/* LLM Extraction for Failed Processing */}
+          {!extractedMetadata && canUseLlm && (
+            url.zoteroProcessingStatus === 'failed_parse' ||
+            url.zoteroProcessingStatus === 'failed_fetch'
+          ) && (
+            <div className="border rounded-lg bg-white p-4">
+              <div className="bg-purple-50 border border-purple-200 rounded-md p-4">
+                <h4 className="font-medium text-purple-900 flex items-center gap-2 mb-2">
+                  <Sparkles className="h-4 w-4" />
+                  Try LLM Extraction
+                </h4>
+                <p className="text-sm text-purple-700 mb-4">
+                  Standard extraction failed, but you can try using AI to extract metadata from the cached content.
+                </p>
+                <Button
+                  onClick={() => router.push(`/urls/${url.id}/llm-extract`)}
+                  variant="default"
+                  className="w-full bg-purple-600 hover:bg-purple-700"
+                >
+                  <Sparkles className="h-4 w-4 mr-2" />
+                  Extract with LLM
+                </Button>
+              </div>
             </div>
           )}
 

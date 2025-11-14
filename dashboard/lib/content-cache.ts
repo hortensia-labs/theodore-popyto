@@ -392,7 +392,7 @@ export async function cachePdfText(
 }
 
 /**
- * Get cached PDF text content
+ * Get cached PDF text content (for LLM extraction)
  */
 export async function getCachedPdfText(
   urlId: number
@@ -400,18 +400,83 @@ export async function getCachedPdfText(
   const cache = await db.query.urlContentCache.findFirst({
     where: eq(urlContentCache.urlId, urlId),
   });
-  
+
   if (!cache || !cache.processedContentPath) {
     return null;
   }
-  
+
   // Check if it's a PDF text cache file
   if (!cache.processedContentPath.includes('_pdf_text.json')) {
     return null;
   }
-  
+
   try {
     return await fs.readFile(cache.processedContentPath, 'utf8');
+  } catch (error) {
+    return null;
+  }
+}
+
+/**
+ * Cache LLM metadata extraction result
+ */
+export async function cacheLlmMetadata(
+  urlId: number,
+  llmResult: import('./extractors/llm/providers/types').LlmExtractionResult
+): Promise<void> {
+  const cache = await db.query.urlContentCache.findFirst({
+    where: eq(urlContentCache.urlId, urlId),
+  });
+
+  if (!cache) {
+    throw new Error('No cache entry found for URL');
+  }
+
+  await initializeCacheDirectories();
+
+  const filename = `${cache.contentHash}_llm_metadata.json`;
+  const llmPath = path.join(CACHE_BASE_DIR, 'processed', filename);
+
+  const cacheData = {
+    result: llmResult,
+    cachedAt: new Date().toISOString(),
+    expiresAt: new Date(Date.now() + MAX_AGE_MS).toISOString(),
+  };
+
+  await fs.writeFile(llmPath, JSON.stringify(cacheData, null, 2), 'utf8');
+
+  console.log(`[Cache] Cached LLM metadata for URL ${urlId} at ${llmPath}`);
+}
+
+/**
+ * Get cached LLM metadata extraction result
+ */
+export async function getCachedLlmMetadata(
+  urlId: number
+): Promise<import('./extractors/llm/providers/types').LlmExtractionResult | null> {
+  const cache = await db.query.urlContentCache.findFirst({
+    where: eq(urlContentCache.urlId, urlId),
+  });
+
+  if (!cache) {
+    return null;
+  }
+
+  const filename = `${cache.contentHash}_llm_metadata.json`;
+  const llmPath = path.join(CACHE_BASE_DIR, 'processed', filename);
+
+  try {
+    const content = await fs.readFile(llmPath, 'utf8');
+    const cacheData = JSON.parse(content);
+
+    // Check if expired
+    if (cacheData.expiresAt && new Date(cacheData.expiresAt) < new Date()) {
+      // Delete expired cache
+      await fs.unlink(llmPath).catch(() => {});
+      return null;
+    }
+
+    return cacheData.result;
   } catch (error) {
     return null;
   }

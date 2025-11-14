@@ -507,13 +507,13 @@ export function normalizeDate(date: string): string {
   if (/^\d{4}-\d{2}-\d{2}/.test(date)) {
     return date.substring(0, 10); // YYYY-MM-DD
   }
-  
+
   // Extract year
   const yearMatch = /\b(19|20)\d{2}\b/.exec(date);
   if (yearMatch) {
     return yearMatch[0];
   }
-  
+
   // Try to parse as date
   try {
     const parsed = new Date(date);
@@ -523,7 +523,112 @@ export function normalizeDate(date: string): string {
   } catch (error) {
     // Not a valid date
   }
-  
+
   return date;
+}
+
+/**
+ * Extract metadata with LLM fallback
+ * Uses structured extraction first, falls back to LLM if incomplete
+ */
+export async function extractMetadataFromHtmlWithLlmFallback(
+  htmlContent: string,
+  url: string
+): Promise<{
+  metadata: ExtractedMetadata;
+  extractionMethod: 'structured' | 'llm' | 'hybrid';
+  llmResult?: import('./llm/providers/types').LlmExtractionResult;
+}> {
+  // First try structured extraction
+  const structuredMetadata = await extractMetadataFromHtml(htmlContent, url);
+
+  // Check if metadata is complete (has title, creators, date, itemType)
+  const isComplete =
+    structuredMetadata.title &&
+    structuredMetadata.creators &&
+    structuredMetadata.creators.length > 0 &&
+    structuredMetadata.date &&
+    structuredMetadata.itemType;
+
+  if (isComplete) {
+    // Structured extraction succeeded
+    return {
+      metadata: structuredMetadata,
+      extractionMethod: 'structured',
+    };
+  }
+
+  // Try LLM extraction as fallback
+  try {
+    const { extractMetadataWithLlm } = await import('./llm/llm-metadata-extractor');
+
+    const llmResult = await extractMetadataWithLlm({
+      text: htmlContent,
+      contentType: 'html',
+      url,
+      metadata: {
+        domain: new URL(url).hostname,
+        title: structuredMetadata.title,
+      },
+    });
+
+    if (!llmResult.success) {
+      // LLM extraction failed, return structured results
+      console.log('[HTML Extractor] LLM extraction failed:', llmResult.error);
+      return {
+        metadata: structuredMetadata,
+        extractionMethod: 'structured',
+        llmResult,
+      };
+    }
+
+    // Merge results (prefer high-confidence structured data)
+    const mergedMetadata: ExtractedMetadata = {
+      ...structuredMetadata,
+    };
+
+    // Use LLM data for missing fields or low-confidence structured data
+    if (!mergedMetadata.itemType && llmResult.metadata?.itemType) {
+      mergedMetadata.itemType = llmResult.metadata.itemType;
+    }
+
+    if (!mergedMetadata.title && llmResult.metadata?.title) {
+      mergedMetadata.title = llmResult.metadata.title;
+    }
+
+    if (
+      (!mergedMetadata.creators || mergedMetadata.creators.length === 0) &&
+      llmResult.metadata?.creators
+    ) {
+      mergedMetadata.creators = llmResult.metadata.creators;
+    }
+
+    if (!mergedMetadata.date && llmResult.metadata?.date) {
+      mergedMetadata.date = llmResult.metadata.date;
+    }
+
+    // Determine extraction method
+    const usedLlmData =
+      (!structuredMetadata.itemType && llmResult.metadata?.itemType) ||
+      (!structuredMetadata.title && llmResult.metadata?.title) ||
+      ((!structuredMetadata.creators || structuredMetadata.creators.length === 0) &&
+        llmResult.metadata?.creators) ||
+      (!structuredMetadata.date && llmResult.metadata?.date);
+
+    const extractionMethod = usedLlmData ? 'hybrid' : 'structured';
+
+    return {
+      metadata: mergedMetadata,
+      extractionMethod,
+      llmResult,
+    };
+  } catch (error) {
+    // LLM extraction errored, return structured results
+    console.error('[HTML Extractor] LLM extraction error:', error);
+    return {
+      metadata: structuredMetadata,
+      extractionMethod: 'structured',
+    };
+  }
 }
 

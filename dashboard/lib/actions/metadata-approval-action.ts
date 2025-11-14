@@ -104,6 +104,27 @@ export async function approveAndStoreMetadata(
       })
       .where(eq(urls.id, urlId));
     
+    // Validate citation after creation
+    if (result.itemKey) {
+      try {
+        const { getItem, validateCitation } = await import('../zotero-client');
+        const itemMetadata = await getItem(result.itemKey);
+        const validation = validateCitation(itemMetadata);
+        
+        await db.update(urls)
+          .set({
+            citationValidationStatus: validation.status,
+            citationValidatedAt: new Date(),
+            citationValidationDetails: { missingFields: validation.missingFields },
+            updatedAt: new Date(),
+          })
+          .where(eq(urls.id, urlId));
+      } catch (error) {
+        console.error('Citation validation failed:', error);
+        // Don't fail the whole operation if validation fails
+      }
+    }
+    
     revalidatePath('/urls');
     
     return {

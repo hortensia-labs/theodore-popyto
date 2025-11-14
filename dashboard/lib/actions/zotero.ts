@@ -160,6 +160,16 @@ export async function processUrlWithZotero(urlId: number): Promise<ProcessingRes
         })
         .where(eq(urls.id, urlId));
       
+      // Automatically attempt content fetching for alternative processing routes
+      try {
+        const { processSingleUrl } = await import('./process-url-action');
+        await processSingleUrl(urlId);
+        console.log(`Content fetching triggered for failed URL ${urlId} to enable alternative processing`);
+      } catch (contentError) {
+        console.error(`Failed to fetch content for URL ${urlId}:`, contentError);
+        // Don't fail the main function - this is a best-effort attempt
+      }
+      
       throw error;
     }
     
@@ -176,6 +186,16 @@ export async function processUrlWithZotero(urlId: number): Promise<ProcessingRes
           updatedAt: new Date(),
         })
         .where(eq(urls.id, urlId));
+      
+      // Automatically attempt content fetching for alternative processing routes
+      try {
+        const { processSingleUrl } = await import('./process-url-action');
+        await processSingleUrl(urlId);
+        console.log(`Content fetching triggered for failed URL ${urlId} to enable alternative processing`);
+      } catch (contentError) {
+        console.error(`Failed to fetch content for URL ${urlId}:`, contentError);
+        // Don't fail the main function - this is a best-effort attempt
+      }
       
       return {
         urlId,
