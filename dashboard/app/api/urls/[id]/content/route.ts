@@ -15,10 +15,11 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const urlId = parseInt(params.id, 10);
+    const { id } = await params;
+    const urlId = parseInt(id, 10);
     
     if (isNaN(urlId)) {
       return new NextResponse('Invalid URL ID', { status: 400 });
@@ -62,7 +63,7 @@ export async function GET(
       headers['X-Frame-Options'] = 'SAMEORIGIN';
     }
     
-    return new NextResponse(cached.content, {
+    return new NextResponse(cached.content.toString('utf8'), {
       status: 200,
       headers,
     });

@@ -142,6 +142,7 @@ export abstract class BaseProvider {
     errors: string[];
   } {
     const errors: string[] = [];
+    console.log('validating response', response);
 
     // Check that we have at least some metadata
     if (!response.itemType && !response.title && !response.creators && !response.date) {

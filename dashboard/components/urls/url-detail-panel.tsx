@@ -95,7 +95,8 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
       // URL is eligible for LLM extraction if it meets ANY of these conditions:
       // 1. Has cached content from automated workflow with issues
       // 2. Has incomplete citation (stored but incomplete validation)
-      // 3. Is extractable/translatable but not stored (can process to cache first)
+      // 3. Zotero processing failed (cached or can cache)
+      // 4. Is extractable/translatable but not stored (can process to cache first)
       
       const cached = await checkHasCachedContent(url.id);
       
@@ -108,10 +109,13 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
         (cached && url.zoteroProcessingStatus === 'failed_parse') ||
         (cached && url.zoteroProcessingStatus === 'failed_fetch') ||
         
-        // Condition 2: Stored in Zotero but incomplete citation
+        // Condition 2: Zotero processing failed - always show LLM as alternative
+        (url.zoteroProcessingStatus === 'failed') ||
+        
+        // Condition 3: Stored in Zotero but incomplete citation
         (url.zoteroItemKey && url.citationValidationStatus === 'incomplete') ||
         
-        // Condition 3: Not yet processed but extractable/translatable (show LLM as option)
+        // Condition 4: Not yet processed but extractable/translatable (show LLM as option)
         (!url.zoteroItemKey && 
          (url.status === 'extractable' || url.status === 'translatable' || url.status === 'resolvable'));
       
@@ -664,7 +668,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
                     <span className="text-gray-600">Status:</span>
                     <div className="mt-1">
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                        Failed
+                        Zotero Processing Failed
                       </span>
                     </div>
                   </div>
@@ -678,25 +682,84 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
                     </div>
                   )}
                   
-                  <Button
-                    onClick={handleProcessWithZotero}
-                    disabled={isProcessing}
-                    size="sm"
-                    variant="outline"
-                    className="w-full"
-                  >
-                    {isProcessing ? (
+                  <div className="space-y-3">
+                    <p className="text-gray-600 text-xs">
+                      Zotero couldn&apos;t process this URL. Try alternative methods:
+                    </p>
+                    
+                    {/* Retry Original Method */}
+                    <Button
+                      onClick={handleProcessWithZotero}
+                      disabled={isProcessing}
+                      size="sm"
+                      variant="outline"
+                      className="w-full"
+                    >
+                      {isProcessing ? (
+                        <>
+                          <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                          Retrying...
+                        </>
+                      ) : (
+                        <>
+                          <RefreshCw className="h-4 w-4 mr-2" />
+                          Retry Zotero Processing
+                        </>
+                      )}
+                    </Button>
+                    
+                    <div className="relative">
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-gray-200"></div>
+                      </div>
+                      <div className="relative flex justify-center text-xs">
+                        <span className="bg-white px-2 text-gray-500">Or try alternative methods</span>
+                      </div>
+                    </div>
+                    
+                    {/* Content Analysis Method */}
+                    <Button
+                      onClick={handleProcessUrlContent}
+                      disabled={isProcessing}
+                      size="sm"
+                      variant="outline"
+                      className="w-full border-blue-300 text-blue-700 hover:bg-blue-50"
+                    >
+                      {isProcessing ? (
+                        <>
+                          <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                          Processing...
+                        </>
+                      ) : (
+                        <>
+                          <Database className="h-4 w-4 mr-2" />
+                          Extract Identifiers from Content
+                        </>
+                      )}
+                    </Button>
+                    <p className="text-xs text-gray-500 italic">
+                      Analyzes content for DOI, PMID, ArXiv, ISBN and metadata
+                    </p>
+                    
+                    {/* LLM Extraction Method */}
+                    {canUseLlm && (
                       <>
-                        <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                        Processing...
-                      </>
-                    ) : (
-                      <>
-                        <RefreshCw className="h-4 w-4 mr-2" />
-                        Retry Processing
+                        <Button
+                          onClick={() => router.push(`/urls/${url.id}/llm-extract`)}
+                          disabled={isProcessing}
+                          size="sm"
+                          variant="default"
+                          className="w-full bg-purple-600 hover:bg-purple-700"
+                        >
+                          <Sparkles className="h-4 w-4 mr-2" />
+                          Extract with LLM (AI)
+                        </Button>
+                        <p className="text-xs text-gray-500 italic">
+                          Use AI to extract metadata from the page content
+                        </p>
                       </>
                     )}
-                  </Button>
+                  </div>
                 </>
               ) : (url.status === 'extractable' || url.status === 'translatable' || url.status === 'resolvable') ? (
                 <>
