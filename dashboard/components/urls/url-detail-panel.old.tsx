@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition, useEffect } from 'react';
-import { X, Database, RefreshCw, ExternalLink, Unlink, Trash, DiamondPlus } from 'lucide-react';
+import { X, Database, RefreshCw, ExternalLink, Unlink } from 'lucide-react';
 import { type UrlWithStatus } from '@/lib/db/computed';
 import { type UrlEnrichment } from '@/lib/db/schema';
 import type { UrlWithCapabilitiesAndStatus } from '@/lib/actions/url-with-capabilities';
@@ -11,8 +11,6 @@ import { processSingleUrl } from '@/lib/actions/process-url-action';
 import { getIdentifiersWithPreviews, selectAndProcessIdentifier, refreshIdentifierPreview, fetchAllPreviews } from '@/lib/actions/identifier-selection-action';
 import { getExtractedMetadata, approveAndStoreMetadata, rejectMetadata } from '@/lib/actions/metadata-approval-action';
 import { checkHasCachedContent } from '@/lib/actions/cache-check-action';
-import { resetProcessingState, ignoreUrl, unignoreUrl, archiveUrl } from '@/lib/actions/state-transitions';
-import { deleteUrls } from '@/lib/actions/urls';
 import { getZoteroWebUrl, type ZoteroItemResponse } from '@/lib/zotero-client';
 import { StatusBadge } from '../status-badge';
 import { Button } from '../ui/button';
@@ -22,13 +20,6 @@ import { PreviewComparison } from './preview-comparison';
 import { MetadataReview } from './metadata-review';
 import { useRouter } from 'next/navigation';
 import { Sparkles } from 'lucide-react';
-import { StatusSummarySection } from './url-detail-panel/StatusSummarySection';
-import { CapabilitiesSection } from './url-detail-panel/CapabilitiesSection';
-import { ProcessingHistorySection } from './url-detail-panel/ProcessingHistorySection';
-import { QuickActionsSection } from './url-detail-panel/QuickActionsSection';
-import { AddIdentifierModal } from './add-identifier-modal';
-import { ReplaceZoteroItemModal } from './replace-zotero-item-modal';
-import { processCustomIdentifier } from '@/lib/actions/process-custom-identifier';
 
 interface URLDetailPanelProps {
   url: UrlWithStatus | UrlWithCapabilitiesAndStatus;
@@ -41,6 +32,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
   const [isPending, startTransition] = useTransition();
   const [enrichment, setEnrichment] = useState<UrlEnrichment | null>(null);
   const [notes, setNotes] = useState('');
+  const [newIdentifier, setNewIdentifier] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -49,20 +41,12 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
   const [identifiersWithPreviews, setIdentifiersWithPreviews] = useState<any[]>([]);
   const [extractedMetadata, setExtractedMetadata] = useState<any>(null);
   const [canUseLlm, setCanUseLlm] = useState(false);
-  
-  // Modal states for custom identifiers
-  const [addIdentifierModalOpen, setAddIdentifierModalOpen] = useState(false);
-  const [replaceItemModalOpen, setReplaceItemModalOpen] = useState(false);
-  const [selectedCustomIdentifier, setSelectedCustomIdentifier] = useState<string | null>(null);
-
-  // Check if URL has new processing system fields
-  const hasNewFields = 'processingStatus' in url && 'userIntent' in url;
-  const urlWithCap = hasNewFields ? (url as UrlWithCapabilitiesAndStatus) : null;
 
   // Normalize URL object to work with both UrlWithStatus and UrlWithCapabilitiesAndStatus
   const normalizedUrl = (() => {
     // Check if it's UrlWithCapabilitiesAndStatus
-    if (hasNewFields && urlWithCap) {
+    if ('processingStatus' in url && !('status' in url)) {
+      const urlWithCap = url as UrlWithCapabilitiesAndStatus;
       return {
         ...url,
         status: urlWithCap.zoteroItemKey ? 'stored' as const : 'unknown' as const,
@@ -215,17 +199,24 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
     });
   }
 
-  async function handleIdentifierAdded() {
-    setAddIdentifierModalOpen(false);
+  async function handleAddIdentifier() {
+    if (!newIdentifier.trim()) return;
     
-    // Reload enrichment data
-    const result = await getEnrichment(normalizedUrl.id);
-    if (result.success && result.data) {
-      setEnrichment(result.data);
-      setSuccessMessage('Identifier added successfully');
-    }
-    
-    onUpdate?.();
+    startTransition(async () => {
+      setError(null);
+      setSuccessMessage(null);
+      
+      const result = await addIdentifier(normalizedUrl.id, newIdentifier.trim());
+      
+      if (result.success && result.data) {
+        setEnrichment(result.data);
+        setNewIdentifier('');
+        setSuccessMessage('Identifier added successfully');
+        onUpdate?.();
+      } else {
+        setError(result.error || 'Unknown error adding identifier');
+      }
+    });
   }
 
   async function handleRemoveIdentifier(identifier: string) {
@@ -457,162 +448,6 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
     }
   }
 
-  async function handleProcessZoteroItemWithCustomIdentifier(identifier: string) {
-    // Check if URL already has a Zotero item
-    if (normalizedUrl.zoteroItemKey) {
-      // Show replacement modal with preview
-      setSelectedCustomIdentifier(identifier);
-      setReplaceItemModalOpen(true);
-    } else {
-      // Process directly without replacement
-      await processCustomIdentifierDirect(identifier, false);
-    }
-  }
-  
-  async function processCustomIdentifierDirect(identifier: string, replaceExisting: boolean) {
-    setIsProcessing(true);
-    setError(null);
-    setSuccessMessage(null);
-    setReplaceItemModalOpen(false);
-    
-    const result = await processCustomIdentifier(
-      normalizedUrl.id,
-      identifier,
-      replaceExisting
-    );
-    
-    setIsProcessing(false);
-    
-    if (result.success) {
-      setSuccessMessage(
-        result.replaced 
-          ? `Successfully replaced Zotero item with ${identifier} (${result.itemKey})`
-          : `Successfully stored in Zotero using ${identifier} (${result.itemKey})`
-      );
-      
-      // Reload Zotero metadata
-      if (result.itemKey) {
-        const metadata = await getZoteroItemMetadata(result.itemKey);
-        if (metadata.success && metadata.data) {
-          setZoteroItemMetadata(metadata.data);
-        }
-      }
-      
-      onUpdate?.();
-      router.refresh();
-    } else {
-      setError(result.error || 'Processing failed');
-    }
-  }
-  
-  async function handleConfirmReplaceItem() {
-    if (selectedCustomIdentifier) {
-      await processCustomIdentifierDirect(selectedCustomIdentifier, true);
-      setSelectedCustomIdentifier(null);
-    }
-  }
-
-  async function handleReset() {
-    setIsProcessing(true);
-    setError(null);
-    setSuccessMessage(null);
-    
-    const result = await resetProcessingState(url.id);
-    
-    setIsProcessing(false);
-    
-    if (result.success) {
-      setSuccessMessage(result.message || 'Processing state reset successfully');
-      onUpdate?.();
-      router.refresh();
-    } else {
-      setError(result.error || 'Failed to reset processing state');
-    }
-  }
-
-  async function handleIgnore() {
-    setIsProcessing(true);
-    setError(null);
-    setSuccessMessage(null);
-    
-    const result = await ignoreUrl(url.id);
-    
-    setIsProcessing(false);
-    
-    if (result.success) {
-      setSuccessMessage('URL marked as ignored');
-      onUpdate?.();
-      router.refresh();
-    } else {
-      setError(result.error || 'Failed to ignore URL');
-    }
-  }
-
-  async function handleUnignore() {
-    setIsProcessing(true);
-    setError(null);
-    setSuccessMessage(null);
-    
-    const result = await unignoreUrl(url.id);
-    
-    setIsProcessing(false);
-    
-    if (result.success) {
-      setSuccessMessage('URL un-ignored successfully');
-      onUpdate?.();
-      router.refresh();
-    } else {
-      setError(result.error || 'Failed to un-ignore URL');
-    }
-  }
-
-  async function handleArchive() {
-    setIsProcessing(true);
-    setError(null);
-    setSuccessMessage(null);
-    
-    const result = await archiveUrl(url.id);
-    
-    setIsProcessing(false);
-    
-    if (result.success) {
-      setSuccessMessage('URL archived successfully');
-      onUpdate?.();
-      router.refresh();
-    } else {
-      setError(result.error || 'Failed to archive URL');
-    }
-  }
-
-  async function handleDelete() {
-    // Confirm deletion since it's destructive
-    const confirmed = window.confirm(
-      'Are you sure you want to delete this URL? This action cannot be undone and will remove all associated data.'
-    );
-    
-    if (!confirmed) {
-      return;
-    }
-    
-    setIsProcessing(true);
-    setError(null);
-    setSuccessMessage(null);
-    
-    const result = await deleteUrls([url.id]);
-    
-    setIsProcessing(false);
-    
-    if (result.success) {
-      setSuccessMessage('URL deleted successfully');
-      // Close the panel and refresh since URL no longer exists
-      onUpdate?.();
-      router.refresh();
-      onClose?.();
-    } else {
-      setError(result.error || 'Failed to delete URL');
-    }
-  }
-
   return (
     <div className="h-full flex flex-col w-full overflow-hidden">
       <div className="flex-1 overflow-y-auto min-w-0">
@@ -661,7 +496,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
             )}
           </div>
           {/* Content */}
-        <div className="px-6 pt-6 space-y-6">
+        <div className="px-6 space-y-6">
           {/* Messages */}
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-md text-sm">
@@ -672,67 +507,6 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
           {successMessage && (
             <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-md text-sm">
               {successMessage}
-            </div>
-          )}
-
-          {/* NEW: Status Summary Section */}
-          {urlWithCap && (
-            <div className="border rounded-lg bg-white p-4">
-              <StatusSummarySection
-                processingStatus={urlWithCap.processingStatus}
-                userIntent={urlWithCap.userIntent}
-                processingAttempts={urlWithCap.processingAttempts || 0}
-                urlId={url.id}
-                onUpdate={onUpdate}
-              />
-            </div>
-          )}
-
-          {/* NEW: Capabilities Section */}
-          {urlWithCap && urlWithCap.capability && (
-            <div className="border rounded-lg bg-white p-4">
-              <CapabilitiesSection capability={urlWithCap.capability} />
-            </div>
-          )}
-
-          {/* NEW: Quick Actions Section */}
-          {urlWithCap && (
-            <div className="border rounded-lg bg-white p-4">
-              <QuickActionsSection
-                url={{
-                  id: url.id,
-                  url: url.url,
-                  processingStatus: urlWithCap.processingStatus,
-                  userIntent: urlWithCap.userIntent,
-                  zoteroItemKey: url.zoteroItemKey || null,
-                  createdByTheodore: (url as any).createdByTheodore || null,
-                  userModifiedInZotero: (url as any).userModifiedInZotero || null,
-                  linkedUrlCount: (url as any).linkedUrlCount || null,
-                  processingAttempts: urlWithCap.processingAttempts || 0,
-                  capability: urlWithCap.capability,
-                }}
-                onProcess={handleProcessWithZotero}
-                onUnlink={() => setUnlinkModalOpen(true)}
-                onEditCitation={() => router.push(`/urls/${url.id}/edit-citation`)}
-                onSelectIdentifier={() => {
-                  // Focus on identifier selection if available
-                  if (identifiersWithPreviews.length > 0) {
-                    document.getElementById('identifier-previews')?.scrollIntoView({ behavior: 'smooth' });
-                  }
-                }}
-                onApproveMetadata={() => handleApproveMetadata(false)}
-                onManualCreate={() => router.push(`/urls/${url.id}/manual-create`)}
-                onReset={handleReset}
-                onIgnore={handleIgnore}
-                onUnignore={handleUnignore}
-                onArchive={handleArchive}
-                onDelete={handleDelete}
-                onViewHistory={() => {
-                  // Scroll to processing history section
-                  document.getElementById('processing-history')?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                isProcessing={isProcessing}
-              />
             </div>
           )}
 
@@ -1132,7 +906,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
 
           {/* Identifier Previews */}
           {identifiersWithPreviews.length > 0 && (
-            <div id="identifier-previews" className="w-full border rounded-lg bg-white p-4 space-y-4">
+            <div className="w-full border rounded-lg bg-white p-4 space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="font-medium">Identifier Previews</h3>
                 <Button
@@ -1261,14 +1035,8 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
                     <span className="text-gray-600">Errors:</span>
                     <div className="mt-1 space-y-1">
                       {(zoteroData.errors as string[]).map((error: string, index: number) => (
-                        <div
-                          key={index}
-                          className="bg-red-50 text-red-800 px-2 py-1 rounded text-xs break-all whitespace-pre-wrap"
-                          style={{ wordBreak: 'break-all', overflowWrap: 'break-word' }}
-                        >
-                          {typeof error === 'string' && error.length > 1000
-                            ? error.slice(0, 1000) + '...'
-                            : error}
+                        <div key={index} className="bg-red-50 text-red-800 px-2 py-1 rounded text-xs">
+                          {error}
                         </div>
                       ))}
                     </div>
@@ -1403,73 +1171,46 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
 
           {/* Custom Identifiers */}
           <div className="border rounded-lg bg-white p-4 space-y-3">
-            <div className="flex items-center justify-between">
-              <h3 className="font-medium">Custom Identifiers</h3>
+            <h3 className="font-medium">Custom Identifiers</h3>
+            
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={newIdentifier}
+                onChange={(e) => setNewIdentifier(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleAddIdentifier()}
+                placeholder="Add new identifier..."
+                className="flex-1 px-3 py-2 border rounded-md text-sm"
+                disabled={isPending}
+              />
               <Button
-                onClick={() => setAddIdentifierModalOpen(true)}
-                disabled={isPending || isProcessing}
+                onClick={handleAddIdentifier}
+                disabled={isPending || !newIdentifier.trim()}
                 size="sm"
-                variant="outline"
               >
-                Add Identifier
+                Add
               </Button>
             </div>
             
-            <p className="text-xs text-gray-500">
-              Add custom identifiers (DOI, PMID, ISBN, ArXiv) that have been validated and can be used to process this URL with Zotero.
-            </p>
-            
-            <div className="space-y-2">
+            <div className="space-y-1">
               {enrichment?.customIdentifiers && enrichment.customIdentifiers.length > 0 ? (
                 enrichment.customIdentifiers.map((identifier, index) => (
-                  <div key={index} className="flex items-center bg-gray-50 border px-3 py-2 rounded group hover:bg-gray-100 transition-colors">
-                    <span className="text-sm font-mono flex-1 truncate">{identifier}</span>
-                    <div className="flex gap-0 ml-2">
-                      <Button
-                        onClick={() => handleProcessZoteroItemWithCustomIdentifier(identifier)}
-                        // disabled={isProcessing || isPending}
-                        size="sm"
-                        variant="ghost"
-                        className="h-8 px-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50"
-                        title="Process with Zotero using this identifier"
-                      >
-                        <DiamondPlus className="h-4 w-4 mr-1" />
-                      </Button>
-                      <Button
-                        onClick={() => handleRemoveIdentifier(identifier)}
-                        disabled={isPending || isProcessing}
-                        size="sm"
-                        variant="ghost"
-                        className="h-8 px-2 text-red-600 hover:text-red-800 hover:bg-red-50"
-                        title="Remove this identifier"
-                      >
-                        <Trash className="h-4 w-4" />
-                      </Button>
-                    </div>
+                  <div key={index} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded">
+                    <span className="text-sm font-mono">{identifier}</span>
+                    <button
+                      onClick={() => handleRemoveIdentifier(identifier)}
+                      disabled={isPending}
+                      className="text-red-600 hover:text-red-800 text-sm"
+                    >
+                      Remove
+                    </button>
                   </div>
                 ))
               ) : (
-                <div className="bg-gray-50 border border-dashed rounded-md px-4 py-8 text-center">
-                  <p className="text-sm text-gray-500 mb-3">No custom identifiers yet</p>
-                  <Button
-                    onClick={() => setAddIdentifierModalOpen(true)}
-                    disabled={isPending || isProcessing}
-                    size="sm"
-                    variant="outline"
-                  >
-                    Add Your First Identifier
-                  </Button>
-                </div>
+                <p className="text-sm text-gray-500">No custom identifiers yet</p>
               )}
             </div>
           </div>
-
-          {/* NEW: Processing History Section */}
-          {urlWithCap && urlWithCap.processingHistory && urlWithCap.processingHistory.length > 0 && (
-            <div id="processing-history" className="border rounded-lg bg-white p-4">
-              <ProcessingHistorySection history={urlWithCap.processingHistory} />
-            </div>
-          )}
 
           {/* Notes */}
           <div className="border rounded-lg bg-white p-4 space-y-3">
@@ -1514,26 +1255,6 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
         onUnlinkAndDelete={handleUnlinkAndDelete}
         isProcessing={isProcessing}
       />
-      
-      {/* Add Identifier Modal */}
-      <AddIdentifierModal
-        urlId={normalizedUrl.id}
-        open={addIdentifierModalOpen}
-        onOpenChange={setAddIdentifierModalOpen}
-        onSuccess={handleIdentifierAdded}
-      />
-      
-      {/* Replace Zotero Item Modal */}
-      {selectedCustomIdentifier && normalizedUrl.zoteroItemKey && (
-        <ReplaceZoteroItemModal
-          open={replaceItemModalOpen}
-          onOpenChange={setReplaceItemModalOpen}
-          identifier={selectedCustomIdentifier}
-          currentItemKey={normalizedUrl.zoteroItemKey}
-          onConfirm={handleConfirmReplaceItem}
-          isProcessing={isProcessing}
-        />
-      )}
     </div>
   );
 }

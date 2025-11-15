@@ -35,6 +35,7 @@ import { ManualCreateModal } from '../url-modals/ManualCreateModal';
 import { EditCitationModal } from '../url-modals/EditCitationModal';
 import { IdentifierSelectionModal } from '../url-modals/IdentifierSelectionModal';
 import { ProcessingHistoryModal } from '../url-modals/ProcessingHistoryModal';
+import { AddIdentifierModal } from '../add-identifier-modal';
 import { Button } from '@/components/ui/button';
 import type { UrlWithCapabilitiesAndStatus } from '@/lib/actions/url-with-capabilities';
 import type { Section } from '@/drizzle/schema';
@@ -74,6 +75,8 @@ export function URLTableNew({
   const [identifierSelectionUrlId, setIdentifierSelectionUrlId] = useState<number | null>(null);
   const [processingHistoryModalOpen, setProcessingHistoryModalOpen] = useState(false);
   const [processingHistoryData, setProcessingHistoryData] = useState<{ urlId: number; url: string; history: any[] } | null>(null);
+  const [addIdentifierModalOpen, setAddIdentifierModalOpen] = useState(false);
+  const [addIdentifierUrlId, setAddIdentifierUrlId] = useState<number | null>(null);
 
   // Custom hooks
   const filters = useURLFilters();
@@ -219,6 +222,17 @@ export function URLTableNew({
     setIdentifierSelectionModalOpen(true);
   }, []);
 
+  const handleAddIdentifier = useCallback((url: UrlWithCapabilitiesAndStatus) => {
+    setAddIdentifierUrlId(url.id);
+    setAddIdentifierModalOpen(true);
+  }, []);
+
+  const handleIdentifierAdded = useCallback(async () => {
+    setAddIdentifierModalOpen(false);
+    setAddIdentifierUrlId(null);
+    await loadUrls();
+  }, [loadUrls]);
+
   const handleApproveMetadata = useCallback((url: UrlWithCapabilitiesAndStatus) => {
     // TODO: Implement metadata approval modal trigger
     console.log('Approve metadata for URL:', url.id);
@@ -333,6 +347,9 @@ export function URLTableNew({
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">
                   Status
                 </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">
+                  IDs
+                </th>
                 {!isDetailPaneOpen && (
                   <>
                     <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">
@@ -357,7 +374,7 @@ export function URLTableNew({
             <tbody className="divide-y">
               {isLoading ? (
                 <tr>
-                  <td colSpan={isDetailPaneOpen ? 6 : 8} className="px-4 py-8 text-center text-gray-500">
+                  <td colSpan={isDetailPaneOpen ? 7 : 9} className="px-4 py-8 text-center text-gray-500">
                     <div className="flex items-center justify-center gap-2">
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
                       <span>Loading...</span>
@@ -366,7 +383,7 @@ export function URLTableNew({
                 </tr>
               ) : urls.length === 0 ? (
                 <tr>
-                  <td colSpan={isDetailPaneOpen ? 6 : 8} className="px-4 py-8 text-center text-gray-500">
+                  <td colSpan={isDetailPaneOpen ? 7 : 9} className="px-4 py-8 text-center text-gray-500">
                     No URLs found
                   </td>
                 </tr>
@@ -382,6 +399,7 @@ export function URLTableNew({
                     onUnlink={() => handleUnlink(url)}
                     onEditCitation={() => handleEditCitation(url)}
                     onSelectIdentifier={() => handleSelectIdentifier(url)}
+                    onAddIdentifier={() => handleAddIdentifier(url)}
                     onApproveMetadata={() => handleApproveMetadata(url)}
                     onManualCreate={() => handleManualCreate(url)}
                     onReset={() => handleReset(url)}
@@ -484,6 +502,21 @@ export function URLTableNew({
           urlId={processingHistoryData.urlId}
           url={processingHistoryData.url}
           history={processingHistoryData.history}
+        />
+      )}
+
+      {/* Add Identifier Modal */}
+      {addIdentifierUrlId !== null && (
+        <AddIdentifierModal
+          urlId={addIdentifierUrlId}
+          open={addIdentifierModalOpen}
+          onOpenChange={(open) => {
+            if (!open) {
+              setAddIdentifierModalOpen(false);
+              setAddIdentifierUrlId(null);
+            }
+          }}
+          onSuccess={handleIdentifierAdded}
         />
       )}
     </div>

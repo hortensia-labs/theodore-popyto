@@ -30,6 +30,7 @@ import {
   CheckSquare,
   RotateCcw,
   Eye,
+  Plus,
 } from 'lucide-react';
 import type { UrlWithCapabilitiesAndStatus } from '@/lib/actions/url-with-capabilities';
 
@@ -42,6 +43,7 @@ interface URLTableRowProps {
   onUnlink?: () => void;
   onEditCitation?: () => void;
   onSelectIdentifier?: () => void;
+  onAddIdentifier?: () => void;
   onApproveMetadata?: () => void;
   onManualCreate?: () => void;
   onReset?: () => void;
@@ -65,6 +67,7 @@ export function URLTableRow({
   onUnlink,
   onEditCitation,
   onSelectIdentifier,
+  onAddIdentifier,
   onApproveMetadata,
   onManualCreate,
   onReset,
@@ -156,6 +159,25 @@ export function URLTableRow({
           showLabel={!compact}
           size={compact ? "sm" : "md"}
         />
+      </td>
+
+      {/* IDs */}
+      <td className="px-4 py-3">
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-600 whitespace-nowrap">
+            {url.analysisData?.validIdentifiers?.length || 0} / {url.enrichment?.customIdentifiers?.length || 0}
+          </span>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onAddIdentifier?.();
+            }}
+            className="p-1 hover:bg-gray-100 rounded transition-colors shrink-0"
+            title="Add custom identifier"
+          >
+            <Plus className="h-4 w-4 text-gray-600" />
+          </button>
+        </div>
       </td>
 
       {/* Capabilities */}
