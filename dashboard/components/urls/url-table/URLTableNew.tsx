@@ -36,6 +36,7 @@ import { EditCitationModal } from '../url-modals/EditCitationModal';
 import { IdentifierSelectionModal } from '../url-modals/IdentifierSelectionModal';
 import { ProcessingHistoryModal } from '../url-modals/ProcessingHistoryModal';
 import { AddIdentifierModal } from '../add-identifier-modal';
+import { BatchProgressModal } from '../batch-progress-modal';
 import { Button } from '@/components/ui/button';
 import type { UrlWithCapabilitiesAndStatus } from '@/lib/actions/url-with-capabilities';
 import type { Section } from '@/drizzle/schema';
@@ -77,6 +78,8 @@ export function URLTableNew({
   const [processingHistoryData, setProcessingHistoryData] = useState<{ urlId: number; url: string; history: any[] } | null>(null);
   const [addIdentifierModalOpen, setAddIdentifierModalOpen] = useState(false);
   const [addIdentifierUrlId, setAddIdentifierUrlId] = useState<number | null>(null);
+  const [batchProgressModalOpen, setBatchProgressModalOpen] = useState(false);
+  const [batchUrlIds, setBatchUrlIds] = useState<number[]>([]);
 
   // Custom hooks
   const filters = useURLFilters();
@@ -149,14 +152,22 @@ export function URLTableNew({
   }, [filters, loadUrls, selection]);
 
   /**
-   * Handle bulk process
+   * Handle bulk process - Opens progress modal
    */
   const handleBulkProcess = useCallback(async (urlIds: number[]) => {
-    await processing.processBatch(urlIds, {
+    // Store URL IDs and open modal
+    setBatchUrlIds(urlIds);
+    setBatchProgressModalOpen(true);
+  }, []);
+
+  /**
+   * Start batch processing (called from modal)
+   */
+  const handleStartBatchProcessing = useCallback(async () => {
+    const session = await processing.processBatch(batchUrlIds, {
       concurrency: 5,
       respectUserIntent: true,
       onProgress: (progress) => {
-        // Progress is tracked in the hook
         console.log(`Batch progress: ${progress?.percentage.toFixed(1)}%`);
       },
     });
@@ -164,7 +175,9 @@ export function URLTableNew({
     // Reload URLs after batch completes
     await loadUrls();
     selection.clear();
-  }, [processing, loadUrls, selection]);
+    
+    return session;
+  }, [processing, batchUrlIds, loadUrls, selection]);
 
   /**
    * Handle single URL processing
@@ -515,6 +528,20 @@ export function URLTableNew({
           onSuccess={handleIdentifierAdded}
         />
       )}
+
+      {/* Batch Progress Modal */}
+      <BatchProgressModal
+        open={batchProgressModalOpen}
+        onOpenChange={setBatchProgressModalOpen}
+        urlIds={batchUrlIds}
+        onProcessingStart={handleStartBatchProcessing}
+        session={processing.batchSession}
+        progress={processing.batchProgress}
+        onPause={processing.pauseCurrentBatch}
+        onResume={processing.resumeCurrentBatch}
+        onCancel={processing.cancelCurrentBatch}
+        isProcessing={processing.isProcessing}
+      />
     </div>
   );
 }
