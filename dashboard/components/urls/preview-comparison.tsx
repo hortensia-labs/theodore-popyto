@@ -145,7 +145,7 @@ function PreviewCard({
             )}
           </div>
           {selected && (
-            <CheckCircle2 className="h-5 w-5 text-blue-500 flex-shrink-0" />
+            <CheckCircle2 className="h-5 w-5 text-blue-500 shrink-0" />
           )}
         </div>
         

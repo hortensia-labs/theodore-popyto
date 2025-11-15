@@ -1,7 +1,7 @@
 'use server';
 
 import { db } from '../db/client';
-import { urls, urlAnalysisData, urlEnrichments } from '../db/schema';
+import { urls, urlAnalysisData, urlEnrichments, zoteroItemLinks } from '../db/schema';
 import { eq } from 'drizzle-orm';
 import { addUrlStatus, type UrlStatus } from '../db/computed';
 import { 
@@ -19,6 +19,11 @@ import {
   type CitationValidationStatus,
   ZoteroApiError
 } from '../zotero-client';
+import { URLProcessingOrchestrator } from '../orchestrator/url-processing-orchestrator';
+import { URLProcessingStateMachine } from '../state-machine/url-processing-state-machine';
+import { StateGuards } from '../state-machine/state-guards';
+import { getUrlWithCapabilities, recordProcessingAttempt } from '../orchestrator/processing-helpers';
+import type { ProcessingStatus } from '../types/url-processing';
 
 /**
  * Processing result for a single URL
@@ -78,19 +83,22 @@ function determineProcessingStrategy(
 
 /**
  * Process a single URL with Zotero
+ * 
+ * NEW: This now uses the orchestrator as the primary method,
+ * which handles multi-stage processing with auto-cascade.
+ * 
+ * The orchestrator will:
+ * 1. Try Zotero processing (identifier or URL)
+ * 2. On failure, auto-cascade to content extraction
+ * 3. On content failure, try LLM extraction
+ * 4. Record all attempts in history
  */
 export async function processUrlWithZotero(urlId: number): Promise<ProcessingResult> {
   try {
-    // Fetch URL with all related data
-    const result = await db
-      .select()
-      .from(urls)
-      .leftJoin(urlAnalysisData, eq(urls.id, urlAnalysisData.urlId))
-      .leftJoin(urlEnrichments, eq(urls.id, urlEnrichments.urlId))
-      .where(eq(urls.id, urlId))
-      .limit(1);
+    // Check if URL exists and get capabilities
+    const urlData = await getUrlWithCapabilities(urlId);
     
-    if (result.length === 0) {
+    if (!urlData) {
       return {
         urlId,
         success: false,
@@ -98,149 +106,31 @@ export async function processUrlWithZotero(urlId: number): Promise<ProcessingRes
       };
     }
     
-    const row = result[0];
-    const urlData = row.urls;
-    const analysisData = row.url_analysis_data;
-    const enrichment = row.url_enrichments;
-    
-    // Compute status
-    const urlWithStatus = addUrlStatus(urlData, analysisData, enrichment);
-    
-    // Don't process if already stored
-    if (urlWithStatus.status === 'stored') {
+    // Check if can be processed
+    if (!StateGuards.canProcessWithZotero(urlData)) {
       return {
         urlId,
         success: false,
-        error: 'URL already processed and stored in Zotero',
+        error: `Cannot process URL (status: ${urlData.processingStatus}, intent: ${urlData.userIntent})`,
       };
     }
     
-    // Determine processing strategy
-    const strategy = determineProcessingStrategy(
-      urlData.url,
-      urlWithStatus.status,
-      analysisData?.validIdentifiers || null,
-      enrichment?.customIdentifiers || null
-    );
+    // NEW: Delegate to orchestrator for complete workflow
+    // The orchestrator handles:
+    // - Multi-stage processing (Zotero → Content → LLM)
+    // - Auto-cascade on failure
+    // - State management
+    // - History recording
+    const result = await URLProcessingOrchestrator.processUrl(urlId);
     
-    if (!strategy) {
-      return {
-        urlId,
-        success: false,
-        error: `Cannot process URL with status: ${urlWithStatus.status}`,
-      };
-    }
-    
-    // Mark as processing
-    await db
-      .update(urls)
-      .set({
-        zoteroProcessingStatus: 'processing',
-        updatedAt: new Date(),
-      })
-      .where(eq(urls.id, urlId));
-    
-    // Process with Zotero
-    let response: ZoteroProcessResponse;
-    
-    try {
-      if (strategy.endpoint === 'identifier' && strategy.identifier) {
-        response = await processIdentifier(strategy.identifier);
-      } else {
-        response = await processUrl(urlData.url);
-      }
-    } catch (error) {
-      // Update with error
-      await db
-        .update(urls)
-        .set({
-          zoteroProcessingStatus: 'failed',
-          zoteroProcessingError: getErrorMessage(error),
-          updatedAt: new Date(),
-        })
-        .where(eq(urls.id, urlId));
-      
-      // Automatically attempt content fetching for alternative processing routes
-      try {
-        const { processSingleUrl } = await import('./process-url-action');
-        await processSingleUrl(urlId);
-        console.log(`Content fetching triggered for failed URL ${urlId} to enable alternative processing`);
-      } catch (contentError) {
-        console.error(`Failed to fetch content for URL ${urlId}:`, contentError);
-        // Don't fail the main function - this is a best-effort attempt
-      }
-      
-      throw error;
-    }
-    
-    // Extract item key
-    const itemKey = extractItemKey(response);
-    
-    if (!itemKey) {
-      // Update with error
-      await db
-        .update(urls)
-        .set({
-          zoteroProcessingStatus: 'failed',
-          zoteroProcessingError: 'No item key returned from Zotero',
-          updatedAt: new Date(),
-        })
-        .where(eq(urls.id, urlId));
-      
-      // Automatically attempt content fetching for alternative processing routes
-      try {
-        const { processSingleUrl } = await import('./process-url-action');
-        await processSingleUrl(urlId);
-        console.log(`Content fetching triggered for failed URL ${urlId} to enable alternative processing`);
-      } catch (contentError) {
-        console.error(`Failed to fetch content for URL ${urlId}:`, contentError);
-        // Don't fail the main function - this is a best-effort attempt
-      }
-      
-      return {
-        urlId,
-        success: false,
-        error: 'No item key returned from Zotero',
-      };
-    }
-    
-    // Fetch item metadata and validate citation
-    let validationStatus: CitationValidationStatus = 'incomplete';
-    let validationDetails: { missingFields?: string[] } = {};
-    
-    try {
-      const itemMetadata = await getItem(itemKey);
-      const validation = validateCitation(itemMetadata);
-      validationStatus = validation.status;
-      validationDetails = { missingFields: validation.missingFields };
-    } catch (error) {
-      // If validation fails, default to incomplete
-      console.error('Citation validation failed:', error);
-      validationDetails = { missingFields: ['title', 'creators', 'date'] };
-    }
-    
-    // Update URL with success and validation
-    await db
-      .update(urls)
-      .set({
-        zoteroItemKey: itemKey,
-        zoteroProcessedAt: new Date(),
-        zoteroProcessingStatus: 'stored',
-        zoteroProcessingMethod: strategy.endpoint,
-        zoteroProcessingError: null,
-        citationValidationStatus: validationStatus,
-        citationValidatedAt: new Date(),
-        citationValidationDetails: validationDetails,
-        updatedAt: new Date(),
-      })
-      .where(eq(urls.id, urlId));
-    
+    // Convert orchestrator result to legacy format for compatibility
     return {
       urlId,
-      success: true,
-      itemKey,
-      method: response.method,
-      isExisting: isExistingItem(response),
+      success: result.success,
+      itemKey: result.itemKey,
+      method: result.method,
+      error: result.error,
+      isExisting: result.metadata?.isExisting as boolean,
     };
   } catch (error) {
     return {
@@ -348,31 +238,49 @@ export async function getZoteroProcessingStatus(urlId: number) {
 
 /**
  * Unlink URL from Zotero item (without deleting the Zotero item)
+ * 
+ * NEW: Enhanced with state machine and link tracking
  */
 export async function unlinkUrlFromZotero(urlId: number) {
   try {
-    // Get current URL data
-    const urlData = await db
-      .select()
-      .from(urls)
-      .where(eq(urls.id, urlId))
-      .limit(1);
+    // Get current URL data with capabilities
+    const urlData = await getUrlWithCapabilities(urlId);
     
-    if (urlData.length === 0) {
+    if (!urlData) {
       return {
         success: false,
         error: 'URL not found',
       };
     }
     
-    const url = urlData[0];
+    // Check if can unlink
+    if (!StateGuards.canUnlink(urlData)) {
+      return {
+        success: false,
+        error: `Cannot unlink URL (current status: ${urlData.processingStatus})`,
+      };
+    }
     
-    if (!url.zoteroItemKey) {
+    if (!urlData.zoteroItemKey) {
       return {
         success: false,
         error: 'URL is not linked to a Zotero item',
       };
     }
+    
+    const currentStatus = urlData.processingStatus;
+    const itemKey = urlData.zoteroItemKey;
+    
+    // Transition back to not_started (per requirements: unlink returns to initial state)
+    await URLProcessingStateMachine.transition(
+      urlId,
+      currentStatus,
+      'not_started',
+      {
+        reason: 'User unlinked from Zotero',
+        previousItemKey: itemKey,
+      }
+    );
     
     // Clear Zotero fields and citation validation
     await db
@@ -390,10 +298,24 @@ export async function unlinkUrlFromZotero(urlId: number) {
       })
       .where(eq(urls.id, urlId));
     
+    // Remove link record
+    await db
+      .delete(zoteroItemLinks)
+      .where(eq(zoteroItemLinks.urlId, urlId));
+    
+    // Update linked_url_count for other URLs with same item
+    await db.execute(sql`
+      UPDATE urls
+      SET linked_url_count = (
+        SELECT COUNT(*) FROM zotero_item_links WHERE item_key = ${itemKey}
+      )
+      WHERE zotero_item_key = ${itemKey}
+    `);
+    
     return {
       success: true,
       urlId,
-      itemKey: url.zoteroItemKey,
+      itemKey,
     };
   } catch (error) {
     return {
@@ -405,44 +327,77 @@ export async function unlinkUrlFromZotero(urlId: number) {
 
 /**
  * Delete Zotero item and unlink URL
+ * 
+ * NEW: Enhanced with safety checks to prevent accidental deletion
  */
 export async function deleteZoteroItemAndUnlink(urlId: number) {
   try {
-    // Get current URL data
-    const urlData = await db
-      .select()
-      .from(urls)
-      .where(eq(urls.id, urlId))
-      .limit(1);
+    // Get current URL data with capabilities
+    const urlData = await getUrlWithCapabilities(urlId);
     
-    if (urlData.length === 0) {
+    if (!urlData) {
       return {
         success: false,
         error: 'URL not found',
       };
     }
     
-    const url = urlData[0];
-    
-    if (!url.zoteroItemKey) {
+    if (!urlData.zoteroItemKey) {
       return {
         success: false,
         error: 'URL is not linked to a Zotero item',
       };
     }
     
+    // NEW: Safety checks before deletion
+    if (!StateGuards.canDeleteZoteroItem(urlData)) {
+      const reasons = [];
+      if (!urlData.createdByTheodore) {
+        reasons.push('Item was not created by Theodore (pre-existing item)');
+      }
+      if (urlData.userModifiedInZotero) {
+        reasons.push('Item was modified by user in Zotero');
+      }
+      if ((urlData.linkedUrlCount || 0) > 1) {
+        reasons.push(`Item is linked to ${urlData.linkedUrlCount} URLs`);
+      }
+      
+      return {
+        success: false,
+        error: `Cannot safely delete item: ${reasons.join(', ')}`,
+        urlId,
+        itemKey: urlData.zoteroItemKey,
+        safetyCheckFailed: true,
+        reasons,
+      };
+    }
+    
+    const itemKey = urlData.zoteroItemKey;
+    const currentStatus = urlData.processingStatus;
+    
     // Delete item from Zotero
     let deleteResponse: ZoteroDeleteResponse;
     try {
-      deleteResponse = await deleteItem(url.zoteroItemKey);
+      deleteResponse = await deleteItem(itemKey);
     } catch (error) {
       return {
         success: false,
         error: getErrorMessage(error),
         urlId,
-        itemKey: url.zoteroItemKey,
+        itemKey,
       };
     }
+    
+    // Transition to not_started
+    await URLProcessingStateMachine.transition(
+      urlId,
+      currentStatus,
+      'not_started',
+      {
+        reason: 'User deleted Zotero item',
+        deletedItemKey: itemKey,
+      }
+    );
     
     // Clear Zotero fields and citation validation in database
     await db
@@ -456,14 +411,21 @@ export async function deleteZoteroItemAndUnlink(urlId: number) {
         citationValidationStatus: null,
         citationValidatedAt: null,
         citationValidationDetails: null,
+        createdByTheodore: false,
+        linkedUrlCount: 0,
         updatedAt: new Date(),
       })
       .where(eq(urls.id, urlId));
     
+    // Remove link record
+    await db
+      .delete(zoteroItemLinks)
+      .where(eq(zoteroItemLinks.urlId, urlId));
+    
     return {
       success: true,
       urlId,
-      itemKey: url.zoteroItemKey,
+      itemKey,
       deleted: deleteResponse.deleted,
       itemInfo: deleteResponse.itemInfo,
     };

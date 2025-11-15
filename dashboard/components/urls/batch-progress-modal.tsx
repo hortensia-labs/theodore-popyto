@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '../ui/button';
 import { X, CheckCircle2, XCircle, Clock, AlertTriangle } from 'lucide-react';
-import type { BatchProgressEvent, BatchStats } from '@/lib/batch-processor';
+import type { BatchProcessingSession } from '@/lib/types/url-processing';
 
 interface BatchProgressModalProps {
   isOpen: boolean;

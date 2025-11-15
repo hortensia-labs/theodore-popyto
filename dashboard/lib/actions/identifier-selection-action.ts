@@ -2,15 +2,20 @@
  * Identifier Selection Server Actions
  * 
  * Handles user selection of identifiers and processing them with Zotero
+ * NEW: Integrated with state machine and orchestrator
  */
 
 'use server';
 
 import { revalidatePath } from 'next/cache';
 import { db } from '../db/client';
-import { urls, urlIdentifiers } from '../../drizzle/schema';
+import { urls, urlIdentifiers, zoteroItemLinks } from '../../drizzle/schema';
 import { eq, and } from 'drizzle-orm';
-import { processIdentifier } from '../zotero-client';
+import { processIdentifier, validateCitation, getItem } from '../zotero-client';
+import { URLProcessingStateMachine } from '../state-machine/url-processing-state-machine';
+import { StateGuards } from '../state-machine/state-guards';
+import { getUrlWithCapabilities, recordProcessingAttempt } from '../orchestrator/processing-helpers';
+import type { ProcessingStatus } from '../types/url-processing';
 
 export interface SelectIdentifierResult {
   success: boolean;
@@ -21,12 +26,31 @@ export interface SelectIdentifierResult {
 
 /**
  * Select and process an identifier
+ * NEW: Integrated with state machine
  */
 export async function selectAndProcessIdentifier(
   urlId: number,
   identifierId: number
 ): Promise<SelectIdentifierResult> {
   try {
+    // Get URL data
+    const urlData = await getUrlWithCapabilities(urlId);
+    
+    if (!urlData) {
+      return {
+        success: false,
+        error: 'URL not found',
+      };
+    }
+    
+    // Check if can select identifier
+    if (!StateGuards.canSelectIdentifier(urlData)) {
+      return {
+        success: false,
+        error: `Cannot select identifier (current status: ${urlData.processingStatus})`,
+      };
+    }
+    
     // Get the identifier
     const identifier = await db.query.urlIdentifiers.findFirst({
       where: and(
@@ -42,10 +66,37 @@ export async function selectAndProcessIdentifier(
       };
     }
     
+    // Transition to processing
+    await URLProcessingStateMachine.transition(
+      urlId,
+      'awaiting_selection',
+      'processing_zotero',
+      {
+        reason: 'User selected identifier',
+        selectedIdentifierId: identifierId,
+        selectedIdentifierValue: identifier.identifierValue,
+      }
+    );
+    
+    // Record attempt start
+    const startTime = Date.now();
+    
     // Process with Zotero
     const result = await processIdentifier(identifier.identifierValue);
     
+    const duration = Date.now() - startTime;
+    
     if (!result.success) {
+      // Record failure
+      await recordProcessingAttempt(urlId, {
+        timestamp: startTime,
+        stage: 'zotero_identifier',
+        method: identifier.identifierType,
+        success: false,
+        error: result.error?.message || 'Processing failed',
+        duration,
+      });
+      
       return {
         success: false,
         error: result.error?.message || 'Processing failed',
@@ -56,11 +107,49 @@ export async function selectAndProcessIdentifier(
     const itemKey = result.items?.[0]?.key || result.items?.[0]?._meta?.itemKey;
     
     if (!itemKey) {
+      await recordProcessingAttempt(urlId, {
+        timestamp: startTime,
+        stage: 'zotero_identifier',
+        method: identifier.identifierType,
+        success: false,
+        error: 'Item created but key not found',
+        duration,
+      });
+      
       return {
         success: false,
         error: 'Item created but key not found',
       };
     }
+    
+    // Validate citation
+    let validationStatus: 'valid' | 'incomplete' = 'incomplete';
+    let missingFields: string[] = [];
+    
+    try {
+      const itemMetadata = await getItem(itemKey);
+      const validation = validateCitation(itemMetadata);
+      validationStatus = validation.status;
+      missingFields = validation.missingFields || [];
+    } catch (error) {
+      console.error('Citation validation failed:', error);
+      missingFields = ['title', 'creators', 'date'];
+    }
+    
+    // Determine final status
+    const finalStatus: ProcessingStatus = validationStatus === 'valid' ? 'stored' : 'stored_incomplete';
+    
+    // Transition to final status
+    await URLProcessingStateMachine.transition(
+      urlId,
+      'processing_zotero',
+      finalStatus,
+      {
+        itemKey,
+        validationStatus,
+        missingFields,
+      }
+    );
     
     // Update identifier as selected
     await db.update(urlIdentifiers)
@@ -71,35 +160,45 @@ export async function selectAndProcessIdentifier(
       })
       .where(eq(urlIdentifiers.id, identifierId));
     
-    // Update URL record
+    // Update URL record with Zotero data and citation validation
     await db.update(urls)
       .set({
         zoteroItemKey: itemKey,
         zoteroProcessedAt: new Date(),
         zoteroProcessingStatus: 'stored',
         zoteroProcessingMethod: 'identifier',
+        citationValidationStatus: validationStatus,
+        citationValidatedAt: new Date(),
+        citationValidationDetails: { missingFields },
+        createdByTheodore: true, // NEW: Track provenance
+        linkedUrlCount: 1, // NEW: Track link count
         updatedAt: new Date(),
       })
       .where(eq(urls.id, urlId));
     
-    // Validate citation after creation
-    try {
-      const { getItem, validateCitation } = await import('../zotero-client');
-      const itemMetadata = await getItem(itemKey);
-      const validation = validateCitation(itemMetadata);
-      
-      await db.update(urls)
-        .set({
-          citationValidationStatus: validation.status,
-          citationValidatedAt: new Date(),
-          citationValidationDetails: { missingFields: validation.missingFields },
-          updatedAt: new Date(),
-        })
-        .where(eq(urls.id, urlId));
-    } catch (error) {
-      console.error('Citation validation failed:', error);
-      // Don't fail the whole operation if validation fails
-    }
+    // Create link record
+    await db.insert(zoteroItemLinks).values({
+      itemKey,
+      urlId,
+      createdByTheodore: true,
+      userModified: false,
+      linkedAt: new Date(),
+    });
+    
+    // Record successful attempt
+    await recordProcessingAttempt(urlId, {
+      timestamp: startTime,
+      stage: 'zotero_identifier',
+      method: identifier.identifierType,
+      success: true,
+      itemKey,
+      duration,
+      metadata: {
+        identifierValue: identifier.identifierValue,
+        validationStatus,
+        missingFields,
+      },
+    });
     
     revalidatePath('/urls');
     

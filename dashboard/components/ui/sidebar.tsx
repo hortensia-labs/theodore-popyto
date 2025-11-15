@@ -45,7 +45,7 @@ export function Sidebar({ className }: SidebarProps) {
         className
       )}
     >
-      <div className="flex-1 p-6">
+      <div className={cn("flex-1", isCollapsed ? "p-2" : "p-6")}>
         <nav className="flex flex-col gap-2">
           {menuItems.map((item) => {
             const isActive =
@@ -58,7 +58,10 @@ export function Sidebar({ className }: SidebarProps) {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-3 text-16 px-4 py-2 rounded-md transition-colors",
+                  "flex items-center rounded-md transition-colors",
+                  isCollapsed 
+                    ? "justify-center px-0 py-2" 
+                    : "gap-3 text-16 px-4 py-2",
                   isActive
                     ? "bg-sidebar-accent text-sidebar-accent-foreground font-semibold"
                     : "text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground"

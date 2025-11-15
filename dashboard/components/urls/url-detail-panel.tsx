@@ -4,6 +4,7 @@ import { useState, useTransition, useEffect } from 'react';
 import { X, Database, RefreshCw, ExternalLink, Unlink } from 'lucide-react';
 import { type UrlWithStatus } from '@/lib/db/computed';
 import { type UrlEnrichment } from '@/lib/db/schema';
+import type { UrlWithCapabilitiesAndStatus } from '@/lib/actions/url-with-capabilities';
 import { updateEnrichment, addIdentifier, removeIdentifier, getEnrichment } from '@/lib/actions/enrichments';
 import { processUrlWithZotero, unlinkUrlFromZotero, deleteZoteroItemAndUnlink, getZoteroItemMetadata, revalidateCitation } from '@/lib/actions/zotero';
 import { processSingleUrl } from '@/lib/actions/process-url-action';
@@ -21,7 +22,7 @@ import { useRouter } from 'next/navigation';
 import { Sparkles } from 'lucide-react';
 
 interface URLDetailPanelProps {
-  url: UrlWithStatus;
+  url: UrlWithStatus | UrlWithCapabilitiesAndStatus;
   onClose?: () => void;
   onUpdate?: () => void;
 }
@@ -41,21 +42,45 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
   const [extractedMetadata, setExtractedMetadata] = useState<any>(null);
   const [canUseLlm, setCanUseLlm] = useState(false);
 
+  // Normalize URL object to work with both UrlWithStatus and UrlWithCapabilitiesAndStatus
+  const normalizedUrl = (() => {
+    // Check if it's UrlWithCapabilitiesAndStatus
+    if ('processingStatus' in url && !('status' in url)) {
+      const urlWithCap = url as UrlWithCapabilitiesAndStatus;
+      return {
+        ...url,
+        status: urlWithCap.zoteroItemKey ? 'stored' as const : 'unknown' as const,
+        zoteroProcessingStatus: urlWithCap.processingStatus as any,
+        identifierCount: urlWithCap.analysisData?.validIdentifiers?.length || 0,
+        hasExtractedMetadata: !!urlWithCap.analysisData,
+        statusCode: null,
+        contentType: null,
+        isAccessible: true,
+        finalUrl: urlWithCap.url,
+        redirectCount: 0,
+        zoteroProcessingMethod: null,
+        zoteroProcessedAt: null,
+        zoteroProcessingError: null,
+      } as unknown as UrlWithStatus;
+    }
+    return url as UrlWithStatus;
+  })();
+
   useEffect(() => {
     async function loadEnrichment() {
-      const result = await getEnrichment(url.id);
+      const result = await getEnrichment(normalizedUrl.id);
       if (result.success && result.data) {
         setEnrichment(result.data);
         setNotes(result.data.notes || '');
       }
     }
     loadEnrichment();
-  }, [url.id]);
+  }, [normalizedUrl.id]);
 
   useEffect(() => {
     async function loadZoteroMetadata() {
-      if (url.zoteroItemKey && url.status === 'stored') {
-        const result = await getZoteroItemMetadata(url.zoteroItemKey);
+      if (normalizedUrl.zoteroItemKey && normalizedUrl.status === 'stored') {
+        const result = await getZoteroItemMetadata(normalizedUrl.zoteroItemKey);
         if (result.success && result.data) {
           setZoteroItemMetadata(result.data);
         }
@@ -64,31 +89,31 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
       }
     }
     loadZoteroMetadata();
-  }, [url.zoteroItemKey, url.status]);
+  }, [normalizedUrl.zoteroItemKey, normalizedUrl.status]);
 
   useEffect(() => {
     async function loadIdentifiers() {
-      if (url.zoteroProcessingStatus === 'identifiers_found' || url.identifierCount && url.identifierCount > 0) {
-        const identifiers = await getIdentifiersWithPreviews(url.id);
+      if (normalizedUrl.zoteroProcessingStatus === 'identifiers_found' || normalizedUrl.identifierCount && normalizedUrl.identifierCount > 0) {
+        const identifiers = await getIdentifiersWithPreviews(normalizedUrl.id);
         setIdentifiersWithPreviews(identifiers);
       } else {
         setIdentifiersWithPreviews([]);
       }
     }
     loadIdentifiers();
-  }, [url.id, url.zoteroProcessingStatus, url.identifierCount]);
+  }, [normalizedUrl.id, normalizedUrl.zoteroProcessingStatus, normalizedUrl.identifierCount]);
 
   useEffect(() => {
     async function loadExtractedMetadata() {
-      if (url.zoteroProcessingStatus === 'no_identifiers' && url.hasExtractedMetadata) {
-        const metadata = await getExtractedMetadata(url.id);
+      if (normalizedUrl.zoteroProcessingStatus === 'no_identifiers' && normalizedUrl.hasExtractedMetadata) {
+        const metadata = await getExtractedMetadata(normalizedUrl.id);
         setExtractedMetadata(metadata);
       } else {
         setExtractedMetadata(null);
       }
     }
     loadExtractedMetadata();
-  }, [url.id, url.zoteroProcessingStatus, url.hasExtractedMetadata]);
+  }, [normalizedUrl.id, normalizedUrl.zoteroProcessingStatus, normalizedUrl.hasExtractedMetadata]);
 
   useEffect(() => {
     async function checkLlmEligibility() {
@@ -98,35 +123,35 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
       // 3. Zotero processing failed (cached or can cache)
       // 4. Is extractable/translatable but not stored (can process to cache first)
       
-      const cached = await checkHasCachedContent(url.id);
+      const cached = await checkHasCachedContent(normalizedUrl.id);
       
       const eligible =
         // Condition 1: Cached content with metadata issues
-        (cached && url.zoteroProcessingStatus === 'no_identifiers' && 
+        (cached && normalizedUrl.zoteroProcessingStatus === 'no_identifiers' && 
          extractedMetadata?.validationStatus === 'incomplete') ||
-        (cached && url.zoteroProcessingStatus === 'no_identifiers' &&
+        (cached && normalizedUrl.zoteroProcessingStatus === 'no_identifiers' &&
          extractedMetadata?.qualityScore && extractedMetadata.qualityScore < 80) ||
-        (cached && url.zoteroProcessingStatus === 'failed_parse') ||
-        (cached && url.zoteroProcessingStatus === 'failed_fetch') ||
+        (cached && normalizedUrl.zoteroProcessingStatus === 'failed_parse') ||
+        (cached && normalizedUrl.zoteroProcessingStatus === 'failed_fetch') ||
         
         // Condition 2: Zotero processing failed - always show LLM as alternative
-        (url.zoteroProcessingStatus === 'failed') ||
+        (normalizedUrl.zoteroProcessingStatus === 'failed') ||
         
         // Condition 3: Stored in Zotero but incomplete citation
-        (url.zoteroItemKey && url.citationValidationStatus === 'incomplete') ||
+        (normalizedUrl.zoteroItemKey && normalizedUrl.citationValidationStatus === 'incomplete') ||
         
         // Condition 4: Not yet processed but extractable/translatable (show LLM as option)
-        (!url.zoteroItemKey && 
-         (url.status === 'extractable' || url.status === 'translatable' || url.status === 'resolvable'));
+        (!normalizedUrl.zoteroItemKey && 
+         (normalizedUrl.status === 'extractable' || normalizedUrl.status === 'translatable' || normalizedUrl.status === 'resolvable'));
       
       setCanUseLlm(eligible);
     }
     
     checkLlmEligibility();
-  }, [url.id, url.zoteroProcessingStatus, extractedMetadata, url.zoteroItemKey, url.citationValidationStatus, url.status]);
+  }, [normalizedUrl.id, normalizedUrl.zoteroProcessingStatus, extractedMetadata, normalizedUrl.zoteroItemKey, normalizedUrl.citationValidationStatus, normalizedUrl.status]);
 
   // Extract ZOTERO analysis data from rawMetadata
-  const rawMetadata = url.analysisData?.rawMetadata as Record<string, unknown> | undefined;
+  const rawMetadata = normalizedUrl.analysisData?.rawMetadata as Record<string, unknown> | undefined;
   const zoteroData = rawMetadata || {};
 
   // Helper function to format creators
@@ -159,7 +184,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
       setError(null);
       setSuccessMessage(null);
       
-      const result = await updateEnrichment(url.id, {
+      const result = await updateEnrichment(normalizedUrl.id, {
         notes: notes.trim() || undefined,
         customIdentifiers: enrichment?.customIdentifiers || [],
       });
@@ -181,7 +206,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
       setError(null);
       setSuccessMessage(null);
       
-      const result = await addIdentifier(url.id, newIdentifier.trim());
+      const result = await addIdentifier(normalizedUrl.id, newIdentifier.trim());
       
       if (result.success && result.data) {
         setEnrichment(result.data);
@@ -199,7 +224,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
       setError(null);
       setSuccessMessage(null);
       
-      const result = await removeIdentifier(url.id, identifier);
+      const result = await removeIdentifier(normalizedUrl.id, identifier);
       
       if (result.success && result.data) {
         setEnrichment(result.data);
@@ -296,8 +321,8 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
       );
       
       // Reload Zotero metadata
-      if (url.zoteroItemKey) {
-        const metadata = await getZoteroItemMetadata(url.zoteroItemKey);
+      if (normalizedUrl.zoteroItemKey) {
+        const metadata = await getZoteroItemMetadata(normalizedUrl.zoteroItemKey);
         if (metadata.success && metadata.data) {
           setZoteroItemMetadata(metadata.data);
         }
@@ -424,20 +449,19 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
   }
 
   return (
-    <div className="h-full flex flex-col w-full overflow-hidden pt-6">
+    <div className="h-full flex flex-col w-full overflow-hidden">
       <div className="flex-1 overflow-y-auto min-w-0">
-        <div className="px-6 space-y-6">
-          {/* Header */}
-          <div className="flex items-start bg-gray-50 border-b justify-between sticky top-0 pb-8 min-w-0">
+        {/* Header */}
+      <div className="flex items-start bg-gray-50 border-b justify-between sticky top-0 pt-6 px-6 pb-8 min-w-0 shadow-lg">
             <div className="flex-1 pr-4 min-w-0">
               <h2 className="text-xl font-semibold mb-2">URL Details</h2>
               <a
-                href={url.url}
+                href={normalizedUrl.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 hover:underline text-sm wrap-break-word break-all"
               >
-                {url.url}
+                {normalizedUrl.url}
               </a>
               
               {/* Zotero Citation */}
@@ -471,7 +495,8 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
               </button>
             )}
           </div>
-
+          {/* Content */}
+        <div className="px-6 space-y-6">
           {/* Messages */}
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-md text-sm">
@@ -493,7 +518,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
               <div>
                 <span className="text-gray-600">Status:</span>
                 <div className="mt-1">
-                  <StatusBadge status={url.status} />
+                  <StatusBadge status={normalizedUrl.status} />
                 </div>
               </div>
               
@@ -504,28 +529,28 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
               
               <div>
                 <span className="text-gray-600">HTTP Status:</span>
-                <div className="mt-1 font-medium">{url.statusCode || '-'}</div>
+                <div className="mt-1 font-medium">{normalizedUrl.statusCode || '-'}</div>
               </div>
               
               <div>
                 <span className="text-gray-600">Content Type:</span>
-                <div className="mt-1 font-medium">{url.contentType || (zoteroData.contentType as string | undefined) || '-'}</div>
+                <div className="mt-1 font-medium">{normalizedUrl.contentType || (zoteroData.contentType as string | undefined) || '-'}</div>
               </div>
               
               <div>
                 <span className="text-gray-600">Accessible:</span>
-                <div className="mt-1 font-medium">{url.isAccessible || (zoteroData.urlAccessible as boolean | undefined) ? 'Yes' : 'No'}</div>
+                <div className="mt-1 font-medium">{normalizedUrl.isAccessible || (zoteroData.urlAccessible as boolean | undefined) ? 'Yes' : 'No'}</div>
               </div>
               
               <div>
                 <span className="text-gray-600">Final URL:</span>
-                <div className="mt-1 font-medium wrap-break-word break-all">{url.finalUrl || '-'}</div>
+                <div className="mt-1 font-medium wrap-break-word break-all">{normalizedUrl.finalUrl || '-'}</div>
               </div>
               
-              {url.redirectCount !== null && url.redirectCount !== undefined && (
+              {normalizedUrl.redirectCount !== null && normalizedUrl.redirectCount !== undefined && (
                 <div>
                   <span className="text-gray-600">Redirect Count:</span>
-                  <div className="mt-1 font-medium">{url.redirectCount}</div>
+                  <div className="mt-1 font-medium">{normalizedUrl.redirectCount}</div>
                 </div>
               )}
             </div>
@@ -536,7 +561,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
             <h3 className="font-medium">Zotero Processing</h3>
             
             <div className="space-y-3 text-sm">
-              {url.zoteroItemKey ? (
+              {normalizedUrl.zoteroItemKey ? (
                 <>
                   <div className="grid grid-cols-2 gap-4">
                     {/* Processing Status */}
@@ -624,7 +649,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
                         {url.zoteroItemKey}
                       </code>
                       <a
-                        href={zoteroItemMetadata?.apiURL || getZoteroWebUrl(url.zoteroItemKey)}
+                        href={zoteroItemMetadata?.apiURL || (normalizedUrl.zoteroItemKey ? getZoteroWebUrl(normalizedUrl.zoteroItemKey) : '#')}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-600 hover:text-blue-800"
@@ -635,18 +660,18 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
                     </div>
                   </div>
                   
-                  {url.zoteroProcessingMethod && (
+                  {normalizedUrl.zoteroProcessingMethod && (
                     <div className="mt-3">
                       <span className="text-gray-600">Processing Method:</span>
-                      <div className="mt-1 font-medium capitalize">{url.zoteroProcessingMethod}</div>
+                      <div className="mt-1 font-medium capitalize">{normalizedUrl.zoteroProcessingMethod}</div>
                     </div>
                   )}
                   
-                  {url.zoteroProcessedAt && (
+                  {normalizedUrl.zoteroProcessedAt && (
                     <div>
                       <span className="text-gray-600">Processed At:</span>
                       <div className="mt-1 font-medium">
-                        {new Date(url.zoteroProcessedAt).toLocaleString()}
+                        {new Date(normalizedUrl.zoteroProcessedAt).toLocaleString()}
                       </div>
                     </div>
                   )}
@@ -662,7 +687,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
                     Unlink from Zotero
                   </Button>
                 </>
-              ) : url.zoteroProcessingStatus === 'failed' ? (
+              ) : normalizedUrl.zoteroProcessingStatus === 'failed' ? (
                 <>
                   <div>
                     <span className="text-gray-600">Status:</span>
@@ -673,11 +698,11 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
                     </div>
                   </div>
                   
-                  {url.zoteroProcessingError && (
+                  {normalizedUrl.zoteroProcessingError && (
                     <div className="min-w-0">
                       <span className="text-gray-600">Error:</span>
                       <div className="mt-1 bg-red-50 text-red-800 px-3 py-2 rounded text-xs wrap-break-word break-all">
-                        {url.zoteroProcessingError}
+                        {normalizedUrl.zoteroProcessingError}
                       </div>
                     </div>
                   )}
@@ -761,7 +786,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
                     )}
                   </div>
                 </>
-              ) : (url.status === 'extractable' || url.status === 'translatable' || url.status === 'resolvable') ? (
+              ) : (normalizedUrl.status === 'extractable' || normalizedUrl.status === 'translatable' || normalizedUrl.status === 'resolvable') ? (
                 <>
                   <div>
                     <span className="text-gray-600">Status:</span>
@@ -947,8 +972,8 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
           
           {/* LLM Extraction for Failed Processing */}
           {!extractedMetadata && canUseLlm && (
-            url.zoteroProcessingStatus === 'failed_parse' ||
-            url.zoteroProcessingStatus === 'failed_fetch'
+            normalizedUrl.zoteroProcessingStatus === 'failed_parse' ||
+            normalizedUrl.zoteroProcessingStatus === 'failed_fetch'
           ) && (
             <div className="border rounded-lg bg-white p-4">
               <div className="bg-purple-50 border border-purple-200 rounded-md p-4">
@@ -1089,7 +1114,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
                 <div className="mt-1">
                   {url.analysisData?.validIdentifiers && url.analysisData.validIdentifiers.length > 0 ? (
                     <div className="flex flex-wrap gap-1">
-                      {url.analysisData.validIdentifiers.map((id, index) => (
+                      {url.analysisData.validIdentifiers.map((id: string, index: number) => (
                         <span key={index} className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">
                           {id}
                         </span>
@@ -1106,7 +1131,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
                 <div className="mt-1">
                   {url.analysisData?.webTranslators && url.analysisData.webTranslators.length > 0 ? (
                     <div className="space-y-1">
-                      {url.analysisData.webTranslators.map((translator, index) => {
+                      {url.analysisData.webTranslators.map((translator: string | { translatorID?: string; label?: string; creator?: string; priority?: number }, index: number) => {
                         // Handle both string and object formats
                         const translatorObj = typeof translator === 'string' 
                           ? { translatorID: translator, label: translator }

@@ -11,20 +11,113 @@ const ZOTERO_REQUEST_TIMEOUT = parseInt(process.env.ZOTERO_REQUEST_TIMEOUT || '6
  * Zotero API Response Types
  */
 
-export interface ZoteroItem {
-  key: string;
-  version?: number;
+/**
+ * Creator in Zotero item
+ */
+export interface ZoteroCreator {
+  creatorType: string;
+  firstName?: string;
+  lastName?: string;
+  name?: string;
+  fieldMode?: 0 | 1; // 0 = first/last, 1 = single field
+}
+
+/**
+ * Zotero Item Data - for creating/updating items
+ * This is the simple structure with direct field names
+ * Used when calling createItem() or updateItem()
+ */
+export interface ZoteroItemData {
+  // Item type
   itemType?: string;
+  
+  // Core bibliographic fields (common to most item types)
   title?: string;
-  creators?: Array<{
-    creatorType: string;
-    firstName?: string;
-    lastName?: string;
-    name?: string;
-  }>;
+  creators?: ZoteroCreator[];
+  
+  // Identifiers
   DOI?: string;
+  ISBN?: string;
+  ISSN?: string;
   url?: string;
+  
+  // Dates
   date?: string;
+  accessDate?: string;
+  
+  // Publication details
+  abstractNote?: string;
+  publicationTitle?: string;
+  journalAbbreviation?: string;
+  
+  // Volume/Issue/Pages (for articles)
+  volume?: string;
+  issue?: string;
+  pages?: string;
+  numPages?: string;
+  
+  // Publishing
+  publisher?: string;
+  place?: string;
+  edition?: string;
+  
+  // Additional metadata
+  language?: string;
+  rights?: string;
+  series?: string;
+  seriesNumber?: string;
+  seriesTitle?: string;
+  
+  // Web-specific
+  websiteTitle?: string;
+  websiteType?: string;
+  
+  // Book-specific
+  bookTitle?: string;
+  
+  // Thesis-specific
+  thesisType?: string;
+  university?: string;
+  
+  // Conference-specific
+  conferenceName?: string;
+  proceedingsTitle?: string;
+  
+  // Archival
+  archive?: string;
+  archiveLocation?: string;
+  libraryCatalog?: string;
+  callNumber?: string;
+  
+  // Other
+  shortTitle?: string;
+  extra?: string;
+  
+  // Tags and collections
+  tags?: Array<{
+    tag: string;
+    type?: 0 | 1; // 0 = manual, 1 = automatic
+  }>;
+  collections?: string[];
+  
+  // Relations
+  relations?: Record<string, unknown>;
+}
+
+/**
+ * Alias for backward compatibility
+ * Most code uses "ZoteroItem" for creating/updating
+ */
+export type ZoteroItem = ZoteroItemData;
+
+/**
+ * Item returned in ZoteroProcessResponse
+ * Contains item data plus metadata about the processing
+ */
+export interface ZoteroProcessedItem extends ZoteroItemData {
+  // Metadata added by the processing
+  key?: string;
+  version?: number;
   _meta?: {
     index?: number;
     itemKey: string;
@@ -33,9 +126,6 @@ export interface ZoteroItem {
     citation?: string;
     apiUrl?: string;
   };
-  
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data?: Record<string, any>;
 }
 
 export interface ZoteroProcessResponse {
@@ -44,7 +134,7 @@ export interface ZoteroProcessResponse {
   translator?: string;
   itemCount?: number;
   timestamp?: string;
-  items?: ZoteroItem[];
+  items?: ZoteroProcessedItem[];
   duplicateInfo?: {
     processed: boolean;
     duplicateCount: number;
@@ -272,26 +362,41 @@ export function getErrorMessage(error: unknown): string {
 }
 
 /**
- * Zotero item metadata response
+ * Zotero item metadata response from /citationlinker/item endpoint
+ * This is what getItem() returns
  */
 export interface ZoteroItemResponse {
   success: boolean;
   timestamp?: string;
+  
+  // Item identity
   key?: string;
   version?: number;
   itemType?: string;
   libraryID?: number;
+  
+  // Timestamps
   dateAdded?: string;
   dateModified?: string;
+  
+  // Field data (numeric field IDs as per Zotero schema)
+  // Field 1 = title, Field 6 = date, etc.
   fields?: Record<string, string>;
-  creators?: Array<{
-    firstName?: string;
-    lastName?: string;
-    name?: string;
+  
+  // Creators
+  creators?: ZoteroCreator[];
+  
+  // Tags
+  tags?: Array<{
+    tag: string;
+    type: 0 | 1;
   }>;
-  tags?: unknown[];
-  collections?: unknown[];
+  
+  // Collections and relations
+  collections?: string[];
   relations?: Record<string, unknown>;
+  
+  // Attachments
   attachments?: Array<{
     key: string;
     title: string;
@@ -299,13 +404,26 @@ export interface ZoteroItemResponse {
     path: string;
     linkMode: number;
   }>;
-  notes?: unknown[];
+  
+  // Notes
+  notes?: Array<{
+    key: string;
+    note: string;
+  }>;
+  
+  // Convenience fields (may be present)
   title?: string;
+  
+  // Citation output
   citation?: string;
   citationFormat?: string;
   citationStyle?: string;
+  
+  // URLs
   apiURL?: string;
   webURL?: string;
+  
+  // Response metadata
   message?: string;
   error?: {
     message: string;
@@ -431,6 +549,163 @@ export function validateCitation(itemMetadata: ZoteroItemResponse): CitationVali
     hasCreators,
     hasDate,
   };
+}
+
+/**
+ * Update Zotero item metadata
+ */
+export interface ZoteroUpdateResponse {
+  success: boolean;
+  timestamp?: string;
+  key?: string;
+  version?: number;
+  message?: string;
+  error?: {
+    message: string;
+    code?: number;
+    timestamp?: string;
+  };
+}
+
+export async function updateItem(
+  itemKey: string,
+  metadata: Partial<ZoteroItem>
+): Promise<ZoteroUpdateResponse> {
+  const url = `${ZOTERO_API_BASE_URL}/citationlinker/updateitem`;
+  
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), ZOTERO_REQUEST_TIMEOUT);
+  
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ itemKey, metadata }),
+      signal: controller.signal,
+    });
+    
+    clearTimeout(timeoutId);
+    
+    const data: ZoteroUpdateResponse = await response.json();
+    
+    if (!data.success) {
+      throw new ZoteroApiError(
+        data.error?.message || 'Failed to update item in Zotero',
+        data.error?.code || response.status
+      );
+    }
+    
+    return data;
+  } catch (error) {
+    clearTimeout(timeoutId);
+    
+    if (error instanceof ZoteroApiError) {
+      throw error;
+    }
+    
+    if (error instanceof Error) {
+      if (error.name === 'AbortError') {
+        throw new ZoteroApiError('Request timeout - Zotero update took too long', 504);
+      }
+      
+      if (error.message.includes('ECONNREFUSED')) {
+        throw new ZoteroApiError(
+          'Cannot connect to Zotero - ensure Zotero is running with Citation Linker plugin',
+          503
+        );
+      }
+      
+      throw new ZoteroApiError(error.message);
+    }
+    
+    throw new ZoteroApiError('Unknown error occurred');
+  }
+}
+
+/**
+ * Create Zotero item
+ */
+export interface ZoteroCreateResponse {
+  success: boolean;
+  timestamp?: string;
+  successful?: {
+    [key: string]: {
+      key: string;
+      version?: number;
+      itemType?: string;
+      title?: string;
+    };
+  };
+  failed?: {
+    [key: string]: {
+      code: number;
+      message: string;
+    };
+  };
+  message?: string;
+  error?: {
+    message: string;
+    code?: number;
+    timestamp?: string;
+  };
+}
+
+export async function createItem(
+  metadata: ZoteroItem
+): Promise<ZoteroCreateResponse> {
+  const url = `${ZOTERO_API_BASE_URL}/citationlinker/createitem`;
+  
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), ZOTERO_REQUEST_TIMEOUT);
+  
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ metadata }),
+      signal: controller.signal,
+    });
+    
+    clearTimeout(timeoutId);
+    
+    const data: ZoteroCreateResponse = await response.json();
+    
+    if (!data.success) {
+      throw new ZoteroApiError(
+        data.error?.message || 'Failed to create item in Zotero',
+        data.error?.code || response.status
+      );
+    }
+    
+    return data;
+  } catch (error) {
+    clearTimeout(timeoutId);
+    
+    if (error instanceof ZoteroApiError) {
+      throw error;
+    }
+    
+    if (error instanceof Error) {
+      if (error.name === 'AbortError') {
+        throw new ZoteroApiError('Request timeout - Zotero creation took too long', 504);
+      }
+      
+      if (error.message.includes('ECONNREFUSED')) {
+        throw new ZoteroApiError(
+          'Cannot connect to Zotero - ensure Zotero is running with Citation Linker plugin',
+          503
+        );
+      }
+      
+      throw new ZoteroApiError(error.message);
+    }
+    
+    throw new ZoteroApiError('Unknown error occurred');
+  }
 }
 
 /**

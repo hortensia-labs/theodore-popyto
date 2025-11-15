@@ -16,7 +16,7 @@ const fragmentMono = Fragment_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Theodore ポピトのPhD",
+  title: "Theodore",
   description: "Thesis Workflow System Dashboard",
 };
 
