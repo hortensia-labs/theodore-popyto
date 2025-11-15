@@ -17,7 +17,8 @@ import { Button } from '@/components/ui/button';
 import { ProcessingHistorySection } from '../url-detail-panel/ProcessingHistorySection';
 import { summarizeProcessingHistory } from '@/lib/utils/processing-utils';
 import { exportProcessingHistoryForUrls } from '@/lib/actions/export-history';
-import { Download, Filter } from 'lucide-react';
+import { resetProcessingState } from '@/lib/actions/state-transitions';
+import { Download, Filter, RotateCcw } from 'lucide-react';
 import type { ProcessingAttempt } from '@/lib/types/url-processing';
 
 interface ProcessingHistoryModalProps {
@@ -26,6 +27,7 @@ interface ProcessingHistoryModalProps {
   urlId: number;
   url: string;
   history: ProcessingAttempt[];
+  onUpdate?: () => void;
 }
 
 /**
@@ -39,9 +41,13 @@ export function ProcessingHistoryModal({
   urlId,
   url,
   history,
+  onUpdate,
 }: ProcessingHistoryModalProps) {
   const [filterStage, setFilterStage] = useState<string>('all');
   const [filterSuccess, setFilterSuccess] = useState<string>('all');
+  const [isResetting, setIsResetting] = useState(false);
+  const [resetError, setResetError] = useState<string | null>(null);
+  const [resetSuccess, setResetSuccess] = useState<string | null>(null);
 
   /**
    * Filter history
@@ -87,6 +93,35 @@ export function ProcessingHistoryModal({
     }
   };
 
+  /**
+   * Reset processing state
+   */
+  const handleReset = async () => {
+    setIsResetting(true);
+    setResetError(null);
+    setResetSuccess(null);
+
+    try {
+      const result = await resetProcessingState(urlId);
+
+      if (result.success) {
+        setResetSuccess(result.message || 'Processing state reset successfully');
+        // Call onUpdate to refresh parent component
+        onUpdate?.();
+        // Close modal after short delay to show success message
+        setTimeout(() => {
+          onOpenChange(false);
+        }, 1500);
+      } else {
+        setResetError(result.error || 'Failed to reset processing state');
+      }
+    } catch (error) {
+      setResetError(error instanceof Error ? error.message : 'Unknown error');
+    } finally {
+      setIsResetting(false);
+    }
+  };
+
   const summary = summarizeProcessingHistory(history);
   const stages = Array.from(new Set(history.map(h => h.stage).filter(Boolean)));
 
@@ -94,7 +129,7 @@ export function ProcessingHistoryModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-5xl h-[90vh] p-0 gap-0 flex flex-col">
         {/* Header */}
-        <DialogHeader className="px-6 py-4 border-b flex-none">
+        <DialogHeader className="px-6 mr-6 py-4 border-b flex-none">
           <div className="flex items-center justify-between">
             <div>
               <DialogTitle>Processing History</DialogTitle>
@@ -102,15 +137,47 @@ export function ProcessingHistoryModal({
                 Complete timeline of all processing attempts for this URL
               </p>
             </div>
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={handleExport}
-            >
-              <Download className="h-4 w-4 mr-2" />
-              Export
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={handleReset}
+                disabled={isResetting}
+              >
+                {isResetting ? (
+                  <>
+                    <RotateCcw className="h-4 w-4 mr-2 animate-spin" />
+                    Resetting...
+                  </>
+                ) : (
+                  <>
+                    <RotateCcw className="h-4 w-4 mr-2" />
+                    Reset
+                  </>
+                )}
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={handleExport}
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Export
+              </Button>
+            </div>
           </div>
+
+          {/* Success/Error Messages */}
+          {resetSuccess && (
+            <div className="mt-3 bg-green-50 border border-green-200 text-green-800 px-3 py-2 rounded-md text-sm">
+              {resetSuccess}
+            </div>
+          )}
+          {resetError && (
+            <div className="mt-3 bg-red-50 border border-red-200 text-red-800 px-3 py-2 rounded-md text-sm">
+              {resetError}
+            </div>
+          )}
         </DialogHeader>
 
         {/* Stats Summary */}

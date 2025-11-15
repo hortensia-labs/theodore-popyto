@@ -29,6 +29,9 @@ import type {
   ProcessingAttempt,
   ProcessingStatus,
 } from '../types/url-processing';
+// Import actual processing functions (NOT from actions/zotero.ts to avoid circular dependency)
+import { processIdentifier, processUrl, validateCitation } from '../zotero-client';
+import { processSingleUrl } from '../actions/process-url-action';
 
 /**
  * URL Processing Orchestrator
@@ -110,17 +113,23 @@ export class URLProcessingOrchestrator {
     });
 
     try {
-      // Import Zotero processing action
-      // This is a placeholder - actual implementation would import from zotero actions
-      // const result = await processUrlWithZotero(urlId);
-      
-      // For now, simulate the call structure
-      // TODO: Replace with actual implementation when integrating
+      // Call actual Zotero processing
       const result = await this.callZoteroProcessing(urlId);
 
       if (result.success) {
-        // Success! Validate citation
-        const validation = await this.validateCitation(result.itemKey!);
+        // Extract item key from response
+        // Zotero returns items array, we want the first item's key
+        const itemKey = result.items?.[0]?.key || result.items?.[0]?._meta?.itemKey;
+        
+        if (!itemKey) {
+          return await this.handleZoteroFailure(
+            urlId,
+            'Zotero processing succeeded but no item key returned'
+          );
+        }
+        
+        // Validate citation
+        const validation = await this.validateCitation(itemKey);
         
         const finalStatus: ProcessingStatus = validation.isComplete 
           ? 'stored' 
@@ -131,17 +140,20 @@ export class URLProcessingOrchestrator {
           'processing_zotero',
           finalStatus,
           {
-            itemKey: result.itemKey,
-            zoteroItemKey: result.itemKey,
+            zoteroItemKey: itemKey,
             zoteroProcessedAt: new Date(),
             citationValidationStatus: validation.status,
+            citationValidationDetails: {
+              missingFields: validation.missingFields,
+            },
           }
         );
 
         // Update processing history with success
         await this.updateLastAttempt(urlId, {
           success: true,
-          itemKey: result.itemKey,
+          itemKey: itemKey,
+          method: result.method,
         });
 
         // Auto-trigger metadata extraction if incomplete
@@ -153,7 +165,8 @@ export class URLProcessingOrchestrator {
           success: true,
           urlId,
           status: finalStatus,
-          itemKey: result.itemKey,
+          itemKey: itemKey,
+          method: result.method,
         };
       } else {
         // Failed - handle failure
@@ -542,52 +555,123 @@ export class URLProcessingOrchestrator {
 
   /**
    * Validate citation completeness
-   * TODO: Implement actual citation validation
+   * Uses the Zotero client validation
    */
   private static async validateCitation(itemKey: string) {
-    // Placeholder
-    return {
-      isComplete: true,
-      status: 'valid',
-      missingFields: [],
-    };
+    try {
+      const result = await validateCitation(itemKey);
+      return {
+        isComplete: result.status === 'valid',
+        status: result.status,
+        missingFields: result.missingFields || [],
+      };
+    } catch (error) {
+      console.error(`Failed to validate citation for ${itemKey}:`, error);
+      // On validation error, assume incomplete
+      return {
+        isComplete: false,
+        status: 'incomplete',
+        missingFields: ['validation_error'],
+      };
+    }
   }
 
   /**
    * Call Zotero processing
-   * TODO: Replace with actual import when integrating
+   * Determines best strategy (identifier vs URL) and processes accordingly
    */
   private static async callZoteroProcessing(urlId: number) {
-    // Placeholder
-    return {
-      success: false,
-      error: 'Not implemented - will use actual processUrlWithZotero',
-    };
+    try {
+      // Get URL and related data
+      const urlRecord = await db.query.urls.findFirst({
+        where: eq(urls.id, urlId),
+      });
+      
+      if (!urlRecord) {
+        return { success: false, error: 'URL not found' };
+      }
+      
+      // Get analysis data for identifiers
+      const analysisData = await db.query.urlAnalysisData.findFirst({
+        where: eq(urlAnalysisData.urlId, urlId),
+      });
+      
+      // Get enrichments for custom identifiers
+      const enrichment = await db.query.urlEnrichments.findFirst({
+        where: eq(urlEnrichments.urlId, urlId),
+      });
+      
+      // Strategy 1: Try valid identifiers from analysis (highest priority)
+      if (analysisData?.validIdentifiers && Array.isArray(analysisData.validIdentifiers) && analysisData.validIdentifiers.length > 0) {
+        const identifier = analysisData.validIdentifiers[0];
+        console.log(`URL ${urlId}: Processing with identifier: ${identifier}`);
+        const result = await processIdentifier(identifier);
+        return {
+          ...result,
+          method: 'identifier',
+          identifier,
+        };
+      }
+      
+      // Strategy 2: Try custom identifiers from enrichment
+      if (enrichment?.customIdentifiers && Array.isArray(enrichment.customIdentifiers) && enrichment.customIdentifiers.length > 0) {
+        const identifier = enrichment.customIdentifiers[0];
+        console.log(`URL ${urlId}: Processing with custom identifier: ${identifier}`);
+        const result = await processIdentifier(identifier);
+        return {
+          ...result,
+          method: 'custom_identifier',
+          identifier,
+        };
+      }
+      
+      // Strategy 3: Fall back to URL processing (web translators)
+      console.log(`URL ${urlId}: Processing with URL translator`);
+      const result = await processUrl(urlRecord.url);
+      return {
+        ...result,
+        method: 'url',
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: getErrorMessage(error),
+      };
+    }
   }
 
   /**
    * Call content processing
-   * TODO: Replace with actual import when integrating
+   * Fetches content and extracts identifiers
    */
   private static async callContentProcessing(urlId: number) {
-    // Placeholder
-    return {
-      success: false,
-      identifierCount: 0,
-      error: 'Not implemented - will use actual processSingleUrl',
-    };
+    try {
+      console.log(`URL ${urlId}: Fetching content and extracting identifiers`);
+      const result = await processSingleUrl(urlId);
+      return result;
+    } catch (error) {
+      return {
+        success: false,
+        state: 'failed_fetch' as const,
+        identifierCount: 0,
+        error: getErrorMessage(error),
+      };
+    }
   }
 
   /**
    * Call LLM extraction
-   * TODO: Replace with actual import when integrating
+   * TODO: Implement LLM metadata extraction
+   * For now, this returns failure to transition to exhausted state
    */
   private static async callLLMExtraction(urlId: number) {
-    // Placeholder
+    // LLM extraction not yet implemented
+    // This allows the cascade to complete properly by reaching exhausted state
+    console.log(`URL ${urlId}: LLM extraction not yet implemented, will transition to exhausted`);
     return {
       success: false,
       qualityScore: 0,
-      error: 'Not implemented - will use actual extractMetadataWithLLM',
+      error: 'LLM extraction not yet implemented',
     };
   }
 }

@@ -60,12 +60,13 @@ export async function transitionProcessingState(
 
 /**
  * Reset URL processing state
- * Clears all processing history and returns URL to not_started state
+ * PRESERVES history and adds a reset event, then returns URL to not_started state
  * 
  * @param urlId - URL ID to reset
+ * @param preserveHistory - If true, keeps history and adds reset event (default: true)
  * @returns Result
  */
-export async function resetProcessingState(urlId: number) {
+export async function resetProcessingState(urlId: number, preserveHistory: boolean = true) {
   try {
     // Get current URL
     const urlData = await getUrlWithCapabilities(urlId);
@@ -77,21 +78,82 @@ export async function resetProcessingState(urlId: number) {
       };
     }
     
-    // Check if can reset
-    if (!StateGuards.canReset(urlData)) {
+    // Get full URL record to access current state
+    const urlRecord = await db.query.urls.findFirst({
+      where: eq(urls.id, urlId),
+    });
+    
+    if (!urlRecord) {
+      return {
+        success: false,
+        error: 'URL record not found',
+      };
+    }
+    
+    // For stuck processing states, allow reset without guard check
+    const isStuckProcessing = urlData.processingStatus.startsWith('processing_');
+    
+    // Check if can reset (but allow stuck processing states)
+    if (!isStuckProcessing && !StateGuards.canReset(urlData)) {
       return {
         success: false,
         error: `Cannot reset URL (currently ${urlData.processingStatus})`,
       };
     }
     
-    // Use helper to reset
-    await resetProcessingStateHelper(urlId);
-    
-    return {
-      success: true,
-      message: 'Processing state reset successfully',
-    };
+    if (preserveHistory) {
+      // Get existing history
+      const existingHistory = urlRecord.processingHistory || [];
+      
+      // Add reset event to history
+      const resetEvent = {
+        timestamp: Date.now(),
+        stage: 'manual' as const,
+        method: 'reset',
+        success: true,
+        metadata: {
+          action: 'reset',
+          previousStatus: urlData.processingStatus,
+          reason: isStuckProcessing ? 'Reset stuck processing state' : 'User initiated reset',
+        },
+        transition: {
+          from: urlData.processingStatus,
+          to: 'not_started' as ProcessingStatus,
+        },
+      };
+      
+      const updatedHistory = [...existingHistory, resetEvent];
+      
+      // Reset state but keep history with reset event
+      await db.update(urls)
+        .set({
+          processingStatus: 'not_started',
+          processingAttempts: 0,
+          processingHistory: updatedHistory,
+          lastProcessingMethod: null,
+          zoteroProcessingStatus: null,
+          zoteroProcessingError: null,
+          updatedAt: new Date(),
+        })
+        .where(eq(urls.id, urlId));
+      
+      return {
+        success: true,
+        message: 'Processing state reset successfully (history preserved)',
+        from: urlData.processingStatus,
+        to: 'not_started',
+      };
+    } else {
+      // Old behavior: clear everything
+      await resetProcessingStateHelper(urlId);
+      
+      return {
+        success: true,
+        message: 'Processing state reset successfully (history cleared)',
+        from: urlData.processingStatus,
+        to: 'not_started',
+      };
+    }
   } catch (error) {
     return {
       success: false,

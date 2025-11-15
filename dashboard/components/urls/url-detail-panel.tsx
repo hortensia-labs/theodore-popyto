@@ -1465,9 +1465,14 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
           </div>
 
           {/* NEW: Processing History Section */}
-          {urlWithCap && urlWithCap.processingHistory && urlWithCap.processingHistory.length > 0 && (
+          {urlWithCap && (
             <div id="processing-history" className="border rounded-lg bg-white p-4">
-              <ProcessingHistorySection history={urlWithCap.processingHistory} />
+              <ProcessingHistorySection 
+                history={urlWithCap.processingHistory || []} 
+                urlId={url.id}
+                onReset={handleReset}
+                isResetting={isProcessing}
+              />
             </div>
           )}
 

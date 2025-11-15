@@ -497,6 +497,7 @@ export function URLTableNew({
           urlId={processingHistoryData.urlId}
           url={processingHistoryData.url}
           history={processingHistoryData.history}
+          onUpdate={handleDetailPanelUpdate}
         />
       )}
 
