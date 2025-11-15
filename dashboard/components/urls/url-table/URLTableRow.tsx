@@ -17,7 +17,6 @@ import { formatUrlForDisplay, cn } from '@/lib/utils';
 import { StateGuards } from '@/lib/state-machine/state-guards';
 import { ProcessingStatusBadge } from '../url-status/ProcessingStatusBadge';
 import { CapabilitySummary } from '../url-status/CapabilityIndicator';
-import { IntentBadge } from '../url-status/IntentBadge';
 import { CitationStatusIndicator, type CitationStatus } from '../citation-status-indicator';
 import { Button } from '@/components/ui/button';
 import {
@@ -134,20 +133,44 @@ export function URLTableRow({
       </td>
 
       {/* URL */}
-      <td className="px-4 py-3 max-w-[300px]">
-        <div className="flex flex-col gap-1">
-          <a
-            href={url.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 hover:underline text-sm truncate block"
-            title={url.url}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {formatUrlForDisplay(url.url)}
-          </a>
+      <td className="px-4 py-2 max-w-[300px]">
+        <div className="flex flex-col gap-0">
+          {/* URL */}
+          <div className="flex items-center gap-1.5">
+            {/* Intent Indicator Dot - only show for non-auto intents */}
+            {url.userIntent && url.userIntent !== 'auto' && (
+              <span
+                className={cn(
+                  "inline-block w-2 h-2 rounded-full shrink-0",
+                  url.userIntent === 'ignore' && "bg-gray-400",
+                  url.userIntent === 'priority' && "bg-orange-500",
+                  url.userIntent === 'manual_only' && "bg-green-500"
+                )}
+                title={url.userIntent}
+              />
+            )}
+            <a
+              href={url.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cn(
+                "hover:underline text-sm truncate block",
+                url.userIntent === 'auto' && "text-blue-600",
+                url.userIntent === 'ignore' && "text-gray-400",
+                url.userIntent === 'priority' && "text-orange-600",
+                url.userIntent === 'manual_only' && "text-green-600",
+                !url.userIntent && "text-blue-600" // fallback to blue if no intent
+              )}
+              title={url.url}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {formatUrlForDisplay(url.url)}
+            </a>
+          </div>
           {url.domain && (
-            <span className="text-xs text-gray-500">{url.domain}</span>
+            <div>
+              <span className="text-xs text-gray-500">{url.domain}</span>
+            </div>
           )}
         </div>
       </td>
@@ -186,16 +209,6 @@ export function URLTableRow({
           {url.capability && (
             <CapabilitySummary capability={url.capability} />
           )}
-        </td>
-      )}
-
-      {/* User Intent */}
-      {!compact && (
-        <td className="px-4 py-3">
-          <IntentBadge
-            intent={url.userIntent || 'auto'}
-            size="sm"
-          />
         </td>
       )}
 

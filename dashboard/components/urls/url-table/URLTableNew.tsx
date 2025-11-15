@@ -351,14 +351,9 @@ export function URLTableNew({
                   IDs
                 </th>
                 {!isDetailPaneOpen && (
-                  <>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">
-                      Methods
-                    </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">
-                      Intent
-                    </th>
-                  </>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">
+                    Methods
+                  </th>
                 )}
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">
                   Attempts
@@ -374,7 +369,7 @@ export function URLTableNew({
             <tbody className="divide-y">
               {isLoading ? (
                 <tr>
-                  <td colSpan={isDetailPaneOpen ? 7 : 9} className="px-4 py-8 text-center text-gray-500">
+                  <td colSpan={isDetailPaneOpen ? 7 : 8} className="px-4 py-8 text-center text-gray-500">
                     <div className="flex items-center justify-center gap-2">
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
                       <span>Loading...</span>
@@ -383,7 +378,7 @@ export function URLTableNew({
                 </tr>
               ) : urls.length === 0 ? (
                 <tr>
-                  <td colSpan={isDetailPaneOpen ? 7 : 9} className="px-4 py-8 text-center text-gray-500">
+                  <td colSpan={isDetailPaneOpen ? 7 : 8} className="px-4 py-8 text-center text-gray-500">
                     No URLs found
                   </td>
                 </tr>
