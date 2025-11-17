@@ -12,7 +12,9 @@
       "Bash(pnpm install:*)",
       "Bash(pnpm db:migrate:*)",
       "Bash(sqlite3:*)",
-      "Bash(pnpm db:generate:*)"
+      "Bash(pnpm db:generate:*)",
+      "Bash(npm run build:*)",
+      "Bash(npx tsc:*)"
     ],
     "deny": [],
     "ask": []

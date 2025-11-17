@@ -12,11 +12,11 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { IdentifierCard } from './IdentifierCard';
-import { selectAndProcessIdentifier } from '@/lib/actions/identifier-selection-action';
 import { getIdentifiersWithPreviews } from '@/lib/actions/identifier-selection-action';
+import { processCustomIdentifier } from '@/lib/actions/process-custom-identifier';
 import { Loader, AlertCircle } from 'lucide-react';
 import type { UrlIdentifier } from '@/drizzle/schema';
 
@@ -46,18 +46,9 @@ export function IdentifierSelectionModal({
   const [error, setError] = useState<string | null>(null);
 
   /**
-   * Load identifiers when modal opens
-   */
-  useEffect(() => {
-    if (open) {
-      loadIdentifiers();
-    }
-  }, [open, urlId]);
-
-  /**
    * Fetch identifiers for the URL
    */
-  const loadIdentifiers = async () => {
+  const loadIdentifiers = useCallback(async () => {
     setIsLoading(true);
     setError(null);
 
@@ -68,7 +59,7 @@ export function IdentifierSelectionModal({
         setError('No identifiers found for this URL');
       } else {
         // Sort by confidence and quality score
-        const sorted = identifiers.sort((a: any, b: any) => {
+        const sorted = identifiers.sort((a, b) => {
           // First by confidence
           const confidenceOrder = { high: 0, medium: 1, low: 2 };
           const confDiff = confidenceOrder[a.confidence as keyof typeof confidenceOrder] - 
@@ -77,28 +68,41 @@ export function IdentifierSelectionModal({
           if (confDiff !== 0) return confDiff;
           
           // Then by quality score
-          return (b.qualityScore || 0) - (a.qualityScore || 0);
+          return (b.previewQualityScore || 0) - (a.previewQualityScore || 0);
         });
         
-        setIdentifiers(sorted as UrlIdentifier[]);
+        setIdentifiers(sorted);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [urlId]);
 
   /**
-   * Handle identifier selection and processing
+   * Load identifiers when modal opens
    */
-  const handleSelect = async (identifier: UrlIdentifier) => {
+  useEffect(() => {
+    if (open) {
+      loadIdentifiers();
+    }
+  }, [open, loadIdentifiers]);
+
+  /**
+   * Handle identifier processing
+   */
+  const handleProcess = async (identifier: UrlIdentifier) => {
     setSelectedId(identifier.id);
     setIsProcessing(true);
     setError(null);
 
     try {
-      const result = await selectAndProcessIdentifier(urlId, identifier.id);
+      const result = await processCustomIdentifier(
+        urlId,
+        identifier.identifierValue,
+        false // Don't replace existing items from identifier selection
+      );
 
       if (result.success) {
         console.log(`Identifier processed successfully: ${result.itemKey}`);
@@ -176,9 +180,9 @@ export function IdentifierSelectionModal({
                   <IdentifierCard
                     key={identifier.id}
                     identifier={identifier}
-                    onSelect={() => handleSelect(identifier)}
+                    onProcess={() => handleProcess(identifier)}
                     onPreview={() => handlePreview(identifier)}
-                    isSelected={selectedId === identifier.id}
+                    isProcessing={selectedId === identifier.id && isProcessing}
                     isPreviewing={isPreviewing === identifier.id}
                   />
                 ))}

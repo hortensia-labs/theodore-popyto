@@ -1,6 +1,6 @@
 'use server';
 
-import { db } from '../db/client';
+import { db, sqlite } from '../db/client';
 import { urls, urlAnalysisData, urlEnrichments, zoteroItemLinks } from '../db/schema';
 import { eq } from 'drizzle-orm';
 import { addUrlStatus, type UrlStatus } from '../db/computed';
@@ -94,11 +94,22 @@ function determineProcessingStrategy(
  * 4. Record all attempts in history
  */
 export async function processUrlWithZotero(urlId: number): Promise<ProcessingResult> {
+  console.log('\n╔═══════════════════════════════════════════════════════════════╗');
+  console.log('║  🎯 ACTION ENTRY: processUrlWithZotero()                     ║');
+  console.log('╚═══════════════════════════════════════════════════════════════╝');
+  console.log('📌 URL ID:', urlId);
+  console.log('⏰ Timestamp:', new Date().toISOString());
+  console.log('📍 Called from: Server Action (zotero.ts)');
+  
   try {
+    console.log('📂 Fetching URL data and checking capabilities...');
+    
     // Check if URL exists and get capabilities
     const urlData = await getUrlWithCapabilities(urlId);
     
     if (!urlData) {
+      console.log('❌ URL not found');
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
       return {
         urlId,
         success: false,
@@ -106,14 +117,29 @@ export async function processUrlWithZotero(urlId: number): Promise<ProcessingRes
       };
     }
     
+    console.log('✅ URL data loaded');
+    console.log('🌐 URL:', urlData.url);
+    console.log('📊 Current status:', urlData.processingStatus);
+    console.log('🎯 User intent:', urlData.userIntent);
+    console.log('🔢 Attempts so far:', urlData.processingAttempts);
+    
     // Check if can be processed
+    console.log('\n🔍 Checking processing eligibility...');
     if (!StateGuards.canProcessWithZotero(urlData)) {
+      console.log('❌ URL cannot be processed');
+      console.log('📊 Status:', urlData.processingStatus);
+      console.log('🎯 Intent:', urlData.userIntent);
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
       return {
         urlId,
         success: false,
         error: `Cannot process URL (status: ${urlData.processingStatus}, intent: ${urlData.userIntent})`,
       };
     }
+    
+    console.log('✅ URL is eligible for processing');
+    console.log('\n🚀 Delegating to URLProcessingOrchestrator...');
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     
     // NEW: Delegate to orchestrator for complete workflow
     // The orchestrator handles:
@@ -122,6 +148,17 @@ export async function processUrlWithZotero(urlId: number): Promise<ProcessingRes
     // - State management
     // - History recording
     const result = await URLProcessingOrchestrator.processUrl(urlId);
+    
+    console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.log('🏁 Orchestrator returned');
+    console.log('✅ Success:', result.success);
+    console.log('📊 Final status:', result.status);
+    console.log('🔑 Item key:', result.itemKey || 'none');
+    console.log('📍 Method used:', result.method || 'none');
+    if (result.error) {
+      console.log('❌ Error:', result.error);
+    }
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     
     // Convert orchestrator result to legacy format for compatibility
     return {
@@ -133,6 +170,15 @@ export async function processUrlWithZotero(urlId: number): Promise<ProcessingRes
       isExisting: result.metadata?.isExisting as boolean,
     };
   } catch (error) {
+    console.log('\n💥 EXCEPTION in processUrlWithZotero()');
+    console.log('💬 Error:', getErrorMessage(error));
+    
+    if (error instanceof Error) {
+      console.log('📜 Stack:', error.stack);
+    }
+    
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
+    
     return {
       urlId,
       success: false,
@@ -304,12 +350,12 @@ export async function unlinkUrlFromZotero(urlId: number) {
       .where(eq(zoteroItemLinks.urlId, urlId));
     
     // Update linked_url_count for other URLs with same item
-    await db.execute(sql`
+    sqlite.exec(`
       UPDATE urls
       SET linked_url_count = (
-        SELECT COUNT(*) FROM zotero_item_links WHERE item_key = ${itemKey}
+        SELECT COUNT(*) FROM zotero_item_links WHERE item_key = '${itemKey}'
       )
-      WHERE zotero_item_key = ${itemKey}
+      WHERE zotero_item_key = '${itemKey}'
     `);
     
     return {

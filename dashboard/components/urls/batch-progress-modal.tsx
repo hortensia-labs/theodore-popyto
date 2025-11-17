@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef, startTransition } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Button } from '../ui/button';
 import { X, CheckCircle2, XCircle, Clock, AlertTriangle, Pause, Play, StopCircle, Database, Hash, Globe, Sparkles } from 'lucide-react';
@@ -37,24 +37,25 @@ export function BatchProgressModal({
   onCancel,
   isProcessing,
 }: BatchProgressModalProps) {
-  const [hasStarted, setHasStarted] = useState(false);
+  const hasStartedRef = useRef(false);
   const [log, setLog] = useState<Array<{ timestamp: string; message: string; type: 'info' | 'success' | 'error' | 'warning' }>>([]);
   
   // Helper function to add log entries
   const addLog = useCallback((message: string, type: 'info' | 'success' | 'error' | 'warning' = 'info') => {
     const timestamp = new Date().toLocaleTimeString();
-    setLog(prev => [...prev.slice(-100), { timestamp, message, type }]);
+    startTransition(() => {
+      setLog(prev => [...prev.slice(-100), { timestamp, message, type }]);
+    });
   }, []);
   
   // Start processing when modal opens
   useEffect(() => {
-    if (open && !hasStarted && urlIds.length > 0) {
-      // eslint-disable-next-line react-compiler/react-compiler
-      setHasStarted(true);
+    if (open && !hasStartedRef.current && urlIds.length > 0) {
+      hasStartedRef.current = true;
       addLog(`Starting batch processing for ${urlIds.length} URLs`, 'info');
       onProcessingStart();
     }
-  }, [open, hasStarted, urlIds, onProcessingStart, addLog]);
+  }, [open, urlIds, onProcessingStart, addLog]);
   
   // Add logs when progress updates
   useEffect(() => {
@@ -62,7 +63,6 @@ export function BatchProgressModal({
     
     // Log milestone progress (throttled to every 10th item)
     if (progress.current > 0 && progress.current % 10 === 0) {
-      // eslint-disable-next-line react-compiler/react-compiler
       addLog(
         `Progress: ${progress.current}/${progress.total} (${progress.percentage.toFixed(1)}%)`,
         'info'
@@ -75,7 +75,6 @@ export function BatchProgressModal({
     if (!session) return;
     
     // Log when session completes
-    // eslint-disable-next-line react-compiler/react-compiler
     if (session.status === 'completed') {
       addLog(
         `Batch processing complete! ${session.completed.length} succeeded, ${session.failed.length} failed`,
@@ -98,7 +97,6 @@ export function BatchProgressModal({
         ? `✓ URL ${lastResult.urlId}: ${lastResult.status || 'stored'} ${lastResult.itemKey ? `(${lastResult.itemKey})` : ''}`
         : `✗ URL ${lastResult.urlId}: ${lastResult.error || 'Failed'}`;
       
-      // eslint-disable-next-line react-compiler/react-compiler
       addLog(message, lastResult.success ? 'success' : 'error');
     }
   }, [session?.results, addLog]);
@@ -106,9 +104,10 @@ export function BatchProgressModal({
   // Reset when modal closes
   useEffect(() => {
     if (!open) {
-      // eslint-disable-next-line react-compiler/react-compiler
-      setHasStarted(false);
-      setLog([]);
+      hasStartedRef.current = false;
+      startTransition(() => {
+        setLog([]);
+      });
     }
   }, [open]);
   

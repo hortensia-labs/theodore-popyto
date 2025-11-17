@@ -5,13 +5,10 @@ import { ProcessUrlsButton } from "@/components/process-urls-button"
 export default async function Home() {
   
   return (
-    <div className="space-y-8">
-      <div className="flex items-start justify-between">
+    <div className="space-y-8 mx-4">
+      <div className="flex items-start justify-between mt-4">
         <div>
           <h1 className="text-h2 text-foreground">Theodore Dashboard</h1>
-          <p className="text-16 text-muted-foreground mt-2">
-            Manage and enrich URLs from your thesis research
-          </p>
         </div>
         <ProcessUrlsButton />
       </div>
@@ -76,7 +73,7 @@ export default async function Home() {
       </div>
       
       {/* Stats Overview */}
-      <div>
+      <div className="pb-16">
         <h2 className="text-h3 text-foreground mb-4">Overview</h2>
         <StatsOverview />
       </div>

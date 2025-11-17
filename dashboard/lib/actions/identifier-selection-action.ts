@@ -224,18 +224,7 @@ export async function getIdentifiersWithPreviews(urlId: number) {
     where: eq(urlIdentifiers.urlId, urlId),
   });
   
-  return identifiers.map(id => ({
-    id: id.id,
-    type: id.identifierType,
-    value: id.identifierValue,
-    confidence: id.confidence,
-    extractionSource: id.extractionSource,
-    preview: id.previewData,
-    previewFetched: id.previewFetched,
-    qualityScore: id.previewQualityScore,
-    userSelected: id.userSelected,
-    selectedAt: id.selectedAt,
-  }));
+  return identifiers;
 }
 
 /**

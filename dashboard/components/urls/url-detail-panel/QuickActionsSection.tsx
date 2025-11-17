@@ -22,11 +22,14 @@ import {
   Eye,
   Archive,
   Trash2,
+  FileText,
 } from 'lucide-react';
 
 interface QuickActionsSectionProps {
   url: UrlForGuardCheck;
   onProcess?: () => void;
+  onProcessContent?: () => void;
+  onExtractSemanticScholar?: () => void;
   onUnlink?: () => void;
   onEditCitation?: () => void;
   onSelectIdentifier?: () => void;
@@ -49,6 +52,8 @@ interface QuickActionsSectionProps {
 export function QuickActionsSection({
   url,
   onProcess,
+  onProcessContent,
+  onExtractSemanticScholar,
   onUnlink,
   onEditCitation,
   onSelectIdentifier,
@@ -85,6 +90,31 @@ export function QuickActionsSection({
           >
             <Database className="h-4 w-4 mr-2" />
             Process with Zotero
+          </Button>
+        )}
+
+        {actions.includes('process_content') && onProcessContent && (
+          <Button
+            onClick={onProcessContent}
+            variant="outline"
+            className="w-full justify-start"
+            size="sm"
+            disabled={isProcessing}
+          >
+            <Database className="h-4 w-4 mr-2" />
+            Fetch Content & Extract IDs
+          </Button>
+        )}
+
+        {actions.includes('extract_semantic_scholar') && onExtractSemanticScholar && (
+          <Button
+            onClick={onExtractSemanticScholar}
+            className="w-full justify-start"
+            size="sm"
+            disabled={isProcessing}
+          >
+            <FileText className="h-4 w-4 mr-2" />
+            Extract BibTeX Citation
           </Button>
         )}
 

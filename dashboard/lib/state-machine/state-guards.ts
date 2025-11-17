@@ -33,7 +33,7 @@ export interface UrlForGuardCheck {
 export class StateGuards {
   /**
    * Can this URL be processed with Zotero?
-   * 
+   *
    * Requirements:
    * - Not ignored/archived
    * - Not in manual_only mode (unless explicitly allowed)
@@ -45,7 +45,7 @@ export class StateGuards {
     if (url.userIntent === 'ignore' || url.userIntent === 'archive') {
       return false;
     }
-    
+
     if (url.userIntent === 'manual_only') {
       return false;
     }
@@ -66,6 +66,53 @@ export class StateGuards {
     }
 
     // If no capability info, assume it can be attempted
+    return true;
+  }
+
+  /**
+   * Can content be fetched and identifiers extracted?
+   *
+   * Requirements:
+   * - Not ignored/archived
+   * - Not in manual_only mode
+   * - Not currently in active processing state
+   * - Not already successfully stored
+   */
+  static canProcessContent(url: UrlForGuardCheck): boolean {
+    // User intent check
+    if (url.userIntent === 'ignore' || url.userIntent === 'archive') {
+      return false;
+    }
+
+    if (url.userIntent === 'manual_only') {
+      return false;
+    }
+
+    // Cannot process if already stored (complete or incomplete)
+    const nonProcessableStates: ProcessingStatus[] = [
+      'stored',
+      'stored_incomplete',
+      'stored_custom',
+      'ignored',
+      'archived',
+    ];
+
+    if (nonProcessableStates.includes(url.processingStatus)) {
+      return false;
+    }
+
+    // Cannot process if currently in active processing
+    const activeStates: ProcessingStatus[] = [
+      'processing_zotero',
+      'processing_content',
+      'processing_llm',
+    ];
+
+    if (activeStates.includes(url.processingStatus)) {
+      return false;
+    }
+
+    // Can process from: not_started, awaiting_selection, awaiting_metadata, exhausted
     return true;
   }
 
@@ -346,6 +393,38 @@ export class StateGuards {
   }
 
   /**
+   * Can extract BibTeX citation from Semantic Scholar?
+   * 
+   * Requirements:
+   * - URL domain must be semanticscholar.org
+   * - Must be in not_started state (hasn't been processed yet)
+   * - Not ignored/archived
+   */
+  static canExtractSemanticScholar(url: UrlForGuardCheck): boolean {
+    // User intent check
+    if (url.userIntent === 'ignore' || url.userIntent === 'archive') {
+      return false;
+    }
+
+    // Must be from Semantic Scholar domain
+    try {
+      const urlObj = new URL(url.url);
+      if (!urlObj.hostname.includes('semanticscholar.org')) {
+        return false;
+      }
+    } catch {
+      return false;
+    }
+
+    // Only available from not_started state
+    if (url.processingStatus !== 'not_started') {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
    * Get all available actions for a URL
    * Returns array of action names that are currently allowed
    */
@@ -353,6 +432,8 @@ export class StateGuards {
     const actions: string[] = [];
 
     if (this.canProcessWithZotero(url)) actions.push('process');
+    if (this.canProcessContent(url)) actions.push('process_content');
+    if (this.canExtractSemanticScholar(url)) actions.push('extract_semantic_scholar');
     if (this.canUnlink(url)) actions.push('unlink');
     if (this.canDeleteZoteroItem(url)) actions.push('delete_item');
     if (this.canManuallyCreate(url)) actions.push('manual_create');
@@ -380,8 +461,10 @@ export class StateGuards {
       select_identifier: 95,
       approve_metadata: 90,
       edit_citation: 85,
+      extract_semantic_scholar: 85,
       retry: 80,
-      manual_create: 75,
+      process_content: 75,
+      manual_create: 70,
       unlink: 50,
       delete_item: 45,
       reset: 40,

@@ -34,7 +34,7 @@ import {
 import type { UrlWithCapabilitiesAndStatus } from '@/lib/actions/url-with-capabilities';
 
 interface URLTableRowProps {
-  url: UrlWithCapabilitiesAndStatus | any; // Accept any for backward compatibility
+  url: UrlWithCapabilitiesAndStatus; // Accept any for backward compatibility
   selected: boolean;
   onSelect: (selected: boolean) => void;
   onClick: () => void;
@@ -168,8 +168,21 @@ export function URLTableRow({
             </a>
           </div>
           {url.domain && (
-            <div>
-              <span className="text-xs text-gray-500">{url.domain}</span>
+            <div className="font-mono text-xs text-gray-500 mt-1">
+              <span className="">
+                {url.id.toString()}
+              </span>
+              <span> - </span>
+ 
+              <span className="">
+                {
+                  url.domain
+                    .replace('www.', '')
+                    .replace('http://', '')
+                    .replace('https://', '')
+                    .replace('/', '')
+                }
+              </span>
             </div>
           )}
         </div>

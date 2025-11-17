@@ -82,9 +82,12 @@ export function ProcessingHistorySection({
   }
 
   const getStageIcon = (stage?: string, method?: string) => {
-    // Special handling for reset events
+    // Special handling for manual actions
     if (method === 'reset') {
       return RotateCcw;
+    }
+    if (method === 'clear_errors' || method === 'clear_errors_reset') {
+      return XCircle;
     }
     
     switch (stage) {
@@ -104,9 +107,15 @@ export function ProcessingHistorySection({
   };
 
   const getStageLabel = (stage?: string, method?: string) => {
-    // Special handling for reset events
+    // Special handling for manual actions
     if (method === 'reset') {
       return 'Processing Reset';
+    }
+    if (method === 'clear_errors') {
+      return 'Errors Cleared';
+    }
+    if (method === 'clear_errors_reset') {
+      return 'Errors Cleared & Reset';
     }
     
     switch (stage) {
@@ -135,6 +144,7 @@ export function ProcessingHistorySection({
           const isSuccess = attempt.success === true || attempt.success === 1;
           const isTransition = !!attempt.transition;
           const isReset = attempt.method === 'reset';
+          const isClearErrors = attempt.method === 'clear_errors' || attempt.method === 'clear_errors_reset';
           
           return (
             <div
@@ -142,6 +152,8 @@ export function ProcessingHistorySection({
               className={`flex gap-3 p-3 rounded-lg border ${
                 isReset
                   ? 'bg-purple-50 border-purple-200'
+                  : isClearErrors
+                  ? 'bg-orange-50 border-orange-200'
                   : isSuccess
                   ? 'bg-green-50 border-green-200'
                   : isTransition
@@ -153,6 +165,8 @@ export function ProcessingHistorySection({
               <div className={`flex-shrink-0 p-2 rounded-full ${
                 isReset
                   ? 'bg-purple-100'
+                  : isClearErrors
+                  ? 'bg-orange-100'
                   : isSuccess
                   ? 'bg-green-100'
                   : isTransition
@@ -161,6 +175,8 @@ export function ProcessingHistorySection({
               }`}>
                 {isReset ? (
                   <Icon className="h-4 w-4 text-purple-600" />
+                ) : isClearErrors ? (
+                  <Icon className="h-4 w-4 text-orange-600" />
                 ) : isTransition ? (
                   <ArrowRight className="h-4 w-4 text-blue-600" />
                 ) : isSuccess ? (
@@ -177,12 +193,12 @@ export function ProcessingHistorySection({
                   <div className="flex-1">
                     {isTransition ? (
                       <div className="text-sm font-medium text-gray-900">
-                        {isReset ? 'Processing Reset' : 'State Transition'}
+                        {isReset ? 'Processing Reset' : isClearErrors ? 'Errors Cleared & Reset' : 'State Transition'}
                       </div>
                     ) : (
                       <div className="text-sm font-medium text-gray-900">
                         {getStageLabel(attempt.stage, attempt.method)}
-                        {attempt.method && attempt.method !== 'reset' && (
+                        {attempt.method && attempt.method !== 'reset' && !isClearErrors && (
                           <span className="text-gray-600 font-normal"> · {attempt.method}</span>
                         )}
                       </div>

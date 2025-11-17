@@ -7,23 +7,21 @@ import { computeUrlStatus, type UrlStatus } from '../db/computed';
 
 /**
  * Get overview stats for the dashboard
+ * Enhanced to include new processing system statistics
  */
 export async function getOverviewStats() {
   try {
-    // Get total URLs
-    const [{ totalUrls }] = await db
-      .select({ totalUrls: sql<number>`count(*)` })
-      .from(urls);
-    
-    // Get all URLs with analysis data to compute statuses
+    // Get all URLs with related data
     const allUrls = await db
       .select()
       .from(urls)
       .leftJoin(urlAnalysisData, eq(urls.id, urlAnalysisData.urlId))
       .leftJoin(urlEnrichments, eq(urls.id, urlEnrichments.urlId));
     
-    // Compute status distribution
-    const statusCounts: Record<UrlStatus, number> = {
+    const totalUrls = allUrls.length;
+    
+    // Compute OLD status distribution (for backward compatibility)
+    const oldStatusCounts: Record<UrlStatus, number> = {
       stored: 0,
       error: 0,
       extractable: 0,
@@ -34,8 +32,66 @@ export async function getOverviewStats() {
     
     allUrls.forEach(row => {
       const status = computeUrlStatus(row.urls, row.url_analysis_data, row.url_enrichments);
-      statusCounts[status]++;
+      oldStatusCounts[status]++;
     });
+    
+    // NEW: Processing status distribution
+    const processingStatusCounts: Record<string, number> = {};
+    allUrls.forEach(row => {
+      const status = row.urls.processingStatus || 'not_started';
+      processingStatusCounts[status] = (processingStatusCounts[status] || 0) + 1;
+    });
+    
+    // NEW: User intent distribution
+    const userIntentCounts: Record<string, number> = {};
+    allUrls.forEach(row => {
+      const intent = row.urls.userIntent || 'auto';
+      userIntentCounts[intent] = (userIntentCounts[intent] || 0) + 1;
+    });
+    
+    // NEW: Processing metrics
+    const storedCount = allUrls.filter(row => 
+      (row.urls.processingStatus || '').startsWith('stored')
+    ).length;
+    
+    const awaitingUserCount = allUrls.filter(row => {
+      const status = row.urls.processingStatus || '';
+      return status === 'awaiting_selection' || status === 'awaiting_metadata';
+    }).length;
+    
+    const exhaustedCount = allUrls.filter(row => 
+      row.urls.processingStatus === 'exhausted'
+    ).length;
+    
+    const processingCount = allUrls.filter(row => {
+      const status = row.urls.processingStatus || '';
+      return status.startsWith('processing_');
+    }).length;
+    
+    const ignoredCount = allUrls.filter(row => 
+      row.urls.processingStatus === 'ignored' || row.urls.userIntent === 'ignore'
+    ).length;
+    
+    const archivedCount = allUrls.filter(row => 
+      row.urls.processingStatus === 'archived' || row.urls.userIntent === 'archive'
+    ).length;
+    
+    // NEW: Citation validation stats
+    const validCitations = allUrls.filter(row => 
+      row.urls.citationValidationStatus === 'valid'
+    ).length;
+    
+    const incompleteCitations = allUrls.filter(row => 
+      row.urls.citationValidationStatus === 'incomplete'
+    ).length;
+    
+    // NEW: Processing attempts distribution
+    const noAttempts = allUrls.filter(row => (row.urls.processingAttempts || 0) === 0).length;
+    const oneToTwoAttempts = allUrls.filter(row => {
+      const attempts = row.urls.processingAttempts || 0;
+      return attempts >= 1 && attempts <= 2;
+    }).length;
+    const threePlusAttempts = allUrls.filter(row => (row.urls.processingAttempts || 0) >= 3).length;
     
     // Get total sections
     const [{ totalSections }] = await db
@@ -57,12 +113,55 @@ export async function getOverviewStats() {
       .from(urlEnrichments)
       .where(sql`json_array_length(${urlEnrichments.customIdentifiers}) > 0`);
     
+    // Calculate success rate
+    const successRate = totalUrls > 0 ? (storedCount / totalUrls) * 100 : 0;
+    const avgAttempts = totalUrls > 0 
+      ? allUrls.reduce((sum, row) => sum + (row.urls.processingAttempts || 0), 0) / totalUrls 
+      : 0;
+    
     return {
       success: true,
       data: {
+        // Basic stats
         totalUrls,
         totalSections,
-        statusDistribution: statusCounts,
+        
+        // OLD: Computed status distribution (kept for backward compatibility)
+        statusDistribution: oldStatusCounts,
+        
+        // NEW: Processing status distribution
+        processingStatusDistribution: processingStatusCounts,
+        
+        // NEW: User intent distribution
+        userIntentDistribution: userIntentCounts,
+        
+        // NEW: Processing metrics
+        processing: {
+          stored: storedCount,
+          awaitingUser: awaitingUserCount,
+          exhausted: exhaustedCount,
+          processing: processingCount,
+          ignored: ignoredCount,
+          archived: archivedCount,
+          successRate,
+          averageAttempts: avgAttempts,
+        },
+        
+        // NEW: Citation validation
+        citation: {
+          valid: validCitations,
+          incomplete: incompleteCitations,
+          notValidated: totalUrls - validCitations - incompleteCitations,
+        },
+        
+        // NEW: Processing attempts
+        attempts: {
+          none: noAttempts,
+          oneToTwo: oneToTwoAttempts,
+          threePlus: threePlusAttempts,
+        },
+        
+        // Enrichment stats
         enrichment: {
           totalEnriched,
           totalWithNotes,

@@ -53,6 +53,7 @@ export function EditCitationModal({
     if (open) {
       loadMetadata();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, urlId, itemKey]);
 
   /**

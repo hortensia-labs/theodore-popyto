@@ -218,7 +218,7 @@ export function MetadataEditor({
               ))
             ) : (
               <div className="text-center py-4 text-sm text-red-600 bg-red-50 rounded-md border border-red-200">
-                No creators added. Click "Add Creator" to add one.
+                No creators added. Click &quot;Add Creator&quot; to add one.
               </div>
             )}
           </div>

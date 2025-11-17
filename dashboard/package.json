@@ -24,6 +24,8 @@
     "@radix-ui/react-tabs": "^1.1.13",
     "@types/better-sqlite3": "^7.6.13",
     "better-sqlite3": "^12.4.1",
+    "bibtex-parser": "^0.0.0",
+    "cheerio": "^1.1.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.19",

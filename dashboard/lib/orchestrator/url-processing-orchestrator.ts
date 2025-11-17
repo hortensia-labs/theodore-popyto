@@ -15,7 +15,7 @@
 
 import { db } from '../db/client';
 import { urls, urlAnalysisData, urlEnrichments } from '../../drizzle/schema';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import { URLProcessingStateMachine } from '../state-machine/url-processing-state-machine';
 import { StateGuards } from '../state-machine/state-guards';
 import {
@@ -30,7 +30,7 @@ import type {
   ProcessingStatus,
 } from '../types/url-processing';
 // Import actual processing functions (NOT from actions/zotero.ts to avoid circular dependency)
-import { processIdentifier, processUrl, validateCitation } from '../zotero-client';
+import { processIdentifier, processUrl, validateCitation as validateCitationMetadata, getItem } from '../zotero-client';
 import { processSingleUrl } from '../actions/process-url-action';
 
 /**
@@ -47,10 +47,19 @@ export class URLProcessingOrchestrator {
    * @returns Processing result
    */
   static async processUrl(urlId: number): Promise<ProcessingResult> {
+    console.log('\n╔════════════════════════════════════════════════════════════╗');
+    console.log('║   ORCHESTRATOR ENTRY: processUrl()                         ║');
+    console.log('╚════════════════════════════════════════════════════════════╝');
+    console.log('📌 URL ID:', urlId);
+    console.log('⏰ Started at:', new Date().toISOString());
+    
     try {
+      console.log('📂 Fetching URL with capabilities...');
       const url = await this.getUrlWithCapabilities(urlId);
       
       if (!url) {
+        console.log('❌ URL not found');
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
         return {
           success: false,
           urlId,
@@ -58,25 +67,65 @@ export class URLProcessingOrchestrator {
         };
       }
 
+      console.log('✅ URL loaded:', url.url);
+      console.log('📊 Processing status:', url.processingStatus);
+      console.log('🎯 User intent:', url.userIntent);
+      console.log('📋 Capabilities:');
+      console.log('   Has identifiers:', url.capability.hasIdentifiers);
+      console.log('   Has web translators:', url.capability.hasWebTranslators);
+      console.log('   Has content:', url.capability.hasContent);
+      console.log('   Is accessible:', url.capability.isAccessible);
+      console.log('   Can use LLM:', url.capability.canUseLLM);
+
       // Check user intent
+      console.log('\n🔍 Checking if URL can be processed...');
       if (!StateGuards.canProcessWithZotero(url)) {
+        console.log('❌ Cannot process URL');
+        console.log('   Reason: User intent or state restriction');
+        console.log('   Current status:', url.processingStatus);
+        console.log('   User intent:', url.userIntent);
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
         return {
           success: false,
           urlId,
           error: 'URL cannot be processed (user intent or state restriction)',
         };
       }
+      
+      console.log('✅ URL can be processed');
 
       // Determine starting stage based on capabilities
+      console.log('\n🎯 DETERMINING STARTING STAGE');
+      
       if (url.capability.hasIdentifiers || url.capability.hasWebTranslators) {
+        console.log('✅ Decision: START WITH ZOTERO PROCESSING');
+        console.log('   Reason: Has identifiers or web translators');
+        console.log('🚀 Calling attemptZoteroProcessing()...\n');
         return await this.attemptZoteroProcessing(urlId);
       } else if (url.capability.hasContent) {
+        console.log('✅ Decision: START WITH CONTENT PROCESSING');
+        console.log('   Reason: Has cached content, no identifiers/translators');
+        console.log('🚀 Calling attemptContentProcessing()...\n');
         return await this.attemptContentProcessing(urlId);
       } else {
+        console.log('✅ Decision: START WITH CONTENT FETCHING');
+        console.log('   Reason: No content cached yet');
+        console.log('🚀 Calling attemptContentFetching()...\n');
         // Need to fetch content first
         return await this.attemptContentFetching(urlId);
       }
     } catch (error) {
+      console.log('\n💥 EXCEPTION in processUrl() entry point');
+      console.log('🏷️  Error type:', error?.constructor?.name);
+      console.log('💬 Error message:', getErrorMessage(error));
+      
+      if (error instanceof Error) {
+        console.log('📜 Stack trace:');
+        console.log(error.stack);
+      }
+      
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
+      
       return {
         success: false,
         urlId,
@@ -93,47 +142,87 @@ export class URLProcessingOrchestrator {
   private static async attemptZoteroProcessing(
     urlId: number
   ): Promise<ProcessingResult> {
+    console.log('\n╔════════════════════════════════════════════════════════════╗');
+    console.log('║   STAGE 1: attemptZoteroProcessing()                       ║');
+    console.log('╚════════════════════════════════════════════════════════════╝');
+    console.log('📌 URL ID:', urlId);
+    
     const url = await db.query.urls.findFirst({ where: eq(urls.id, urlId) });
     if (!url) {
+      console.log('❌ URL not found in database');
       return { success: false, urlId, error: 'URL not found' };
     }
 
+    console.log('📊 Current state:', url.processingStatus);
+    console.log('🎯 Transitioning to: processing_zotero');
+    
     // Transition to processing state
     await URLProcessingStateMachine.transition(
       urlId,
       url.processingStatus as ProcessingStatus,
       'processing_zotero'
     );
+    
+    console.log('✅ State transition complete');
 
     // Record attempt start
+    const attemptStartTime = Date.now();
     await this.recordProcessingAttempt(urlId, {
-      timestamp: Date.now(),
+      timestamp: attemptStartTime,
       stage: 'zotero_identifier', // Will be determined by actual method
       success: false, // Update on completion
     });
+    
+    console.log('📝 Processing attempt recorded');
 
     try {
+      console.log('🎬 Starting Zotero processing...');
+      
       // Call actual Zotero processing
       const result = await this.callZoteroProcessing(urlId);
+      
+      const processingDuration = Date.now() - attemptStartTime;
+      console.log('\n📊 Zotero processing result:');
+      console.log('Success:', result.success);
+      console.log('Duration:', `${processingDuration}ms`);
 
-      if (result.success) {
+      if (result.success && 'items' in result) {
+        console.log('✅ Zotero processing succeeded');
+        
         // Extract item key from response
         // Zotero returns items array, we want the first item's key
         const itemKey = result.items?.[0]?.key || result.items?.[0]?._meta?.itemKey;
         
+        console.log('🔑 Extracted item key:', itemKey || 'NONE');
+        console.log('📦 Items array length:', result.items?.length || 0);
+        if (result.items && result.items.length > 0) {
+          console.log('📄 First item structure:', JSON.stringify(result.items[0], null, 2));
+        }
+        
         if (!itemKey) {
+          console.log('❌ No item key found in response - this is unusual');
+          console.log('🔄 Calling handleZoteroFailure()...');
           return await this.handleZoteroFailure(
             urlId,
             'Zotero processing succeeded but no item key returned'
           );
         }
         
+        console.log('🔍 Validating citation for item:', itemKey);
         // Validate citation
         const validation = await this.validateCitation(itemKey);
+        
+        console.log('📋 Citation validation result:');
+        console.log('   Is complete:', validation.isComplete);
+        console.log('   Status:', validation.status);
+        console.log('   Missing fields:', validation.missingFields);
         
         const finalStatus: ProcessingStatus = validation.isComplete 
           ? 'stored' 
           : 'stored_incomplete';
+        
+        console.log('🎯 Final status determined:', finalStatus);
+        console.log('🔄 Transitioning: processing_zotero →', finalStatus);
 
         await URLProcessingStateMachine.transition(
           urlId,
@@ -148,8 +237,11 @@ export class URLProcessingOrchestrator {
             },
           }
         );
+        
+        console.log('✅ State transition complete');
 
         // Update processing history with success
+        console.log('📝 Updating processing history with success...');
         await this.updateLastAttempt(urlId, {
           success: true,
           itemKey: itemKey,
@@ -158,21 +250,40 @@ export class URLProcessingOrchestrator {
 
         // Auto-trigger metadata extraction if incomplete
         if (finalStatus === 'stored_incomplete') {
+          console.log('⚠️  Citation incomplete - triggering metadata extraction');
           await this.attemptMetadataExtraction(urlId);
         }
 
+        console.log('✅ STAGE 1 COMPLETE - SUCCESS');
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
+        
         return {
           success: true,
           urlId,
           status: finalStatus,
           itemKey: itemKey,
-          method: result.method,
+          // method: result.method,
         };
       } else {
+        console.log('❌ Zotero processing returned failure');
+        console.log('💬 Error:', result.error);
+        console.log('🔄 Calling handleZoteroFailure()...');
+        
         // Failed - handle failure
-        return await this.handleZoteroFailure(urlId, result.error || 'Unknown error');
+        return await this.handleZoteroFailure(urlId, result.error?.toString() || 'Unknown error');
       }
     } catch (error) {
+      console.log('\n💥 EXCEPTION caught in attemptZoteroProcessing()');
+      console.log('🏷️  Error type:', error?.constructor?.name);
+      console.log('💬 Error message:', getErrorMessage(error));
+      
+      if (error instanceof Error) {
+        console.log('📜 Stack trace:');
+        console.log(error.stack);
+      }
+      
+      console.log('🔄 Calling handleZoteroFailure()...');
+      
       return await this.handleZoteroFailure(
         urlId,
         getErrorMessage(error)
@@ -188,9 +299,18 @@ export class URLProcessingOrchestrator {
     urlId: number,
     errorMessage: string
   ): Promise<ProcessingResult> {
+    console.log('\n╔══════════════════════════════════════════════════════════════╗');
+    console.log('║    FAILURE HANDLER: handleZoteroFailure()                    ║');
+    console.log('╚══════════════════════════════════════════════════════════════╝');
+    console.log('📌 URL ID:', urlId);
+    console.log('💬 Error message:', errorMessage);
+    
     const errorCategory = categorizeError(errorMessage);
+    console.log('🏷️  Error category:', errorCategory);
+    console.log('🔍 Is permanent error:', isPermanentError(errorMessage));
     
     // Update last attempt with failure
+    console.log('📝 Updating last processing attempt with failure info...');
     await this.updateLastAttempt(urlId, {
       success: false,
       error: errorMessage,
@@ -198,19 +318,35 @@ export class URLProcessingOrchestrator {
     });
 
     // Increment processing attempts
-    await db.execute(`
-      UPDATE urls 
-      SET processing_attempts = processing_attempts + 1 
-      WHERE id = ${urlId}
-    `);
+    console.log('🔢 Incrementing processing attempts counter...');
+    await db.update(urls)
+      .set({
+        processingAttempts: sql`${urls.processingAttempts} + 1`,
+      })
+      .where(eq(urls.id, urlId));
+    
+    // Get updated attempt count
+    const updatedUrl = await db.query.urls.findFirst({
+      where: eq(urls.id, urlId),
+      columns: { processingAttempts: true },
+    });
+    console.log('📊 Processing attempts now:', updatedUrl?.processingAttempts || 0);
 
     // Check if error is permanent
     if (isPermanentError(errorMessage)) {
+      console.log('🛑 PERMANENT ERROR DETECTED');
+      console.log('❌ No auto-cascade - transitioning to exhausted');
+      console.log('🎯 Transition: processing_zotero → exhausted');
+      
       await URLProcessingStateMachine.transition(
         urlId,
         'processing_zotero',
         'exhausted'
       );
+      
+      console.log('✅ Transitioned to exhausted state');
+      console.log('💡 Suggestion: User should try manual creation');
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
       
       return {
         success: false,
@@ -222,7 +358,12 @@ export class URLProcessingOrchestrator {
     }
 
     // Auto-cascade to content processing
-    console.log(`URL ${urlId}: Zotero failed, auto-cascading to content processing`);
+    console.log('🔄 AUTO-CASCADE DECISION');
+    console.log('✅ Error is retryable (not permanent)');
+    console.log('🎯 Next stage: Content Processing');
+    console.log('📍 Reason: Zotero processing failed, trying alternative method');
+    console.log('🚀 Calling attemptContentProcessing()...\n');
+    
     return await this.attemptContentProcessing(urlId);
   }
 
@@ -233,43 +374,72 @@ export class URLProcessingOrchestrator {
   private static async attemptContentProcessing(
     urlId: number
   ): Promise<ProcessingResult> {
+    console.log('\n╔════════════════════════════════════════════════════════════╗');
+    console.log('║   STAGE 2: attemptContentProcessing()                      ║');
+    console.log('╚════════════════════════════════════════════════════════════╝');
+    console.log('📌 URL ID:', urlId);
+    
     const url = await db.query.urls.findFirst({ where: eq(urls.id, urlId) });
     if (!url) {
+      console.log('❌ URL not found');
       return { success: false, urlId, error: 'URL not found' };
     }
 
+    console.log('📊 Current state:', url.processingStatus);
+    console.log('🎯 Transitioning to: processing_content');
+    
     await URLProcessingStateMachine.transition(
       urlId,
       url.processingStatus as ProcessingStatus,
       'processing_content'
     );
+    
+    console.log('✅ State transition complete');
 
     // Record attempt
+    const attemptStartTime = Date.now();
     await this.recordProcessingAttempt(urlId, {
-      timestamp: Date.now(),
+      timestamp: attemptStartTime,
       stage: 'content_extraction',
       success: false,
     });
+    
+    console.log('📝 Processing attempt recorded');
 
     try {
-      // Import content processing action
-      // const result = await processSingleUrl(urlId);
+      console.log('🎬 Starting content processing...');
       
-      // Placeholder - TODO: Replace with actual implementation
+      // Call content processing
       const result = await this.callContentProcessing(urlId);
+      
+      const duration = Date.now() - attemptStartTime;
+      console.log('\n📊 Content processing result:');
+      console.log('Success:', result.success);
+      console.log('State:', result.state);
+      console.log('Identifier count:', result.identifierCount);
+      console.log('Duration:', `${duration}ms`);
 
       if (result.identifierCount && result.identifierCount > 0) {
+        console.log('✅ Identifiers found:', result.identifierCount);
+        console.log('🎯 Transitioning: processing_content → awaiting_selection');
+        
         // Found identifiers - await user selection
         await URLProcessingStateMachine.transition(
           urlId,
           'processing_content',
           'awaiting_selection'
         );
+        
+        console.log('✅ State transition complete');
 
         await this.updateLastAttempt(urlId, {
           success: true,
           metadata: { identifierCount: result.identifierCount },
         });
+        
+        console.log('📝 Processing history updated');
+        console.log('✅ STAGE 2 COMPLETE - AWAITING USER SELECTION');
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 
         return {
           success: true,
@@ -278,11 +448,23 @@ export class URLProcessingOrchestrator {
           identifierCount: result.identifierCount,
         };
       } else {
+        console.log('❌ No identifiers found');
+        console.log('🔄 AUTO-CASCADE: Content → LLM Processing');
+        console.log('🚀 Calling attemptLLMProcessing()...\n');
+        
         // No identifiers - try LLM
-        console.log(`URL ${urlId}: No identifiers found, auto-cascading to LLM`);
         return await this.attemptLLMProcessing(urlId);
       }
     } catch (error) {
+      console.log('\n💥 EXCEPTION in attemptContentProcessing()');
+      console.log('💬 Error:', getErrorMessage(error));
+      
+      if (error instanceof Error) {
+        console.log('📜 Stack:', error.stack);
+      }
+      
+      console.log('🔄 Calling handleContentFailure()...');
+      
       return await this.handleContentFailure(
         urlId,
         getErrorMessage(error)
@@ -305,11 +487,11 @@ export class URLProcessingOrchestrator {
       errorCategory,
     });
 
-    await db.execute(`
-      UPDATE urls 
-      SET processing_attempts = processing_attempts + 1 
-      WHERE id = ${urlId}
-    `);
+    await db.update(urls)
+      .set({
+        processingAttempts: sql`${urls.processingAttempts} + 1`,
+      })
+      .where(eq(urls.id, urlId));
 
     // Try LLM as last resort
     console.log(`URL ${urlId}: Content processing failed, trying LLM`);
@@ -521,7 +703,7 @@ export class URLProcessingOrchestrator {
     const url = await db.query.urls.findFirst({ where: eq(urls.id, urlId) });
     if (!url) return;
 
-    const history: ProcessingAttempt[] = url.processingHistory || [];
+    const history: ProcessingAttempt[] = (url.processingHistory || []) as ProcessingAttempt[];
     history.push(attempt as ProcessingAttempt);
 
     await db.update(urls)
@@ -539,7 +721,7 @@ export class URLProcessingOrchestrator {
     const url = await db.query.urls.findFirst({ where: eq(urls.id, urlId) });
     if (!url) return;
 
-    const history: ProcessingAttempt[] = url.processingHistory || [];
+    const history: ProcessingAttempt[] = (url.processingHistory || []) as ProcessingAttempt[];
     if (history.length === 0) return;
 
     // Update last entry
@@ -559,7 +741,11 @@ export class URLProcessingOrchestrator {
    */
   private static async validateCitation(itemKey: string) {
     try {
-      const result = await validateCitation(itemKey);
+      // First fetch the item metadata
+      const itemMetadata = await getItem(itemKey);
+      
+      // Then validate the citation using the imported function
+      const result = validateCitationMetadata(itemMetadata);
       return {
         isComplete: result.status === 'valid',
         status: result.status,
@@ -581,31 +767,63 @@ export class URLProcessingOrchestrator {
    * Determines best strategy (identifier vs URL) and processes accordingly
    */
   private static async callZoteroProcessing(urlId: number) {
+    console.log('\n╔════════════════════════════════════════════════════════════╗');
+    console.log('║   ORCHESTRATOR: callZoteroProcessing()                     ║');
+    console.log('╚════════════════════════════════════════════════════════════╝');
+    console.log('📌 URL ID:', urlId);
+    
     try {
       // Get URL and related data
+      console.log('📂 Loading URL record and related data...');
       const urlRecord = await db.query.urls.findFirst({
         where: eq(urls.id, urlId),
       });
       
       if (!urlRecord) {
+        console.log('❌ URL record not found in database');
         return { success: false, error: 'URL not found' };
       }
+      
+      console.log('✅ URL record loaded:', urlRecord.url);
+      console.log('📊 Current processing status:', urlRecord.processingStatus);
+      console.log('🔢 Processing attempts:', urlRecord.processingAttempts);
       
       // Get analysis data for identifiers
       const analysisData = await db.query.urlAnalysisData.findFirst({
         where: eq(urlAnalysisData.urlId, urlId),
       });
       
+      console.log('📊 Analysis data loaded:', analysisData ? 'Yes' : 'No');
+      if (analysisData) {
+        console.log('   Valid identifiers:', analysisData.validIdentifiers);
+        console.log('   Web translators:', analysisData.webTranslators?.length || 0);
+        console.log('   AI translation:', analysisData.aiTranslation);
+      }
+      
       // Get enrichments for custom identifiers
       const enrichment = await db.query.urlEnrichments.findFirst({
         where: eq(urlEnrichments.urlId, urlId),
       });
       
+      console.log('📝 Enrichment data loaded:', enrichment ? 'Yes' : 'No');
+      if (enrichment) {
+        console.log('   Custom identifiers:', enrichment.customIdentifiers);
+        console.log('   Has notes:', !!enrichment.notes);
+      }
+      
       // Strategy 1: Try valid identifiers from analysis (highest priority)
       if (analysisData?.validIdentifiers && Array.isArray(analysisData.validIdentifiers) && analysisData.validIdentifiers.length > 0) {
         const identifier = analysisData.validIdentifiers[0];
-        console.log(`URL ${urlId}: Processing with identifier: ${identifier}`);
+        console.log('\n🎯 STRATEGY 1: Using valid identifier from analysis');
+        console.log('🔑 Identifier:', identifier);
+        console.log('📚 Available identifiers:', analysisData.validIdentifiers.join(', '));
+        console.log('🚀 Calling processIdentifier()...\n');
+        
         const result = await processIdentifier(identifier);
+        
+        console.log('\n✅ STRATEGY 1 completed');
+        console.log('Success:', result.success);
+        console.log('Method returned:', result.method);
         return {
           ...result,
           method: 'identifier',
@@ -616,8 +834,16 @@ export class URLProcessingOrchestrator {
       // Strategy 2: Try custom identifiers from enrichment
       if (enrichment?.customIdentifiers && Array.isArray(enrichment.customIdentifiers) && enrichment.customIdentifiers.length > 0) {
         const identifier = enrichment.customIdentifiers[0];
-        console.log(`URL ${urlId}: Processing with custom identifier: ${identifier}`);
+        console.log('\n🎯 STRATEGY 2: Using custom identifier from enrichment');
+        console.log('🔑 Custom identifier:', identifier);
+        console.log('📚 Available custom IDs:', enrichment.customIdentifiers.join(', '));
+        console.log('🚀 Calling processIdentifier()...\n');
+        
         const result = await processIdentifier(identifier);
+        
+        console.log('\n✅ STRATEGY 2 completed');
+        console.log('Success:', result.success);
+        console.log('Method returned:', result.method);
         return {
           ...result,
           method: 'custom_identifier',
@@ -626,13 +852,32 @@ export class URLProcessingOrchestrator {
       }
       
       // Strategy 3: Fall back to URL processing (web translators)
-      console.log(`URL ${urlId}: Processing with URL translator`);
+      console.log('\n🎯 STRATEGY 3: Using URL translator');
+      console.log('🌐 URL:', urlRecord.url);
+      console.log('🔧 Web translators available:', analysisData?.webTranslators?.length || 0);
+      if (analysisData?.webTranslators && analysisData.webTranslators.length > 0) {
+        console.log('   Translators:', JSON.stringify(analysisData.webTranslators, null, 2));
+      }
+      console.log('🚀 Calling processUrl()...\n');
+      
       const result = await processUrl(urlRecord.url);
+      
+      console.log('\n✅ STRATEGY 3 completed');
+      console.log('Success:', result.success);
+      console.log('Method returned:', result.method);
       return {
         ...result,
         method: 'url',
       };
     } catch (error) {
+      console.log('\n💥 EXCEPTION in callZoteroProcessing()');
+      console.log('Error type:', error?.constructor?.name);
+      console.log('Error message:', getErrorMessage(error));
+      if (error instanceof Error && error.stack) {
+        console.log('Stack trace:', error.stack);
+      }
+      console.log('Returning failure result');
+      
       return {
         success: false,
         error: getErrorMessage(error),

@@ -1,18 +1,20 @@
 'use client';
 
 import { useState, useTransition, useEffect } from 'react';
-import { X, Database, RefreshCw, ExternalLink, Unlink, Trash, DiamondPlus } from 'lucide-react';
+import { X, Database, RefreshCw, ExternalLink, Unlink, Trash, DiamondPlus, Trash2 } from 'lucide-react';
 import { type UrlWithStatus } from '@/lib/db/computed';
 import { type UrlEnrichment } from '@/lib/db/schema';
 import type { UrlWithCapabilitiesAndStatus } from '@/lib/actions/url-with-capabilities';
 import { updateEnrichment, addIdentifier, removeIdentifier, getEnrichment } from '@/lib/actions/enrichments';
 import { processUrlWithZotero, unlinkUrlFromZotero, deleteZoteroItemAndUnlink, getZoteroItemMetadata, revalidateCitation } from '@/lib/actions/zotero';
 import { processSingleUrl } from '@/lib/actions/process-url-action';
-import { getIdentifiersWithPreviews, selectAndProcessIdentifier, refreshIdentifierPreview, fetchAllPreviews } from '@/lib/actions/identifier-selection-action';
+import { extractSemanticScholarBibTeX } from '@/lib/actions/extract-semantic-scholar-bibtex';
+import { getIdentifiersWithPreviews, refreshIdentifierPreview, fetchAllPreviews } from '@/lib/actions/identifier-selection-action';
 import { getExtractedMetadata, approveAndStoreMetadata, rejectMetadata } from '@/lib/actions/metadata-approval-action';
 import { checkHasCachedContent } from '@/lib/actions/cache-check-action';
 import { resetProcessingState, ignoreUrl, unignoreUrl, archiveUrl } from '@/lib/actions/state-transitions';
 import { deleteUrls } from '@/lib/actions/urls';
+import { clearAnalysisErrors } from '@/lib/actions/clear-errors';
 import { getZoteroWebUrl, type ZoteroItemResponse } from '@/lib/zotero-client';
 import { StatusBadge } from '../status-badge';
 import { Button } from '../ui/button';
@@ -276,6 +278,39 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
     }
   }
 
+  async function handleExtractSemanticScholar() {
+    setIsProcessing(true);
+    setError(null);
+    setSuccessMessage(null);
+    
+    startTransition(async () => {
+      try {
+        const result = await extractSemanticScholarBibTeX(normalizedUrl.id, normalizedUrl.url);
+        
+        if (result.success) {
+          setSuccessMessage(result.message || `Citation extracted and linked to Zotero (${result.itemKey})`);
+          
+          // Reload Zotero metadata
+          if (result.itemKey) {
+            const metadata = await getZoteroItemMetadata(result.itemKey);
+            if (metadata.success && metadata.data) {
+              setZoteroItemMetadata(metadata.data);
+            }
+          }
+          
+          onUpdate?.();
+          router.refresh(); // Refresh to get updated citation status
+        } else {
+          setError(result.error || 'Failed to extract BibTeX');
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Unknown error');
+      } finally {
+        setIsProcessing(false);
+      }
+    });
+  }
+
   async function handleUnlinkOnly() {
     setIsProcessing(true);
     setError(null);
@@ -351,26 +386,57 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
     setIsProcessing(true);
     setError(null);
     setSuccessMessage(null);
-    
+
     const result = await processSingleUrl(url.id);
-    
+
     setIsProcessing(false);
-    
+
     if (result.success) {
       setSuccessMessage(
         `URL processed: ${result.state}` +
         (result.identifierCount ? ` - Found ${result.identifierCount} identifier(s)` : '')
       );
-      
+
       // Reload identifiers if found
       if (result.identifierCount && result.identifierCount > 0) {
         const identifiers = await getIdentifiersWithPreviews(url.id);
         setIdentifiersWithPreviews(identifiers);
       }
-      
+
       onUpdate?.();
     } else {
       setError(result.error || 'Processing failed');
+    }
+  }
+
+  async function handleProcessContent() {
+    setIsProcessing(true);
+    setError(null);
+    setSuccessMessage(null);
+
+    const result = await processSingleUrl(url.id);
+
+    setIsProcessing(false);
+
+    if (result.success) {
+      if (result.identifierCount && result.identifierCount > 0) {
+        setSuccessMessage(`Content processed - Found ${result.identifierCount} identifier(s)`);
+
+        // Reload identifiers
+        const identifiers = await getIdentifiersWithPreviews(url.id);
+        setIdentifiersWithPreviews(identifiers);
+      } else {
+        setSuccessMessage('Content processed - No identifiers found, but metadata may be available');
+
+        // Reload extracted metadata if available
+        const metadata = await getExtractedMetadata(url.id);
+        setExtractedMetadata(metadata);
+      }
+
+      onUpdate?.();
+      router.refresh();
+    } else {
+      setError(result.error || 'Content processing failed');
     }
   }
 
@@ -378,11 +444,20 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
     setIsProcessing(true);
     setError(null);
     setSuccessMessage(null);
-    
-    const result = await selectAndProcessIdentifier(url.id, identifierId);
-    
+
+    // Find the identifier in the preview data to get its value
+    const identifier = identifiersWithPreviews.find(id => id.id === identifierId);
+    if (!identifier) {
+      setError('Identifier not found');
+      setIsProcessing(false);
+      return;
+    }
+
+    // Use processCustomIdentifier which works from any state
+    const result = await processCustomIdentifier(url.id, identifier.value, false);
+
     setIsProcessing(false);
-    
+
     if (result.success) {
       setSuccessMessage(`Item stored in Zotero: ${result.itemKey}`);
       onUpdate?.();
@@ -613,6 +688,42 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
     }
   }
 
+  async function handleClearErrors() {
+    // Confirm action
+    const confirmed = window.confirm(
+      'Clear analysis errors and reset processing state?\n\n' +
+      'This will:\n' +
+      '• Remove error messages from analysis data\n' +
+      '• Reset processing status to "not_started"\n' +
+      '• Add a clear errors event to processing history\n' +
+      '• Allow you to process this URL again\n\n' +
+      'Continue?'
+    );
+    
+    if (!confirmed) {
+      return;
+    }
+    
+    setIsProcessing(true);
+    setError(null);
+    setSuccessMessage(null);
+    
+    const result = await clearAnalysisErrors(url.id, true); // true = also reset processing state
+    
+    setIsProcessing(false);
+    
+    if (result.success) {
+      setSuccessMessage(
+        result.message || 
+        `Cleared ${result.clearedErrors} error(s)${result.resetState ? ' and reset processing state' : ''}`
+      );
+      onUpdate?.();
+      router.refresh();
+    } else {
+      setError(result.error || 'Failed to clear errors');
+    }
+  }
+
   return (
     <div className="h-full flex flex-col w-full overflow-hidden">
       <div className="flex-1 overflow-y-auto min-w-0">
@@ -712,8 +823,10 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
                   capability: urlWithCap.capability,
                 }}
                 onProcess={handleProcessWithZotero}
+                onProcessContent={handleProcessContent}
+                onExtractSemanticScholar={handleExtractSemanticScholar}
                 onUnlink={() => setUnlinkModalOpen(true)}
-                onEditCitation={() => router.push(`/urls/${url.id}/edit-citation`)}
+                onEditCitation={() => router.push(`/urls/${url.id}/manual/edit`)}
                 onSelectIdentifier={() => {
                   // Focus on identifier selection if available
                   if (identifiersWithPreviews.length > 0) {
@@ -721,7 +834,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
                   }
                 }}
                 onApproveMetadata={() => handleApproveMetadata(false)}
-                onManualCreate={() => router.push(`/urls/${url.id}/manual-create`)}
+                onManualCreate={() => router.push(`/urls/${url.id}/manual/create`)}
                 onReset={handleReset}
                 onIgnore={handleIgnore}
                 onUnignore={handleUnignore}
@@ -1258,7 +1371,20 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
                 
                 {Array.isArray(zoteroData.errors) && zoteroData.errors.length > 0 && (
                   <div>
-                    <span className="text-gray-600">Errors:</span>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-gray-600">Errors:</span>
+                      <Button
+                        onClick={handleClearErrors}
+                        disabled={isProcessing}
+                        size="sm"
+                        variant="ghost"
+                        className="h-7 px-2 text-red-600 hover:text-red-700 hover:bg-red-50"
+                        title="Clear errors and reset processing state"
+                      >
+                        <Trash2 className="h-3.5 w-3.5 mr-1" />
+                        Clear Errors
+                      </Button>
+                    </div>
                     <div className="mt-1 space-y-1">
                       {(zoteroData.errors as string[]).map((error: string, index: number) => (
                         <div

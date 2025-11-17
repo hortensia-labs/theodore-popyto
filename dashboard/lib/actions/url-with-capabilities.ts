@@ -42,6 +42,10 @@ export interface UrlWithCapabilitiesAndStatus {
   
   // Section info
   section?: any;
+
+  createdByTheodore: boolean | null;
+  userModifiedInZotero: boolean | null;
+  linkedUrlCount: number | null;
 }
 
 /**
@@ -140,6 +144,9 @@ export async function getUrlsWithCapabilities(
           analysisData: row.url_analysis_data,
           enrichment: row.url_enrichments,
           section: row.sections,
+          createdByTheodore: row.urls.createdByTheodore,
+          userModifiedInZotero: row.urls.userModifiedInZotero,
+          linkedUrlCount: row.urls.linkedUrlCount,
         };
       })
     );

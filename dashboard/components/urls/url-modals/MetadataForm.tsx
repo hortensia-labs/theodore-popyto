@@ -260,7 +260,7 @@ export function MetadataForm({
               ))
             ) : (
               <div className="text-center py-4 text-sm text-gray-500 bg-gray-50 rounded-md">
-                No creators added. Click "Add Creator" to add one.
+                No creators added. Click &quot;Add Creator&quot; to add one.
               </div>
             )}
           </div>
@@ -334,7 +334,7 @@ export function MetadataForm({
       </div>
 
       {/* Submit Button */}
-      <div className="flex-none pt-4 border-t">
+      <div className="flex-none py-4 border-t">
         <Button
           type="submit"
           className="w-full"

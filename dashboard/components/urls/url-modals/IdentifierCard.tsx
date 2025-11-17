@@ -17,9 +17,9 @@ import type { UrlIdentifier } from '@/drizzle/schema';
 
 interface IdentifierCardProps {
   identifier: UrlIdentifier;
-  onSelect: () => void;
+  onProcess: () => void;
   onPreview: () => void;
-  isSelected?: boolean;
+  isProcessing?: boolean;
   isPreviewing?: boolean;
 }
 
@@ -30,9 +30,9 @@ interface IdentifierCardProps {
  */
 export function IdentifierCard({
   identifier,
-  onSelect,
+  onProcess,
   onPreview,
-  isSelected,
+  isProcessing,
   isPreviewing,
 }: IdentifierCardProps) {
   // Confidence color
@@ -68,11 +68,7 @@ export function IdentifierCard({
 
   return (
     <div
-      className={`border rounded-lg p-4 transition-all ${
-        isSelected
-          ? 'border-blue-500 bg-blue-50 shadow-md'
-          : 'border-gray-200 hover:border-gray-300 hover:shadow-sm'
-      }`}
+      className={`border rounded-lg p-4 transition-all border-gray-200 hover:border-gray-300 hover:shadow-sm`}
     >
       {/* Header */}
       <div className="flex items-start justify-between gap-3 mb-3">
@@ -89,12 +85,6 @@ export function IdentifierCard({
               <span>{confidence}</span>
             </div>
 
-            {/* Selected Badge */}
-            {isSelected && (
-              <span className="px-2 py-0.5 bg-blue-600 text-white text-xs font-medium rounded">
-                Selected
-              </span>
-            )}
           </div>
 
           {/* Identifier Value */}
@@ -157,20 +147,20 @@ export function IdentifierCard({
         <Button
           size="sm"
           variant={hasPreview ? 'default' : 'outline'}
-          onClick={onSelect}
+          onClick={onProcess}
           className="flex-1"
-          disabled={isSelected}
+          disabled={isProcessing}
         >
-          {isSelected ? (
+          {isProcessing ? (
             <>
-              <CheckCircle className="h-4 w-4 mr-2" />
-              Selected
+              <CheckCircle className="h-4 w-4 mr-2 animate-spin" />
+              Processing...
             </>
           ) : (
-            'Select & Process'
+            'Process with this Identifier'
           )}
         </Button>
-        
+
         <Button
           size="sm"
           variant="ghost"
