@@ -8,6 +8,7 @@
  */
 
 import type { ZoteroItemData, ZoteroCreator } from './zotero-client';
+import { globalRateLimiter } from './rate-limiter';
 
 // ============================================================================
 // TYPE DEFINITIONS (matches Semantic Scholar API response)
@@ -201,16 +202,50 @@ function statusCodeToErrorCode(statusCode: number): SemanticScholarErrorCode {
   }
 }
 
+/**
+ * Sleep utility for exponential backoff
+ */
+function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * Calculate exponential backoff delay with jitter
+ * Prevents thundering herd by adding randomness
+ * Delays: 2s, 4s, 8s, 16s, 32s, 64s with jitter
+ */
+function getExponentialBackoffDelay(attemptNumber: number): number {
+  const baseDelay = 2000; // 2 seconds base (more aggressive API = longer waits)
+  const maxDelay = 64000; // 64 seconds max (compared to 32s before)
+
+  // Exponential: 2, 4, 8, 16, 32, 64
+  const delay = baseDelay * Math.pow(2, attemptNumber);
+  const cappedDelay = Math.min(delay, maxDelay);
+
+  // Add jitter: ±10% randomness to prevent synchronized requests
+  const jitter = cappedDelay * 0.1 * (Math.random() - 0.5);
+  const finalDelay = Math.max(baseDelay, cappedDelay + jitter);
+
+  return Math.round(finalDelay);
+}
+
 // ============================================================================
 // MAIN API CLIENT
 // ============================================================================
 
 /**
- * Fetch paper metadata from Semantic Scholar API
+ * Fetch paper metadata from Semantic Scholar API with aggressive rate limiting and exponential backoff
  *
  * Accepts:
  * - Paper ID (40-char hex string)
  * - Semantic Scholar URL (any format)
+ *
+ * Features:
+ * - Aggressive rate limiting via token bucket (0.5 req/sec = 1 request every 2 seconds)
+ * - Exponential backoff with jitter on 429/5xx errors (up to 5 retries)
+ * - Backoff delays: 2s, 4s, 8s, 16s, 32s, 64s (with ±10% jitter)
+ * - Request timeout protection
+ * - Server error (5xx) recovery
  */
 export async function fetchPaperFromSemanticScholar(
   paperIdOrUrl: string
@@ -236,78 +271,125 @@ export async function fetchPaperFromSemanticScholar(
     );
   }
 
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
+  const url = `${PAPER_ENDPOINT}/${paperId}?fields=${PAPER_FIELDS}`;
+  const maxRetries = 5; // Increased from 3 to 5 for more aggressive APIs
+  let lastError: SemanticScholarError | null = null;
 
+  // Retry loop with exponential backoff for rate limit errors
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
-      const url = `${PAPER_ENDPOINT}/${paperId}?fields=${PAPER_FIELDS}`;
+      // Apply rate limiting via token bucket
+      await globalRateLimiter.waitForToken(url);
 
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'User-Agent': USER_AGENT,
-          'Accept': 'application/json',
-        },
-        signal: controller.signal,
-      });
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
 
-      clearTimeout(timeoutId);
+      try {
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'User-Agent': USER_AGENT,
+            'Accept': 'application/json',
+          },
+          signal: controller.signal,
+        });
 
-      if (!response.ok) {
-        const errorCode = statusCodeToErrorCode(response.status);
-        let errorMessage = `Semantic Scholar API error: ${response.status}`;
+        clearTimeout(timeoutId);
 
-        if (response.status === 404) {
-          errorMessage = `Paper not found in Semantic Scholar: ${paperId}`;
-        } else if (response.status === 429) {
-          errorMessage = 'Semantic Scholar API rate limit exceeded';
-        } else if (response.status >= 500) {
-          errorMessage = 'Semantic Scholar API is temporarily unavailable';
+        if (!response.ok) {
+          const errorCode = statusCodeToErrorCode(response.status);
+          let errorMessage = `Semantic Scholar API error: ${response.status}`;
+
+          if (response.status === 404) {
+            errorMessage = `Paper not found in Semantic Scholar: ${paperId}`;
+          } else if (response.status === 429) {
+            errorMessage = 'Semantic Scholar API rate limit exceeded';
+          } else if (response.status >= 500) {
+            errorMessage = 'Semantic Scholar API is temporarily unavailable';
+          }
+
+          const error = new SemanticScholarError(errorCode, errorMessage, response.status);
+
+          // If rate limited (429) or server error (5xx) and we have retries left, backoff and retry
+          const isRetryable = (response.status === 429 || response.status >= 500) && attempt < maxRetries;
+
+          if (isRetryable) {
+            lastError = error;
+            const backoffDelay = getExponentialBackoffDelay(attempt);
+            const errorType = response.status === 429 ? 'Rate limited' : 'Server error';
+            console.warn(
+              `${errorType} (attempt ${attempt + 1}/${maxRetries + 1}). ` +
+              `Retrying after ${backoffDelay}ms...`
+            );
+            await sleep(backoffDelay);
+            continue; // Retry
+          }
+
+          // Non-retryable error or exhausted retries
+          throw error;
         }
 
-        throw new SemanticScholarError(errorCode, errorMessage, response.status);
-      }
+        const paper: SemanticScholarPaper = await response.json();
 
-      const paper: SemanticScholarPaper = await response.json();
+        // Validate response structure
+        if (!paper.paperId || !paper.title) {
+          throw new SemanticScholarError(
+            SemanticScholarErrorCode.INVALID_RESPONSE,
+            'API response missing required fields (paperId or title)'
+          );
+        }
 
-      // Validate response structure
-      if (!paper.paperId || !paper.title) {
+        // Success - log if we had retries
+        if (attempt > 0) {
+          console.log(`Successfully fetched paper after ${attempt} retry/retries`);
+        }
+
+        return paper;
+      } catch (error) {
+        clearTimeout(timeoutId);
+
+        if (error instanceof SemanticScholarError) {
+          throw error;
+        }
+
+        if (error instanceof Error && error.name === 'AbortError') {
+          throw new SemanticScholarError(
+            SemanticScholarErrorCode.TIMEOUT,
+            `Request timeout after ${REQUEST_TIMEOUT}ms`
+          );
+        }
+
         throw new SemanticScholarError(
-          SemanticScholarErrorCode.INVALID_RESPONSE,
-          'API response missing required fields (paperId or title)'
+          SemanticScholarErrorCode.NETWORK_ERROR,
+          `Network error: ${error instanceof Error ? error.message : 'Unknown error'}`
+        );
+      }
+    } catch (error) {
+      // If this is the last attempt or not a retryable error, throw
+      if (!(error instanceof SemanticScholarError) || attempt === maxRetries) {
+        if (error instanceof SemanticScholarError) {
+          throw error;
+        }
+        throw new SemanticScholarError(
+          SemanticScholarErrorCode.NETWORK_ERROR,
+          error instanceof Error ? error.message : 'Unknown error'
         );
       }
 
-      return paper;
-    } catch (error) {
-      clearTimeout(timeoutId);
-
-      if (error instanceof SemanticScholarError) {
+      // For non-rate-limit errors, throw immediately
+      if (error instanceof SemanticScholarError && error.code !== SemanticScholarErrorCode.RATE_LIMITED) {
         throw error;
       }
 
-      if (error instanceof Error && error.name === 'AbortError') {
-        throw new SemanticScholarError(
-          SemanticScholarErrorCode.TIMEOUT,
-          `Request timeout after ${REQUEST_TIMEOUT}ms`
-        );
-      }
-
-      throw new SemanticScholarError(
-        SemanticScholarErrorCode.NETWORK_ERROR,
-        `Network error: ${error instanceof Error ? error.message : 'Unknown error'}`
-      );
+      lastError = error instanceof SemanticScholarError ? error : null;
     }
-  } catch (error) {
-    if (error instanceof SemanticScholarError) {
-      throw error;
-    }
-    throw new SemanticScholarError(
-      SemanticScholarErrorCode.NETWORK_ERROR,
-      error instanceof Error ? error.message : 'Unknown error'
-    );
   }
+
+  // Should not reach here, but just in case
+  throw lastError || new SemanticScholarError(
+    SemanticScholarErrorCode.API_ERROR,
+    'Failed to fetch paper after retries'
+  );
 }
 
 // ============================================================================
