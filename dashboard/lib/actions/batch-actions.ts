@@ -10,11 +10,17 @@ import { BatchProcessor } from '../orchestrator/batch-processor';
 import type { BatchProcessingSession, BatchProcessingOptions } from '../types/url-processing';
 
 /**
- * Start a batch processing session
- * 
+ * Start a batch processing session (non-blocking)
+ *
+ * Returns immediately with a session object. Batch processing happens
+ * in the background on the server without blocking the client.
+ *
+ * The returned session contains the initial state. As processing continues,
+ * polling with getBatchStatus() will return updated progress.
+ *
  * @param urlIds - Array of URL IDs to process
  * @param options - Processing options
- * @returns Processing session
+ * @returns Session object with initial state (processing starts immediately in background)
  */
 export async function startBatchProcessing(
   urlIds: number[],
@@ -25,15 +31,17 @@ export async function startBatchProcessing(
       throw new Error('No URLs provided for batch processing');
     }
 
-    console.log(`Starting batch processing: ${urlIds.length} URLs`);
-    
-    const session = await BatchProcessor.processBatch(urlIds, {
+    console.log(`Starting batch processing: ${urlIds.length} URLs (non-blocking)`);
+
+    // Use BatchProcessor to create and initialize the session
+    // This returns immediately after session creation
+    const session = BatchProcessor.createAndStartSession(urlIds, {
       concurrency: options?.concurrency || 5,
-      respectUserIntent: options?.respectUserIntent !== false, // Default true
+      respectUserIntent: options?.respectUserIntent !== false,
       stopOnError: options?.stopOnError || false,
       ...options,
     });
-    
+
     return session;
   } catch (error) {
     throw new Error(`Failed to start batch processing: ${error instanceof Error ? error.message : 'Unknown error'}`);

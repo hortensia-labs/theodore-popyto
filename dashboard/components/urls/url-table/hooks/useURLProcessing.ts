@@ -129,47 +129,54 @@ export function useURLProcessing() {
   ) => {
     clearMessages();
     setIsProcessing(true);
-    setBatchProgress({
+
+    // Initialize session with empty progress (polling will update it)
+    const initialProgress = {
       current: 0,
       total: urlIds.length,
       percentage: 0,
       succeeded: 0,
       failed: 0,
-    });
-    
+    };
+
+    setBatchProgress(initialProgress);
+
     try {
-      // Start batch session
+      // Start batch session (returns immediately, processing happens in background)
       const session = await startBatchProcessing(urlIds, {
         concurrency: options?.concurrency || 5,
         respectUserIntent: options?.respectUserIntent !== false,
       });
-      
+
       setBatchSession(session);
-      
-      // Poll for progress
+
+      // Start polling IMMEDIATELY after session is created
+      // This will begin tracking progress as soon as processing starts
       const pollInterval = setInterval(async () => {
         const statusResult = await getBatchStatus(session.id);
-        
+
         if (statusResult.success && statusResult.data) {
           const status = statusResult.data;
-          
+
           const progress = {
             current: status.currentIndex,
             total: status.urlIds.length,
-            percentage: (status.currentIndex / status.urlIds.length) * 100,
+            percentage: status.urlIds.length > 0 ? (status.currentIndex / status.urlIds.length) * 100 : 0,
             succeeded: status.completed.length,
             failed: status.failed.length,
           };
-          
+
           setBatchProgress(progress);
           options?.onProgress?.(progress);
-          
+
+          // Update session in state to reflect current server state
+          setBatchSession(status);
+
           // Check if completed
           if (status.status === 'completed' || status.status === 'cancelled') {
             clearInterval(pollInterval);
             setIsProcessing(false);
-            setBatchSession(null);
-            
+
             if (status.status === 'completed') {
               setSuccessMessage(
                 `Batch complete: ${status.completed.length} succeeded, ${status.failed.length} failed`
@@ -179,8 +186,8 @@ export function useURLProcessing() {
             }
           }
         }
-      }, 1000);
-      
+      }, 500); // Increased frequency from 1000ms to 500ms for more responsive UI
+
       return session;
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : 'Unknown error';

@@ -33,11 +33,167 @@ export class BatchProcessor {
   private static sessions: Map<string, BatchProcessingSession> = new Map();
 
   /**
+   * Create a session and start processing in the background (non-blocking)
+   *
+   * Returns immediately with the session object. Processing continues
+   * on the server without blocking the client.
+   *
+   * @param urlIds - Array of URL IDs to process
+   * @param options - Processing options
+   * @returns Processing session (initial state)
+   */
+  static createAndStartSession(
+    urlIds: number[],
+    options: BatchProcessingOptions = {}
+  ): BatchProcessingSession {
+    // Validate input
+    if (urlIds.length === 0) {
+      throw new Error('No URLs provided for batch processing');
+    }
+
+    const sessionId = this.generateSessionId();
+
+    // Filter URLs based on user intent if requested
+    let filteredIds = urlIds;
+    if (options.respectUserIntent) {
+      // Filter synchronously here - we need to return immediately
+      // The actual async filtering will happen in the background processing
+      // For now, we'll do the filtering in the background
+      filteredIds = urlIds; // Placeholder - will be updated during background processing
+    }
+
+    // Create session with initial state
+    const session: BatchProcessingSession = {
+      id: sessionId,
+      urlIds: filteredIds,
+      currentIndex: 0,
+      completed: [],
+      failed: [],
+      status: 'running',
+      startedAt: new Date(),
+      estimatedCompletion: this.estimateCompletion(filteredIds.length),
+      results: [],
+    };
+
+    this.sessions.set(sessionId, session);
+
+    console.log(`Created batch session ${sessionId}: ${filteredIds.length} URLs (processing in background)`);
+
+    // Start processing in the background without awaiting
+    void this.processBatchInBackground(sessionId, urlIds, options);
+
+    // Return immediately with the session
+    return session;
+  }
+
+  /**
+   * Process batch in the background (called asynchronously)
+   *
+   * @param sessionId - The session ID
+   * @param urlIds - Array of URL IDs to process
+   * @param options - Processing options
+   */
+  private static async processBatchInBackground(
+    sessionId: string,
+    urlIds: number[],
+    options: BatchProcessingOptions = {}
+  ): Promise<void> {
+    const session = this.sessions.get(sessionId);
+    if (!session) {
+      console.error(`Session ${sessionId} not found for background processing`);
+      return;
+    }
+
+    try {
+      // Filter URLs based on user intent if requested
+      let filteredIds = urlIds;
+      if (options.respectUserIntent) {
+        filteredIds = await this.filterByUserIntent(urlIds);
+        // Update session with filtered IDs
+        session.urlIds = filteredIds;
+      }
+
+      // Create concurrency limiter
+      const concurrency = options.concurrency || 5;
+      const limit = pLimit(concurrency);
+
+      console.log(`Starting background processing for session ${sessionId}: ${filteredIds.length} URLs with concurrency ${concurrency}`);
+
+      // Process URLs with concurrency control
+      const promises = filteredIds.map((urlId, index) =>
+        limit(async () => {
+          // Check if session is paused
+          await this.waitIfPaused(sessionId);
+
+          // Check if session is cancelled
+          if (session.status === 'cancelled') {
+            console.log(`Session ${sessionId} cancelled, skipping URL ${urlId}`);
+            return;
+          }
+
+          try {
+            const startTime = Date.now();
+            const result = await URLProcessingOrchestrator.processUrl(urlId);
+            const duration = Date.now() - startTime;
+
+            // Update session
+            if (result.success) {
+              session.completed.push(urlId);
+            } else {
+              session.failed.push(urlId);
+            }
+
+            session.currentIndex = index + 1;
+            session.results?.push({ ...result, urlId, metadata: { ...result.metadata, duration } });
+
+            // Update estimated completion
+            const avgDuration = this.calculateAverageDuration(session);
+            session.estimatedCompletion = this.estimateCompletion(
+              filteredIds.length - session.currentIndex,
+              avgDuration
+            );
+
+            // Stop on error if requested
+            if (!result.success && options.stopOnError) {
+              console.log(`Stopping batch ${sessionId} due to error on URL ${urlId}`);
+              session.status = 'cancelled';
+            }
+
+            console.log(`Batch ${sessionId}: Processed ${session.currentIndex}/${filteredIds.length} (${result.success ? '✓' : '✗'})`);
+          } catch (error) {
+            console.error(`Error processing URL ${urlId} in batch ${sessionId}:`, error);
+            session.failed.push(urlId);
+            session.currentIndex = index + 1;
+
+            if (options.stopOnError) {
+              session.status = 'cancelled';
+            }
+          }
+        })
+      );
+
+      // Wait for all to complete
+      await Promise.all(promises);
+
+      // Mark session as completed
+      session.status = session.status === 'cancelled' ? 'cancelled' : 'completed';
+      session.completedAt = new Date();
+
+      console.log(`Batch ${sessionId} finished: ${session.completed.length} succeeded, ${session.failed.length} failed`);
+    } catch (error) {
+      console.error(`Background processing error for session ${sessionId}:`, error);
+      session.status = 'cancelled';
+    }
+  }
+
+  /**
    * Process multiple URLs concurrently
-   * 
+   *
    * @param urlIds - Array of URL IDs to process
    * @param options - Processing options
    * @returns Processing session
+   *
+   * @deprecated Use createAndStartSession() instead for non-blocking operation
    */
   static async processBatch(
     urlIds: number[],
