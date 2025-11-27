@@ -32,6 +32,8 @@ import type {
 // Import actual processing functions (NOT from actions/zotero.ts to avoid circular dependency)
 import { processIdentifier, processUrl, validateCitation as validateCitationMetadata, getItem } from '../zotero-client';
 import { processSingleUrl } from '../actions/process-url-action';
+import { extractSemanticScholarBibTeX } from '../actions/extract-semantic-scholar-bibtex';
+import { isSemanticScholarPaperUrl } from './semantic-scholar-helpers';
 
 /**
  * URL Processing Orchestrator
@@ -94,10 +96,21 @@ export class URLProcessingOrchestrator {
       
       console.log('✅ URL can be processed');
 
-      // Determine starting stage based on capabilities
+      // Determine starting stage based on domain and capabilities
       console.log('\n🎯 DETERMINING STARTING STAGE');
-      
-      if (url.capability.hasIdentifiers || url.capability.hasWebTranslators) {
+
+      // Check for Semantic Scholar domain first (highest priority)
+      console.log('🔍 Checking if URL is Semantic Scholar...');
+      console.log('   URL:', url.url);
+      const isSemanticScholar = isSemanticScholarPaperUrl(url.url);
+      console.log('   Is Semantic Scholar:', isSemanticScholar);
+
+      if (isSemanticScholar) {
+        console.log('✅ Decision: START WITH SEMANTIC SCHOLAR API PROCESSING');
+        console.log('   Reason: URL is from semanticscholar.org domain');
+        console.log('🚀 Calling attemptSemanticScholarProcessing()...\n');
+        return await this.attemptSemanticScholarProcessing(urlId);
+      } else if (url.capability.hasIdentifiers || url.capability.hasWebTranslators) {
         console.log('✅ Decision: START WITH ZOTERO PROCESSING');
         console.log('   Reason: Has identifiers or web translators');
         console.log('🚀 Calling attemptZoteroProcessing()...\n');
@@ -133,6 +146,183 @@ export class URLProcessingOrchestrator {
         errorCategory: categorizeError(error),
       };
     }
+  }
+
+  /**
+   * Stage 0: Semantic Scholar Processing (highest priority)
+   * Uses the official Semantic Scholar API for semanticscholar.org URLs
+   */
+  private static async attemptSemanticScholarProcessing(
+    urlId: number
+  ): Promise<ProcessingResult> {
+    console.log('\n╔════════════════════════════════════════════════════════════╗');
+    console.log('║   STAGE 0: attemptSemanticScholarProcessing()               ║');
+    console.log('╚════════════════════════════════════════════════════════════╝');
+    console.log('📌 URL ID:', urlId);
+
+    const url = await db.query.urls.findFirst({ where: eq(urls.id, urlId) });
+    if (!url) {
+      console.log('❌ URL not found in database');
+      return { success: false, urlId, error: 'URL not found' };
+    }
+
+    console.log('📊 Current state:', url.processingStatus);
+    console.log('🌐 URL:', url.url);
+    console.log('🎯 Transitioning to: processing_zotero');
+
+    // Transition to processing state (using processing_zotero since SS is an advanced Zotero method)
+    await URLProcessingStateMachine.transition(
+      urlId,
+      url.processingStatus as ProcessingStatus,
+      'processing_zotero'
+    );
+
+    console.log('✅ State transition complete');
+
+    // Record attempt start
+    const attemptStartTime = Date.now();
+    await this.recordProcessingAttempt(urlId, {
+      timestamp: attemptStartTime,
+      stage: 'content_extraction',
+      method: 'extract_semantic_scholar_api',
+      success: false,
+    });
+
+    console.log('📝 Processing attempt recorded');
+
+    try {
+      console.log('🎬 Starting Semantic Scholar API processing...');
+
+      // Call Semantic Scholar extraction
+      const result = await extractSemanticScholarBibTeX(urlId, url.url);
+
+      const processingDuration = Date.now() - attemptStartTime;
+      console.log('\n📊 Semantic Scholar API result:');
+      console.log('Success:', result.success);
+      console.log('Duration:', `${processingDuration}ms`);
+
+      if (result.success && result.itemKey) {
+        console.log('✅ Semantic Scholar processing succeeded');
+        console.log('🔑 Item key:', result.itemKey);
+        console.log('📦 Extracted fields:', result.extractedFields.length);
+
+        // Update processing history with success
+        console.log('📝 Updating processing history with success...');
+        await this.updateLastAttempt(urlId, {
+          success: true,
+          itemKey: result.itemKey,
+          method: 'extract_semantic_scholar_api',
+        });
+
+        console.log('✅ STAGE 0 COMPLETE - SUCCESS');
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
+
+        return {
+          success: true,
+          urlId,
+          status: 'stored',
+          itemKey: result.itemKey,
+        };
+      } else {
+        console.log('❌ Semantic Scholar processing returned failure');
+        console.log('💬 Error:', result.error);
+        console.log('🔄 Calling handleSemanticScholarFailure()...');
+
+        // Failed - handle failure
+        return await this.handleSemanticScholarFailure(urlId, result.error || 'Unknown error');
+      }
+    } catch (error) {
+      console.log('\n💥 EXCEPTION caught in attemptSemanticScholarProcessing()');
+      console.log('🏷️  Error type:', error?.constructor?.name);
+      console.log('💬 Error message:', getErrorMessage(error));
+
+      if (error instanceof Error) {
+        console.log('📜 Stack trace:');
+        console.log(error.stack);
+      }
+
+      console.log('🔄 Calling handleSemanticScholarFailure()...');
+
+      return await this.handleSemanticScholarFailure(
+        urlId,
+        getErrorMessage(error)
+      );
+    }
+  }
+
+  /**
+   * Handle Semantic Scholar processing failure
+   * Falls back to Zotero processing
+   */
+  private static async handleSemanticScholarFailure(
+    urlId: number,
+    errorMessage: string
+  ): Promise<ProcessingResult> {
+    console.log('\n╔══════════════════════════════════════════════════════════════╗');
+    console.log('║    FAILURE HANDLER: handleSemanticScholarFailure()           ║');
+    console.log('╚══════════════════════════════════════════════════════════════╝');
+    console.log('📌 URL ID:', urlId);
+    console.log('💬 Error message:', errorMessage);
+
+    const errorCategory = categorizeError(errorMessage);
+    console.log('🏷️  Error category:', errorCategory);
+
+    // Update last attempt with failure
+    console.log('📝 Updating last processing attempt with failure info...');
+    await this.updateLastAttempt(urlId, {
+      success: false,
+      error: errorMessage,
+      errorCategory,
+    });
+
+    // Increment processing attempts
+    console.log('🔢 Incrementing processing attempts counter...');
+    await db.update(urls)
+      .set({
+        processingAttempts: sql`${urls.processingAttempts} + 1`,
+      })
+      .where(eq(urls.id, urlId));
+
+    // Get updated attempt count
+    const updatedUrl = await db.query.urls.findFirst({
+      where: eq(urls.id, urlId),
+      columns: { processingAttempts: true },
+    });
+    console.log('📊 Processing attempts now:', updatedUrl?.processingAttempts || 0);
+
+    // Check if error is permanent
+    if (isPermanentError(errorMessage)) {
+      console.log('🛑 PERMANENT ERROR DETECTED');
+      console.log('❌ No auto-cascade - transitioning to exhausted');
+      console.log('🎯 Transition: processing_zotero → exhausted');
+
+      await URLProcessingStateMachine.transition(
+        urlId,
+        'processing_zotero',
+        'exhausted'
+      );
+
+      console.log('✅ Transitioned to exhausted state');
+      console.log('💡 Suggestion: User should try manual creation');
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
+
+      return {
+        success: false,
+        urlId,
+        status: 'exhausted',
+        error: errorMessage,
+        errorCategory,
+      };
+    }
+
+    // Auto-cascade to Zotero processing
+    console.log('🔄 AUTO-CASCADE DECISION');
+    console.log('✅ Error is retryable (not permanent)');
+    console.log('🎯 Next stage: Zotero Processing');
+    console.log('📍 Reason: Semantic Scholar API processing failed, trying Zotero');
+    console.log('🚀 Calling attemptZoteroProcessing()...\n');
+
+    return await this.attemptZoteroProcessing(urlId);
   }
 
   /**

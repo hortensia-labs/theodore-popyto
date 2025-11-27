@@ -10,6 +10,7 @@
 import type { ProcessingStatus, UserIntent, ProcessingCapability } from '../types/url-processing';
 import type { Url } from '../../drizzle/schema';
 import { categorizeError, isPermanentError } from '../error-handling';
+import { isSemanticScholarUrl } from '../orchestrator/semantic-scholar-helpers';
 
 /**
  * Extended URL type with computed fields for guard checks
@@ -58,6 +59,11 @@ export class StateGuards {
 
     if (!processableStates.includes(url.processingStatus)) {
       return false;
+    }
+
+    if (isSemanticScholarUrl(url.url)) {
+      console.log(`[canProcessWithZotero] URL is Semantic Scholar, returning true`);
+      return true;
     }
 
     // Capability check - must have identifiers or translators
