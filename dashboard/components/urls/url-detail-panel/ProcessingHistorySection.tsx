@@ -162,7 +162,7 @@ export function ProcessingHistorySection({
               }`}
             >
               {/* Icon */}
-              <div className={`flex-shrink-0 p-2 rounded-full ${
+              <div className={`shrink-0 p-2 rounded-full ${
                 isReset
                   ? 'bg-purple-100'
                   : isClearErrors

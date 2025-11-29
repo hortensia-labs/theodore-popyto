@@ -23,7 +23,7 @@ import {
   RotateCcw,
   X,
 } from 'lucide-react';
-import { bulkIgnoreUrls, bulkArchiveUrls } from '@/lib/actions/state-transitions';
+import { bulkIgnoreUrls, bulkArchiveUrls, bulkResetProcessingState } from '@/lib/actions/state-transitions';
 import { deleteUrls } from '@/lib/actions/urls';
 
 interface URLTableBulkActionsProps {
@@ -140,6 +140,38 @@ export function URLTableBulkActions({
   };
 
   /**
+   * Handle bulk reset processing state
+   */
+  const handleBulkReset = async () => {
+    const confirmed = confirm(
+      `Reset processing state for ${selectedCount} URL(s)?\n\n` +
+      `This will:\n` +
+      `- Return URLs to "not_started" status\n` +
+      `- Preserve processing history\n` +
+      `- Add a reset event to the history\n` +
+      `- Allow reprocessing from the beginning`
+    );
+
+    if (!confirmed) return;
+
+    setIsExecuting(true);
+    try {
+      const result = await bulkResetProcessingState(selectedIds);
+
+      if (result.successful > 0) {
+        alert(`Successfully reset ${result.successful} URL(s)`);
+        onActionComplete();
+      }
+
+      if (result.failed > 0) {
+        alert(`Failed to reset ${result.failed} URL(s)`);
+      }
+    } finally {
+      setIsExecuting(false);
+    }
+  };
+
+  /**
    * Handle bulk delete
    */
   const handleBulkDelete = async () => {
@@ -223,6 +255,18 @@ export function URLTableBulkActions({
         >
           <Archive className="h-4 w-4 mr-2" />
           Archive
+        </Button>
+
+        <Button
+          onClick={handleBulkReset}
+          variant="outline"
+          size="sm"
+          disabled={isDisabled}
+          className="text-amber-600 hover:text-amber-700 hover:bg-amber-50"
+          title="Reset processing state (return to not_started, preserve history)"
+        >
+          <RotateCcw className="h-4 w-4 mr-2" />
+          Reset
         </Button>
 
         <Button
