@@ -4,17 +4,24 @@ import { db } from '../db/client';
 import { urls, urlAnalysisData, urlEnrichments, sections } from '../db/schema';
 import { eq, and, like, sql, desc, asc } from 'drizzle-orm';
 import { addUrlStatus, type UrlStatus, type UrlWithStatus } from '../db/computed';
+import { computeProcessingCapability } from '../orchestrator/processing-helpers';
+import type { ProcessingStatus, UserIntent } from '../types/url-processing';
 
 /**
  * Filters for URL queries
  */
 export interface UrlFilters {
   sectionId?: number;
-  status?: UrlStatus;
+  status?: UrlStatus; // DEPRECATED: Use processingStatus instead
+  processingStatus?: ProcessingStatus; // NEW: Filter by processing status
+  userIntent?: UserIntent; // NEW: Filter by user intent
   domain?: string;
   hasEnrichment?: boolean;
   search?: string;
   citationStatus?: 'valid' | 'incomplete';
+  processingAttempts?: number; // NEW: Filter by number of attempts
+  minAttempts?: number; // NEW: Minimum attempts
+  maxAttempts?: number; // NEW: Maximum attempts
 }
 
 /**
@@ -62,6 +69,29 @@ export async function getUrls(
     
     if (filters.citationStatus) {
       whereConditions.push(eq(urls.citationValidationStatus, filters.citationStatus));
+    }
+    
+    // NEW: Processing status filter
+    if (filters.processingStatus) {
+      whereConditions.push(eq(urls.processingStatus, filters.processingStatus));
+    }
+    
+    // NEW: User intent filter
+    if (filters.userIntent) {
+      whereConditions.push(eq(urls.userIntent, filters.userIntent));
+    }
+    
+    // NEW: Processing attempts filters
+    if (filters.processingAttempts !== undefined) {
+      whereConditions.push(eq(urls.processingAttempts, filters.processingAttempts));
+    }
+    
+    if (filters.minAttempts !== undefined) {
+      whereConditions.push(sql`${urls.processingAttempts} >= ${filters.minAttempts}`);
+    }
+    
+    if (filters.maxAttempts !== undefined) {
+      whereConditions.push(sql`${urls.processingAttempts} <= ${filters.maxAttempts}`);
     }
     
     // Apply sorting

@@ -43,12 +43,22 @@ export class DomainRateLimiter {
       'doi.org',
       'dx.doi.org',
     ];
-    
+
     trustedDomains.forEach(domain => {
       this.domainConfigs.set(domain, {
         tokensPerSecond: 2,
         maxBurst: 4,
       });
+    });
+
+    // Semantic Scholar API rate limiting
+    // API is very restrictive: ~30-50 requests per 5 minutes in practice
+    // That's approximately 0.1-0.17 req/sec
+    // We use 0.5 req/sec (1 request every 2 seconds) for safety
+    // This is conservative but ensures we don't hit rate limits
+    this.domainConfigs.set('api.semanticscholar.org', {
+      tokensPerSecond: 0.5,  // 1 request every 2 seconds
+      maxBurst: 1,           // No bursts - strictly sequential
     });
   }
   
