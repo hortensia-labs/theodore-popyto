@@ -78,7 +78,7 @@ En cualquier caso, la danza, entendida como **resistencia encarnada** , seguirá
 
 * Ceriani, A. (2025). “Danza, audiovisual e inteligencia artificial: una hidra algorítmica bullendo en la web”. *HArtes* , 6(12), 117-136.
 
-* McGregor, W. & Google Arts (2018). *Living Archive* , proyecto de coreografía con IA (consultado en Wired: Leprince-Ringuet, 2018). [wired.com](https://www.wired.com/story/google-ai-wayne-mcgregor-dance-choreography/#:~:text=capture%2C%20described%20by%20Andy%20Serkis,%E2%80%9D)
+* McGregor, W. & Google Arts (2018). *Living Archive* , proyecto de coreografía con IA (consultado en Wired: Leprince-Ringuet, 2018).
 
 * Rojo, T. (2024). Declaraciones en entrevista “La IA puede transformar las artes escénicas pero también destruir la profesión artística”, *La Vanguardia* , 12/10/2024.
 
