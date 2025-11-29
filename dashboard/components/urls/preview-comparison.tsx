@@ -145,7 +145,7 @@ function PreviewCard({
             )}
           </div>
           {selected && (
-            <CheckCircle2 className="h-5 w-5 text-blue-500 flex-shrink-0" />
+            <CheckCircle2 className="h-5 w-5 text-blue-500 shrink-0" />
           )}
         </div>
         
@@ -275,20 +275,15 @@ function PreviewCard({
           onClick={onSelect}
           disabled={disabled || !identifier.previewFetched || !item}
           className="w-full"
-          variant={selected ? 'default' : 'outline'}
+          variant={identifier.previewFetched && item ? 'default' : 'outline'}
         >
           {processing ? (
             <>
               <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
               Processing...
             </>
-          ) : selected ? (
-            <>
-              <CheckCircle2 className="h-4 w-4 mr-2" />
-              Selected
-            </>
           ) : (
-            'Select This'
+            'Process with this Identifier'
           )}
         </Button>
       </CardFooter>

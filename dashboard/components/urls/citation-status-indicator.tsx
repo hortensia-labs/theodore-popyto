@@ -21,7 +21,7 @@ export function CitationStatusIndicator({
   if (!status) return null;
   
   const sizeClasses = {
-    sm: 'h-3 w-3',
+    sm: 'h-[22px] w-[22px]',
     md: 'h-5 w-5',
   };
   
@@ -43,7 +43,7 @@ export function CitationStatusIndicator({
   };
   
   const indicator = (
-    <div className="inline-flex items-center gap-2">
+    <div className="inline-flex items-center gap-2 mt-2.5">
       {status === 'valid' ? (
         <CheckCircle2 className={`${sizeClasses[size]} text-green-600 shrink-0`} />
       ) : (

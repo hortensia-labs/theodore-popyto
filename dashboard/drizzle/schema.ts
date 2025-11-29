@@ -62,6 +62,18 @@ export const urls = sqliteTable('urls', {
   llmExtractedAt: integer('llm_extracted_at', { mode: 'timestamp' }),
   llmExtractionError: text('llm_extraction_error'),
   
+  // NEW: Processing status system (replaces computed status)
+  processingStatus: text('processing_status').notNull().default('not_started'),
+  userIntent: text('user_intent').notNull().default('auto'),
+  processingAttempts: integer('processing_attempts').notNull().default(0),
+  processingHistory: text('processing_history', { mode: 'json' }).$type<ProcessingAttempt[]>(),
+  lastProcessingMethod: text('last_processing_method'),
+  
+  // NEW: Zotero item provenance tracking
+  createdByTheodore: integer('created_by_theodore', { mode: 'boolean' }).default(false),
+  userModifiedInZotero: integer('user_modified_in_zotero', { mode: 'boolean' }).default(false),
+  linkedUrlCount: integer('linked_url_count').default(0),
+  
   // Timestamps
   discoveredAt: integer('discovered_at', { mode: 'timestamp' }),
   lastCheckedAt: integer('last_checked_at', { mode: 'timestamp' }),
@@ -76,7 +88,29 @@ export const urls = sqliteTable('urls', {
   zoteroItemKeyIdx: index('urls_zotero_item_key_idx').on(table.zoteroItemKey),
   zoteroProcessingStatusIdx: index('urls_zotero_processing_status_idx').on(table.zoteroProcessingStatus),
   citationValidationStatusIdx: index('urls_citation_validation_status_idx').on(table.citationValidationStatus),
+  // NEW: Indexes for processing status system
+  processingStatusIdx: index('idx_urls_processing_status').on(table.processingStatus),
+  userIntentIdx: index('idx_urls_user_intent').on(table.userIntent),
+  processingAttemptsIdx: index('idx_urls_processing_attempts').on(table.processingAttempts),
   urlSectionUnique: uniqueIndex('urls_url_section_unique').on(table.url, table.sectionId),
+}));
+
+/**
+ * Zotero Item Links - tracks relationship between URLs and Zotero items
+ * This table enables safe deletion checks and multi-URL linking to same item
+ */
+export const zoteroItemLinks = sqliteTable('zotero_item_links', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  itemKey: text('item_key').notNull(),
+  urlId: integer('url_id').notNull().references(() => urls.id, { onDelete: 'cascade' }),
+  createdByTheodore: integer('created_by_theodore', { mode: 'boolean' }).notNull().default(true),
+  userModified: integer('user_modified', { mode: 'boolean' }).notNull().default(false),
+  linkedAt: integer('linked_at', { mode: 'timestamp' }).notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
+}, (table) => ({
+  itemKeyIdx: index('idx_zotero_links_item_key').on(table.itemKey),
+  urlIdIdx: index('idx_zotero_links_url_id').on(table.urlId),
+  itemKeyUrlUnique: uniqueIndex('zotero_item_links_unique').on(table.itemKey, table.urlId),
 }));
 
 /**
@@ -174,6 +208,27 @@ export type NewUrlEnrichment = typeof urlEnrichments.$inferInsert;
 
 export type UrlMetadata = typeof urlMetadata.$inferSelect;
 export type NewUrlMetadata = typeof urlMetadata.$inferInsert;
+
+// NEW: Zotero item links type exports
+export type ZoteroItemLink = typeof zoteroItemLinks.$inferSelect;
+export type NewZoteroItemLink = typeof zoteroItemLinks.$inferInsert;
+
+// NEW: Processing attempt interface (used in processingHistory JSON field)
+export interface ProcessingAttempt {
+  timestamp: number;
+  stage?: 'zotero_identifier' | 'zotero_url' | 'content_extraction' | 'llm' | 'manual';
+  method?: string;
+  success?: boolean | number;
+  error?: string | null;
+  errorCategory?: string;
+  itemKey?: string | null;
+  duration?: number;
+  metadata?: Record<string, unknown>;
+  transition?: {
+    from: string;
+    to: string;
+  };
+}
 
 export type ImportHistory = typeof importHistory.$inferSelect;
 export type NewImportHistory = typeof importHistory.$inferInsert;

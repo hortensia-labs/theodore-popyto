@@ -2,9 +2,11 @@
  * Error Handling & Recovery
  * 
  * Comprehensive error classification and recovery strategies
+ * Enhanced with new error categorization system for URL processing
  */
 
 import type { FetchErrorCode } from './content-fetcher';
+import type { ErrorCategory, ProcessingError as NewProcessingError } from './types/url-processing';
 
 export enum ErrorSeverity {
   RECOVERABLE = 'recoverable',   // Can retry automatically
@@ -267,5 +269,204 @@ export function logError(
     ...context,
     timestamp: new Date().toISOString(),
   });
+}
+
+// ============================================
+// NEW: Enhanced Error Categorization System
+// ============================================
+
+/**
+ * Categorize error for the new processing system
+ * Maps errors to categories that determine retry strategy
+ */
+export function categorizeError(error: unknown): ErrorCategory {
+  const message = error instanceof Error ? error.message.toLowerCase() : String(error).toLowerCase();
+  const code = (error as any)?.code || (error as any)?.errorCode;
+  
+  // Check for specific HTTP status codes
+  if (code === 404 || message.includes('404') || message.includes('not found')) {
+    return 'permanent';
+  }
+  if (code === 403 || message.includes('403') || message.includes('forbidden')) {
+    return 'permanent';
+  }
+  if (code === 401 || message.includes('401') || message.includes('unauthorized')) {
+    return 'permanent';
+  }
+  if (code === 410 || message.includes('410') || message.includes('gone')) {
+    return 'permanent';
+  }
+  
+  // Network errors (retryable)
+  if (
+    message.includes('timeout') ||
+    message.includes('econnrefused') ||
+    message.includes('enotfound') ||
+    message.includes('network') ||
+    message.includes('dns') ||
+    message.includes('etimedout')
+  ) {
+    return 'network';
+  }
+  
+  // Server errors (retryable)
+  if (
+    code >= 500 ||
+    message.includes('500') ||
+    message.includes('502') ||
+    message.includes('503') ||
+    message.includes('504') ||
+    message.includes('server error')
+  ) {
+    return 'http_server';
+  }
+  
+  // Client errors (not retryable)
+  if (code >= 400 && code < 500) {
+    return 'http_client';
+  }
+  
+  // Rate limiting
+  if (
+    code === 429 ||
+    message.includes('429') ||
+    message.includes('rate limit') ||
+    message.includes('too many requests')
+  ) {
+    return 'rate_limit';
+  }
+  
+  // Parsing errors
+  if (
+    message.includes('parse') ||
+    message.includes('invalid json') ||
+    message.includes('syntax error') ||
+    message.includes('unexpected token')
+  ) {
+    return 'parsing';
+  }
+  
+  // Validation errors
+  if (
+    message.includes('validation') ||
+    message.includes('invalid identifier') ||
+    message.includes('invalid format')
+  ) {
+    return 'validation';
+  }
+  
+  // Zotero specific errors
+  if (
+    message.includes('zotero') ||
+    message.includes('translation server') ||
+    message.includes('connector')
+  ) {
+    return 'zotero_api';
+  }
+  
+  // Default to unknown
+  return 'unknown';
+}
+
+/**
+ * Check if error is permanent (should not retry)
+ */
+export function isPermanentError(error: unknown): boolean {
+  const category = categorizeError(error);
+  return category === 'permanent';
+}
+
+/**
+ * Check if error should be retried
+ */
+export function isRetryableError(error: unknown): boolean {
+  const category = categorizeError(error);
+  return ['network', 'http_server', 'rate_limit', 'zotero_api'].includes(category);
+}
+
+/**
+ * Get error message from various error types
+ */
+export function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  if (typeof error === 'string') {
+    return error;
+  }
+  if (error && typeof error === 'object' && 'message' in error) {
+    return String((error as any).message);
+  }
+  return 'Unknown error';
+}
+
+/**
+ * Create a processing error with category
+ */
+export function createProcessingError(
+  error: unknown,
+  context?: Record<string, unknown>
+): NewProcessingError {
+  const message = getErrorMessage(error);
+  const category = categorizeError(error);
+  
+  return {
+    message,
+    category,
+    code: (error as any)?.code || (error as any)?.errorCode,
+    details: context,
+    retryable: isRetryableError(error),
+  };
+}
+
+/**
+ * Determine retry delay based on error category
+ * Uses exponential backoff for retryable errors
+ */
+export function getRetryDelayForCategory(
+  category: ErrorCategory,
+  attemptNumber: number = 1
+): number {
+  const baseDelays: Record<ErrorCategory, number> = {
+    network: 2000,      // 2 seconds base
+    http_server: 5000,  // 5 seconds base
+    rate_limit: 10000,  // 10 seconds base
+    zotero_api: 3000,   // 3 seconds base
+    http_client: 0,     // No retry
+    parsing: 0,         // No retry
+    validation: 0,      // No retry
+    permanent: 0,       // No retry
+    unknown: 1000,      // 1 second base (conservative)
+  };
+  
+  const baseDelay = baseDelays[category] || 1000;
+  
+  if (baseDelay === 0) {
+    return 0; // No retry
+  }
+  
+  // Exponential backoff: baseDelay * (2 ^ (attemptNumber - 1))
+  // Capped at 60 seconds
+  return Math.min(baseDelay * Math.pow(2, attemptNumber - 1), 60000);
+}
+
+/**
+ * Format error for display in UI
+ */
+export function formatErrorForDisplay(error: NewProcessingError): string {
+  const categoryLabels: Record<ErrorCategory, string> = {
+    network: 'Network Error',
+    http_client: 'Client Error',
+    http_server: 'Server Error',
+    parsing: 'Parsing Error',
+    validation: 'Validation Error',
+    zotero_api: 'Zotero API Error',
+    rate_limit: 'Rate Limit',
+    permanent: 'Permanent Error',
+    unknown: 'Error',
+  };
+  
+  const label = categoryLabels[error.category];
+  return `${label}: ${error.message}`;
 }
 
