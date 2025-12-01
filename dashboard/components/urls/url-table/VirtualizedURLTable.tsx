@@ -26,6 +26,7 @@ interface VirtualizedURLTableProps {
   onApproveMetadata?: (urlId: number) => void;
   onManualCreate?: (urlId: number) => void;
   onReset?: (urlId: number) => void;
+  onLinkToItem?: (urlId: number) => void;
   isProcessing?: boolean;
   compact?: boolean;
   height?: number; // Table height in pixels
@@ -49,6 +50,7 @@ export function VirtualizedURLTable({
   onApproveMetadata,
   onManualCreate,
   onReset,
+  onLinkToItem,
   isProcessing,
   compact = false,
   height = 600,
@@ -76,6 +78,7 @@ export function VirtualizedURLTable({
               onApproveMetadata={onApproveMetadata ? () => onApproveMetadata(url.id) : undefined}
               onManualCreate={onManualCreate ? () => onManualCreate(url.id) : undefined}
               onReset={onReset ? () => onReset(url.id) : undefined}
+              onLinkToItem={onLinkToItem ? () => onLinkToItem(url.id) : undefined}
               isProcessing={isProcessing}
               compact={compact}
             />
@@ -83,7 +86,7 @@ export function VirtualizedURLTable({
         </table>
       </div>
     );
-  }, [urls, selectedIds, onSelect, onRowClick, onProcess, onUnlink, onEditCitation, onSelectIdentifier, onApproveMetadata, onManualCreate, onReset, isProcessing, compact]);
+  }, [urls, selectedIds, onSelect, onRowClick, onProcess, onUnlink, onEditCitation, onSelectIdentifier, onApproveMetadata, onManualCreate, onReset, onLinkToItem, isProcessing, compact]);
 
   return (
     <div className="bg-white border rounded-lg overflow-hidden">

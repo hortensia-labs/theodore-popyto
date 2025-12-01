@@ -25,7 +25,7 @@ import { useURLProcessing } from './hooks/useURLProcessing';
 import { getUrlsWithCapabilities } from '@/lib/actions/url-with-capabilities';
 import { getSections, getUniqueDomains, deleteUrls } from '@/lib/actions/urls';
 import { startBatchProcessing } from '@/lib/actions/batch-actions';
-import { unlinkUrlFromZotero } from '@/lib/actions/zotero';
+import { unlinkUrlFromZotero, linkUrlToExistingZoteroItem } from '@/lib/actions/zotero';
 import { resetProcessingState, ignoreUrl, unignoreUrl, archiveUrl } from '@/lib/actions/state-transitions';
 import { retryFailedUrl } from '@/lib/actions/process-url-action';
 import { URLTableFilters } from './URLTableFilters';
@@ -38,9 +38,11 @@ import { IdentifierSelectionModal } from '../url-modals/IdentifierSelectionModal
 import { ProcessingHistoryModal } from '../url-modals/ProcessingHistoryModal';
 import { AddIdentifierModal } from '../add-identifier-modal';
 import { BatchProgressModal } from '../batch-progress-modal';
+import { LinkToItemDialog } from '../dialogs/LinkToItemDialog';
 import { Button } from '@/components/ui/button';
 import type { UrlWithCapabilitiesAndStatus } from '@/lib/actions/url-with-capabilities';
 import type { Section } from '@/drizzle/schema';
+import type { ZoteroItemResponse } from '@/lib/zotero-client';
 
 interface URLTableNewProps {
   initialUrls?: UrlWithCapabilitiesAndStatus[];
@@ -81,6 +83,9 @@ export function URLTableNew({
   const [addIdentifierUrlId, setAddIdentifierUrlId] = useState<number | null>(null);
   const [batchProgressModalOpen, setBatchProgressModalOpen] = useState(false);
   const [batchUrlIds, setBatchUrlIds] = useState<number[]>([]);
+  const [linkItemDialogOpen, setLinkItemDialogOpen] = useState(false);
+  const [linkItemUrlId, setLinkItemUrlId] = useState<number | null>(null);
+  const [isLinkingItem, setIsLinkingItem] = useState(false);
 
   // Custom hooks
   const filters = useURLFilters();
@@ -365,6 +370,40 @@ export function URLTableNew({
     }
   }, [loadUrls, selectedUrlForDetail, urls]);
 
+  const handleLinkToItem = useCallback((url: UrlWithCapabilitiesAndStatus) => {
+    setLinkItemUrlId(url.id);
+    setLinkItemDialogOpen(true);
+  }, []);
+
+  const handleLinkToItemConfirm = useCallback(
+    async (itemKey: string, itemPreview: ZoteroItemResponse) => {
+      if (linkItemUrlId === null) return;
+
+      setIsLinkingItem(true);
+      try {
+        const result = await linkUrlToExistingZoteroItem(linkItemUrlId, itemKey);
+
+        if (result.success) {
+          await loadUrls();
+          // Update detail panel if this URL is selected
+          if (selectedUrlForDetail?.id === linkItemUrlId) {
+            const updatedUrl = urls.find(u => u.id === linkItemUrlId);
+            if (updatedUrl) {
+              setSelectedUrlForDetail(updatedUrl);
+            }
+          }
+        } else {
+          alert(`Failed to link item: ${result.error}`);
+        }
+      } catch (error) {
+        alert(`Error linking item: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      } finally {
+        setIsLinkingItem(false);
+      }
+    },
+    [linkItemUrlId, loadUrls, selectedUrlForDetail, urls]
+  );
+
   /**
    * Load filter options on mount
    */
@@ -497,6 +536,7 @@ export function URLTableNew({
                     onArchive={() => handleArchive(url)}
                     onDelete={() => handleDelete(url)}
                     onRetry={() => handleRetry(url)}
+                    onLinkToItem={() => handleLinkToItem(url)}
                     onViewHistory={() => handleViewHistory(url)}
                     isProcessing={processing.isProcessing}
                     compact={isDetailPaneOpen}
@@ -628,6 +668,22 @@ export function URLTableNew({
         onCancel={processing.cancelCurrentBatch}
         isProcessing={processing.isProcessing}
       />
+
+      {/* Link to Item Dialog */}
+      {linkItemUrlId !== null && (
+        <LinkToItemDialog
+          urlId={linkItemUrlId}
+          open={linkItemDialogOpen}
+          onOpenChange={(open) => {
+            if (!open) {
+              setLinkItemDialogOpen(false);
+              setLinkItemUrlId(null);
+            }
+          }}
+          onConfirm={handleLinkToItemConfirm}
+          isLoading={isLinkingItem}
+        />
+      )}
     </div>
   );
 }

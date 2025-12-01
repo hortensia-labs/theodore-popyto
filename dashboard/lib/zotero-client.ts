@@ -528,57 +528,112 @@ export interface ZoteroItemResponse {
 
 /**
  * Get Zotero item metadata by key
- * 
- * According to Citation Linker API: POST /citationlinker/item with {"itemKey": "..."}
+ *
+ * Uses the Local API: GET /api/users/:userID/items/:itemKey
+ * This is more reliable than the Citation Linker endpoint for item retrieval.
+ *
+ * See: HTTP_ZOTERO_SERVER_API.md - Local API Endpoints, Items section (line 882)
  */
 export async function getItem(itemKey: string): Promise<ZoteroItemResponse> {
-  const url = `${ZOTERO_API_BASE_URL}/citationlinker/item`;
-  
+  const userId = getZoteroUserId();
+  const url = `${ZOTERO_API_BASE_URL}/api/users/${userId}/items/${encodeURIComponent(itemKey)}`;
+
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), ZOTERO_REQUEST_TIMEOUT);
-  
+
   try {
-    const response = await fetch(`${ZOTERO_API_BASE_URL}/citationlinker/item?key=${encodeURIComponent(itemKey)}`, {
+    console.log('🔷 getItem() called for key:', itemKey);
+    console.log('📍 Using Local API endpoint:', url);
+
+    const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'Zotero-API-Version': '3',
       },
       signal: controller.signal,
     });
     clearTimeout(timeoutId);
-    
-    const data: ZoteroItemResponse = await response.json();
-    
-    if (!data.success) {
+
+    console.log('📊 HTTP Response status:', response.status, response.statusText);
+
+    // Local API returns JSON with the item data directly
+    const data = await response.json();
+
+    console.log('📦 Item data received:', JSON.stringify(data, null, 2));
+
+    // Handle success - Local API returns the item data directly when successful
+    if (response.ok && data.data) {
+      // Transform Local API response to ZoteroItemResponse format
+      const itemResponse: ZoteroItemResponse = {
+        success: true,
+        timestamp: new Date().toISOString(),
+        key: data.key,
+        version: data.version,
+        itemType: data.data.itemType,
+        libraryID: data.library?.id,
+        dateAdded: data.dateAdded,
+        dateModified: data.dateModified,
+        title: data.data.title,
+        fields: data.data, // Store full data fields
+        creators: data.data.creators,
+        tags: data.data.tags,
+        collections: data.data.collections,
+        relations: data.data.relations,
+      };
+
+      console.log('✅ getItem() success for key:', itemKey);
+      return itemResponse;
+    }
+
+    // Handle 404 - item not found
+    if (response.status === 404) {
+      console.log('❌ Item not found:', itemKey);
+      throw new ZoteroApiError('Item not found in Zotero library', 404);
+    }
+
+    // Handle other errors
+    if (!response.ok) {
+      console.log('❌ HTTP Error:', response.status);
       throw new ZoteroApiError(
-        data.error?.message || 'Failed to retrieve item from Zotero',
-        data.error?.code || response.status
+        `Failed to retrieve item from Zotero (HTTP ${response.status})`,
+        response.status
       );
     }
-    
-    return data;
+
+    // Unexpected state
+    console.log('❌ Unexpected response structure');
+    throw new ZoteroApiError('Unexpected response from Zotero API', response.status);
+
   } catch (error) {
     clearTimeout(timeoutId);
-    
+
+    console.log('💥 getItem() exception');
+
     if (error instanceof ZoteroApiError) {
+      console.log('❌ ZoteroApiError:', error.message);
       throw error;
     }
-    
+
     if (error instanceof Error) {
       if (error.name === 'AbortError') {
+        console.log('⏱️  Request timeout');
         throw new ZoteroApiError('Request timeout - Zotero item retrieval took too long', 504);
       }
-      
+
       if (error.message.includes('ECONNREFUSED')) {
+        console.log('🔌 Connection refused - Zotero not running');
         throw new ZoteroApiError(
-          'Cannot connect to Zotero - ensure Zotero is running with Citation Linker plugin',
+          'Cannot connect to Zotero - ensure Zotero is running',
           503
         );
       }
-      
+
+      console.log('⚠️  Error:', error.message);
       throw new ZoteroApiError(error.message);
     }
-    
+
+    console.log('❓ Unknown error');
     throw new ZoteroApiError('Unknown error occurred');
   }
 }

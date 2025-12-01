@@ -607,15 +607,129 @@ export async function bulkRevalidateCitations(urlIds: number[]) {
   const results = await Promise.all(
     urlIds.map(urlId => revalidateCitation(urlId))
   );
-  
+
   const successful = results.filter(r => r.success).length;
   const failed = results.filter(r => !r.success).length;
-  
+
   return {
     total: urlIds.length,
     successful,
     failed,
     results,
   };
+}
+
+/**
+ * Link a URL to an existing Zotero item
+ *
+ * This allows users to manually link a URL to an item that already exists
+ * in their Zotero library (e.g., for items created outside of Theodore)
+ */
+export async function linkUrlToExistingZoteroItem(
+  urlId: number,
+  zoteroItemKey: string
+) {
+  try {
+    // Get URL data with capabilities
+    const urlData = await getUrlWithCapabilities(urlId);
+
+    if (!urlData) {
+      return {
+        success: false,
+        error: 'URL not found',
+      };
+    }
+
+    // Check if can link (must not have existing item)
+    if (!StateGuards.canLinkToItem(urlData)) {
+      return {
+        success: false,
+        error: `Cannot link URL to item (current status: ${urlData.processingStatus}, may already have linked item)`,
+      };
+    }
+
+    // Verify the item exists in Zotero
+    const itemData = await getItem(zoteroItemKey);
+
+    if (!itemData.success) {
+      return {
+        success: false,
+        error: `Zotero item not found or inaccessible: ${itemData.error?.message || 'Unknown error'}`,
+      };
+    }
+
+    // Transition state to stored_custom (manually linked item)
+    const currentStatus = urlData.processingStatus;
+    await URLProcessingStateMachine.transition(
+      urlId,
+      currentStatus,
+      'stored_custom',
+      {
+        reason: 'User linked to existing Zotero item',
+        linkedItemKey: zoteroItemKey,
+      }
+    );
+
+    // Record the linking
+    await db
+      .update(urls)
+      .set({
+        zoteroItemKey,
+        zoteroProcessedAt: new Date(),
+        zoteroProcessingStatus: 'stored_custom',
+        zoteroProcessingMethod: 'manual_link_existing',
+        createdByTheodore: false, // Item was not created by Theodore
+        updatedAt: new Date(),
+      })
+      .where(eq(urls.id, urlId));
+
+    // Create link record
+    await db.insert(zoteroItemLinks).values({
+      urlId,
+      itemKey: zoteroItemKey,
+      createdAt: new Date(),
+    });
+
+    // Update linked_url_count for this item
+    const existingLinks = await db
+      .select({ count: 'COUNT(*)' } as any)
+      .from(zoteroItemLinks)
+      .where(eq(zoteroItemLinks.itemKey, zoteroItemKey));
+
+    const linkedUrlCount = (existingLinks[0]?.count as number) || 1;
+
+    await db
+      .update(urls)
+      .set({
+        linkedUrlCount,
+        updatedAt: new Date(),
+      })
+      .where(eq(urls.id, urlId));
+
+    // Revalidate citation using latest item metadata
+    const validation = validateCitation(itemData);
+    await db
+      .update(urls)
+      .set({
+        citationValidationStatus: validation.status,
+        citationValidatedAt: new Date(),
+        citationValidationDetails: { missingFields: validation.missingFields },
+        updatedAt: new Date(),
+      })
+      .where(eq(urls.id, urlId));
+
+    return {
+      success: true,
+      urlId,
+      itemKey: zoteroItemKey,
+      itemTitle: itemData.title || 'Item linked',
+      citationValidationStatus: validation.status,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    };
+  }
 }
 

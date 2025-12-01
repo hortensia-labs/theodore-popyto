@@ -6,7 +6,7 @@ import { type UrlWithStatus } from '@/lib/db/computed';
 import { type UrlEnrichment } from '@/lib/db/schema';
 import type { UrlWithCapabilitiesAndStatus } from '@/lib/actions/url-with-capabilities';
 import { updateEnrichment, addIdentifier, removeIdentifier, getEnrichment } from '@/lib/actions/enrichments';
-import { processUrlWithZotero, unlinkUrlFromZotero, deleteZoteroItemAndUnlink, getZoteroItemMetadata, revalidateCitation } from '@/lib/actions/zotero';
+import { processUrlWithZotero, unlinkUrlFromZotero, deleteZoteroItemAndUnlink, getZoteroItemMetadata, revalidateCitation, linkUrlToExistingZoteroItem } from '@/lib/actions/zotero';
 import { processSingleUrl } from '@/lib/actions/process-url-action';
 import { extractSemanticScholarBibTeX } from '@/lib/actions/extract-semantic-scholar-bibtex';
 import { getIdentifiersWithPreviews, refreshIdentifierPreview, fetchAllPreviews } from '@/lib/actions/identifier-selection-action';
@@ -30,6 +30,7 @@ import { ProcessingHistorySection } from './url-detail-panel/ProcessingHistorySe
 import { QuickActionsSection } from './url-detail-panel/QuickActionsSection';
 import { AddIdentifierModal } from './add-identifier-modal';
 import { ReplaceZoteroItemModal } from './replace-zotero-item-modal';
+import { LinkToItemDialog } from './dialogs/LinkToItemDialog';
 import { processCustomIdentifier } from '@/lib/actions/process-custom-identifier';
 
 interface URLDetailPanelProps {
@@ -56,6 +57,10 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
   const [addIdentifierModalOpen, setAddIdentifierModalOpen] = useState(false);
   const [replaceItemModalOpen, setReplaceItemModalOpen] = useState(false);
   const [selectedCustomIdentifier, setSelectedCustomIdentifier] = useState<string | null>(null);
+
+  // Modal state for linking to existing item
+  const [linkItemDialogOpen, setLinkItemDialogOpen] = useState(false);
+  const [isLinkingItem, setIsLinkingItem] = useState(false);
 
   // Check if URL has new processing system fields
   const hasNewFields = 'processingStatus' in url && 'userIntent' in url;
@@ -714,13 +719,42 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
     
     if (result.success) {
       setSuccessMessage(
-        result.message || 
+        result.message ||
         `Cleared ${result.clearedErrors} error(s)${result.resetState ? ' and reset processing state' : ''}`
       );
       onUpdate?.();
       router.refresh();
     } else {
       setError(result.error || 'Failed to clear errors');
+    }
+  }
+
+  async function handleLinkToExistingItem(
+    itemKey: string,
+    itemPreview: ZoteroItemResponse
+  ) {
+    setIsLinkingItem(true);
+    setError(null);
+    setSuccessMessage(null);
+
+    try {
+      const result = await linkUrlToExistingZoteroItem(url.id, itemKey);
+
+      if (result.success) {
+        setSuccessMessage(
+          `Successfully linked to: ${result.itemTitle || 'Zotero item'}`
+        );
+        onUpdate?.();
+        router.refresh();
+      } else {
+        setError(result.error || 'Failed to link item');
+      }
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : 'An unexpected error occurred'
+      );
+    } finally {
+      setIsLinkingItem(false);
     }
   }
 
@@ -825,6 +859,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
                 onProcess={handleProcessWithZotero}
                 onProcessContent={handleProcessContent}
                 onExtractSemanticScholar={handleExtractSemanticScholar}
+                onLinkToItem={() => setLinkItemDialogOpen(true)}
                 onUnlink={() => setUnlinkModalOpen(true)}
                 onEditCitation={() => router.push(`/urls/${url.id}/manual/edit`)}
                 onSelectIdentifier={() => {
@@ -844,7 +879,7 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
                   // Scroll to processing history section
                   document.getElementById('processing-history')?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                isProcessing={isProcessing}
+                isProcessing={isProcessing || isLinkingItem}
               />
             </div>
           )}
@@ -1653,7 +1688,16 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
         onOpenChange={setAddIdentifierModalOpen}
         onSuccess={handleIdentifierAdded}
       />
-      
+
+      {/* Link to Existing Item Dialog */}
+      <LinkToItemDialog
+        urlId={normalizedUrl.id}
+        open={linkItemDialogOpen}
+        onOpenChange={setLinkItemDialogOpen}
+        onConfirm={handleLinkToExistingItem}
+        isLoading={isLinkingItem}
+      />
+
       {/* Replace Zotero Item Modal */}
       {selectedCustomIdentifier && normalizedUrl.zoteroItemKey && (
         <ReplaceZoteroItemModal

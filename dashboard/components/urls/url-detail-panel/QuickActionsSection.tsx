@@ -23,6 +23,7 @@ import {
   Archive,
   Trash2,
   FileText,
+  Link,
 } from 'lucide-react';
 
 interface QuickActionsSectionProps {
@@ -30,6 +31,7 @@ interface QuickActionsSectionProps {
   onProcess?: () => void;
   onProcessContent?: () => void;
   onExtractSemanticScholar?: () => void;
+  onLinkToItem?: () => void;
   onUnlink?: () => void;
   onEditCitation?: () => void;
   onSelectIdentifier?: () => void;
@@ -54,6 +56,7 @@ export function QuickActionsSection({
   onProcess,
   onProcessContent,
   onExtractSemanticScholar,
+  onLinkToItem,
   onUnlink,
   onEditCitation,
   onSelectIdentifier,
@@ -115,6 +118,19 @@ export function QuickActionsSection({
           >
             <FileText className="h-4 w-4 mr-2" />
             Extract BibTeX Citation
+          </Button>
+        )}
+
+        {actions.includes('link_to_item') && onLinkToItem && (
+          <Button
+            onClick={onLinkToItem}
+            variant="outline"
+            className="w-full justify-start"
+            size="sm"
+            disabled={isProcessing}
+          >
+            <Link className="h-4 w-4 mr-2" />
+            Link to Existing Item
           </Button>
         )}
 

@@ -400,7 +400,7 @@ export class StateGuards {
 
   /**
    * Can extract BibTeX citation from Semantic Scholar?
-   * 
+   *
    * Requirements:
    * - URL domain must be semanticscholar.org
    * - Must be in not_started state (hasn't been processed yet)
@@ -431,6 +431,39 @@ export class StateGuards {
   }
 
   /**
+   * Can link URL to an existing Zotero item?
+   *
+   * Requirements:
+   * - URL must not already be linked to a Zotero item
+   * - Not ignored/archived
+   * - Not currently processing
+   */
+  static canLinkToItem(url: UrlForGuardCheck): boolean {
+    // User intent check
+    if (url.userIntent === 'ignore' || url.userIntent === 'archive') {
+      return false;
+    }
+
+    // Must not already have a Zotero item linked
+    if (url.zoteroItemKey) {
+      return false;
+    }
+
+    // Can't link while processing
+    const activeProcessingStates: ProcessingStatus[] = [
+      'processing_zotero',
+      'processing_content',
+      'processing_llm',
+    ];
+
+    if (activeProcessingStates.includes(url.processingStatus)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
    * Get all available actions for a URL
    * Returns array of action names that are currently allowed
    */
@@ -440,6 +473,7 @@ export class StateGuards {
     if (this.canProcessWithZotero(url)) actions.push('process');
     if (this.canProcessContent(url)) actions.push('process_content');
     if (this.canExtractSemanticScholar(url)) actions.push('extract_semantic_scholar');
+    if (this.canLinkToItem(url)) actions.push('link_to_item');
     if (this.canUnlink(url)) actions.push('unlink');
     if (this.canDeleteZoteroItem(url)) actions.push('delete_item');
     if (this.canManuallyCreate(url)) actions.push('manual_create');
@@ -468,6 +502,7 @@ export class StateGuards {
       approve_metadata: 90,
       edit_citation: 85,
       extract_semantic_scholar: 85,
+      link_to_item: 82,
       retry: 80,
       process_content: 75,
       manual_create: 70,

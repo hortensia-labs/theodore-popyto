@@ -43,6 +43,7 @@ import {
   Plus,
   RefreshCw,
   X,
+  Link,
 } from 'lucide-react';
 import type { UrlWithCapabilitiesAndStatus } from '@/lib/actions/url-with-capabilities';
 
@@ -52,6 +53,7 @@ interface URLTableRowProps {
   onSelect: (selected: boolean) => void;
   onClick: () => void;
   onProcess: () => void;
+  onLinkToItem?: () => void;
   onUnlink?: () => void;
   onEditCitation?: () => void;
   onSelectIdentifier?: () => void;
@@ -84,6 +86,7 @@ export function URLTableRow({
   onSelect,
   onClick,
   onProcess,
+  onLinkToItem,
   onUnlink,
   onEditCitation,
   onSelectIdentifier,
@@ -347,6 +350,21 @@ export function URLTableRow({
                   >
                     <FileText className="h-4 w-4 mr-2" />
                     Extract BibTeX Citation
+                  </DropdownMenuItem>
+                )}
+
+                {actions.includes('link_to_item') && (
+                  <DropdownMenuItem
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onLinkToItem?.();
+                    }}
+                    disabled={isProcessing || !onLinkToItem}
+                  >
+                    <Link className={cn(
+                      "h-4 w-4 mr-2",
+                      !onLinkToItem && "text-red-600 focus:text-red-700 focus:bg-red-50",)} />
+                    Link to Existing Item
                   </DropdownMenuItem>
                 )}
 
