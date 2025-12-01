@@ -110,11 +110,48 @@ export interface PreparedAnalysisData {
 }
 
 /**
+ * Check if a URL report entry is valid (has successful analysis data, not just an error)
+ */
+export function isValidUrlReportEntry(entry: UrlReportEntry): boolean {
+  // If entry has an 'error' field at the top level, it failed analysis
+  if ('error' in entry && entry.error) {
+    return false;
+  }
+
+  // Entry must have been successful
+  if (!entry.success) {
+    return false;
+  }
+
+  // Entry should have a valid URL
+  if (!entry.url) {
+    return false;
+  }
+
+  // Entry should have analysis data (at minimum, check required fields exist)
+  if (!entry.status) {
+    return false;
+  }
+
+  return true;
+}
+
+/**
  * Transform URL report entry into database-ready format
+ *
+ * @throws Error if the entry is invalid
  */
 export function transformUrlReportEntry(
   entry: UrlReportEntry
 ): { url: PreparedUrlData; analysis: PreparedAnalysisData } {
+  // Validate the entry before processing
+  if (!isValidUrlReportEntry(entry)) {
+    const error = ('error' in entry && entry.error)
+      ? entry.error
+      : 'Entry missing required fields or marked as unsuccessful';
+    throw new Error(`Invalid URL report entry for ${entry.url}: ${error}`);
+  }
+
   const url: PreparedUrlData = {
     url: entry.url,
     domain: extractDomain(entry.url),
@@ -128,7 +165,7 @@ export function transformUrlReportEntry(
     discoveredAt: new Date(entry.timestamp),
     lastCheckedAt: new Date(entry.timestamp),
   };
-  
+
   const analysis: PreparedAnalysisData = {
     validIdentifiers: entry.validIdentifiers || [],
     webTranslators: entry.webTranslators || [],
@@ -142,7 +179,7 @@ export function transformUrlReportEntry(
       errors: entry.errors,
     },
   };
-  
+
   return { url, analysis };
 }
 

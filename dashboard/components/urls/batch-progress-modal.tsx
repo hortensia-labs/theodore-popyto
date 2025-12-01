@@ -340,6 +340,7 @@ export function BatchProgressModal({
                   size="sm"
                   variant="destructive"
                   disabled={isComplete}
+                  className="text-white"
                 >
                   <StopCircle className="h-4 w-4 mr-2" />
                   Cancel
