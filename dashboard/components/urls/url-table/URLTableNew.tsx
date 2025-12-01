@@ -23,10 +23,11 @@ import { useURLFilters } from './hooks/useURLFilters';
 import { useURLSelection } from './hooks/useURLSelection';
 import { useURLProcessing } from './hooks/useURLProcessing';
 import { getUrlsWithCapabilities } from '@/lib/actions/url-with-capabilities';
-import { getSections, getUniqueDomains } from '@/lib/actions/urls';
+import { getSections, getUniqueDomains, deleteUrls } from '@/lib/actions/urls';
 import { startBatchProcessing } from '@/lib/actions/batch-actions';
 import { unlinkUrlFromZotero } from '@/lib/actions/zotero';
-import { resetProcessingState } from '@/lib/actions/state-transitions';
+import { resetProcessingState, ignoreUrl, unignoreUrl, archiveUrl } from '@/lib/actions/state-transitions';
+import { retryFailedUrl } from '@/lib/actions/process-url-action';
 import { URLTableFilters } from './URLTableFilters';
 import { URLTableBulkActions } from './URLTableBulkActions';
 import { URLTableRow } from './URLTableRow';
@@ -284,6 +285,86 @@ export function URLTableNew({
     }
   }, [loadUrls]);
 
+  const handleIgnore = useCallback(async (url: UrlWithCapabilitiesAndStatus) => {
+    const result = await ignoreUrl(url.id);
+    if (result.success) {
+      await loadUrls();
+      // Update detail panel if this URL is selected
+      if (selectedUrlForDetail?.id === url.id) {
+        const updatedUrl = urls.find(u => u.id === url.id);
+        if (updatedUrl) {
+          setSelectedUrlForDetail(updatedUrl);
+        }
+      }
+    } else {
+      alert(`Failed to ignore URL: ${result.error}`);
+    }
+  }, [loadUrls, selectedUrlForDetail, urls]);
+
+  const handleUnignore = useCallback(async (url: UrlWithCapabilitiesAndStatus) => {
+    const result = await unignoreUrl(url.id);
+    if (result.success) {
+      await loadUrls();
+      // Update detail panel if this URL is selected
+      if (selectedUrlForDetail?.id === url.id) {
+        const updatedUrl = urls.find(u => u.id === url.id);
+        if (updatedUrl) {
+          setSelectedUrlForDetail(updatedUrl);
+        }
+      }
+    } else {
+      alert(`Failed to unignore URL: ${result.error}`);
+    }
+  }, [loadUrls, selectedUrlForDetail, urls]);
+
+  const handleArchive = useCallback(async (url: UrlWithCapabilitiesAndStatus) => {
+    const result = await archiveUrl(url.id);
+    if (result.success) {
+      await loadUrls();
+      // Update detail panel if this URL is selected
+      if (selectedUrlForDetail?.id === url.id) {
+        const updatedUrl = urls.find(u => u.id === url.id);
+        if (updatedUrl) {
+          setSelectedUrlForDetail(updatedUrl);
+        }
+      }
+    } else {
+      alert(`Failed to archive URL: ${result.error}`);
+    }
+  }, [loadUrls, selectedUrlForDetail, urls]);
+
+  const handleDelete = useCallback(async (url: UrlWithCapabilitiesAndStatus) => {
+    const confirmed = confirm(`Are you sure you want to delete this URL?\n\nURL: ${url.url}\n\nThis action cannot be undone.`);
+    if (!confirmed) return;
+
+    const result = await deleteUrls([url.id]);
+    if (result.success) {
+      // Close detail panel if this URL was selected
+      if (selectedUrlForDetail?.id === url.id) {
+        setSelectedUrlForDetail(null);
+      }
+      await loadUrls();
+    } else {
+      alert(`Failed to delete URL: ${result.error}`);
+    }
+  }, [loadUrls, selectedUrlForDetail]);
+
+  const handleRetry = useCallback(async (url: UrlWithCapabilitiesAndStatus) => {
+    const result = await retryFailedUrl(url.id);
+    if (result.success) {
+      await loadUrls();
+      // Update detail panel if this URL is selected
+      if (selectedUrlForDetail?.id === url.id) {
+        const updatedUrl = urls.find(u => u.id === url.id);
+        if (updatedUrl) {
+          setSelectedUrlForDetail(updatedUrl);
+        }
+      }
+    } else {
+      alert(`Failed to retry processing: ${result.error || 'Unknown error'}`);
+    }
+  }, [loadUrls, selectedUrlForDetail, urls]);
+
   /**
    * Load filter options on mount
    */
@@ -411,7 +492,12 @@ export function URLTableNew({
                     onApproveMetadata={() => handleApproveMetadata(url)}
                     onManualCreate={() => handleManualCreate(url)}
                     onReset={() => handleReset(url)}
-                    onMoreActions={() => handleViewHistory(url)}
+                    onIgnore={() => handleIgnore(url)}
+                    onUnignore={() => handleUnignore(url)}
+                    onArchive={() => handleArchive(url)}
+                    onDelete={() => handleDelete(url)}
+                    onRetry={() => handleRetry(url)}
+                    onViewHistory={() => handleViewHistory(url)}
                     isProcessing={processing.isProcessing}
                     compact={isDetailPaneOpen}
                     isDetailSelected={selectedUrlForDetail?.id === url.id}
