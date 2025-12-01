@@ -6,7 +6,7 @@ This script:
 1. Scans all files in sections/[section-name]/sources folders
 2. Extracts and deduplicates URLs
 3. Analyzes URLs via citation linker API
-4. Generates reports in sections/[section-name]/references/url-report.json
+4. Generates reports in sections/[section-name]/references/urls-report.json
 
 Progress is output to stdout as JSON lines for streaming to Node.js API routes.
 
@@ -334,7 +334,7 @@ def process_section(section_path, api_endpoint, max_workers=10):
     # Generate report file
     references_dir = section_path / "references"
     references_dir.mkdir(parents=True, exist_ok=True)
-    report_file = references_dir / "url-report.json"
+    report_file = references_dir / "urls-report.json"
     
     try:
         with open(report_file, 'w', encoding='utf-8') as f:

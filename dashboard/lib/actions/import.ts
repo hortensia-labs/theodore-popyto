@@ -3,13 +3,14 @@
 import { db } from '../db/client';
 import { sections, urls, urlAnalysisData, importHistory } from '../db/schema';
 import { eq, and } from 'drizzle-orm';
-import { 
-  parseUrlsReport, 
-  calculateFileHash, 
+import {
+  parseUrlsReport,
+  calculateFileHash,
   transformUrlReportEntry,
+  isValidUrlReportEntry,
   getUrlsReportPath,
   getFileModifiedTime,
-  type UrlReportEntry 
+  type UrlReportEntry
 } from '../importers/urls-report';
 import path from 'path';
 import { readdir } from 'fs/promises';
@@ -20,7 +21,9 @@ export interface SyncResult {
     urlsImported: number;
     urlsUpdated: number;
     urlsSkipped: number;
+    urlsInvalid: number;
     section: string;
+    skippedEntries?: Array<{ url: string; reason: string }>;
   };
   error?: string;
 }
@@ -36,6 +39,24 @@ export interface SyncStatus {
     changesSummary?: string;
   };
   error?: string;
+}
+
+export interface SyncAllResult {
+  success: boolean;
+  data?: {
+    totalSynced: number;
+    totalUrlsImported: number;
+    totalUrlsUpdated: number;
+    totalUrlsInvalid: number;
+    sectionResults?: Array<{
+      section: string;
+      urlsImported: number;
+      urlsUpdated: number;
+      urlsSkipped: number;
+      urlsInvalid: number;
+    }>;
+  };
+  errors?: string[];
 }
 
 /**
@@ -161,13 +182,27 @@ export async function syncSection(sectionName: string): Promise<SyncResult> {
       let urlsImported = 0;
       let urlsUpdated = 0;
       let urlsSkipped = 0;
+      let urlsInvalid = 0;
       const errors: string[] = [];
-      
+      const skippedEntries: Array<{ url: string; reason: string }> = [];
+
       // Process each URL entry
       for (const entry of reportEntries) {
         try {
+          // Check if entry is valid before processing
+          if (!isValidUrlReportEntry(entry)) {
+            const reason = ('error' in entry && entry.error)
+              ? String(entry.error)
+              : 'Entry missing required fields or marked as unsuccessful';
+            urlsInvalid++;
+            urlsSkipped++;
+            skippedEntries.push({ url: entry.url || 'unknown', reason });
+            errors.push(`Invalid entry for ${entry.url}: ${reason}`);
+            continue;
+          }
+
           const { url: urlData, analysis: analysisData } = transformUrlReportEntry(entry);
-          
+
           // Check if URL already exists
           const existingUrl = await tx.query.urls.findFirst({
             where: and(
@@ -175,7 +210,7 @@ export async function syncSection(sectionName: string): Promise<SyncResult> {
               eq(urls.sectionId, section.id)
             ),
           });
-          
+
           if (existingUrl) {
             // Update existing URL
             await tx.update(urls)
@@ -184,12 +219,12 @@ export async function syncSection(sectionName: string): Promise<SyncResult> {
                 updatedAt: new Date(),
               })
               .where(eq(urls.id, existingUrl.id));
-            
+
             // Update or create analysis data
             const existingAnalysis = await tx.query.urlAnalysisData.findFirst({
               where: eq(urlAnalysisData.urlId, existingUrl.id),
             });
-            
+
             if (existingAnalysis) {
               await tx.update(urlAnalysisData)
                 .set({
@@ -206,7 +241,7 @@ export async function syncSection(sectionName: string): Promise<SyncResult> {
                 ...analysisData,
               });
             }
-            
+
             urlsUpdated++;
           } else {
             // Insert new URL
@@ -214,18 +249,20 @@ export async function syncSection(sectionName: string): Promise<SyncResult> {
               sectionId: section.id,
               ...urlData,
             }).returning();
-            
+
             // Insert analysis data
             await tx.insert(urlAnalysisData).values({
               urlId: newUrl.id,
               ...analysisData,
             });
-            
+
             urlsImported++;
           }
         } catch (error) {
-          errors.push(`Error processing URL ${entry.url}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+          const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+          errors.push(`Error processing URL ${entry.url}: ${errorMsg}`);
           urlsSkipped++;
+          // Note: don't increment urlsInvalid here as this is a processing error, not a data validation error
         }
       }
       
@@ -239,12 +276,14 @@ export async function syncSection(sectionName: string): Promise<SyncResult> {
         urlsSkipped,
         errors: errors.length > 0 ? errors : null,
       });
-      
+
       return {
         urlsImported,
         urlsUpdated,
         urlsSkipped,
+        urlsInvalid,
         section: sectionName,
+        skippedEntries: skippedEntries.length > 0 ? skippedEntries : undefined,
       };
     });
     
@@ -299,49 +338,68 @@ export async function getSyncHistory(sectionName?: string) {
 }
 
 /**
- * Sync all sections that have url-report.json files
+ * Sync all sections that have urls-report.json files
  */
-export async function syncAllSections() {
+export async function syncAllSections(): Promise<SyncAllResult> {
   try {
     const sectionsRoot = path.join(process.cwd(), '..', 'sections');
     const sectionsDir = await readdir(sectionsRoot, { withFileTypes: true });
-    
+
     let totalSynced = 0;
     let totalUrlsImported = 0;
     let totalUrlsUpdated = 0;
+    let totalUrlsInvalid = 0;
     const errors: string[] = [];
-    
+    const sectionResults: Array<{
+      section: string;
+      urlsImported: number;
+      urlsUpdated: number;
+      urlsSkipped: number;
+      urlsInvalid: number;
+    }> = [];
+
     for (const entry of sectionsDir) {
       if (entry.isDirectory()) {
         const sectionPath = path.join(sectionsRoot, entry.name);
         const reportPath = getUrlsReportPath(sectionPath);
-        
+
         if (reportPath) {
           const result = await syncSection(entry.name);
           if (result.success && result.data) {
             totalSynced++;
             totalUrlsImported += result.data.urlsImported;
             totalUrlsUpdated += result.data.urlsUpdated;
+            totalUrlsInvalid += result.data.urlsInvalid || 0;
+
+            sectionResults.push({
+              section: result.data.section,
+              urlsImported: result.data.urlsImported,
+              urlsUpdated: result.data.urlsUpdated,
+              urlsSkipped: result.data.urlsSkipped,
+              urlsInvalid: result.data.urlsInvalid || 0,
+            });
           } else {
             errors.push(`${entry.name}: ${result.error || 'Unknown error'}`);
           }
         }
       }
     }
-    
+
     return {
       success: true,
       data: {
         totalSynced,
         totalUrlsImported,
         totalUrlsUpdated,
-        errors: errors.length > 0 ? errors : undefined,
+        totalUrlsInvalid,
+        sectionResults: sectionResults.length > 0 ? sectionResults : undefined,
       },
+      errors: errors.length > 0 ? errors : undefined,
     };
   } catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error syncing all sections',
+      errors: [error instanceof Error ? error.message : 'Unknown error syncing all sections'],
     };
   }
 }

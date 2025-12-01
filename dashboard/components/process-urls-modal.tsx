@@ -125,26 +125,66 @@ export function ProcessUrlsModal({ onClose, onComplete }: ProcessUrlsModalProps)
   const handleSyncAll = async () => {
     setIsSyncing(true);
     addLog('Syncing all sections to database...');
-    
+
     try {
       const result = await syncAllSections();
-      
+
       if (result.success) {
         addLog(`✓ Database sync complete!`);
         addLog(`  - ${result.data?.totalSynced || 0} sections synced`);
         addLog(`  - ${result.data?.totalUrlsImported || 0} URLs imported`);
         addLog(`  - ${result.data?.totalUrlsUpdated || 0} URLs updated`);
+
+        // Log invalid entries if any
+        if (result.data?.totalUrlsInvalid && result.data.totalUrlsInvalid > 0) {
+          addLog(`  ⚠ ${result.data.totalUrlsInvalid} invalid entries skipped (missing analysis data)`);
+        }
+
+        // Log detailed section results
+        if (result.data?.sectionResults && result.data.sectionResults.length > 0) {
+          addLog('Section breakdown:');
+          for (const section of result.data.sectionResults) {
+            const details = [
+              `${section.urlsImported} imported`,
+              `${section.urlsUpdated} updated`,
+            ];
+            if (section.urlsInvalid > 0) {
+              details.push(`${section.urlsInvalid} invalid`);
+            }
+            addLog(`  • ${section.section}: ${details.join(', ')}`);
+          }
+        }
+
+        // Log any sync errors
+        if (result.errors && result.errors.length > 0) {
+          addLog('⚠ Some sections had errors:');
+          for (const err of result.errors) {
+            addLog(`  • ${err}`);
+          }
+        }
+
+        // Close modal after successful sync
         setTimeout(() => {
           onComplete();
           onClose();
         }, 2000);
       } else {
-        setError(result.error || 'Failed to sync sections');
-        addLog(`✗ Sync error: ${result.error}`);
+        const errorMsg = result.errors?.[0] || 'Failed to sync sections';
+        setError(errorMsg);
+        addLog(`✗ Sync error: ${errorMsg}`);
+
+        // Log all errors if available
+        if (result.errors && result.errors.length > 1) {
+          addLog('Additional errors:');
+          for (const err of result.errors.slice(1)) {
+            addLog(`  • ${err}`);
+          }
+        }
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown sync error');
-      addLog(`✗ Sync error: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      const errorMsg = err instanceof Error ? err.message : 'Unknown sync error';
+      setError(errorMsg);
+      addLog(`✗ Sync error: ${errorMsg}`);
     } finally {
       setIsSyncing(false);
     }
