@@ -154,7 +154,7 @@ export function MetadataForm({
       <div>
         <label className="block text-sm font-medium mb-2">
           Item Type <span className="text-red-500">*</span>
-          <ConfidenceIndicator confidence={confidence.itemType} />
+          {confidence && <ConfidenceIndicator confidence={confidence.itemType ?? 0} />}
         </label>
         <select
           value={itemType}
@@ -178,7 +178,7 @@ export function MetadataForm({
       <div>
         <label className="block text-sm font-medium mb-2">
           Title <span className="text-red-500">*</span>
-          <ConfidenceIndicator confidence={confidence.title} />
+          {confidence && <ConfidenceIndicator confidence={confidence.title ?? 0} />}
         </label>
         <input
           type="text"
@@ -197,7 +197,7 @@ export function MetadataForm({
       <div>
         <label className="block text-sm font-medium mb-2">
           Authors <span className="text-red-500">*</span>
-          <ConfidenceIndicator confidence={confidence.creators} />
+          {confidence && <ConfidenceIndicator confidence={confidence.creators ?? 0} />}
         </label>
         
         <div className="space-y-3">
@@ -264,7 +264,7 @@ export function MetadataForm({
       <div>
         <label className="block text-sm font-medium mb-2">
           Date <span className="text-red-500">*</span>
-          <ConfidenceIndicator confidence={confidence.date} />
+          {confidence && <ConfidenceIndicator confidence={confidence.date ?? 0} />}
         </label>
         <input
           type="text"
@@ -286,7 +286,7 @@ export function MetadataForm({
       <div>
         <label className="block text-sm font-medium mb-2">
           Publication/Journal
-          <ConfidenceIndicator confidence={confidence.publicationTitle} />
+          {confidence && <ConfidenceIndicator confidence={confidence.publicationTitle ?? 0} />}
         </label>
         <input
           type="text"
@@ -301,7 +301,7 @@ export function MetadataForm({
       <div>
         <label className="block text-sm font-medium mb-2">
           Abstract
-          <ConfidenceIndicator confidence={confidence.abstractNote} />
+          {confidence && <ConfidenceIndicator confidence={confidence.abstractNote ?? 0} />}
         </label>
         <textarea
           value={abstractNote}

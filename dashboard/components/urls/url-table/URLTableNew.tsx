@@ -31,7 +31,7 @@ import { retryFailedUrl } from '@/lib/actions/process-url-action';
 import { URLTableFilters } from './URLTableFilters';
 import { URLTableBulkActions } from './URLTableBulkActions';
 import { URLTableRow } from './URLTableRow';
-import { URLDetailPanel } from '../url-detail-panel';
+import { URLDetailPanel } from '../url-detail-panel/url-detail-panel';
 import { ManualCreateModal } from '../url-modals/ManualCreateModal';
 import { EditCitationModal } from '../url-modals/EditCitationModal';
 import { IdentifierSelectionModal } from '../url-modals/IdentifierSelectionModal';

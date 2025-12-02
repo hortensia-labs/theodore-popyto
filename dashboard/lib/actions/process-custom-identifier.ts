@@ -96,7 +96,7 @@ export async function processCustomIdentifier(
       // Record failure
       await recordProcessingAttempt(urlId, {
         timestamp: startTime,
-        stage: 'zotero_custom_identifier',
+        stage: 'zotero_identifier',
         method: 'custom_identifier',
         success: false,
         error: result.error?.message || 'Processing failed',
@@ -130,7 +130,7 @@ export async function processCustomIdentifier(
     if (!itemKey) {
       await recordProcessingAttempt(urlId, {
         timestamp: startTime,
-        stage: 'zotero_custom_identifier',
+        stage: 'zotero_identifier',
         method: 'custom_identifier',
         success: false,
         error: 'Item created but key not found',
@@ -229,7 +229,7 @@ export async function processCustomIdentifier(
     // Record successful attempt
     await recordProcessingAttempt(urlId, {
       timestamp: startTime,
-      stage: 'zotero_custom_identifier',
+      stage: 'zotero_identifier',
       method: 'custom_identifier',
       success: true,
       itemKey,

@@ -4,13 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -60,7 +53,11 @@ type BulkRepairStep = 'filter' | 'preview' | 'confirm' | 'repairing' | 'results'
  * - Display detailed results
  * - Export repair report
  */
-export function BulkRepairPanel() {
+interface BulkRepairPanelProps {
+  onRepairComplete?: () => void;
+}
+
+export function BulkRepairPanel({ onRepairComplete }: BulkRepairPanelProps) {
   const [step, setStep] = useState<BulkRepairStep>('filter');
   const [isLoading, setIsLoading] = useState(false);
   const [issues, setIssues] = useState<BulkRepairIssue[]>([]);
@@ -347,45 +344,61 @@ function FilterStep({
       <div className="rounded-lg border border-gray-200 bg-white p-4">
         <h3 className="font-semibold text-gray-900 mb-4">Filters</h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="space-y-4">
           {/* Issue Type Filter */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Issue Type
-            </label>
-            <Select
-              value={selectedIssueType || 'all'}
-              onValueChange={(v) => setSelectedIssueType(v === 'all' ? null : v)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="All issue types" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All issue types</SelectItem>
-                {uniqueIssueTypes.map(type => (
-                  <SelectItem key={type} value={type}>
+          {uniqueIssueTypes.length > 0 && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Issue Type
+              </label>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => setSelectedIssueType(null)}
+                  className={`px-3 py-2 rounded text-sm font-medium transition-colors ${
+                    selectedIssueType === null
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                >
+                  All Types
+                </button>
+                {uniqueIssueTypes.map((type) => (
+                  <button
+                    key={type}
+                    onClick={() => setSelectedIssueType(type)}
+                    className={`px-3 py-2 rounded text-sm font-medium transition-colors ${
+                      selectedIssueType === type
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    }`}
+                  >
                     {type}
-                  </SelectItem>
+                  </button>
                 ))}
-              </SelectContent>
-            </Select>
-          </div>
+              </div>
+            </div>
+          )}
 
           {/* Severity Filter */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Severity
             </label>
-            <Select value={selectedSeverity} onValueChange={(v: any) => setSelectedSeverity(v)}>
-              <SelectTrigger>
-                <SelectValue placeholder="All severities" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All severities</SelectItem>
-                <SelectItem value="error">Critical (Error)</SelectItem>
-                <SelectItem value="warning">Non-Critical (Warning)</SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="flex gap-2">
+              {['all', 'error', 'warning'].map((severity) => (
+                <button
+                  key={severity}
+                  onClick={() => setSelectedSeverity(severity as 'all' | 'error' | 'warning')}
+                  className={`px-3 py-2 rounded text-sm font-medium transition-colors ${
+                    selectedSeverity === severity
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                >
+                  {severity === 'all' ? 'All' : severity === 'error' ? 'Critical' : 'Non-Critical'}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Count */}

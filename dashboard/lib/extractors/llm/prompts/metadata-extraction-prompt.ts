@@ -11,7 +11,11 @@ import { formatExamplesForPrompt, METADATA_EXTRACTION_EXAMPLES } from './example
  * Build metadata extraction prompt
  */
 export function buildMetadataExtractionPrompt(request: LlmExtractionRequest): string {
-  const examples = formatExamplesForPrompt(METADATA_EXTRACTION_EXAMPLES, request.contentType);
+  // Filter content type to only pdf or html for examples (docx not supported in examples)
+  const exampleContentType = request.contentType === 'pdf' || request.contentType === 'html'
+    ? request.contentType
+    : undefined;
+  const examples = formatExamplesForPrompt(METADATA_EXTRACTION_EXAMPLES, exampleContentType);
 
   const contextInfo = [
     `- Content Type: ${request.contentType}`,

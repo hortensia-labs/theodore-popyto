@@ -16,21 +16,21 @@ import { resetProcessingState, ignoreUrl, unignoreUrl, archiveUrl } from '@/lib/
 import { deleteUrls } from '@/lib/actions/urls';
 import { clearAnalysisErrors } from '@/lib/actions/clear-errors';
 import { getZoteroWebUrl, type ZoteroItemResponse } from '@/lib/zotero-client';
-import { StatusBadge } from '../status-badge';
-import { Button } from '../ui/button';
-import { UnlinkConfirmationModal } from './unlink-confirmation-modal';
-import { CitationStatusIndicator, type CitationStatus } from './citation-status-indicator';
-import { PreviewComparison } from './preview-comparison';
-import { MetadataReview } from './metadata-review';
+import { StatusBadge } from '../../status-badge';
+import { Button } from '../../ui/button';
+import { UnlinkConfirmationModal } from '../unlink-confirmation-modal';
+import { CitationStatusIndicator, type CitationStatus } from '../citation-status-indicator';
+import { PreviewComparison } from '../preview-comparison';
+import { MetadataReview } from '../metadata-review';
 import { useRouter } from 'next/navigation';
 import { Sparkles } from 'lucide-react';
-import { StatusSummarySection } from './url-detail-panel/StatusSummarySection';
-import { CapabilitiesSection } from './url-detail-panel/CapabilitiesSection';
-import { ProcessingHistorySection } from './url-detail-panel/ProcessingHistorySection';
-import { QuickActionsSection } from './url-detail-panel/QuickActionsSection';
-import { AddIdentifierModal } from './add-identifier-modal';
-import { ReplaceZoteroItemModal } from './replace-zotero-item-modal';
-import { LinkToItemDialog } from './dialogs/LinkToItemDialog';
+import { StatusSummarySection } from './StatusSummarySection';
+import { CapabilitiesSection } from './CapabilitiesSection';
+import { ProcessingHistorySection } from './ProcessingHistorySection';
+import { QuickActionsSection } from './QuickActionsSection';
+import { AddIdentifierModal } from '../add-identifier-modal';
+import { ReplaceZoteroItemModal } from '../replace-zotero-item-modal';
+import { LinkToItemDialog } from '../dialogs/LinkToItemDialog';
 import { processCustomIdentifier } from '@/lib/actions/process-custom-identifier';
 
 interface URLDetailPanelProps {
@@ -731,7 +731,6 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
 
   async function handleLinkToExistingItem(
     itemKey: string,
-    itemPreview: ZoteroItemResponse
   ) {
     setIsLinkingItem(true);
     setError(null);
@@ -762,49 +761,49 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
     <div className="h-full flex flex-col w-full overflow-hidden">
       <div className="flex-1 overflow-y-auto min-w-0">
         {/* Header */}
-      <div className="flex items-start bg-gray-50 border-b justify-between sticky top-0 pt-6 px-6 pb-8 min-w-0 shadow-lg">
-            <div className="flex-1 pr-4 min-w-0">
-              <h2 className="text-xl font-semibold mb-2">URL Details</h2>
-              <a
-                href={normalizedUrl.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:underline text-sm wrap-break-word break-all"
-              >
-                {normalizedUrl.url}
-              </a>
-              
-              {/* Zotero Citation */}
-              {zoteroItemMetadata?.citation && (
-                <div className="mt-3 pt-3 border-t">
-                  <div className="items-center flex-row-reverse gap-2 text-sm">
-                  <p className="py-1 rounded text-lg font-serif wrap-break-word break-all">
-                      {zoteroItemMetadata.citation}
-                    </p>    
-                  {zoteroItemMetadata.itemType && (
-                      <p className="inline-flex items-center px-2 py-1 rounded text-[10px] mt-2 font-medium bg-gray-200 text-black tracking-wider">
-                        {zoteroItemMetadata.itemType
-                          .replace(/([a-z])([A-Z])/g, '$1 $2')      // add space before capitals
-                          .replace(/^./, s => s.toUpperCase())      // capitalize first letter
-                          .toUpperCase()
-                        }
-                      </p>
-                    )}
-                                    
+        <div className="flex items-start bg-gray-50 border-b justify-between sticky top-0 pt-6 px-6 pb-8 min-w-0 shadow-lg z-30">
+              <div className="flex-1 pr-4 min-w-0">
+                <h2 className="text-xl font-semibold mb-2">URL Details</h2>
+                <a
+                  href={normalizedUrl.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline text-sm wrap-break-word break-all"
+                >
+                  {normalizedUrl.url}
+                </a>
+                
+                {/* Zotero Citation */}
+                {zoteroItemMetadata?.citation && (
+                  <div className="mt-3 pt-3 border-t">
+                    <div className="items-center flex-row-reverse gap-2 text-sm">
+                    <p className="py-1 rounded text-lg font-serif wrap-break-word break-all">
+                        {zoteroItemMetadata.citation}
+                      </p>    
+                    {zoteroItemMetadata.itemType && (
+                        <p className="inline-flex items-center px-2 py-1 rounded text-[10px] mt-2 font-medium bg-gray-200 text-black tracking-wider">
+                          {zoteroItemMetadata.itemType
+                            .replace(/([a-z])([A-Z])/g, '$1 $2')      // add space before capitals
+                            .replace(/^./, s => s.toUpperCase())      // capitalize first letter
+                            .toUpperCase()
+                          }
+                        </p>
+                      )}
+                                      
+                    </div>
                   </div>
-                </div>
+                )}
+              </div>
+              {onClose && (
+                <button
+                  onClick={onClose}
+                  className="text-gray-400 hover:text-gray-600 p-1"
+                  title="Close"
+                >
+                  <X className="h-5 w-5" />
+                </button>
               )}
-            </div>
-            {onClose && (
-              <button
-                onClick={onClose}
-                className="text-gray-400 hover:text-gray-600 p-1"
-                title="Close"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            )}
-          </div>
+        </div>
           {/* Content */}
         <div className="px-6 pt-6 space-y-6">
           {/* Messages */}

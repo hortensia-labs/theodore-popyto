@@ -19,7 +19,7 @@ import { Button } from '@/components/ui/button';
 import { CitationPreview } from './CitationPreview';
 import { MetadataEditor } from './MetadataEditor';
 import { approveAndStoreMetadata, rejectMetadata } from '@/lib/actions/metadata-approval-action';
-import { Loader, CheckCircle, XCircle, Sparkles, AlertTriangle } from 'lucide-react';
+import { Loader, CheckCircle, XCircle, Sparkles, AlertTriangle, AlertCircle } from 'lucide-react';
 import type { ZoteroItem } from '@/lib/zotero-client';
 
 interface MetadataApprovalModalProps {
@@ -103,7 +103,7 @@ export function MetadataApprovalModal({
     setError(null);
 
     try {
-      const result = await approveAndStoreMetadata(urlId, metadata as any, true);
+      const result = await approveAndStoreMetadata(urlId, true);
 
       if (result.success) {
         console.log('Metadata approved and stored');

@@ -13,11 +13,14 @@
 
 'use client';
 
+import React, { useState } from 'react';
 import { formatUrlForDisplay, cn } from '@/lib/utils';
 import { StateGuards } from '@/lib/state-machine/state-guards';
 import { ProcessingStatusBadge } from '../url-status/ProcessingStatusBadge';
 import { CapabilitySummary } from '../url-status/CapabilityIndicator';
 import { CitationStatusIndicator, type CitationStatus } from '../citation-status-indicator';
+import { RepairSuggestionBanner } from '../repair-suggestion-banner';
+import { RepairStateDialog } from '../dialogs/RepairStateDialog';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -107,6 +110,9 @@ export function URLTableRow({
   compact = false,
   isDetailSelected = false,
 }: URLTableRowProps) {
+  // State for repair dialog
+  const [repairDialogOpen, setRepairDialogOpen] = useState(false);
+
   // Get available actions from guards
   const actions = url.processingStatus && url.userIntent
     ? StateGuards.getAvailableActions({
@@ -124,14 +130,33 @@ export function URLTableRow({
     : [];
 
   const canProcess = actions.includes('process');
-  
+
   // Get all actions except 'process' for the dropdown menu
   const dropdownActions = actions.filter(action => action !== 'process');
-  
+
   // Sort dropdown actions by priority (highest first)
   const sortedDropdownActions = dropdownActions.sort((a, b) =>
     StateGuards.getActionPriority(b) - StateGuards.getActionPriority(a)
   );
+
+  // Handle repair
+  const handleRepair = async () => {
+    try {
+      const response = await fetch(`/api/state-integrity/check/${url.id}`);
+      if (response.ok) {
+        setRepairDialogOpen(true);
+      }
+    } catch (error) {
+      console.error('Failed to check repair status:', error);
+    }
+  };
+
+  const handleRepairComplete = async (urlId: number) => {
+    setRepairDialogOpen(false);
+    // Optionally trigger a refresh or callback
+    // In a real app, you might emit an event or call a parent callback instead
+    window.location.reload(); // Simple refresh for now
+  };
 
   return (
     <tr
@@ -207,7 +232,7 @@ export function URLTableRow({
                 {url.id.toString()}
               </span>
               <span> - </span>
- 
+
               <span className="">
                 {
                   url.domain
@@ -217,6 +242,25 @@ export function URLTableRow({
                     .replace('/', '')
                 }
               </span>
+            </div>
+          )}
+
+          {/* Repair Suggestion Banner - Show if there are state integrity issues */}
+          {!compact && (
+            <div className="mt-2">
+              <RepairSuggestionBanner
+                url={{
+                  id: url.id,
+                  url: url.url,
+                  processingStatus: url.processingStatus as any,
+                  zoteroItemKey: url.zoteroItemKey,
+                  userIntent: url.userIntent as any,
+                  capability: url.capability as any,
+                }}
+                onRepair={handleRepair}
+                compact={false}
+                showDetails={false}
+              />
             </div>
           )}
         </div>
@@ -561,6 +605,21 @@ export function URLTableRow({
           )}
         </div>
       </td>
+
+      {/* Repair State Dialog - Appears when user clicks repair */}
+      <RepairStateDialog
+        open={repairDialogOpen}
+        onOpenChange={setRepairDialogOpen}
+        url={{
+          id: url.id,
+          url: url.url,
+          processingStatus: url.processingStatus as any,
+          zoteroItemKey: url.zoteroItemKey,
+          userIntent: url.userIntent as any,
+          capability: url.capability as any,
+        }}
+        onRepair={handleRepairComplete}
+      />
     </tr>
   );
 }

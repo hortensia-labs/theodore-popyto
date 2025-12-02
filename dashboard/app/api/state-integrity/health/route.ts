@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/drizzle/db';
-import { urls } from '@/drizzle/schema';
+import { db } from '@/lib/db/client';
+import { urls } from '@/lib/db/schema';
 import { StateGuards } from '@/lib/state-machine/state-guards';
 import type { UrlForGuardCheck } from '@/lib/state-machine/state-guards';
 
@@ -44,9 +44,7 @@ export async function GET(request: NextRequest) {
         url: url.url,
         processingStatus: url.processingStatus as any,
         zoteroItemKey: url.zoteroItemKey,
-        zoteroProcessingStatus: url.zoteroProcessingStatus as any,
         userIntent: url.userIntent as any,
-        capability: url.capability as any,
       };
 
       const issues = StateGuards.getStateIntegrityIssues(guardCheckUrl);

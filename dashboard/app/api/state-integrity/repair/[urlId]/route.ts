@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/drizzle/db';
-import { urls } from '@/drizzle/schema';
+import { db } from '@/lib/db/client';
+import { urls } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { StateGuards } from '@/lib/state-machine/state-guards';
 import { URLProcessingStateMachine } from '@/lib/state-machine/url-processing-state-machine';
@@ -23,10 +23,11 @@ import type { UrlForGuardCheck } from '@/lib/state-machine/state-guards';
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { urlId: string } }
+  { params }: { params: Promise<{ urlId: string }> }
 ) {
   try {
-    const urlId = parseInt(params.urlId, 10);
+    const { urlId: urlIdStr } = await params;
+    const urlId = parseInt(urlIdStr, 10);
 
     if (isNaN(urlId)) {
       return NextResponse.json(
@@ -60,9 +61,7 @@ export async function POST(
       url: url.url,
       processingStatus: url.processingStatus as any,
       zoteroItemKey: url.zoteroItemKey,
-      zoteroProcessingStatus: url.zoteroProcessingStatus as any,
       userIntent: url.userIntent as any,
-      capability: url.capability as any,
     };
 
     // Get repair suggestion
@@ -82,20 +81,21 @@ export async function POST(
     let newStatus: string;
     let repairDetails: any = {
       type: repairSuggestion.type,
-      description: repairSuggestion.description,
+      reason: repairSuggestion.reason,
     };
 
     try {
       switch (repairSuggestion.type) {
         case 'transition_to_stored_custom': {
           // URL has item but wrong status - move to stored_custom
-          const transition = URLProcessingStateMachine.transition(
-            guardCheckUrl,
+          const transition = await URLProcessingStateMachine.transition(
+            urlId,
+            url.processingStatus as any,
             'stored_custom'
           );
 
-          if (!transition.allowed) {
-            throw new Error(`Cannot transition to stored_custom: ${transition.reason}`);
+          if (!transition.success) {
+            throw new Error(`Cannot transition to stored_custom: ${transition.error}`);
           }
 
           await db
@@ -122,15 +122,16 @@ export async function POST(
           break;
         }
 
-        case 'reset_to_not_started': {
+        case 'transition_to_not_started': {
           // URL has no item but is marked as stored - reset
-          const transition = URLProcessingStateMachine.transition(
-            guardCheckUrl,
+          const transition = await URLProcessingStateMachine.transition(
+            urlId,
+            url.processingStatus as any,
             'not_started'
           );
 
-          if (!transition.allowed) {
-            throw new Error(`Cannot transition to not_started: ${transition.reason}`);
+          if (!transition.success) {
+            throw new Error(`Cannot transition to not_started: ${transition.error}`);
           }
 
           await db
@@ -163,30 +164,8 @@ export async function POST(
           break;
         }
 
-        case 'sync_dual_state': {
-          // Dual state mismatch - sync both to match processingStatus
-          const newProcessingStatus = url.processingStatus;
-
-          await db
-            .update(urls)
-            .set({
-              zoteroProcessingStatus: newProcessingStatus,
-            })
-            .where(eq(urls.id, urlId));
-
-          newStatus = newProcessingStatus;
-          repairDetails.changes = [
-            {
-              field: 'zoteroProcessingStatus',
-              oldValue: url.zoteroProcessingStatus,
-              newValue: newProcessingStatus,
-            },
-          ];
-          break;
-        }
-
-        case 'clear_archived_item': {
-          // URL is archived but has item - clear the item
+        case 'unlink_item': {
+          // URL is archived/ignored but has item - unlink the item
           await db
             .update(urls)
             .set({

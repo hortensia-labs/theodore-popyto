@@ -173,7 +173,7 @@ export async function recordProcessingAttempt(
     }
 
     // Get existing history
-    const existingHistory: ProcessingAttempt[] = url.processingHistory || [];
+    const existingHistory: ProcessingAttempt[] = (url.processingHistory || []) as ProcessingAttempt[];
 
     // Add new attempt
     const updatedHistory = [...existingHistory, attempt];
@@ -212,7 +212,7 @@ export async function getProcessingHistory(
 
     if (!url) return [];
 
-    return url.processingHistory || [];
+    return (url.processingHistory || []) as ProcessingAttempt[];
   } catch (error) {
     console.error(`Failed to get processing history for URL ${urlId}:`, error);
     return [];
@@ -349,9 +349,16 @@ export async function setUserIntent(
  */
 export async function incrementProcessingAttempts(urlId: number): Promise<void> {
   try {
-    await db.execute(
-      `UPDATE urls SET processing_attempts = processing_attempts + 1, updated_at = ${Math.floor(Date.now() / 1000)} WHERE id = ${urlId}`
-    );
+    const url = await db.select({ processingAttempts: urls.processingAttempts }).from(urls).where(eq(urls.id, urlId)).limit(1);
+    if (url.length === 0) return;
+
+    const newAttempts = (url[0].processingAttempts || 0) + 1;
+    await db.update(urls)
+      .set({
+        processingAttempts: newAttempts,
+        updatedAt: new Date(),
+      })
+      .where(eq(urls.id, urlId));
   } catch (error) {
     console.error(`Failed to increment attempts for URL ${urlId}:`, error);
   }
@@ -600,7 +607,7 @@ export async function exportProcessingHistoryData(
         url: url.url,
         processingStatus: url.processingStatus || 'not_started',
         attempts: url.processingAttempts || 0,
-        history: url.processingHistory || [],
+        history: (url.processingHistory || []) as ProcessingAttempt[],
       });
     }
   }

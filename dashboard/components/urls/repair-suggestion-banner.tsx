@@ -111,7 +111,7 @@ function RepairBannerContent({
         'flex items-center gap-3 rounded-md border border-green-200 bg-green-50 px-4 py-3',
         compact && 'py-2 px-3'
       )}>
-        <CheckCircle2 className="h-5 w-5 flex-shrink-0 text-green-600" />
+        <CheckCircle2 className="h-5 w-5 shrink-0 text-green-600" />
         <div className="flex-1">
           <p className={cn(
             'text-sm font-medium text-green-900',
@@ -177,11 +177,11 @@ function RepairBannerContent({
       bgColor,
       compact && 'py-2 px-3 gap-2'
     )}>
-      <AlertCircle className={cn('h-5 w-5 flex-shrink-0 mt-0.5', iconColor)} />
+      <AlertCircle className={cn('h-5 w-5 shrink-0 mt-0.5', iconColor)} />
 
       <div className="flex-1 min-w-0">
         <p className={cn(
-          'text-sm font-medium',
+          'font-mono text-[11px]',
           textColor,
           compact && 'text-xs'
         )}>
@@ -242,7 +242,7 @@ function RepairBannerContent({
           variant={severity === 'error' ? 'destructive' : 'outline'}
           onClick={handleRepair}
           disabled={isRepairing}
-          className="flex-shrink-0"
+          className={cn("shrink-0", severity === 'error' && "text-white")}
         >
           {isRepairing && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
           {isRepairing ? 'Repairing...' : 'Repair'}

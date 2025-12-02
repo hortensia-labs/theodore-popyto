@@ -130,7 +130,6 @@ export function RepairStateDialog({
               </Button>
               <Button
                 onClick={handleNextStep}
-                disabled={step === 'repairing'}
               >
                 {step === 'explain' ? 'Next' : 'Repair Now'}
               </Button>

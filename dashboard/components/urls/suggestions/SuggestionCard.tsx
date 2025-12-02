@@ -13,7 +13,7 @@
 
 import { Button } from '@/components/ui/button';
 import { X, AlertCircle, AlertTriangle, Info, ArrowRight } from 'lucide-react';
-import type { Suggestion } from '@/lib/types/url-suggestions';
+import type { Suggestion } from '@/lib/types/url-processing';
 
 interface SuggestionCardProps {
   suggestion: Suggestion;

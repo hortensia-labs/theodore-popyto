@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/drizzle/db';
-import { urls } from '@/drizzle/schema';
+import { db } from '@/lib/db/client';
+import { urls } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { StateGuards } from '@/lib/state-machine/state-guards';
 import type { UrlForGuardCheck } from '@/lib/state-machine/state-guards';
@@ -20,10 +20,11 @@ import type { UrlForGuardCheck } from '@/lib/state-machine/state-guards';
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { urlId: string } }
+  { params }: { params: Promise<{ urlId: string }> }
 ) {
   try {
-    const urlId = parseInt(params.urlId, 10);
+    const { urlId: urlIdStr } = await params;
+    const urlId = parseInt(urlIdStr, 10);
 
     if (isNaN(urlId)) {
       return NextResponse.json(
@@ -54,9 +55,7 @@ export async function GET(
       url: url.url,
       processingStatus: url.processingStatus as any,
       zoteroItemKey: url.zoteroItemKey,
-      zoteroProcessingStatus: url.zoteroProcessingStatus as any,
       userIntent: url.userIntent as any,
-      capability: url.capability as any,
     };
 
     // Check state integrity
