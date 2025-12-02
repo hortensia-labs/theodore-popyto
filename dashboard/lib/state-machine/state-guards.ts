@@ -446,6 +446,7 @@ export class StateGuards {
 
     // Must not already have a Zotero item linked
     if (url.zoteroItemKey) {
+      console.log(`[canLinkToItem] URL with id ${url.id} already has a Zotero item linked (${url.zoteroItemKey}), returning false`);
       return false;
     }
 

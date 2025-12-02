@@ -376,8 +376,11 @@ export function URLTableNew({
   }, []);
 
   const handleLinkToItemConfirm = useCallback(
-    async (itemKey: string, itemPreview: ZoteroItemResponse) => {
-      if (linkItemUrlId === null) return;
+    async (itemKey: string) => {
+      if (linkItemUrlId === null) {
+        alert('No URL selected to link to item');
+        return;
+      }
 
       setIsLinkingItem(true);
       try {

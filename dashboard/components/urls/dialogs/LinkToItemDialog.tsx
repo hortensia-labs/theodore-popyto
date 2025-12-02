@@ -12,13 +12,14 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Loader, AlertCircle, CheckCircle } from 'lucide-react';
-import { getItem, type ZoteroItemResponse } from '@/lib/zotero-client';
+import { getZoteroItemMetadata } from '@/lib/actions/zotero';
+import type { ZoteroItemResponse } from '@/lib/zotero-client';
 
 interface LinkToItemDialogProps {
   urlId: number;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onConfirm: (itemKey: string, itemPreview: ZoteroItemResponse) => Promise<void>;
+  onConfirm: (itemKey: string) => Promise<void>;
   isLoading?: boolean;
 }
 
@@ -54,14 +55,14 @@ export function LinkToItemDialog({
     setItemPreview(null);
 
     try {
-      const item = await getItem(itemKey.trim());
+      console.log(`Verifying item: ${itemKey.trim()}`);
+      // Call server action to verify item exists
+      const result = await getZoteroItemMetadata(itemKey.trim());
 
-      // getItem() now returns the item data directly on success
-      // If we get here with success: true, the item was found
-      if (item.success) {
-        setItemPreview(item);
+      if (result.success && result.data) {
+        setItemPreview(result.data);
       } else {
-        setVerificationError(item.error?.message || 'Failed to retrieve item');
+        setVerificationError(result.error || 'Failed to retrieve item');
       }
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Unknown error occurred';
@@ -78,7 +79,7 @@ export function LinkToItemDialog({
 
     setIsConfirming(true);
     try {
-      await onConfirm(itemKey.trim(), itemPreview);
+      await onConfirm(itemKey.trim());
       // Reset dialog on success
       setItemKey('');
       setItemPreview(null);

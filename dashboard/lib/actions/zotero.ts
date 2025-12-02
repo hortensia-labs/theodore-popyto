@@ -523,11 +523,14 @@ export async function bulkDeleteZoteroItemsAndUnlink(urlIds: number[]) {
 
 /**
  * Get Zotero item metadata by item key
+ *
+ * Server action wrapper for client-side verification of Zotero items.
+ * Used by LinkToItemDialog to verify item exists before linking.
  */
 export async function getZoteroItemMetadata(itemKey: string) {
   try {
     const itemData = await getItem(itemKey);
-    
+
     return {
       success: true,
       data: itemData,
@@ -543,6 +546,8 @@ export async function getZoteroItemMetadata(itemKey: string) {
 /**
  * Revalidate citation for a stored URL
  * Fetches latest metadata from Zotero and updates validation status
+ *
+ * Supports both 'stored' (auto-created) and 'stored_custom' (manually linked) items
  */
 export async function revalidateCitation(urlId: number) {
   try {
@@ -552,17 +557,18 @@ export async function revalidateCitation(urlId: number) {
       .from(urls)
       .where(eq(urls.id, urlId))
       .limit(1);
-    
+
     if (urlData.length === 0) {
       return {
         success: false,
         error: 'URL not found',
       };
     }
-    
+
     const url = urlData[0];
-    
-    if (!url.zoteroItemKey || url.zoteroProcessingStatus !== 'stored') {
+
+    // Check if URL has a Zotero item key and is in a stored state (either 'stored' or 'stored_custom')
+    if (!url.zoteroItemKey || (url.zoteroProcessingStatus !== 'stored' && url.zoteroProcessingStatus !== 'stored_custom')) {
       return {
         success: false,
         error: 'URL is not stored in Zotero',
@@ -648,6 +654,7 @@ export async function linkUrlToExistingZoteroItem(
       };
     }
 
+    console.log(`Verifying item right before linking: ${zoteroItemKey}`);
     // Verify the item exists in Zotero
     const itemData = await getItem(zoteroItemKey);
 
@@ -670,6 +677,8 @@ export async function linkUrlToExistingZoteroItem(
       }
     );
 
+    console.log(`Linking URL to existing Zotero item: ${urlId} to ${zoteroItemKey}`);
+
     // Record the linking
     await db
       .update(urls)
@@ -683,12 +692,19 @@ export async function linkUrlToExistingZoteroItem(
       })
       .where(eq(urls.id, urlId));
 
+    console.log(`Updating URL record: ${urlId} to ${zoteroItemKey}`);
+
     // Create link record
     await db.insert(zoteroItemLinks).values({
       urlId,
       itemKey: zoteroItemKey,
+      createdByTheodore: false, // Item was not created by Theodore
+      userModified: false,
+      linkedAt: new Date(),
       createdAt: new Date(),
     });
+
+    console.log(`Creating link record: ${urlId} to ${zoteroItemKey}`);
 
     // Update linked_url_count for this item
     const existingLinks = await db
@@ -698,6 +714,8 @@ export async function linkUrlToExistingZoteroItem(
 
     const linkedUrlCount = (existingLinks[0]?.count as number) || 1;
 
+    console.log(`Updating linked_url_count for item: ${zoteroItemKey} to ${linkedUrlCount}`);
+
     await db
       .update(urls)
       .set({
@@ -705,6 +723,8 @@ export async function linkUrlToExistingZoteroItem(
         updatedAt: new Date(),
       })
       .where(eq(urls.id, urlId));
+
+    console.log(`Revalidating citation for item: ${zoteroItemKey}`);
 
     // Revalidate citation using latest item metadata
     const validation = validateCitation(itemData);
@@ -717,6 +737,8 @@ export async function linkUrlToExistingZoteroItem(
         updatedAt: new Date(),
       })
       .where(eq(urls.id, urlId));
+
+    console.log(`Updated citation validation status for item: ${zoteroItemKey} to ${validation.status}`);
 
     return {
       success: true,

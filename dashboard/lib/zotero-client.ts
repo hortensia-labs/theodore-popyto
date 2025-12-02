@@ -12,7 +12,7 @@ const ZOTERO_REQUEST_TIMEOUT = parseInt(process.env.ZOTERO_REQUEST_TIMEOUT || '6
  * Defaults to '0' if not set (local library)
  */
 function getZoteroUserId(): string {
-  return process.env.ZOTERO_USER_ID || '0';
+  return process.env.ZOTERO_USER_ID || '1106041';
 }
 
 /**
@@ -527,87 +527,147 @@ export interface ZoteroItemResponse {
 }
 
 /**
- * Get Zotero item metadata by key
+ * Get Zotero item metadata via custom Citation Linker endpoint
  *
- * Uses the Local API: GET /api/users/:userID/items/:itemKey
- * This is more reliable than the Citation Linker endpoint for item retrieval.
+ * Uses the new custom endpoint: GET /citationlinker/item?key=...
+ * See: docs/zotero/ZOTERO_GET_ITEM.md
  *
- * See: HTTP_ZOTERO_SERVER_API.md - Local API Endpoints, Items section (line 882)
+ * This endpoint provides:
+ * - Comprehensive item metadata (fields, creators, tags, collections, attachments, notes)
+ * - Built-in citation generation
+ * - Simplified response structure
+ * - Better error handling
  */
-export async function getItem(itemKey: string): Promise<ZoteroItemResponse> {
-  const userId = getZoteroUserId();
-  const url = `${ZOTERO_API_BASE_URL}/api/users/${userId}/items/${encodeURIComponent(itemKey)}`;
-
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), ZOTERO_REQUEST_TIMEOUT);
-
+async function getItemViaCustomEndpoint(itemKey: string): Promise<ZoteroItemResponse> {
   try {
-    console.log('🔷 getItem() called for key:', itemKey);
-    console.log('📍 Using Local API endpoint:', url);
+    const zoteroUrl = `${ZOTERO_API_BASE_URL}/citationlinker/item?key=${encodeURIComponent(itemKey)}`;
 
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Zotero-API-Version': '3',
-      },
-      signal: controller.signal,
-    });
-    clearTimeout(timeoutId);
+    console.log('🔷 getItemViaCustomEndpoint() called for key:', itemKey);
+    console.log('📍 Custom Zotero endpoint call:', zoteroUrl);
 
-    console.log('📊 HTTP Response status:', response.status, response.statusText);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), ZOTERO_REQUEST_TIMEOUT);
 
-    // Local API returns JSON with the item data directly
-    const data = await response.json();
+    try {
+      const response = await fetch(zoteroUrl, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        signal: controller.signal,
+      });
 
-    console.log('📦 Item data received:', JSON.stringify(data, null, 2));
+      clearTimeout(timeoutId);
 
-    // Handle success - Local API returns the item data directly when successful
-    if (response.ok && data.data) {
-      // Transform Local API response to ZoteroItemResponse format
+      if (!response.ok) {
+        if (response.status === 404) {
+          throw new ZoteroApiError('Item not found in Zotero library', 404);
+        }
+        const errorMessage = `Failed to retrieve item (HTTP ${response.status})`;
+        throw new ZoteroApiError(errorMessage, response.status);
+      }
+
+      const data = await response.json();
+
+      console.log('✅ getItemViaCustomEndpoint() success for key:', itemKey);
+
+      // Custom endpoint returns data directly at root level
+      // Response structure per ZOTERO_GET_ITEM.md
+      if (!data.success) {
+        throw new ZoteroApiError(
+          data.error?.message || 'Failed to retrieve item from Zotero',
+          data.error?.code || 500
+        );
+      }
+
+      // Transform custom endpoint response to ZoteroItemResponse format
       const itemResponse: ZoteroItemResponse = {
         success: true,
         timestamp: new Date().toISOString(),
         key: data.key,
         version: data.version,
-        itemType: data.data.itemType,
-        libraryID: data.library?.id,
+        itemType: data.itemType,
+        libraryID: data.libraryID,
         dateAdded: data.dateAdded,
         dateModified: data.dateModified,
-        title: data.data.title,
-        fields: data.data, // Store full data fields
-        creators: data.data.creators,
-        tags: data.data.tags,
-        collections: data.data.collections,
-        relations: data.data.relations,
+        title: data.title,
+        fields: data.fields || {},
+        creators: data.creators,
+        tags: data.tags,
+        collections: data.collections,
+        relations: data.relations,
+        attachments: data.attachments,
+        citation: data.citation,
+        citationFormat: data.citationFormat,
+        apiURL: data.apiURL,
+        webURL: data.webURL,
       };
 
-      console.log('✅ getItem() success for key:', itemKey);
       return itemResponse;
+    } catch (fetchError) {
+      clearTimeout(timeoutId);
+
+      if (fetchError instanceof ZoteroApiError) {
+        throw fetchError;
+      }
+
+      if (fetchError instanceof Error) {
+        if (fetchError.name === 'AbortError') {
+          throw new ZoteroApiError('Request timeout - Zotero took too long to respond', 504);
+        }
+
+        if (fetchError.message.includes('ECONNREFUSED')) {
+          throw new ZoteroApiError(
+            'Cannot connect to Zotero - ensure Zotero is running with Citation Linker plugin',
+            503
+          );
+        }
+
+        throw new ZoteroApiError(fetchError.message);
+      }
+
+      throw new ZoteroApiError('Unknown error occurred');
     }
-
-    // Handle 404 - item not found
-    if (response.status === 404) {
-      console.log('❌ Item not found:', itemKey);
-      throw new ZoteroApiError('Item not found in Zotero library', 404);
-    }
-
-    // Handle other errors
-    if (!response.ok) {
-      console.log('❌ HTTP Error:', response.status);
-      throw new ZoteroApiError(
-        `Failed to retrieve item from Zotero (HTTP ${response.status})`,
-        response.status
-      );
-    }
-
-    // Unexpected state
-    console.log('❌ Unexpected response structure');
-    throw new ZoteroApiError('Unexpected response from Zotero API', response.status);
-
   } catch (error) {
-    clearTimeout(timeoutId);
+    console.log('💥 getItemViaCustomEndpoint() exception');
 
+    if (error instanceof ZoteroApiError) {
+      console.log('❌ ZoteroApiError:', error.message);
+      throw error;
+    }
+
+    if (error instanceof Error) {
+      console.log('⚠️  Error:', error.message);
+      throw new ZoteroApiError(error.message);
+    }
+
+    console.log('❓ Unknown error');
+    throw new ZoteroApiError('Unknown error occurred');
+  }
+}
+
+/**
+ * Get Zotero item metadata by key
+ *
+ * Uses the custom Zotero Citation Linker endpoint: GET /citationlinker/item?key=...
+ * This endpoint provides comprehensive item metadata and is used for all contexts.
+ *
+ * See: docs/zotero/ZOTERO_GET_ITEM.md for endpoint documentation
+ *
+ * Previously, this function used different endpoints depending on context:
+ * - Client-side: /api/zotero/item proxy (removed)
+ * - Server-side: /api/users/:userID/items/:itemKey (replaced with custom endpoint)
+ *
+ * The new custom endpoint is simpler, provides better error handling, and eliminates
+ * the need for the API proxy route entirely.
+ */
+export async function getItem(itemKey: string): Promise<ZoteroItemResponse> {
+  try {
+    console.log('🔷 getItem() called for key:', itemKey);
+    console.log('📍 Using custom Zotero endpoint: /citationlinker/item');
+
+    return await getItemViaCustomEndpoint(itemKey);
+  } catch (error) {
     console.log('💥 getItem() exception');
 
     if (error instanceof ZoteroApiError) {
@@ -616,19 +676,6 @@ export async function getItem(itemKey: string): Promise<ZoteroItemResponse> {
     }
 
     if (error instanceof Error) {
-      if (error.name === 'AbortError') {
-        console.log('⏱️  Request timeout');
-        throw new ZoteroApiError('Request timeout - Zotero item retrieval took too long', 504);
-      }
-
-      if (error.message.includes('ECONNREFUSED')) {
-        console.log('🔌 Connection refused - Zotero not running');
-        throw new ZoteroApiError(
-          'Cannot connect to Zotero - ensure Zotero is running',
-          503
-        );
-      }
-
       console.log('⚠️  Error:', error.message);
       throw new ZoteroApiError(error.message);
     }
