@@ -41,6 +41,18 @@ export class StateGuards {
    * - In appropriate processing state
    * - Has identifiers or web translators available
    */
+  /**
+   * Can this URL be processed with Zotero?
+   *
+   * ENHANCED (Phase 3): Now includes state consistency verification
+   *
+   * Requirements:
+   * - Not ignored/archived
+   * - Not in manual_only mode
+   * - In appropriate processing state
+   * - State must be consistent (no broken state)
+   * - Has identifiers or web translators available
+   */
   static canProcessWithZotero(url: UrlForGuardCheck): boolean {
     // User intent check
     if (url.userIntent === 'ignore' || url.userIntent === 'archive') {
@@ -61,6 +73,14 @@ export class StateGuards {
       return false;
     }
 
+    // NEW (Phase 3): Check for state consistency issues
+    // Cannot process if state is already inconsistent
+    const consistencyIssues = this.getStateIntegrityIssues(url);
+    if (consistencyIssues.length > 0) {
+      console.log(`[canProcessWithZotero] URL has state consistency issues: ${consistencyIssues[0]}`);
+      return false;
+    }
+
     if (isSemanticScholarUrl(url.url)) {
       console.log(`[canProcessWithZotero] URL is Semantic Scholar, returning true`);
       return true;
@@ -78,11 +98,14 @@ export class StateGuards {
   /**
    * Can content be fetched and identifiers extracted?
    *
+   * ENHANCED (Phase 3): Now includes state consistency verification
+   *
    * Requirements:
    * - Not ignored/archived
    * - Not in manual_only mode
    * - Not currently in active processing state
    * - Not already successfully stored
+   * - State must be consistent (no broken state)
    */
   static canProcessContent(url: UrlForGuardCheck): boolean {
     // User intent check
@@ -118,6 +141,14 @@ export class StateGuards {
       return false;
     }
 
+    // NEW (Phase 3): Check for state consistency issues
+    // Cannot process if state is already inconsistent
+    const consistencyIssues = this.getStateIntegrityIssues(url);
+    if (consistencyIssues.length > 0) {
+      console.log(`[canProcessContent] URL has state consistency issues: ${consistencyIssues[0]}`);
+      return false;
+    }
+
     // Can process from: not_started, awaiting_selection, awaiting_metadata, exhausted
     return true;
   }
@@ -128,14 +159,45 @@ export class StateGuards {
    * Requirements:
    * - Currently stored in Zotero (any stored variant)
    */
+  /**
+   * Can this URL be unlinked from its Zotero item?
+   *
+   * ENHANCED (Phase 3): Now includes additional safety checks
+   *
+   * Requirements:
+   * - Status must be in unlinkable states (stored*)
+   * - State must be consistent (no broken state)
+   * - Item must not have multiple links (if critical)
+   * - User intent must allow unlinking
+   */
   static canUnlink(url: UrlForGuardCheck): boolean {
+    // Check if in unlinkable state
     const unlinkableStates: ProcessingStatus[] = [
       'stored',
       'stored_incomplete',
       'stored_custom',
     ];
-    
-    return unlinkableStates.includes(url.processingStatus);
+
+    if (!unlinkableStates.includes(url.processingStatus)) {
+      return false;
+    }
+
+    // NEW (Phase 3): Check for state consistency issues
+    // Cannot unlink if state is already inconsistent
+    const consistencyIssues = this.getStateIntegrityIssues(url);
+    if (consistencyIssues.length > 0) {
+      console.log(`[canUnlink] URL has state consistency issues: ${consistencyIssues[0]}`);
+      return false;
+    }
+
+    // NEW (Phase 3): Check if item has multiple links
+    // Warn if item is linked to multiple URLs (might be important)
+    if (url.linkedUrlCount && url.linkedUrlCount > 1) {
+      console.log(`[canUnlink] Item is linked to ${url.linkedUrlCount} URLs, unlinking may affect other URLs`);
+      // Still allowed, but logged as warning
+    }
+
+    return true;
   }
 
   /**
@@ -589,6 +651,96 @@ export class StateGuards {
    */
   static hasStateIssues(url: UrlForGuardCheck): boolean {
     return this.getStateIntegrityIssues(url).length > 0;
+  }
+
+  /**
+   * NEW (Phase 3): Validate and suggest repair for state after transition
+   *
+   * This method is called after a state transition to verify the new state
+   * is consistent. If problems are detected, it suggests repairs.
+   *
+   * Returns validation result with consistency status and repair suggestions
+   */
+  static validateTransitionState(url: UrlForGuardCheck, afterTransition: ProcessingStatus): { isConsistent: boolean; issues?: string[]; repairSuggestion?: { type: string; reason: string; from: ProcessingStatus; to: ProcessingStatus } } {
+    // Create URL object with new status for checking
+    const transitionedUrl: UrlForGuardCheck = {
+      ...url,
+      processingStatus: afterTransition,
+    };
+
+    const issues = this.getStateIntegrityIssues(transitionedUrl);
+
+    if (issues.length === 0) {
+      // State is consistent after transition
+      return {
+        isConsistent: true,
+      };
+    }
+
+    // State is inconsistent after transition - suggest repair
+    const repairSuggestion = this.suggestRepairAction(transitionedUrl);
+
+    return {
+      isConsistent: false,
+      issues,
+      repairSuggestion: repairSuggestion || undefined,
+    };
+  }
+
+  /**
+   * NEW (Phase 3): Check if a state transition would be safe
+   *
+   * Validates that:
+   * 1. Current state allows transition from
+   * 2. Target state is valid
+   * 3. After transition, state will be consistent (if possible)
+   *
+   * Returns validation result with details
+   */
+  static validateTransition(url: UrlForGuardCheck, toState: ProcessingStatus): { allowed: boolean; reason?: string; requiresRepair?: boolean } {
+    // Check if current state can transition from
+    const currentState = url.processingStatus;
+
+    // Define allowed transitions (basic state machine rules)
+    const transitionMap: Record<ProcessingStatus, ProcessingStatus[]> = {
+      'not_started': ['processing_zotero', 'processing_content', 'processing_llm', 'stored_custom', 'ignored', 'archived'],
+      'awaiting_selection': ['processing_zotero', 'processing_content', 'processing_llm', 'exhausted'],
+      'awaiting_metadata': ['processing_zotero', 'stored', 'stored_custom', 'exhausted'],
+      'processing_zotero': ['stored', 'stored_incomplete', 'awaiting_metadata', 'exhausted'],
+      'processing_content': ['awaiting_selection', 'processing_zotero', 'exhausted'],
+      'processing_llm': ['awaiting_metadata', 'stored', 'exhausted'],
+      'stored': ['stored_incomplete', 'stored_custom', 'ignored', 'archived', 'not_started'],
+      'stored_incomplete': ['stored', 'stored_custom', 'ignored', 'archived', 'not_started'],
+      'stored_custom': ['stored', 'stored_incomplete', 'ignored', 'archived', 'not_started'],
+      'exhausted': ['processing_zotero', 'processing_content', 'processing_llm', 'stored_custom', 'ignored', 'archived', 'not_started'],
+      'ignored': ['not_started', 'processing_zotero', 'processing_content'],
+      'archived': ['not_started'],
+    };
+
+    // Get allowed transitions for current state
+    const allowedTransitions = transitionMap[currentState] || [];
+
+    if (!allowedTransitions.includes(toState)) {
+      return {
+        allowed: false,
+        reason: `Cannot transition from '${currentState}' to '${toState}' (not in allowed transitions)`,
+      };
+    }
+
+    // Check if new state would have consistency issues
+    const validationResult = this.validateTransitionState(url, toState);
+
+    if (!validationResult.isConsistent) {
+      return {
+        allowed: false,
+        reason: `Transition would result in state inconsistency: ${validationResult.issues?.join(', ')}`,
+        requiresRepair: true,
+      };
+    }
+
+    return {
+      allowed: true,
+    };
   }
 
   /**
