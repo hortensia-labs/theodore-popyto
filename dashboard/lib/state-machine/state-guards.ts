@@ -465,6 +465,122 @@ export class StateGuards {
   }
 
   /**
+   * Get all state consistency issues for a URL
+   *
+   * State Integrity Rules (MUST always be true):
+   * 1. If has zoteroItemKey → must be in ['stored', 'stored_incomplete', 'stored_custom']
+   * 2. If in stored* states → must have valid zoteroItemKey
+   * 3. If in 'ignored'/'archived' → must NOT have zoteroItemKey
+   * 4. If in 'processing_*' states → must NOT have zoteroItemKey yet
+   *
+   * Returns array of human-readable inconsistency descriptions
+   */
+  static getStateIntegrityIssues(url: UrlForGuardCheck): string[] {
+    const issues: string[] = [];
+
+    // Rule 1: If has zoteroItemKey, must be in stored state
+    if (url.zoteroItemKey) {
+      const storedStates: ProcessingStatus[] = ['stored', 'stored_incomplete', 'stored_custom'];
+      if (!storedStates.includes(url.processingStatus)) {
+        issues.push(
+          `LINKED_BUT_NOT_STORED: Item ${url.zoteroItemKey} is linked but status is '${url.processingStatus}' ` +
+          `(should be one of: stored, stored_incomplete, stored_custom)`
+        );
+      }
+    }
+
+    // Rule 2: If in stored state, must have zoteroItemKey
+    const storedStates: ProcessingStatus[] = ['stored', 'stored_incomplete', 'stored_custom'];
+    if (storedStates.includes(url.processingStatus) && !url.zoteroItemKey) {
+      issues.push(
+        `STORED_WITHOUT_ITEM: Status is '${url.processingStatus}' but no zoteroItemKey found ` +
+        `(orphaned state - item was supposed to be linked but isn't)`
+      );
+    }
+
+    // Rule 3: Ignored/archived shouldn't have zoteroItemKey
+    if ((url.processingStatus === 'ignored' || url.processingStatus === 'archived') && url.zoteroItemKey) {
+      issues.push(
+        `ARCHIVED_WITH_ITEM: Status is '${url.processingStatus}' but still linked to item ${url.zoteroItemKey} ` +
+        `(should not have item if ignored/archived)`
+      );
+    }
+
+    // Rule 4: Processing states shouldn't have zoteroItemKey
+    const processingStates: ProcessingStatus[] = ['processing_zotero', 'processing_content', 'processing_llm'];
+    if (processingStates.includes(url.processingStatus) && url.zoteroItemKey) {
+      issues.push(
+        `PROCESSING_WITH_ITEM: Still processing but already has item ${url.zoteroItemKey} ` +
+        `(should not have item until processing completes)`
+      );
+    }
+
+    return issues;
+  }
+
+  /**
+   * Suggest repair action for inconsistent state
+   *
+   * Returns the recommended action to fix inconsistencies, or null if no issues
+   */
+  static suggestRepairAction(url: UrlForGuardCheck): {
+    type: 'transition_to_stored_custom' | 'transition_to_not_started' | 'unlink_item';
+    reason: string;
+    from: ProcessingStatus;
+    to: ProcessingStatus;
+  } | null {
+    const issues = this.getStateIntegrityIssues(url);
+    if (issues.length === 0) return null;
+
+    // Pattern 1: Item linked but not in stored state
+    // Best fix: transition to stored_custom (since it's linked)
+    if (url.zoteroItemKey && !['stored', 'stored_incomplete', 'stored_custom'].includes(url.processingStatus)) {
+      const firstIssue = issues.find(i => i.includes('LINKED_BUT_NOT_STORED'));
+      return {
+        type: 'transition_to_stored_custom',
+        reason: firstIssue || 'Item is linked but status is not in stored state',
+        from: url.processingStatus,
+        to: 'stored_custom',
+      };
+    }
+
+    // Pattern 2: In stored state but no item
+    // Best fix: transition to not_started (not actually stored)
+    if (!url.zoteroItemKey && ['stored', 'stored_incomplete', 'stored_custom'].includes(url.processingStatus)) {
+      const firstIssue = issues.find(i => i.includes('STORED_WITHOUT_ITEM'));
+      return {
+        type: 'transition_to_not_started',
+        reason: firstIssue || 'Status says stored but no item is actually linked',
+        from: url.processingStatus,
+        to: 'not_started',
+      };
+    }
+
+    // Pattern 3: Archived/ignored but still has item
+    // Best fix: unlink the item
+    if ((url.processingStatus === 'ignored' || url.processingStatus === 'archived') && url.zoteroItemKey) {
+      const firstIssue = issues.find(i => i.includes('ARCHIVED_WITH_ITEM'));
+      return {
+        type: 'unlink_item',
+        reason: firstIssue || 'Item is linked but URL is archived/ignored',
+        from: url.processingStatus,
+        to: url.processingStatus, // Don't change status, just unlink
+      };
+    }
+
+    return null;
+  }
+
+  /**
+   * Check if URL has state consistency issues
+   *
+   * Returns true if any inconsistencies detected
+   */
+  static hasStateIssues(url: UrlForGuardCheck): boolean {
+    return this.getStateIntegrityIssues(url).length > 0;
+  }
+
+  /**
    * Get all available actions for a URL
    * Returns array of action names that are currently allowed
    */
