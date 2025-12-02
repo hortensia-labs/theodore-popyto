@@ -433,10 +433,13 @@ export class StateGuards {
   /**
    * Can link URL to an existing Zotero item?
    *
+   * Enhanced with state consistency checks (Phase 2)
+   *
    * Requirements:
    * - URL must not already be linked to a Zotero item
    * - Not ignored/archived
    * - Not currently processing
+   * - State must be consistent (no orphaned items, etc.)
    */
   static canLinkToItem(url: UrlForGuardCheck): boolean {
     // User intent check
@@ -447,6 +450,14 @@ export class StateGuards {
     // Must not already have a Zotero item linked
     if (url.zoteroItemKey) {
       console.log(`[canLinkToItem] URL with id ${url.id} already has a Zotero item linked (${url.zoteroItemKey}), returning false`);
+      return false;
+    }
+
+    // NEW (Phase 2): Check for state consistency issues
+    // Cannot link if state is already inconsistent
+    const consistencyIssues = this.getStateIntegrityIssues(url);
+    if (consistencyIssues.length > 0) {
+      console.log(`[canLinkToItem] URL has state consistency issues: ${consistencyIssues[0]}`);
       return false;
     }
 

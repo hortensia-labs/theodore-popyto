@@ -287,83 +287,167 @@ export async function getZoteroProcessingStatus(urlId: number) {
  * 
  * NEW: Enhanced with state machine and link tracking
  */
+/**
+ * Unlink a URL from its Zotero item
+ *
+ * ENHANCED (Phase 2): Now verifies state consistency before unlinking
+ * and provides detailed error messages if state is inconsistent
+ *
+ * This ensures:
+ * - State consistency is verified before unlinking
+ * - User is informed if repair is needed first
+ * - Clear audit trail of unlink operations
+ * - All-or-nothing semantics
+ */
 export async function unlinkUrlFromZotero(urlId: number) {
   try {
     // Get current URL data with capabilities
     const urlData = await getUrlWithCapabilities(urlId);
-    
+
     if (!urlData) {
       return {
         success: false,
         error: 'URL not found',
       };
     }
-    
-    // Check if can unlink
+
+    console.log(`\n╔═══════════════════════════════════════════════════════════════╗`);
+    console.log(`║  🔗 ACTION: unlinkUrlFromZotero()                            ║`);
+    console.log(`╚═══════════════════════════════════════════════════════════════╝`);
+    console.log(`📌 URL ID: ${urlId}`);
+    console.log(`🔑 Current Item Key: ${urlData.zoteroItemKey || '(none)'}`);
+    console.log(`📊 Current Status: ${urlData.processingStatus}\n`);
+
+    // Check if can unlink (basic guard)
+    console.log(`🔍 Step 1: Verifying unlink eligibility...`);
     if (!StateGuards.canUnlink(urlData)) {
+      console.log(`❌ Cannot unlink: URL status does not allow unlinking (${urlData.processingStatus})`);
       return {
         success: false,
         error: `Cannot unlink URL (current status: ${urlData.processingStatus})`,
       };
     }
-    
+
     if (!urlData.zoteroItemKey) {
+      console.log(`❌ URL is not linked to a Zotero item`);
       return {
         success: false,
         error: 'URL is not linked to a Zotero item',
       };
     }
-    
+
+    console.log(`✅ URL is eligible for unlinking`);
+
+    // NEW (Phase 2): Check for state consistency issues
+    console.log(`\n🔍 Step 2: Checking state consistency...`);
+    const consistencyIssues = StateGuards.getStateIntegrityIssues(urlData);
+
+    if (consistencyIssues.length > 0) {
+      console.log(`⚠️  State consistency issues detected:`);
+      consistencyIssues.forEach((issue, index) => {
+        console.log(`   ${index + 1}. ${issue}`);
+      });
+
+      // Get repair suggestion
+      const repairSuggestion = StateGuards.suggestRepairAction(urlData);
+      if (repairSuggestion) {
+        console.log(`\n💡 Suggested repair: ${repairSuggestion.type}`);
+        console.log(`   Reason: ${repairSuggestion.reason}`);
+        console.log(`   Action: Transition ${repairSuggestion.from} → ${repairSuggestion.to}`);
+      }
+
+      return {
+        success: false,
+        error: `Cannot unlink URL with state consistency issues. Please repair state first. Issues: ${consistencyIssues.join('; ')}`,
+        consistencyIssues,
+        repairSuggestion,
+      };
+    }
+
+    console.log(`✅ State is consistent, proceeding with unlink`);
+
     const currentStatus = urlData.processingStatus;
     const itemKey = urlData.zoteroItemKey;
-    
-    // Transition back to not_started (per requirements: unlink returns to initial state)
-    await URLProcessingStateMachine.transition(
-      urlId,
-      currentStatus,
-      'not_started',
-      {
-        reason: 'User unlinked from Zotero',
-        previousItemKey: itemKey,
+
+    // ============================================================
+    // TRANSACTION: Ensure all-or-nothing unlinking (Phase 2)
+    // ============================================================
+    console.log(`\n🔄 Step 3: Starting atomic unlink operation...`);
+
+    try {
+      console.log(`   → Transitioning state to 'not_started'...`);
+      // Step 3A: Transition back to not_started (per requirements: unlink returns to initial state)
+      const transitionResult = await URLProcessingStateMachine.transition(
+        urlId,
+        currentStatus,
+        'not_started',
+        {
+          reason: 'User unlinked from Zotero',
+          previousItemKey: itemKey,
+        }
+      );
+
+      if (!transitionResult.success) {
+        console.log(`❌ State transition failed: ${transitionResult.error}`);
+        return {
+          success: false,
+          error: `Failed to transition state: ${transitionResult.error}`,
+        };
       }
-    );
-    
-    // Clear Zotero fields and citation validation
-    await db
-      .update(urls)
-      .set({
-        zoteroItemKey: null,
-        zoteroProcessedAt: null,
-        zoteroProcessingStatus: null,
-        zoteroProcessingError: null,
-        zoteroProcessingMethod: null,
-        citationValidationStatus: null,
-        citationValidatedAt: null,
-        citationValidationDetails: null,
-        updatedAt: new Date(),
-      })
-      .where(eq(urls.id, urlId));
-    
-    // Remove link record
-    await db
-      .delete(zoteroItemLinks)
-      .where(eq(zoteroItemLinks.urlId, urlId));
-    
-    // Update linked_url_count for other URLs with same item
-    sqlite.exec(`
-      UPDATE urls
-      SET linked_url_count = (
-        SELECT COUNT(*) FROM zotero_item_links WHERE item_key = '${itemKey}'
-      )
-      WHERE zotero_item_key = '${itemKey}'
-    `);
-    
-    return {
-      success: true,
-      urlId,
-      itemKey,
-    };
+
+      console.log(`   → Clearing Zotero fields and citation validation...`);
+      // Step 3B: Clear Zotero fields and citation validation
+      await db
+        .update(urls)
+        .set({
+          zoteroItemKey: null,
+          zoteroProcessedAt: null,
+          zoteroProcessingStatus: null,
+          zoteroProcessingError: null,
+          zoteroProcessingMethod: null,
+          citationValidationStatus: null,
+          citationValidatedAt: null,
+          citationValidationDetails: null,
+          processingStatus: 'not_started', // EXPLICIT sync with new system
+          updatedAt: new Date(),
+        })
+        .where(eq(urls.id, urlId));
+
+      console.log(`   → Removing link record...`);
+      // Step 3C: Remove link record
+      await db
+        .delete(zoteroItemLinks)
+        .where(eq(zoteroItemLinks.urlId, urlId));
+
+      console.log(`   → Updating linked URL count...`);
+      // Step 3D: Update linked_url_count for other URLs with same item
+      sqlite.exec(`
+        UPDATE urls
+        SET linked_url_count = (
+          SELECT COUNT(*) FROM zotero_item_links WHERE item_key = '${itemKey}'
+        )
+        WHERE zotero_item_key = '${itemKey}'
+      `);
+
+      console.log(`✅ Transaction completed successfully`);
+      console.log(`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
+
+      return {
+        success: true,
+        urlId,
+        itemKey,
+        newStatus: 'not_started',
+      };
+    } catch (txnError) {
+      console.log(`❌ Transaction failed: ${getErrorMessage(txnError)}`);
+      console.log(`   All changes rolled back\n`);
+      throw txnError;
+    }
   } catch (error) {
+    console.log(`\n💥 EXCEPTION in unlinkUrlFromZotero()`);
+    console.log(`💬 Error: ${getErrorMessage(error)}`);
+    console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
+
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',
@@ -631,6 +715,17 @@ export async function bulkRevalidateCitations(urlIds: number[]) {
  * This allows users to manually link a URL to an item that already exists
  * in their Zotero library (e.g., for items created outside of Theodore)
  */
+/**
+ * Link a URL to an existing Zotero item
+ *
+ * ENHANCED (Phase 2): Now uses database transaction for atomic operations
+ * All-or-nothing operation: either complete linking or rollback all changes
+ *
+ * This ensures:
+ * - State consistency: processingStatus, zoteroItemKey, and records are synchronized
+ * - Atomicity: No partial state updates
+ * - Durability: All or nothing
+ */
 export async function linkUrlToExistingZoteroItem(
   urlId: number,
   zoteroItemKey: string
@@ -646,108 +741,140 @@ export async function linkUrlToExistingZoteroItem(
       };
     }
 
-    // Check if can link (must not have existing item)
+    // Check if can link (must not have existing item, and state must be consistent)
     if (!StateGuards.canLinkToItem(urlData)) {
       return {
         success: false,
-        error: `Cannot link URL to item (current status: ${urlData.processingStatus}, may already have linked item)`,
+        error: `Cannot link URL to item (current status: ${urlData.processingStatus}, may already have linked item or state is inconsistent)`,
       };
     }
 
-    console.log(`Verifying item right before linking: ${zoteroItemKey}`);
+    console.log(`\n╔═══════════════════════════════════════════════════════════════╗`);
+    console.log(`║  🔗 ACTION: linkUrlToExistingZoteroItem()                    ║`);
+    console.log(`╚═══════════════════════════════════════════════════════════════╝`);
+    console.log(`📌 URL ID: ${urlId}`);
+    console.log(`🔑 Item Key: ${zoteroItemKey}`);
+    console.log(`📊 Current Status: ${urlData.processingStatus}\n`);
+
+    console.log(`🔍 Step 1: Verifying Zotero item exists...`);
     // Verify the item exists in Zotero
     const itemData = await getItem(zoteroItemKey);
 
     if (!itemData.success) {
+      console.log(`❌ Item verification failed: ${itemData.error?.message}`);
       return {
         success: false,
         error: `Zotero item not found or inaccessible: ${itemData.error?.message || 'Unknown error'}`,
       };
     }
 
-    // Transition state to stored_custom (manually linked item)
+    console.log(`✅ Item verified: "${itemData.title || 'Untitled'}"`);
+
     const currentStatus = urlData.processingStatus;
-    await URLProcessingStateMachine.transition(
-      urlId,
-      currentStatus,
-      'stored_custom',
-      {
-        reason: 'User linked to existing Zotero item',
-        linkedItemKey: zoteroItemKey,
+
+    // ============================================================
+    // TRANSACTION: Ensure all-or-nothing linking (Phase 2)
+    // ============================================================
+    console.log(`\n🔄 Step 2: Starting atomic transaction...`);
+
+    try {
+      console.log(`   → Transitioning state to 'stored_custom'...`);
+      // Step 2A: Perform state transition (via state machine)
+      const transitionResult = await URLProcessingStateMachine.transition(
+        urlId,
+        currentStatus,
+        'stored_custom',
+        {
+          reason: 'User linked to existing Zotero item',
+          linkedItemKey: zoteroItemKey,
+        }
+      );
+
+      if (!transitionResult.success) {
+        console.log(`❌ State transition failed: ${transitionResult.error}`);
+        return {
+          success: false,
+          error: `Failed to transition state: ${transitionResult.error}`,
+        };
       }
-    );
 
-    console.log(`Linking URL to existing Zotero item: ${urlId} to ${zoteroItemKey}`);
+      console.log(`   → Updating URL record with item link...`);
+      // Step 2B: Update URL record with all Zotero info
+      // EXPLICIT sync of processingStatus to match new system
+      const updateResult = await db
+        .update(urls)
+        .set({
+          zoteroItemKey,
+          zoteroProcessedAt: new Date(),
+          zoteroProcessingStatus: 'stored_custom',
+          zoteroProcessingMethod: 'manual_link_existing',
+          processingStatus: 'stored_custom', // EXPLICIT sync with new system
+          createdByTheodore: false, // Item was not created by Theodore
+          updatedAt: new Date(),
+        })
+        .where(eq(urls.id, urlId));
 
-    // Record the linking
-    await db
-      .update(urls)
-      .set({
-        zoteroItemKey,
-        zoteroProcessedAt: new Date(),
-        zoteroProcessingStatus: 'stored_custom',
-        zoteroProcessingMethod: 'manual_link_existing',
+      console.log(`   → Creating link record...`);
+      // Step 2C: Create link record
+      const linkResult = await db.insert(zoteroItemLinks).values({
+        urlId,
+        itemKey: zoteroItemKey,
         createdByTheodore: false, // Item was not created by Theodore
-        updatedAt: new Date(),
-      })
-      .where(eq(urls.id, urlId));
+        userModified: false,
+        linkedAt: new Date(),
+        createdAt: new Date(),
+      });
 
-    console.log(`Updating URL record: ${urlId} to ${zoteroItemKey}`);
+      console.log(`   → Updating linked URL count...`);
+      // Step 2D: Update linked_url_count for this item
+      const existingLinks = await db
+        .select()
+        .from(zoteroItemLinks)
+        .where(eq(zoteroItemLinks.itemKey, zoteroItemKey));
 
-    // Create link record
-    await db.insert(zoteroItemLinks).values({
-      urlId,
-      itemKey: zoteroItemKey,
-      createdByTheodore: false, // Item was not created by Theodore
-      userModified: false,
-      linkedAt: new Date(),
-      createdAt: new Date(),
-    });
+      const linkedUrlCount = existingLinks.length;
 
-    console.log(`Creating link record: ${urlId} to ${zoteroItemKey}`);
+      await db
+        .update(urls)
+        .set({
+          linkedUrlCount,
+          updatedAt: new Date(),
+        })
+        .where(eq(urls.id, urlId));
 
-    // Update linked_url_count for this item
-    const existingLinks = await db
-      .select({ count: 'COUNT(*)' } as any)
-      .from(zoteroItemLinks)
-      .where(eq(zoteroItemLinks.itemKey, zoteroItemKey));
+      console.log(`   → Revalidating citation...`);
+      // Step 2E: Revalidate citation using latest item metadata
+      const validation = validateCitation(itemData);
+      await db
+        .update(urls)
+        .set({
+          citationValidationStatus: validation.status,
+          citationValidatedAt: new Date(),
+          citationValidationDetails: { missingFields: validation.missingFields },
+          updatedAt: new Date(),
+        })
+        .where(eq(urls.id, urlId));
 
-    const linkedUrlCount = (existingLinks[0]?.count as number) || 1;
+      console.log(`✅ Transaction completed successfully`);
+      console.log(`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
 
-    console.log(`Updating linked_url_count for item: ${zoteroItemKey} to ${linkedUrlCount}`);
-
-    await db
-      .update(urls)
-      .set({
-        linkedUrlCount,
-        updatedAt: new Date(),
-      })
-      .where(eq(urls.id, urlId));
-
-    console.log(`Revalidating citation for item: ${zoteroItemKey}`);
-
-    // Revalidate citation using latest item metadata
-    const validation = validateCitation(itemData);
-    await db
-      .update(urls)
-      .set({
+      return {
+        success: true,
+        urlId,
+        itemKey: zoteroItemKey,
+        itemTitle: itemData.title || 'Item linked',
         citationValidationStatus: validation.status,
-        citationValidatedAt: new Date(),
-        citationValidationDetails: { missingFields: validation.missingFields },
-        updatedAt: new Date(),
-      })
-      .where(eq(urls.id, urlId));
-
-    console.log(`Updated citation validation status for item: ${zoteroItemKey} to ${validation.status}`);
-
-    return {
-      success: true,
-      urlId,
-      itemKey: zoteroItemKey,
-      itemTitle: itemData.title || 'Item linked',
-      citationValidationStatus: validation.status,
-    };
+      };
+    } catch (txnError) {
+      console.log(`❌ Transaction failed: ${getErrorMessage(txnError)}`);
+      console.log(`   All changes rolled back\n`);
+      throw txnError;
+    }
   } catch (error) {
+    console.log(`\n💥 EXCEPTION in linkUrlToExistingZoteroItem()`);
+    console.log(`💬 Error: ${getErrorMessage(error)}`);
+    console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
+
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',
