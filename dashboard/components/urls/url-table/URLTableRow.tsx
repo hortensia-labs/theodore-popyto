@@ -162,7 +162,8 @@ export function URLTableRow({
     <tr
       className={cn(
         "hover:bg-gray-50 cursor-pointer transition-colors group",
-        isDetailSelected && "bg-blue-50 border-l-4 border-l-blue-500"
+        isDetailSelected && "bg-blue-50 border-l-4 border-l-blue-500",
+        url.userIntent === 'ignore' && "text-gray-400"
       )}
       onClick={(e) => {
         // Don't trigger if clicking interactive elements
@@ -268,16 +269,18 @@ export function URLTableRow({
 
       {/* Processing Status */}
       <td className="px-4 py-3">
-        <ProcessingStatusBadge
-          status={url.processingStatus || 'not_started'}
-          showLabel={!compact}
-          size={compact ? "sm" : "md"}
-        />
+        <div className={cn(url.userIntent === 'ignore' && "hidden")}>
+          <ProcessingStatusBadge
+            status={url.processingStatus || 'not_started'}
+            showLabel={!compact}
+            size={compact ? "sm" : "md"}
+          />
+        </div>
       </td>
 
       {/* IDs */}
       <td className="px-4 py-3">
-        <div className="flex items-center gap-2">
+        <div className={cn("flex items-center gap-2", url.userIntent === 'ignore' && "hidden")}>
           <span className="text-sm text-gray-600 whitespace-nowrap">
             {url.analysisData?.validIdentifiers?.length || 0} / {url.enrichment?.customIdentifiers?.length || 0}
           </span>
@@ -305,7 +308,7 @@ export function URLTableRow({
 
       {/* Processing Attempts */}
       <td className="px-4 py-3">
-        <div className="flex items-center gap-2">
+        <div className={cn("flex items-center gap-2", url.userIntent === 'ignore' && "hidden")}>
           <span className="text-sm text-gray-600">
             {url.processingAttempts || 0}
           </span>

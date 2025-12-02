@@ -162,13 +162,13 @@ function LogEntry({ log }: { log: ProcessingLogEntry }) {
   const getIcon = () => {
     switch (log.status) {
       case 'success':
-        return <CheckCircle2 className="h-5 w-5 text-green-600 flex-shrink-0" />;
+        return <CheckCircle2 className="h-5 w-5 text-green-600 shrink-0" />;
       case 'failed':
-        return <XCircle className="h-5 w-5 text-red-600 flex-shrink-0" />;
+        return <XCircle className="h-5 w-5 text-red-600 shrink-0" />;
       case 'processing':
-        return <Loader2 className="h-5 w-5 text-blue-600 animate-spin flex-shrink-0" />;
+        return <Loader2 className="h-5 w-5 text-blue-600 animate-spin shrink-0" />;
       case 'pending':
-        return <div className="h-5 w-5 border-2 border-gray-300 rounded-full flex-shrink-0" />;
+        return <div className="h-5 w-5 border-2 border-gray-300 rounded-full shrink-0" />;
     }
   };
   

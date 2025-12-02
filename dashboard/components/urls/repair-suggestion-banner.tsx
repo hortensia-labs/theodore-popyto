@@ -136,7 +136,7 @@ function RepairBannerContent({
         'flex items-center gap-3 rounded-md border border-red-200 bg-red-50 px-4 py-3',
         compact && 'py-2 px-3'
       )}>
-        <AlertCircle className="h-5 w-5 flex-shrink-0 text-red-600" />
+        <AlertCircle className="h-5 w-5 shrink-0 text-red-600" />
         <div className="flex-1">
           <p className={cn(
             'text-sm font-medium text-red-900',

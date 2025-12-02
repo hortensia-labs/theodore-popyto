@@ -189,7 +189,7 @@ export function LinkToItemDialog({
           {/* Verification Error */}
           {verificationError && (
             <div className="flex items-start gap-3 p-3 bg-red-50 border border-red-200 rounded-lg">
-              <AlertCircle className="h-4 w-4 text-red-600 mt-0.5 flex-shrink-0" />
+              <AlertCircle className="h-4 w-4 text-red-600 mt-0.5 shrink-0" />
               <div className="text-sm text-red-600">{verificationError}</div>
             </div>
           )}
@@ -198,10 +198,10 @@ export function LinkToItemDialog({
           {itemPreview && (
             <div className="space-y-3">
               <div className="flex items-start gap-3 p-3 bg-green-50 border border-green-200 rounded-lg">
-                <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 shrink-0" />
                 <div className="space-y-1">
                   <p className="text-sm font-medium text-green-900">Item found and verified</p>
-                  <p className="text-sm text-green-700 break-words">{getItemPreviewText()}</p>
+                  <p className="text-sm text-green-700 wrap-break-word">{getItemPreviewText()}</p>
                   {itemPreview.dateAdded && (
                     <p className="text-xs text-green-600 mt-1">
                       Added: {new Date(itemPreview.dateAdded).toLocaleDateString()}
