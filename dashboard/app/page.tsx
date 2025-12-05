@@ -1,16 +1,20 @@
 import Link from "next/link"
 import { StatsOverview } from "@/components/stats-overview"
 import { ProcessUrlsButton } from "@/components/process-urls-button"
+import { DeduplicateUrlsButton } from "@/components/deduplicate-urls-button"
 
 export default async function Home() {
-  
+
   return (
     <div className="space-y-8 mx-4">
       <div className="flex items-start justify-between mt-4">
         <div>
           <h1 className="text-h2 text-foreground">Theodore Dashboard</h1>
         </div>
-        <ProcessUrlsButton />
+        <div className="flex gap-2">
+          <DeduplicateUrlsButton />
+          <ProcessUrlsButton />
+        </div>
       </div>
       
       {/* Quick Actions */}
