@@ -8,7 +8,7 @@
 'use server';
 
 import { db } from '../db/client';
-import { urls, urlAnalysisData, urlEnrichments, urlContentCache, sections } from '../../drizzle/schema';
+import { urls, urlAnalysisData, urlEnrichments, urlContentCache, sections, urlIdentifiers, urlExtractedMetadata } from '../../drizzle/schema';
 import { eq, and, like, sql, desc, asc, inArray } from 'drizzle-orm';
 import { computeProcessingCapability } from '../orchestrator/processing-helpers';
 import type { ProcessingStatus, UserIntent, ProcessingCapability } from '../types/url-processing';
@@ -46,6 +46,21 @@ export interface UrlWithCapabilitiesAndStatus {
   createdByTheodore: boolean | null;
   userModifiedInZotero: boolean | null;
   linkedUrlCount: number | null;
+
+  // Content processing data
+  contentCache?: any;
+  identifiers?: any[];
+  extractedMetadata?: any;
+
+  // Additional URL fields for content processing
+  isAccessible: boolean | null;
+  contentFetchAttempts: number | null;
+  lastFetchError: string | null;
+  llmExtractionStatus: string | null;
+  llmExtractionProvider: string | null;
+  llmExtractedAt: Date | null;
+  llmExtractionAttempts: number | null;
+  llmExtractionError: string | null;
 }
 
 /**
@@ -181,6 +196,7 @@ export async function getUrlsWithCapabilities(
 
 /**
  * Get single URL by ID with capabilities
+ * Enhanced to include content cache, identifiers, and extracted metadata
  */
 export async function getUrlWithCapabilitiesById(id: number) {
   try {
@@ -190,19 +206,27 @@ export async function getUrlWithCapabilitiesById(id: number) {
       .leftJoin(urlAnalysisData, eq(urls.id, urlAnalysisData.urlId))
       .leftJoin(urlEnrichments, eq(urls.id, urlEnrichments.urlId))
       .leftJoin(urlContentCache, eq(urls.id, urlContentCache.urlId))
+      .leftJoin(urlExtractedMetadata, eq(urls.id, urlExtractedMetadata.urlId))
       .leftJoin(sections, eq(urls.sectionId, sections.id))
       .where(eq(urls.id, id))
       .limit(1);
-    
+
     if (result.length === 0) {
       return {
         success: false,
         error: 'URL not found',
       };
     }
-    
+
     const row = result[0];
-    
+
+    // Fetch identifiers separately
+    const identifiers = await db
+      .select()
+      .from(urlIdentifiers)
+      .where(eq(urlIdentifiers.urlId, id))
+      .orderBy(desc(urlIdentifiers.confidence), desc(urlIdentifiers.createdAt));
+
     const capability = await computeProcessingCapability(
       row.urls.id,
       row.urls,
@@ -210,7 +234,7 @@ export async function getUrlWithCapabilitiesById(id: number) {
       row.url_enrichments,
       row.url_content_cache
     );
-    
+
     return {
       success: true,
       data: {
@@ -229,6 +253,25 @@ export async function getUrlWithCapabilitiesById(id: number) {
         analysisData: row.url_analysis_data,
         enrichment: row.url_enrichments,
         section: row.sections,
+
+        // Content processing data
+        contentCache: row.url_content_cache,
+        identifiers: identifiers,
+        extractedMetadata: row.url_extracted_metadata,
+
+        // Additional URL fields
+        isAccessible: row.urls.isAccessible,
+        contentFetchAttempts: row.urls.contentFetchAttempts,
+        lastFetchError: row.urls.lastFetchError,
+        llmExtractionStatus: row.urls.llmExtractionStatus,
+        llmExtractionProvider: row.urls.llmExtractionProvider,
+        llmExtractedAt: row.urls.llmExtractedAt,
+        llmExtractionAttempts: row.urls.llmExtractionAttempts,
+        llmExtractionError: row.urls.llmExtractionError,
+
+        createdByTheodore: row.urls.createdByTheodore,
+        userModifiedInZotero: row.urls.userModifiedInZotero,
+        linkedUrlCount: row.urls.linkedUrlCount,
       },
     };
   } catch (error) {

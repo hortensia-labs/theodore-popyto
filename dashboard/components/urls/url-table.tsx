@@ -11,7 +11,7 @@ import { StatusBadge } from '../status-badge';
 import { Button } from '../ui/button';
 import { AddIdentifierModal } from './add-identifier-modal';
 import { PreviewModal } from './preview-modal';
-import { URLDetailPanel } from './url-detail-panel';
+import { URLDetailPanel } from './url-detail-panel/url-detail-panel';
 import { ProcessingProgressModal, type ProcessingLogEntry } from './processing-progress-modal';
 import { UnlinkConfirmationModal } from './unlink-confirmation-modal';
 import { CitationStatusIndicator, type CitationStatus } from './citation-status-indicator';

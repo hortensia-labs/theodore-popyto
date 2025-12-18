@@ -4,7 +4,7 @@
  * Validates and scores extracted bibliographic metadata
  */
 
-import type { ExtractedMetadata } from './extractors/html-metadata-extractor';
+import type { ExtractedMetadata, Creator } from './extractors/html-metadata-extractor';
 
 export interface ValidationResult {
   status: 'valid' | 'incomplete' | 'invalid';

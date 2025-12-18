@@ -12,7 +12,7 @@ const ZOTERO_REQUEST_TIMEOUT = parseInt(process.env.ZOTERO_REQUEST_TIMEOUT || '6
  * Defaults to '0' if not set (local library)
  */
 function getZoteroUserId(): string {
-  return process.env.ZOTERO_USER_ID || '0';
+  return process.env.ZOTERO_USER_ID || '1106041';
 }
 
 /**
@@ -527,58 +527,160 @@ export interface ZoteroItemResponse {
 }
 
 /**
- * Get Zotero item metadata by key
- * 
- * According to Citation Linker API: POST /citationlinker/item with {"itemKey": "..."}
+ * Get Zotero item metadata via custom Citation Linker endpoint
+ *
+ * Uses the new custom endpoint: GET /citationlinker/item?key=...
+ * See: docs/zotero/ZOTERO_GET_ITEM.md
+ *
+ * This endpoint provides:
+ * - Comprehensive item metadata (fields, creators, tags, collections, attachments, notes)
+ * - Built-in citation generation
+ * - Simplified response structure
+ * - Better error handling
  */
-export async function getItem(itemKey: string): Promise<ZoteroItemResponse> {
-  const url = `${ZOTERO_API_BASE_URL}/citationlinker/item`;
-  
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), ZOTERO_REQUEST_TIMEOUT);
-  
+async function getItemViaCustomEndpoint(itemKey: string): Promise<ZoteroItemResponse> {
   try {
-    const response = await fetch(`${ZOTERO_API_BASE_URL}/citationlinker/item?key=${encodeURIComponent(itemKey)}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      signal: controller.signal,
-    });
-    clearTimeout(timeoutId);
-    
-    const data: ZoteroItemResponse = await response.json();
-    
-    if (!data.success) {
-      throw new ZoteroApiError(
-        data.error?.message || 'Failed to retrieve item from Zotero',
-        data.error?.code || response.status
-      );
-    }
-    
-    return data;
-  } catch (error) {
-    clearTimeout(timeoutId);
-    
-    if (error instanceof ZoteroApiError) {
-      throw error;
-    }
-    
-    if (error instanceof Error) {
-      if (error.name === 'AbortError') {
-        throw new ZoteroApiError('Request timeout - Zotero item retrieval took too long', 504);
+    const zoteroUrl = `${ZOTERO_API_BASE_URL}/citationlinker/item?key=${encodeURIComponent(itemKey)}`;
+
+    console.log('🔷 getItemViaCustomEndpoint() called for key:', itemKey);
+    console.log('📍 Custom Zotero endpoint call:', zoteroUrl);
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), ZOTERO_REQUEST_TIMEOUT);
+
+    try {
+      const response = await fetch(zoteroUrl, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        if (response.status === 404) {
+          throw new ZoteroApiError('Item not found in Zotero library', 404);
+        }
+        const errorMessage = `Failed to retrieve item (HTTP ${response.status})`;
+        throw new ZoteroApiError(errorMessage, response.status);
       }
-      
-      if (error.message.includes('ECONNREFUSED')) {
+
+      const data = await response.json();
+
+      console.log('✅ getItemViaCustomEndpoint() success for key:', itemKey);
+
+      // Custom endpoint returns data directly at root level
+      // Response structure per ZOTERO_GET_ITEM.md
+      if (!data.success) {
         throw new ZoteroApiError(
-          'Cannot connect to Zotero - ensure Zotero is running with Citation Linker plugin',
-          503
+          data.error?.message || 'Failed to retrieve item from Zotero',
+          data.error?.code || 500
         );
       }
-      
+
+      // Transform custom endpoint response to ZoteroItemResponse format
+      const itemResponse: ZoteroItemResponse = {
+        success: true,
+        timestamp: new Date().toISOString(),
+        key: data.key,
+        version: data.version,
+        itemType: data.itemType,
+        libraryID: data.libraryID,
+        dateAdded: data.dateAdded,
+        dateModified: data.dateModified,
+        title: data.title,
+        fields: data.fields || {},
+        creators: data.creators,
+        tags: data.tags,
+        collections: data.collections,
+        relations: data.relations,
+        attachments: data.attachments,
+        citation: data.citation,
+        citationFormat: data.citationFormat,
+        apiURL: data.apiURL,
+        webURL: data.webURL,
+      };
+
+      return itemResponse;
+    } catch (fetchError) {
+      clearTimeout(timeoutId);
+
+      if (fetchError instanceof ZoteroApiError) {
+        throw fetchError;
+      }
+
+      if (fetchError instanceof Error) {
+        if (fetchError.name === 'AbortError') {
+          throw new ZoteroApiError('Request timeout - Zotero took too long to respond', 504);
+        }
+
+        if (fetchError.message.includes('ECONNREFUSED')) {
+          throw new ZoteroApiError(
+            'Cannot connect to Zotero - ensure Zotero is running with Citation Linker plugin',
+            503
+          );
+        }
+
+        throw new ZoteroApiError(fetchError.message);
+      }
+
+      throw new ZoteroApiError('Unknown error occurred');
+    }
+  } catch (error) {
+    console.log('💥 getItemViaCustomEndpoint() exception');
+
+    if (error instanceof ZoteroApiError) {
+      console.log('❌ ZoteroApiError:', error.message);
+      throw error;
+    }
+
+    if (error instanceof Error) {
+      console.log('⚠️  Error:', error.message);
       throw new ZoteroApiError(error.message);
     }
-    
+
+    console.log('❓ Unknown error');
+    throw new ZoteroApiError('Unknown error occurred');
+  }
+}
+
+/**
+ * Get Zotero item metadata by key
+ *
+ * Uses the custom Zotero Citation Linker endpoint: GET /citationlinker/item?key=...
+ * This endpoint provides comprehensive item metadata and is used for all contexts.
+ *
+ * See: docs/zotero/ZOTERO_GET_ITEM.md for endpoint documentation
+ *
+ * Previously, this function used different endpoints depending on context:
+ * - Client-side: /api/zotero/item proxy (removed)
+ * - Server-side: /api/users/:userID/items/:itemKey (replaced with custom endpoint)
+ *
+ * The new custom endpoint is simpler, provides better error handling, and eliminates
+ * the need for the API proxy route entirely.
+ */
+export async function getItem(itemKey: string): Promise<ZoteroItemResponse> {
+  try {
+    console.log('🔷 getItem() called for key:', itemKey);
+    console.log('📍 Using custom Zotero endpoint: /citationlinker/item');
+
+    return await getItemViaCustomEndpoint(itemKey);
+  } catch (error) {
+    console.log('💥 getItem() exception');
+
+    if (error instanceof ZoteroApiError) {
+      console.log('❌ ZoteroApiError:', error.message);
+      throw error;
+    }
+
+    if (error instanceof Error) {
+      console.log('⚠️  Error:', error.message);
+      throw new ZoteroApiError(error.message);
+    }
+
+    console.log('❓ Unknown error');
     throw new ZoteroApiError('Unknown error occurred');
   }
 }

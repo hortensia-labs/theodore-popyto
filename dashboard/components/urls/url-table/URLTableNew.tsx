@@ -23,23 +23,26 @@ import { useURLFilters } from './hooks/useURLFilters';
 import { useURLSelection } from './hooks/useURLSelection';
 import { useURLProcessing } from './hooks/useURLProcessing';
 import { getUrlsWithCapabilities } from '@/lib/actions/url-with-capabilities';
-import { getSections, getUniqueDomains } from '@/lib/actions/urls';
+import { getSections, getUniqueDomains, deleteUrls } from '@/lib/actions/urls';
 import { startBatchProcessing } from '@/lib/actions/batch-actions';
-import { unlinkUrlFromZotero } from '@/lib/actions/zotero';
-import { resetProcessingState } from '@/lib/actions/state-transitions';
+import { unlinkUrlFromZotero, linkUrlToExistingZoteroItem } from '@/lib/actions/zotero';
+import { resetProcessingState, ignoreUrl, unignoreUrl, archiveUrl } from '@/lib/actions/state-transitions';
+import { retryFailedUrl } from '@/lib/actions/process-url-action';
 import { URLTableFilters } from './URLTableFilters';
 import { URLTableBulkActions } from './URLTableBulkActions';
 import { URLTableRow } from './URLTableRow';
-import { URLDetailPanel } from '../url-detail-panel';
+import { URLDetailPanel } from '../url-detail-panel/url-detail-panel';
 import { ManualCreateModal } from '../url-modals/ManualCreateModal';
 import { EditCitationModal } from '../url-modals/EditCitationModal';
 import { IdentifierSelectionModal } from '../url-modals/IdentifierSelectionModal';
 import { ProcessingHistoryModal } from '../url-modals/ProcessingHistoryModal';
 import { AddIdentifierModal } from '../add-identifier-modal';
 import { BatchProgressModal } from '../batch-progress-modal';
+import { LinkToItemDialog } from '../dialogs/LinkToItemDialog';
 import { Button } from '@/components/ui/button';
 import type { UrlWithCapabilitiesAndStatus } from '@/lib/actions/url-with-capabilities';
 import type { Section } from '@/drizzle/schema';
+import type { ZoteroItemResponse } from '@/lib/zotero-client';
 
 interface URLTableNewProps {
   initialUrls?: UrlWithCapabilitiesAndStatus[];
@@ -80,6 +83,9 @@ export function URLTableNew({
   const [addIdentifierUrlId, setAddIdentifierUrlId] = useState<number | null>(null);
   const [batchProgressModalOpen, setBatchProgressModalOpen] = useState(false);
   const [batchUrlIds, setBatchUrlIds] = useState<number[]>([]);
+  const [linkItemDialogOpen, setLinkItemDialogOpen] = useState(false);
+  const [linkItemUrlId, setLinkItemUrlId] = useState<number | null>(null);
+  const [isLinkingItem, setIsLinkingItem] = useState(false);
 
   // Custom hooks
   const filters = useURLFilters();
@@ -284,6 +290,123 @@ export function URLTableNew({
     }
   }, [loadUrls]);
 
+  const handleIgnore = useCallback(async (url: UrlWithCapabilitiesAndStatus) => {
+    const result = await ignoreUrl(url.id);
+    if (result.success) {
+      await loadUrls();
+      // Update detail panel if this URL is selected
+      if (selectedUrlForDetail?.id === url.id) {
+        const updatedUrl = urls.find(u => u.id === url.id);
+        if (updatedUrl) {
+          setSelectedUrlForDetail(updatedUrl);
+        }
+      }
+    } else {
+      alert(`Failed to ignore URL: ${result.error}`);
+    }
+  }, [loadUrls, selectedUrlForDetail, urls]);
+
+  const handleUnignore = useCallback(async (url: UrlWithCapabilitiesAndStatus) => {
+    const result = await unignoreUrl(url.id);
+    if (result.success) {
+      await loadUrls();
+      // Update detail panel if this URL is selected
+      if (selectedUrlForDetail?.id === url.id) {
+        const updatedUrl = urls.find(u => u.id === url.id);
+        if (updatedUrl) {
+          setSelectedUrlForDetail(updatedUrl);
+        }
+      }
+    } else {
+      alert(`Failed to unignore URL: ${result.error}`);
+    }
+  }, [loadUrls, selectedUrlForDetail, urls]);
+
+  const handleArchive = useCallback(async (url: UrlWithCapabilitiesAndStatus) => {
+    const result = await archiveUrl(url.id);
+    if (result.success) {
+      await loadUrls();
+      // Update detail panel if this URL is selected
+      if (selectedUrlForDetail?.id === url.id) {
+        const updatedUrl = urls.find(u => u.id === url.id);
+        if (updatedUrl) {
+          setSelectedUrlForDetail(updatedUrl);
+        }
+      }
+    } else {
+      alert(`Failed to archive URL: ${result.error}`);
+    }
+  }, [loadUrls, selectedUrlForDetail, urls]);
+
+  const handleDelete = useCallback(async (url: UrlWithCapabilitiesAndStatus) => {
+    const confirmed = confirm(`Are you sure you want to delete this URL?\n\nURL: ${url.url}\n\nThis action cannot be undone.`);
+    if (!confirmed) return;
+
+    const result = await deleteUrls([url.id]);
+    if (result.success) {
+      // Close detail panel if this URL was selected
+      if (selectedUrlForDetail?.id === url.id) {
+        setSelectedUrlForDetail(null);
+      }
+      await loadUrls();
+    } else {
+      alert(`Failed to delete URL: ${result.error}`);
+    }
+  }, [loadUrls, selectedUrlForDetail]);
+
+  const handleRetry = useCallback(async (url: UrlWithCapabilitiesAndStatus) => {
+    const result = await retryFailedUrl(url.id);
+    if (result.success) {
+      await loadUrls();
+      // Update detail panel if this URL is selected
+      if (selectedUrlForDetail?.id === url.id) {
+        const updatedUrl = urls.find(u => u.id === url.id);
+        if (updatedUrl) {
+          setSelectedUrlForDetail(updatedUrl);
+        }
+      }
+    } else {
+      alert(`Failed to retry processing: ${result.error || 'Unknown error'}`);
+    }
+  }, [loadUrls, selectedUrlForDetail, urls]);
+
+  const handleLinkToItem = useCallback((url: UrlWithCapabilitiesAndStatus) => {
+    setLinkItemUrlId(url.id);
+    setLinkItemDialogOpen(true);
+  }, []);
+
+  const handleLinkToItemConfirm = useCallback(
+    async (itemKey: string) => {
+      if (linkItemUrlId === null) {
+        alert('No URL selected to link to item');
+        return;
+      }
+
+      setIsLinkingItem(true);
+      try {
+        const result = await linkUrlToExistingZoteroItem(linkItemUrlId, itemKey);
+
+        if (result.success) {
+          await loadUrls();
+          // Update detail panel if this URL is selected
+          if (selectedUrlForDetail?.id === linkItemUrlId) {
+            const updatedUrl = urls.find(u => u.id === linkItemUrlId);
+            if (updatedUrl) {
+              setSelectedUrlForDetail(updatedUrl);
+            }
+          }
+        } else {
+          alert(`Failed to link item: ${result.error}`);
+        }
+      } catch (error) {
+        alert(`Error linking item: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      } finally {
+        setIsLinkingItem(false);
+      }
+    },
+    [linkItemUrlId, loadUrls, selectedUrlForDetail, urls]
+  );
+
   /**
    * Load filter options on mount
    */
@@ -411,7 +534,13 @@ export function URLTableNew({
                     onApproveMetadata={() => handleApproveMetadata(url)}
                     onManualCreate={() => handleManualCreate(url)}
                     onReset={() => handleReset(url)}
-                    onMoreActions={() => handleViewHistory(url)}
+                    onIgnore={() => handleIgnore(url)}
+                    onUnignore={() => handleUnignore(url)}
+                    onArchive={() => handleArchive(url)}
+                    onDelete={() => handleDelete(url)}
+                    onRetry={() => handleRetry(url)}
+                    onLinkToItem={() => handleLinkToItem(url)}
+                    onViewHistory={() => handleViewHistory(url)}
                     isProcessing={processing.isProcessing}
                     compact={isDetailPaneOpen}
                     isDetailSelected={selectedUrlForDetail?.id === url.id}
@@ -542,6 +671,22 @@ export function URLTableNew({
         onCancel={processing.cancelCurrentBatch}
         isProcessing={processing.isProcessing}
       />
+
+      {/* Link to Item Dialog */}
+      {linkItemUrlId !== null && (
+        <LinkToItemDialog
+          urlId={linkItemUrlId}
+          open={linkItemDialogOpen}
+          onOpenChange={(open) => {
+            if (!open) {
+              setLinkItemDialogOpen(false);
+              setLinkItemUrlId(null);
+            }
+          }}
+          onConfirm={handleLinkToItemConfirm}
+          isLoading={isLinkingItem}
+        />
+      )}
     </div>
   );
 }
