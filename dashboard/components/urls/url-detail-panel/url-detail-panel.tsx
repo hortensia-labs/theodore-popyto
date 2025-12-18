@@ -28,6 +28,7 @@ import { StatusSummarySection } from './StatusSummarySection';
 import { CapabilitiesSection } from './CapabilitiesSection';
 import { ProcessingHistorySection } from './ProcessingHistorySection';
 import { QuickActionsSection } from './QuickActionsSection';
+import { ContentProcessingSection } from './ContentProcessingSection';
 import { AddIdentifierModal } from '../add-identifier-modal';
 import { ReplaceZoteroItemModal } from '../replace-zotero-item-modal';
 import { LinkToItemDialog } from '../dialogs/LinkToItemDialog';
@@ -837,6 +838,15 @@ export function URLDetailPanel({ url, onClose, onUpdate }: URLDetailPanelProps) 
             <div className="border rounded-lg bg-white p-4">
               <CapabilitiesSection capability={urlWithCap.capability} />
             </div>
+          )}
+
+          {/* NEW: Content Processing Section */}
+          {urlWithCap && (
+            <ContentProcessingSection
+              url={urlWithCap}
+              onUpdate={onUpdate}
+              isProcessing={isProcessing}
+            />
           )}
 
           {/* NEW: Quick Actions Section */}
