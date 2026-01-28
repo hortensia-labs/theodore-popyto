@@ -35,7 +35,7 @@ export function MetadataExtractionSubsection({
   isProcessing = false,
 }: MetadataExtractionSubsectionProps) {
   const status = getMetadataExtractionStatus(
-    { hasExtractedMetadata: url.hasExtractedMetadata },
+    { hasExtractedMetadata: url.extractedMetadata?.length > 0 },
     url.extractedMetadata
   );
 

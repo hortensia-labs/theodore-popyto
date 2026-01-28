@@ -162,6 +162,19 @@ export async function getUrlsWithCapabilities(
           createdByTheodore: row.urls.createdByTheodore,
           userModifiedInZotero: row.urls.userModifiedInZotero,
           linkedUrlCount: row.urls.linkedUrlCount,
+          // Content processing data
+          contentCache: row.url_content_cache,
+          identifiers: [], // Fetch separately if needed for individual URLs
+          extractedMetadata: undefined,
+          // Additional URL fields for content processing
+          isAccessible: row.urls.isAccessible ?? null,
+          contentFetchAttempts: row.urls.contentFetchAttempts ?? null,
+          lastFetchError: row.urls.lastFetchError ?? null,
+          llmExtractionStatus: row.urls.llmExtractionStatus ?? null,
+          llmExtractionProvider: row.urls.llmExtractionProvider ?? null,
+          llmExtractedAt: row.urls.llmExtractedAt ?? null,
+          llmExtractionAttempts: row.urls.llmExtractionAttempts ?? null,
+          llmExtractionError: row.urls.llmExtractionError ?? null,
         };
       })
     );

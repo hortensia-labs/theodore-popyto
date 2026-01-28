@@ -36,7 +36,7 @@ export function IdentifierExtractionSubsection({
   const [showAllIdentifiers, setShowAllIdentifiers] = useState(false);
 
   const status = getIdentifierExtractionStatus(
-    { identifierCount: url.identifierCount },
+    { identifierCount: url.identifiers?.length || 0 },
     url.contentCache
   );
 

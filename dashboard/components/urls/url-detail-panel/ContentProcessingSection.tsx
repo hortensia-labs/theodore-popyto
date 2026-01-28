@@ -45,8 +45,8 @@ export function ContentProcessingSection({
   };
 
   // Check if we should show each subsection
-  const showIdentifierExtraction = url.contentCache || (url.identifierCount && url.identifierCount > 0);
-  const showMetadataExtraction = url.hasExtractedMetadata || url.extractedMetadata;
+  const showIdentifierExtraction = url.contentCache || (url.identifiers?.length && url.identifiers?.length > 0);
+  const showMetadataExtraction = url.extractedMetadata?.length > 0;
   const showLLMProcessing = url.capability.canUseLLM || url.llmExtractionStatus;
   const showErrorInformation = url.lastFetchError || url.llmExtractionError;
 
