@@ -2,9 +2,17 @@
 """
 Replace markdown links with Zotero citations.
 
-This script loads URL-to-citation mappings from zotero-data.json and replaces
-all matching markdown links in sections/*/sources/*.md files with their
-corresponding citations. Reference links without mappings are deleted by default.
+This script loads URL-to-citation mappings from the API endpoint and replaces
+all matching markdown links with their corresponding citations. 
+
+Usage:
+    # Process a specific file:
+    python replace-links-with-citations.py path/to/file.md
+    
+    # Process all files in sections/*/sources/:
+    python replace-links-with-citations.py
+
+Reference links without mappings are deleted by default.
 
 Example transformation:
     Input:  perspectivas[1](http://example.com/paper.pdf).
@@ -29,11 +37,40 @@ from pathlib import Path
 from typing import Optional
 from urllib.parse import unquote, urlparse
 
+try:
+    import requests
+except ImportError:
+    print("Error: 'requests' library is required. Install it with: pip install requests", file=sys.stderr)
+    sys.exit(1)
 
-def load_zotero_data(json_path: Path) -> dict:
-    """Load the URL-to-citation mapping from the JSON file."""
-    with open(json_path, 'r', encoding='utf-8') as f:
-        return json.load(f)
+
+def load_zotero_data(api_url: str) -> dict:
+    """
+    Load the URL-to-citation mapping from the API endpoint.
+    
+    Args:
+        api_url: The URL of the API endpoint (e.g., 'http://localhost:3000/api/zotero-mappings')
+    
+    Returns:
+        Dictionary mapping URLs to citation data
+    
+    Raises:
+        SystemExit: If the API request fails
+    """
+    try:
+        response = requests.get(api_url, timeout=30)
+        response.raise_for_status()  # Raise an exception for bad status codes
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching data from API endpoint: {e}", file=sys.stderr)
+        if hasattr(e, 'response') and e.response is not None:
+            print(f"  Status code: {e.response.status_code}", file=sys.stderr)
+            try:
+                error_detail = e.response.json()
+                print(f"  Response: {error_detail}", file=sys.stderr)
+            except:
+                print(f"  Response text: {e.response.text[:200]}", file=sys.stderr)
+        sys.exit(1)
 
 
 def normalize_url(url: str) -> str:
@@ -61,6 +98,7 @@ def build_url_lookup(zotero_data: dict) -> dict:
     
     Returns a dict mapping normalized URLs to their citation strings.
     Also includes the original URLs for exact matching priority.
+    Additionally stores base URLs (without fragments) to match URLs with different fragments.
     """
     lookup = {}
     
@@ -73,6 +111,16 @@ def build_url_lookup(zotero_data: dict) -> dict:
             normalized = normalize_url(url)
             if normalized not in lookup:
                 lookup[normalized] = citation
+            
+            # Also store base URL (without fragment) for matching URLs with different fragments
+            if '#' in url:
+                base_url = url.split('#')[0]
+                if base_url not in lookup:
+                    lookup[base_url] = citation
+                # Also store normalized base URL
+                normalized_base = normalize_url(base_url)
+                if normalized_base not in lookup:
+                    lookup[normalized_base] = citation
     
     return lookup
 
@@ -139,6 +187,7 @@ def replace_links_in_content(content: str, lookup: dict, delete_unmatched: bool 
     
     # Pattern to match markdown links: [text](url)
     # - [text] can contain any characters except ] (including ^, numbers, etc.)
+    # - Handles escaped brackets: [\[text\]](url)
     # - (url) contains the URL which cannot contain unescaped parentheses
     # 
     # We need to be careful with nested parentheses in URLs
@@ -146,14 +195,23 @@ def replace_links_in_content(content: str, lookup: dict, delete_unmatched: bool 
     # For now, we'll handle simple cases and URLs with balanced parens
     
     # Regex pattern explanation:
-    # \[([^\]]*)\]  - Match [text] where text is any chars except ]
-    # \(            - Match opening paren
-    # ([^)\s]+)     - Match URL (any chars except ) and whitespace)
-    # \)            - Match closing paren
+    # \[              - Match literal opening bracket [
+    # (               - Start capture group for link text
+    #   (?:           - Non-capturing group for escaped or regular characters
+    #     \\[\[\]]    - Match escaped brackets \[ or \]
+    #     |           - OR
+    #     [^\]]       - Match any character except ]
+    #   )*            - Zero or more of the above
+    # )               - End capture group
+    # \]              - Match literal closing bracket ]
+    # \(              - Match opening paren
+    # ([^)\s]+)       - Match URL (any chars except ) and whitespace)
+    # \)              - Match closing paren
     #
-    # Note: This pattern handles most cases. URLs with spaces would need encoding.
+    # Note: This pattern handles both [text](url) and [\[text\]](url) formats.
+    # URLs with spaces would need encoding.
     
-    link_pattern = re.compile(r'\[([^\]]*)\]\(([^)\s]+)\)')
+    link_pattern = re.compile(r'\[((?:\\[\[\]]|[^\]])*)\]\(([^)\s]+)\)')
     
     def replace_link(match: re.Match) -> str:
         nonlocal replacements_made, deletions_made, deleted_urls
@@ -250,6 +308,13 @@ def main():
         description='Replace markdown links with Zotero citations.'
     )
     parser.add_argument(
+        'file',
+        type=Path,
+        nargs='?',
+        default=None,
+        help='Path to markdown file to process (optional: if not provided, processes all files in sections/*/sources/)'
+    )
+    parser.add_argument(
         '--dry-run',
         action='store_true',
         help='Show what would be changed without modifying files'
@@ -265,10 +330,10 @@ def main():
         help='Keep reference links that have no matching citation (default: delete them)'
     )
     parser.add_argument(
-        '--json-path',
-        type=Path,
-        default=Path('zotero-data.json'),
-        help='Path to the zotero-data.json file (default: zotero-data.json)'
+        '--api-url',
+        type=str,
+        default='http://localhost:3000/api/zotero-mappings',
+        help='URL of the API endpoint to fetch citation data (default: http://localhost:3000/api/zotero-mappings)'
     )
     parser.add_argument(
         '--base-path',
@@ -280,31 +345,40 @@ def main():
     args = parser.parse_args()
     
     # Resolve paths
-    json_path = args.json_path.resolve()
     base_path = args.base_path.resolve()
     
-    # Check if JSON file exists
-    if not json_path.exists():
-        print(f"Error: JSON file not found: {json_path}", file=sys.stderr)
-        sys.exit(1)
-    
-    # Load Zotero data
-    print(f"Loading citation data from: {json_path}")
+    # Load Zotero data from API
+    print(f"Loading citation data from: {args.api_url}")
     try:
-        zotero_data = load_zotero_data(json_path)
+        zotero_data = load_zotero_data(args.api_url)
         print(f"  Loaded {len(zotero_data)} URL-to-citation mappings")
+    except SystemExit:
+        # Error already printed by load_zotero_data
+        raise
     except Exception as e:
-        print(f"Error loading JSON file: {e}", file=sys.stderr)
+        print(f"Error loading data from API: {e}", file=sys.stderr)
         sys.exit(1)
     
     # Build lookup dictionary
     lookup = build_url_lookup(zotero_data)
     
-    # Find markdown files
-    md_files = find_markdown_files(base_path)
-    if not md_files:
-        print(f"No markdown files found in {base_path}/sections/*/sources/")
-        sys.exit(0)
+    # Determine which files to process
+    if args.file:
+        # Process single file specified by user
+        file_path = Path(args.file).resolve()
+        if not file_path.exists():
+            print(f"Error: File not found: {file_path}", file=sys.stderr)
+            sys.exit(1)
+        if not file_path.is_file():
+            print(f"Error: Path is not a file: {file_path}", file=sys.stderr)
+            sys.exit(1)
+        md_files = [file_path]
+    else:
+        # Find all markdown files in sections/*/sources/
+        md_files = find_markdown_files(base_path)
+        if not md_files:
+            print(f"No markdown files found in {base_path}/sections/*/sources/")
+            sys.exit(0)
     
     delete_unmatched = not args.keep_unmatched
     
@@ -335,7 +409,12 @@ def main():
             modified_files += 1
             total_replacements += result['replacements']
             total_deletions += result['deletions']
-            relative_path = md_file.relative_to(base_path)
+            
+            # Show relative path if processing multiple files, absolute path for single file
+            if args.file:
+                display_path = md_file
+            else:
+                display_path = md_file.relative_to(base_path)
             
             # Format output to show both replacements and deletions
             stats = []
@@ -344,13 +423,16 @@ def main():
             if result['deletions'] > 0:
                 stats.append(f"{result['deletions']} deleted")
             stats_str = ', '.join(stats)
-            print(f"  [{stats_str:>25}] {relative_path}")
+            print(f"  [{stats_str:>25}] {display_path}")
             
             if args.verbose and result['deleted_urls']:
                 all_deleted_urls.extend(result['deleted_urls'])
         elif args.verbose:
-            relative_path = md_file.relative_to(base_path)
-            print(f"  [{'no changes':>25}] {relative_path}")
+            if args.file:
+                display_path = md_file
+            else:
+                display_path = md_file.relative_to(base_path)
+            print(f"  [{'no changes':>25}] {display_path}")
     
     # Print summary
     print(f"\n{'='*60}")

@@ -1,14 +1,14 @@
 /**
- * API Route: Get Zotero Item Mappings
+ * API Route: Get Zotero Item Mapping by URL
  * 
- * Returns a JSON mapping of non-ignored URLs to their linked Zotero item keys and citations
- * Format: { "[url]": { "key": "[zotero-item-key]", "citation": "[formatted-citation]" }, ... }
+ * Returns the key and citation for a specific URL
+ * Format: { "key": "[zotero-item-key]", "citation": "[formatted-citation]" }
  */
 
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db/client';
 import { urls } from '@/drizzle/schema';
-import { and, isNotNull, notInArray } from 'drizzle-orm';
+import { and, eq, isNotNull, notInArray } from 'drizzle-orm';
 
 export const dynamic = 'force-dynamic';
 
@@ -75,12 +75,22 @@ async function fetchAllZoteroItems(): Promise<Map<string, string>> {
   }
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    // Query for all URLs that:
-    // 1. Are not ignored or archived (userIntent not in ['ignore', 'archive'])
-    // 2. Have a linked Zotero item key
-    const urlRecords = await db
+    const { searchParams } = new URL(request.url);
+    const url = searchParams.get('url');
+    
+    if (!url) {
+      return NextResponse.json(
+        { error: 'URL parameter is required' },
+        { status: 400 }
+      );
+    }
+
+    // Query for the specific URL that:
+    // 1. Is not ignored or archived (userIntent not in ['ignore', 'archive'])
+    // 2. Has a linked Zotero item key
+    const urlRecord = await db
       .select({
         url: urls.url,
         zoteroItemKey: urls.zoteroItemKey,
@@ -88,10 +98,21 @@ export async function GET() {
       .from(urls)
       .where(
         and(
+          eq(urls.url, url),
           isNotNull(urls.zoteroItemKey),
           notInArray(urls.userIntent, ['ignore', 'archive'])
         )
+      )
+      .limit(1);
+
+    if (!urlRecord.length || !urlRecord[0].zoteroItemKey) {
+      return NextResponse.json(
+        { error: 'URL not found or has no linked Zotero item' },
+        { status: 404 }
       );
+    }
+
+    const record = urlRecord[0];
 
     // Fetch all Zotero items with citations
     let citationMap: Map<string, string>;
@@ -99,32 +120,30 @@ export async function GET() {
       citationMap = await fetchAllZoteroItems();
     } catch (error) {
       console.error('Error fetching Zotero items:', error);
-      // If Zotero is unavailable, return mappings without citations
+      // If Zotero is unavailable, return mapping without citation
       // This allows the endpoint to still function for basic key lookups
       citationMap = new Map();
     }
 
-    // Transform the results into the requested format
-    const mappings: Record<string, { key: string; citation?: string }> = {};
-    
-    for (const record of urlRecords) {
-      if (record.zoteroItemKey) {
-        const citation = citationMap.get(record.zoteroItemKey);
-        mappings[record.url] = {
-          key: record.zoteroItemKey,
-          ...(citation && { citation }),
-        };
-      }
-    }
+    // Get the citation for this specific item
+    // TypeScript doesn't infer that zoteroItemKey is non-null from the where clause,
+    // but we've already verified it exists above
+    const zoteroItemKey = record.zoteroItemKey!;
+    const citation = citationMap.get(zoteroItemKey);
 
-    return NextResponse.json(mappings, {
+    const result: { key: string; citation?: string } = {
+      key: zoteroItemKey,
+      ...(citation && { citation }),
+    };
+
+    return NextResponse.json(result, {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
       },
     });
   } catch (error) {
-    console.error('Error fetching Zotero mappings:', error);
+    console.error('Error fetching Zotero mapping by URL:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
