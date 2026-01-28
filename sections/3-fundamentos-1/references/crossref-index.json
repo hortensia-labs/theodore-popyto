@@ -1,0 +1,532 @@
+{
+  "chapter": 3,
+  "title": "Fundamentos Teóricos I: La Singularidad de la Práctica Dancística",
+  "generated": "2026-01-28",
+  "anchors": {
+    "chapter_level": [
+      {
+        "id": "cap3-introduccion",
+        "file": "3.0-introduccion.md",
+        "description": "Introducción al Capítulo 3",
+        "type": "section"
+      }
+    ],
+    "section_3_1": [
+      {
+        "id": "cognicion-corporeizada",
+        "file": "3.1.0-cognicion-intro.md",
+        "description": "Sección principal 3.1 - Cognición Corporeizada",
+        "type": "section"
+      },
+      {
+        "id": "cuerpo-conocimiento",
+        "file": "3.1.1-cuerpo-conocimiento.md",
+        "description": "3.1.1 El Cuerpo como Lugar de Conocimiento",
+        "type": "subsection"
+      },
+      {
+        "id": "korper-leib",
+        "file": "3.1.1-cuerpo-conocimiento.md",
+        "description": "Distinción Körper vs. Leib",
+        "type": "concept"
+      },
+      {
+        "id": "cuerpo-vivido",
+        "file": "3.1.1-cuerpo-conocimiento.md",
+        "description": "El concepto de cuerpo-vivido",
+        "type": "concept"
+      },
+      {
+        "id": "esquema-corporal",
+        "file": "3.1.1-cuerpo-conocimiento.md",
+        "description": "Esquema corporal de Merleau-Ponty",
+        "type": "concept"
+      },
+      {
+        "id": "conocimiento-tacito",
+        "file": "3.1.2-conocimiento-tacito.md",
+        "description": "3.1.2 Conocimiento Tácito",
+        "type": "subsection"
+      },
+      {
+        "id": "polanyi-tacito",
+        "file": "3.1.2-conocimiento-tacito.md",
+        "description": "Teoría del conocimiento tácito de Polanyi",
+        "type": "concept"
+      },
+      {
+        "id": "inteligencia-kinestetica",
+        "file": "3.1.2-conocimiento-tacito.md",
+        "description": "Conocimiento tácito kinestésico",
+        "type": "concept"
+      },
+      {
+        "id": "memoria-muscular",
+        "file": "3.1.2-conocimiento-tacito.md",
+        "description": "Memoria muscular/kinestésica",
+        "type": "concept"
+      },
+      {
+        "id": "juicio-encarnado",
+        "file": "3.1.2-conocimiento-tacito.md",
+        "description": "Juicio encarnado e inteligencia motriz",
+        "type": "concept"
+      },
+      {
+        "id": "presencia-escenica",
+        "file": "3.1.3-presencia-escenica.md",
+        "description": "3.1.3 La Presencia Escénica",
+        "type": "subsection"
+      },
+      {
+        "id": "enaccion",
+        "file": "3.1.3-presencia-escenica.md",
+        "description": "Teoría de la enacción",
+        "type": "concept"
+      },
+      {
+        "id": "acoplamiento-estructural",
+        "file": "3.1.3-presencia-escenica.md",
+        "description": "Acoplamiento estructural",
+        "type": "concept"
+      },
+      {
+        "id": "sense-making",
+        "file": "3.1.3-presencia-escenica.md",
+        "description": "Sentido-hacer (sense-making)",
+        "type": "concept"
+      },
+      {
+        "id": "percepcion-activa",
+        "file": "3.1.3-presencia-escenica.md",
+        "description": "Percepción activa",
+        "type": "concept"
+      },
+      {
+        "id": "propiocepcion",
+        "file": "3.1.3-presencia-escenica.md",
+        "description": "Propiocepción e interocepción",
+        "type": "concept"
+      }
+    ],
+    "section_3_2": [
+      {
+        "id": "estetica-valor",
+        "file": "3.2.0-estetica-intro.md",
+        "description": "Sección principal 3.2 - Estética y Valor",
+        "type": "section"
+      },
+      {
+        "id": "intencionalidad-artistica",
+        "file": "3.2.1-intencionalidad.md",
+        "description": "3.2.1 Intencionalidad Artística",
+        "type": "subsection"
+      },
+      {
+        "id": "juicio-estetico",
+        "file": "3.2.1-intencionalidad.md",
+        "description": "Juicio estético en danza",
+        "type": "concept"
+      },
+      {
+        "id": "subjetividad-creador",
+        "file": "3.2.1-intencionalidad.md",
+        "description": "Subjetividad del creador",
+        "type": "concept"
+      },
+      {
+        "id": "autenticidad-performativa",
+        "file": "3.2.1-intencionalidad.md",
+        "description": "Autenticidad performativa",
+        "type": "concept"
+      },
+      {
+        "id": "expresividad-emocional",
+        "file": "3.2.1-intencionalidad.md",
+        "description": "Expresividad emocional encarnada",
+        "type": "concept"
+      },
+      {
+        "id": "co-construccion-significado",
+        "file": "3.2.2-co-construccion.md",
+        "description": "3.2.2 Co-construcción del Significado",
+        "type": "subsection"
+      },
+      {
+        "id": "recepcion-estetica",
+        "file": "3.2.2-co-construccion.md",
+        "description": "Teoría de la recepción estética",
+        "type": "concept"
+      },
+      {
+        "id": "horizonte-expectativas",
+        "file": "3.2.2-co-construccion.md",
+        "description": "Horizonte de expectativas del público",
+        "type": "concept"
+      },
+      {
+        "id": "empatia-kinestetica",
+        "file": "3.2.2-co-construccion.md",
+        "description": "Empatía kinestésica",
+        "type": "concept"
+      },
+      {
+        "id": "valor-finitud",
+        "file": "3.2.3-finitud.md",
+        "description": "3.2.3 El Valor de la Finitud",
+        "type": "subsection"
+      },
+      {
+        "id": "presencia-auratica",
+        "file": "3.2.3-finitud.md",
+        "description": "Presencia aurática (Benjamin)",
+        "type": "concept"
+      },
+      {
+        "id": "vulnerabilidad",
+        "file": "3.2.3-finitud.md",
+        "description": "Vulnerabilidad del performer",
+        "type": "concept"
+      },
+      {
+        "id": "fragilidad-performance",
+        "file": "3.2.3-finitud.md",
+        "description": "Fragilidad de la performance en vivo",
+        "type": "concept"
+      },
+      {
+        "id": "efimeridad",
+        "file": "3.2.3-finitud.md",
+        "description": "Efimeridad de la danza",
+        "type": "concept"
+      }
+    ],
+    "section_3_3": [
+      {
+        "id": "poetica-danza",
+        "file": "3.3.0-poetica-intro.md",
+        "description": "Sección principal 3.3 - Poética de la Danza",
+        "type": "section"
+      },
+      {
+        "id": "lenguaje-movimiento",
+        "file": "3.3.1-lenguaje-movimiento.md",
+        "description": "3.3.1 El Lenguaje del Movimiento",
+        "type": "subsection"
+      },
+      {
+        "id": "analisis-laban",
+        "file": "3.3.1-lenguaje-movimiento.md",
+        "description": "Análisis del Movimiento de Laban",
+        "type": "concept"
+      },
+      {
+        "id": "factores-esfuerzo",
+        "file": "3.3.1-lenguaje-movimiento.md",
+        "description": "Factores de Esfuerzo (Laban)",
+        "type": "concept"
+      },
+      {
+        "id": "kinesfera",
+        "file": "3.3.1-lenguaje-movimiento.md",
+        "description": "Kinesfera",
+        "type": "concept"
+      },
+      {
+        "id": "polisemia-danza",
+        "file": "3.3.1-lenguaje-movimiento.md",
+        "description": "Polisemia en la danza",
+        "type": "concept"
+      },
+      {
+        "id": "metafora-kinestetica",
+        "file": "3.3.1-lenguaje-movimiento.md",
+        "description": "Metáfora kinestésica",
+        "type": "concept"
+      },
+      {
+        "id": "improvisacion-composicion",
+        "file": "3.3.2-improvisacion.md",
+        "description": "3.3.2 Improvisación y Composición",
+        "type": "subsection"
+      },
+      {
+        "id": "improvisacion-danza",
+        "file": "3.3.2-improvisacion.md",
+        "description": "Improvisación dancística",
+        "type": "concept"
+      },
+      {
+        "id": "pensamiento-movimiento",
+        "file": "3.3.2-improvisacion.md",
+        "description": "Pensamiento en movimiento",
+        "type": "concept"
+      },
+      {
+        "id": "composicion-coreografica",
+        "file": "3.3.2-improvisacion.md",
+        "description": "Composición coreográfica",
+        "type": "concept"
+      },
+      {
+        "id": "dramaturgia-danza",
+        "file": "3.3.2-improvisacion.md",
+        "description": "Dramaturgia de la danza",
+        "type": "concept"
+      },
+      {
+        "id": "anclaje-cultural",
+        "file": "3.3.3-anclaje-cultural.md",
+        "description": "3.3.3 El Anclaje Cultural",
+        "type": "subsection"
+      },
+      {
+        "id": "cuerpo-archivo",
+        "file": "3.3.3-anclaje-cultural.md",
+        "description": "El cuerpo como archivo cultural",
+        "type": "concept"
+      },
+      {
+        "id": "memoria-colectiva",
+        "file": "3.3.3-anclaje-cultural.md",
+        "description": "Memoria colectiva en la danza",
+        "type": "concept"
+      },
+      {
+        "id": "transmision-cultural",
+        "file": "3.3.3-anclaje-cultural.md",
+        "description": "Transmisión cultural del conocimiento dancístico",
+        "type": "concept"
+      },
+      {
+        "id": "resistencia-social",
+        "file": "3.3.3-anclaje-cultural.md",
+        "description": "Danza como comentario y resistencia social",
+        "type": "concept"
+      }
+    ],
+    "section_3_4": [
+      {
+        "id": "sintesis-cap3",
+        "file": "3.4-sintesis.md",
+        "description": "Sección principal 3.4 - Síntesis Intermedia",
+        "type": "section"
+      },
+      {
+        "id": "convergencias-pilares",
+        "file": "3.4-sintesis.md",
+        "description": "Convergencias entre los tres pilares",
+        "type": "concept"
+      },
+      {
+        "id": "irreductiblemente-humano",
+        "file": "3.4-sintesis.md",
+        "description": "Lo irreductiblemente humano en la danza",
+        "type": "concept"
+      },
+      {
+        "id": "barrera-ia-cap3",
+        "file": "3.4-sintesis.md",
+        "description": "Desafíos compuestos para la IA (síntesis Cap. 3)",
+        "type": "concept"
+      }
+    ]
+  },
+  "cross_references": {
+    "internal": [
+      {
+        "from": "3.0-introduccion.md",
+        "to": "#cognicion-corporeizada",
+        "type": "forward_reference"
+      },
+      {
+        "from": "3.0-introduccion.md",
+        "to": "#estetica-valor",
+        "type": "forward_reference"
+      },
+      {
+        "from": "3.0-introduccion.md",
+        "to": "#poetica-danza",
+        "type": "forward_reference"
+      },
+      {
+        "from": "3.0-introduccion.md",
+        "to": "#sintesis-cap3",
+        "type": "forward_reference"
+      },
+      {
+        "from": "3.1.0-cognicion-intro.md",
+        "to": "#cuerpo-conocimiento",
+        "type": "forward_reference"
+      },
+      {
+        "from": "3.1.0-cognicion-intro.md",
+        "to": "#conocimiento-tacito",
+        "type": "forward_reference"
+      },
+      {
+        "from": "3.1.0-cognicion-intro.md",
+        "to": "#presencia-escenica",
+        "type": "forward_reference"
+      },
+      {
+        "from": "3.1.3-presencia-escenica.md",
+        "to": "#cuerpo-conocimiento",
+        "type": "back_reference"
+      },
+      {
+        "from": "3.1.3-presencia-escenica.md",
+        "to": "#conocimiento-tacito",
+        "type": "back_reference"
+      },
+      {
+        "from": "3.2.0-estetica-intro.md",
+        "to": "#cognicion-corporeizada",
+        "type": "back_reference"
+      },
+      {
+        "from": "3.2.3-finitud.md",
+        "to": "#intencionalidad-artistica",
+        "type": "back_reference"
+      },
+      {
+        "from": "3.2.3-finitud.md",
+        "to": "#co-construccion-significado",
+        "type": "back_reference"
+      },
+      {
+        "from": "3.2.3-finitud.md",
+        "to": "#presencia-escenica",
+        "type": "back_reference"
+      },
+      {
+        "from": "3.3.0-poetica-intro.md",
+        "to": "#cognicion-corporeizada",
+        "type": "back_reference"
+      },
+      {
+        "from": "3.3.0-poetica-intro.md",
+        "to": "#estetica-valor",
+        "type": "back_reference"
+      },
+      {
+        "from": "3.3.2-improvisacion.md",
+        "to": "#cognicion-corporeizada",
+        "type": "back_reference"
+      },
+      {
+        "from": "3.3.3-anclaje-cultural.md",
+        "to": "#lenguaje-movimiento",
+        "type": "back_reference"
+      },
+      {
+        "from": "3.3.3-anclaje-cultural.md",
+        "to": "#improvisacion-composicion",
+        "type": "back_reference"
+      },
+      {
+        "from": "3.4-sintesis.md",
+        "to": "#korper-leib",
+        "type": "back_reference"
+      },
+      {
+        "from": "3.4-sintesis.md",
+        "to": "#polanyi-tacito",
+        "type": "back_reference"
+      },
+      {
+        "from": "3.4-sintesis.md",
+        "to": "#enaccion",
+        "type": "back_reference"
+      },
+      {
+        "from": "3.4-sintesis.md",
+        "to": "#co-construccion-significado",
+        "type": "back_reference"
+      },
+      {
+        "from": "3.4-sintesis.md",
+        "to": "#polisemia-danza",
+        "type": "back_reference"
+      }
+    ],
+    "external": [
+      {
+        "from": "3.0-introduccion.md",
+        "to": "chapter_4",
+        "description": "Prepara para el pilar de economía laboral"
+      },
+      {
+        "from": "3.0-introduccion.md",
+        "to": "chapter_5",
+        "description": "Prepara para el marco Resistencia Encarnada"
+      },
+      {
+        "from": "3.3.3-anclaje-cultural.md",
+        "to": "chapter_5",
+        "description": "Fundamenta lente ético-política"
+      },
+      {
+        "from": "3.4-sintesis.md",
+        "to": "chapter_4",
+        "description": "Transición hacia análisis laboral"
+      }
+    ]
+  },
+  "markers": {
+    "NOTA": [
+      {
+        "file": "3.0-introduccion.md",
+        "content": "Verificar que las referencias cruzadas a otros capítulos estén correctamente formateadas tras la compilación final"
+      },
+      {
+        "file": "3.1.1-cuerpo-conocimiento.md",
+        "content": "Revisar si las citas de Prescott y Wilson están correctamente formateadas según APA 7"
+      },
+      {
+        "file": "3.3.1-lenguaje-movimiento.md",
+        "content": "Conectar con la sección 3.3.3 sobre anclaje cultural para evitar redundancia"
+      },
+      {
+        "file": "3.3.3-anclaje-cultural.md",
+        "content": "Esta sección establece fundamentos que el Capítulo 5 desarrollará al articular la lente ético-política del marco"
+      }
+    ],
+    "PENDIENTE": [
+      {
+        "file": "3.1.2-conocimiento-tacito.md",
+        "content": "Verificar la cita 'Unknown Author, 2024' y reemplazar con referencia completa"
+      },
+      {
+        "file": "3.2.2-co-construccion.md",
+        "content": "Añadir ejemplo concreto de estudio experimental sobre recepción de danza generada por IA"
+      },
+      {
+        "file": "3.3.2-improvisacion.md",
+        "content": "Añadir referencia a un caso de estudio específico de colaboración humano-IA en improvisación"
+      }
+    ],
+    "REVISAR": [
+      {
+        "file": "3.1.3-presencia-escenica.md",
+        "content": "Posible solapamiento conceptual con sección 3.2.3 sobre presencia aurática - coordinar terminología"
+      },
+      {
+        "file": "3.2.1-intencionalidad.md",
+        "content": "Verificar consistencia terminológica entre 'autenticidad performativa' aquí y 'presencia aurática' en 3.2.3"
+      },
+      {
+        "file": "3.2.3-finitud.md",
+        "content": "Asegurar que la conclusión conecte explícitamente con la síntesis del capítulo 3.4"
+      }
+    ]
+  },
+  "statistics": {
+    "total_anchors": 51,
+    "internal_crossrefs": 21,
+    "external_crossrefs": 4,
+    "markers_nota": 4,
+    "markers_pendiente": 3,
+    "markers_revisar": 3
+  }
+}
