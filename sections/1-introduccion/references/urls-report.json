@@ -1,0 +1,870 @@
+[
+  {
+    "url": "https://Move.AI**",
+    "error": "HTTP 400: {\"success\":false,\"error\":{\"type\":\"ValidationError\",\"message\":\"Invalid URL format\",\"timestamp\":\"2026-01-29T22:58:08.701Z\"}}",
+    "status_code": 400
+  },
+  {
+    "url": "https://dancemagazine.com/how-dancers-use-ai/",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:08.686Z",
+    "itemKey": "D6KV59CR",
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "already-stored",
+    "urlAccessible": false,
+    "contentType": "unknown",
+    "httpStatusCode": null,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://calmatters.org/economy/technology/2026/01/ai-sucks-at-dancing-tests-show/",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:08.697Z",
+    "itemKey": "BSVX5W5W",
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "already-stored",
+    "urlAccessible": false,
+    "contentType": "unknown",
+    "httpStatusCode": null,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://engineering.stanford.edu/news/ai-powered-edge-dance-animator-applies-generative-ai-choreography",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:08.700Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://dl.acm.org/doi/abs/10.1145/3537972.3538007",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:08.702Z",
+    "itemKey": null,
+    "identifiers": [
+      "10.1145/3537972.3538007"
+    ],
+    "validIdentifiers": [
+      "10.1145/3537972.3538007"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": false,
+    "contentType": "unknown",
+    "httpStatusCode": null,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://google.github.io/aichoreographer/",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:08.702Z",
+    "itemKey": null,
+    "identifiers": [
+      "2101.08779"
+    ],
+    "validIdentifiers": [
+      "2101.08779"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://openaccess.thecvf.com/content/CVPR2022/html/Siyao_Bailando_3D_Dance_Generation_by_Actor-Critic_GPT_With_Choreographic_Memory_CVPR_2022_paper.html",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:08.787Z",
+    "itemKey": null,
+    "identifiers": [
+      "2203.13055"
+    ],
+    "validIdentifiers": [
+      "2203.13055"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://arxiv.org/html/2506.12008v1",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:08.679Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [],
+    "status": "partial_success",
+    "processingRecommendation": "ai-resolvable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [
+      "AI identifier extraction failed: [Exception... \"Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsIChannel.contentDisposition]\"  nsresult: \"0x80040111 (NS_ERROR_NOT_AVAILABLE)\"  location: \"JS frame :: file:///Users/henry/Developer/Projects/Packages/Thesis-Workflow/ZoteroCitationLinker/build/lib.js :: makeChatRequest :: line 3099\"  data: no]"
+    ],
+    "disambiguationUsed": false,
+    "aiTranslation": true
+  },
+  {
+    "url": "https://openaccess.thecvf.com/content/ICCV2021/papers/Li_AI_Choreographer_Music_Conditioned_3D_Dance_Generation_With_AIST_ICCV_2021_paper.pdf",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:08.829Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "ai-resolvable",
+    "urlAccessible": true,
+    "contentType": "pdf",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": true
+  },
+  {
+    "url": "https://nettricegaskins.medium.com/afrofuturism-kinesthetics-kinematics-biomechanics-beyond-the-speculative-113109961a9d",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:08.779Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "6c957d6b-a554-474f-81a9-91c178fef65d",
+        "label": "Medium",
+        "creator": "Philipp Zumstein",
+        "priority": 100
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://medium.com/@luan.home/the-philosophy-of-agentic-ai-agency-autonomy-and-moral-responsibility-in-artificial-intelligence-a26a8f622a60",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:08.770Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "6c957d6b-a554-474f-81a9-91c178fef65d",
+        "label": "Medium",
+        "creator": "Philipp Zumstein",
+        "priority": 100
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://www.goldmansachs.com/insights/articles/generative-ai-could-raise-global-gdp-by-7-percent",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:08.907Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://just-tech.ssrc.org/field-reviews/interrogating-ai-bias-through-digital-art/",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:08.694Z",
+    "itemKey": null,
+    "identifiers": [
+      "10.35650/JT.3039.d.2022",
+      "10.1145/3532836.3536263",
+      "10.1145/1198555.1198593",
+      "10.1215/02705346-2008-018",
+      "10.1109/CVPR.2016.265",
+      "10.2139/ssrn.3354412",
+      "10.1007/s10708-009-9307-4",
+      "10.1145/383259.383319",
+      "10.48550/arXiv.2103.15163",
+      "10.1016/j.patter.2021.100327",
+      "10.22230/cjc.2009v34n1a2196",
+      "10.1145/1141911.1141987"
+    ],
+    "validIdentifiers": [
+      "10.35650/JT.3039.d.2022",
+      "10.1145/3532836.3536263",
+      "10.1145/1198555.1198593",
+      "10.1215/02705346-2008-018",
+      "10.1109/CVPR.2016.265",
+      "10.2139/ssrn.3354412",
+      "10.1007/s10708-009-9307-4",
+      "10.1145/383259.383319",
+      "10.48550/arXiv.2103.15163",
+      "10.1016/j.patter.2021.100327",
+      "10.22230/cjc.2009v34n1a2196",
+      "10.1145/1141911.1141987"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "primaryDOI": "10.35650/JT.3039.d.2022",
+    "primaryDOIScore": 72,
+    "primaryDOIConfidence": "medium",
+    "alternativeDOIs": [
+      {
+        "doi": "10.1145/3532836.3536263",
+        "score": 49,
+        "confidence": "low"
+      },
+      {
+        "doi": "10.1109/CVPR.2016.265",
+        "score": 47,
+        "confidence": "low"
+      }
+    ],
+    "disambiguationUsed": true,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://www.mdpi.com/2571-5577/8/5/127",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:09.140Z",
+    "itemKey": "KCZ8D9SG",
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "already-stored",
+    "urlAccessible": false,
+    "contentType": "unknown",
+    "httpStatusCode": null,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://researchprofiles.ku.dk/en/publications/multimodal-dance-style-transfer/",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:08.833Z",
+    "itemKey": null,
+    "identifiers": [
+      "10.1007/s00138-023-01399-x",
+      "0932-8092",
+      "10.1007/s00138-023-01399-xLicence: CC BY"
+    ],
+    "validIdentifiers": [
+      "10.1007/s00138-023-01399-x",
+      "10.1007/s00138-023-01399-xLicence: CC BY"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "primaryDOI": "10.1007/s00138-023-01399-x",
+    "primaryDOIScore": 52,
+    "primaryDOIConfidence": "low",
+    "alternativeDOIs": [
+      {
+        "doi": "10.1007/s00138-023-01399-xLicence: CC BY",
+        "score": 42,
+        "confidence": "low"
+      }
+    ],
+    "disambiguationUsed": true,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://www.razon.com.mx/el-cultural/2025/06/20/arte-el-sueno-de-la-maquina-creativa/",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:09.153Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://www.researchgate.net/publication/380080358_Exploring_the_impact_of_machine_learning_on_dance_performance_a_systematic_review",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:09.153Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "unreachable",
+    "urlAccessible": false,
+    "contentType": "unknown",
+    "httpStatusCode": 0,
+    "errors": [
+      "URL accessibility check failed: Error: HTTP GET https://www.researchgate.net/publication/380080358_Exploring_the_impact_of_machine_learning_on_dance_performance_a_systematic_review failed with status code 429:\n\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <meta name=\"robots\" content=\"noindex\"/>\n    <title>ResearchGate - Temporarily Unavailable</title>\n    <style>\n        /* Reset and base styles */\n        * {\n            box-sizing: border-box;\n        }\n        \n        body, p, h1, h2 {\n            margin: 0;\n            padding: 0;\n            outline: none;\n        }\n        \n        a, a:hover {\n            text-decoration: none;\n            cursor: pointer;\n        }\n        \n        body {\n            height: 100vh;\n            color: #39393A;\n            font-family: 'Inter', Arial, sans-serif;\n            font-size: 16px;\n            line-height: 1.5;\n            text-align: center;\n            word-wrap: break-word;\n            text-rendering: optimizeLegibility;\n            -webkit-font-smoothing: antialiased;\n            background: #FFFFFF;\n        }\n        \n        /* Header styles */\n        .error-navbar {\n            box-sizing: border-box;\n            display: flex;\n            flex-direction: row;\n            align-items: center;\n            padding: 0px 20px;\n            margin: 0;\n            width: 100%;\n            height: 64px;\n            background: #F6F6F6;\n            border-bottom: 1px solid #E8E8E8;\n            position: relative;\n            z-index: 10;\n        }\n        \n        .logo-container {\n            display: flex;\n            flex-direction: row;\n            align-items: center;\n            padding: 0px;\n            gap: 32px;\n            width: 149.09px;\n            height: 20px;\n            flex: none;\n            order: 0;\n            flex-grow: 0;\n        }\n        \n        .logo-link {\n            display: flex;\n            flex-direction: column;\n            justify-content: center;\n            align-items: center;\n            padding: 0px;\n            gap: 10px;\n            width: 149.09px;\n            height: 20px;\n            flex: none;\n            order: 0;\n            flex-grow: 0;\n        }\n        \n        .error-navbar-logo {\n            width: 149.09px;\n            height: 20px;\n            flex: none;\n            order: 0;\n            flex-grow: 0;\n        }\n        \n        /* Main container */\n        .main {\n            display: flex;\n            flex-direction: column;\n            min-height: calc(100vh - 64px);\n            justify-content: center;\n            align-items: center;\n            background: #F6F6F6;\n            padding: 20px;\n        }\n\n        /* Challenge content container */\n        .challenge-content {\n            display: flex;\n            flex-direction: column;\n            justify-content: center;\n            align-items: center;\n            width: 100%;\n            width: 576px;\n            margin: 0 auto;\n            gap: 16px;\n        }\n\n        /* Warning icon */\n        .challenge-icon {\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            width: 96px;\n            height: 96px;\n        }\n\n        .challenge-icon svg {\n            width: 96px;\n            height: 96px;\n        }\n\n        /* Heading */\n        .challenge-heading h1 {\n            font-family: 'Inter', Arial, sans-serif;\n            font-weight: 600;\n            font-size: 22px;\n            line-height: 1.3;\n            color: #39393A;\n            margin: 0;\n        }\n\n        /* Main message */\n        .challenge-message p {\n            font-family: 'Inter', Arial, sans-serif;\n            font-weight: 400;\n            font-size: 16px;\n            line-height: 1.5;\n            color: #39393A;\n            margin: 0;\n            max-width: 500px;\n        }\n\n        /* CAPTCHA container */\n        .challenge-captcha {\n            width: 100%;\n            max-width: 576px;\n            min-height: 64px;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n        }\n\n        .challenge-captcha ul {\n            list-style: none;\n            padding-left: 0;\n        }\n\n        /* Login promo section */\n        .challenge-login-promo {\n            width: 100%;\n            max-width: 500px;\n        }\n\n        .login-promo-content {\n            display: flex;\n            flex-direction: column;\n            align-items: center;\n            gap: 16px;\n            padding: 16px 0px;\n        }\n\n        .login-promo-main {\n            display: flex;\n            align-items: center;\n            gap: 16px;\n            width: 100%;\n            justify-content: center;\n        }\n\n        .login-promo-text-section {\n            flex: 1;\n            text-align: center;\n        }\n\n        .login-promo-title {\n            font-family: 'Inter', Arial, sans-serif;\n            font-weight: 600;\n            font-size: 16px;\n            color: #39393A;\n            margin: 0 0 8px 0;\n        }\n\n        .login-promo-text {\n            font-family: 'Inter', Arial, sans-serif;\n            font-weight: 400;\n            font-size: 16px;\n            line-height: 1.5;\n            color: #39393A;\n            margin: 0;\n        }\n\n        /* Button container */\n        .login-buttons {\n            display: flex;\n            flex-direction: row;\n            justify-content: center;\n            align-items: flex-start;\n            padding: 0px;\n            gap: 8px;\n            margin-top: 10px;\n        }\n\n        /* Button styles */\n        .btn {\n            box-sizing: border-box;\n            display: flex;\n            flex-direction: row;\n            justify-content: center;\n            align-items: center;\n            padding: 0px 16px;\n            gap: 4px;\n            height: 32px;\n            border-radius: 16px;\n            font-family: 'Inter', Arial, sans-serif;\n            font-style: normal;\n            font-weight: 400;\n            font-size: 14px;\n            line-height: 20px;\n            text-decoration: none;\n            cursor: pointer;\n            transition: all 0.2s ease;\n            flex: none;\n            flex-grow: 0;\n            white-space: nowrap;\n        }\n\n        .btn-primary {\n            background: #006DD9;\n            color: #FFFFFF;\n            border: none;\n        }\n\n        .btn-primary:hover {\n            background: #0056B3;\n            color: #FFFFFF;\n        }\n\n        .btn-secondary {\n            background: transparent;\n            color: #006DD9;\n            border: 1px solid #006DD9;\n        }\n\n        .btn-secondary:hover {\n            background: #F0F7FF;\n            color: #006DD9;\n            border: 1px solid #006DD9;\n        }\n\n        /* Additional info */\n        .challenge-additional-info {\n            display: flex;\n            flex-direction: column;\n            align-items: center;\n            gap: 8px;\n        }\n\n        .challenge-additional-info p {\n            font-family: 'Inter', Arial, sans-serif;\n            font-weight: 400;\n            font-size: 14px;\n            line-height: 1.4;\n            color: #39393A;\n            margin: 0;\n        }\n\n        /* Footer */\n        .challenge-footer {\n        }\n\n        .challenge-footer p {\n            font-family: 'Inter', Arial, sans-serif;\n            font-weight: 400;\n            font-size: 12px;\n            line-height: 1.3;\n            color: #6F6F71;\n            margin: 0;\n        }\n\n        /* Mobile responsive */\n        @media (max-width: 767px) {\n            .error-navbar {\n                padding: 0px 16px;\n            }\n            \n            .main {\n                padding: 20px;\n                min-height: calc(100vh - 64px);\n            }\n            \n            .challenge-content {\n                width: auto;\n                max-width: 576px;\n            }\n            \n            .challenge-heading h1 {\n                font-size: 22px;\n            }\n            \n            .challenge-message p,\n            .login-promo-text {\n                font-size: 16px;\n            }\n\n            .challenge-icon {\n                width: 96px;\n                height: 96px;\n            }\n            \n            .challenge-icon svg {\n                width: 96px;\n                height: 96px;\n            }\n\n            .login-promo-main {\n                flex-direction: column;\n                gap: 16px;\n            }\n\n            .login-promo-text-section {\n                order: 2;\n            }\n            \n            .login-buttons {\n                flex-direction: column;\n                align-items: stretch;\n                gap: 8px;\n                width: 100%;\n            }\n            \n            .btn {\n                min-width: 140px;\n                padding: 0px 20px;\n            }\n            \n            .challenge-captcha {\n                min-height: 64px;\n            }\n        }\n    </style>\n<meta http-equiv=\"refresh\" content=\"360\">\n</head>\n<body>\n<div class=\"error-navbar\">\n    <div class=\"logo-container\">\n        <a href=\"https://www.researchgate.net\" class=\"logo-link\">\n            <svg class=\"error-navbar-logo\" width=\"150\" height=\"20\" viewBox=\"0 0 150 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                <path d=\"M86.3714 18.7355L85.4769 18.8396L85.5763 19.4642C86.272 19.3601 87.2659 19.3601 88.2599 19.3601C88.801 19.3601 89.3716 19.3909 89.8915 19.419C90.3265 19.4426 90.7259 19.4642 91.0428 19.4642V18.7355L90.1483 18.6315C89.5519 18.5274 89.2538 18.4233 89.2538 16.4457V8.431C90.1483 7.80648 91.2416 7.39013 92.3349 7.39013C94.6209 7.39013 95.1179 8.74326 95.1179 10.825V16.5497C95.1179 18.4233 94.8197 18.6315 94.2234 18.7355L93.3288 18.8396V19.5682C94.0246 19.4642 95.0185 19.4642 96.0124 19.4642C96.5535 19.4642 97.1241 19.495 97.644 19.5231C98.0789 19.5466 98.4784 19.5682 98.7954 19.5682V18.8396L97.9009 18.7355C97.3045 18.6315 97.0063 18.5274 97.0063 16.5497V10.5127C97.0063 7.80648 96.1118 5.82884 93.0307 5.82884C91.6392 5.93292 90.2477 6.55744 89.2538 7.59831V0C88.0611 0.624518 86.8684 1.04086 85.5763 1.45721V2.18581C87.2659 2.49807 87.2659 2.81033 87.2659 4.26754V16.5497C87.2659 18.4233 86.9678 18.6315 86.3714 18.7355Z\" fill=\"#131314\"/>\n                <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M6.16229 11.8658C7.2556 14.1557 8.64708 16.2374 10.138 18.2151C11.0325 19.2559 12.3246 19.8804 13.7161 19.7764C14.1136 19.7764 14.5112 19.7763 14.8094 19.5682V18.8396C13.8154 18.7355 12.9209 18.2151 12.2252 17.3824C10.7343 15.5088 9.34282 13.5312 8.24951 11.4494C10.4361 10.929 11.927 9.05545 12.0264 6.76555C12.0264 3.64296 9.74039 2.18575 6.75864 2.18575C5.88924 2.18575 5.10896 2.21686 4.40157 2.24506C3.81502 2.26845 3.27856 2.28984 2.78297 2.28984H0V3.12253L0.993917 3.3307C1.68966 3.43479 2.08723 3.74705 2.08723 5.51651V16.5497C2.08723 18.2151 1.68966 18.6314 0.993917 18.7355L0 18.9437V19.7764C0.695742 19.6723 1.98783 19.6723 3.18054 19.6723C3.85674 19.6723 4.62878 19.7057 5.29743 19.7347C5.80813 19.7568 6.25858 19.7764 6.55985 19.7764V18.9437L5.16837 18.7355C4.47263 18.6314 4.07506 18.2151 4.07506 16.5497V11.8658H6.16229ZM6.26168 3.53887C8.54769 3.53887 9.83978 4.78791 9.83978 6.97372C9.83978 9.15954 8.34891 10.6167 5.9635 10.6167C5.06898 10.6167 4.67141 10.6167 4.07506 10.5127V3.53887H6.26168Z\" fill=\"#131314\"/>\n                <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M21.1701 5.82895C17.6913 5.82895 15.3059 8.84746 15.3059 13.115C15.3059 17.2785 17.3932 19.9847 21.3688 19.8806C23.2573 19.8806 24.9469 19.0479 25.4439 18.2152L25.3445 17.4866C24.2512 18.1111 23.0585 18.3193 21.8658 18.3193C18.884 18.3193 17.4926 15.8212 17.4926 12.8027V11.97H26.0402V10.5128C25.9409 7.80659 23.7542 5.72486 21.1701 5.82895ZM23.953 10.3047C23.953 10.721 23.8536 10.9292 23.3567 10.9292H17.592C17.7907 9.05563 18.9834 6.9739 21.1701 6.9739H21.3688C22.9591 7.18207 24.1518 8.63928 23.953 10.3047Z\" fill=\"#131314\"/>\n                <path d=\"M28.2266 19.3601C28.2266 18.111 28.2266 16.9661 28.1272 15.717H29.1211C29.3199 17.6947 29.9163 18.7355 32.2023 18.7355C33.8919 18.7355 34.9852 17.7988 34.9852 16.2375C34.9852 14.6805 33.6169 14.1714 32.1207 13.6149C30.3163 12.9436 28.326 12.2033 28.326 9.47186C28.326 7.28605 30.2144 5.82884 32.7986 5.82884C33.9913 5.82884 35.184 6.1411 36.2773 6.55744V9.68003H35.2834C35.3828 8.32691 34.4883 7.07787 33.1962 6.8697H32.5998C31.0096 6.8697 30.0156 7.59831 30.0156 8.95143C30.0156 10.3891 31.3377 10.9176 32.8037 11.5036C34.6279 12.2328 36.6749 13.0511 36.6749 15.8211C36.6749 18.0069 34.6871 19.8805 32.1029 19.8805C30.8108 19.9846 29.5187 19.7764 28.2266 19.3601Z\" fill=\"#131314\"/>\n                <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M44.9249 5.82895C41.4461 5.82895 39.0607 8.84746 39.0607 13.115C39.0607 17.2785 41.148 19.9847 45.1236 19.8806C47.0121 19.8806 48.7017 19.0479 49.1987 18.2152L49.0993 17.4866C48.006 18.1111 46.8133 18.3193 45.6206 18.3193C42.6388 18.3193 41.2474 15.8212 41.2474 12.8027V11.97H49.795V10.5128C49.6957 7.80659 47.509 5.72486 44.9249 5.82895ZM47.6084 10.3047C47.6084 10.721 47.509 10.9292 47.0121 10.9292H41.2474C41.4461 9.05563 42.6388 6.9739 44.8255 6.9739H45.0242C46.6145 7.18207 47.8072 8.63928 47.6084 10.3047Z\" fill=\"#131314\"/>\n                <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M51.2862 16.5497C51.2862 13.9475 53.4728 12.2821 56.8522 12.2821H58.2436V10.7209C58.2436 8.53504 57.3491 7.49417 55.2619 7.49417C54.268 7.49417 53.1747 7.70235 52.2801 8.22278L52.1807 7.286C53.1747 6.34922 54.4668 5.7247 55.8582 5.7247C58.84 5.7247 60.3309 7.49417 60.3309 10.0963C60.3309 11.1528 60.3077 12.1849 60.2837 13.2515C60.258 14.3914 60.2315 15.5715 60.2315 16.8619C60.2315 18.2151 60.7284 18.6314 62.3187 18.6314V19.36C61.7224 19.6723 61.0266 19.8805 60.3309 19.8805C59.337 19.9845 58.5418 19.2559 58.4424 18.3192V18.0069C57.6473 19.1518 56.3552 19.8805 54.9637 19.8805C53.1747 19.9845 51.5844 18.6314 51.485 16.7579C51.2862 16.7579 51.2862 16.6538 51.2862 16.5497ZM58.1443 17.07C58.1443 16.1332 58.1443 14.0516 58.2436 13.4271H57.2497C54.5662 13.4271 53.2741 14.468 53.2741 16.1333C53.2741 17.2783 54.0692 18.2151 55.1625 18.3192H55.3613C56.4546 18.3192 57.4485 17.9027 58.1443 17.07Z\" fill=\"#131314\"/>\n                <path d=\"M65.1014 18.7355L64.2068 18.8395L64.3062 19.4641C64.6232 19.4641 65.002 19.4425 65.4145 19.4189C65.9075 19.3908 66.4486 19.36 66.9898 19.36C67.531 19.36 68.19 19.3908 68.7904 19.4189C69.2927 19.4425 69.754 19.4641 70.0709 19.4641V18.7355L68.8782 18.6314C68.2819 18.5273 67.9837 18.4232 67.9837 16.4456V8.63908C68.7789 8.01456 69.7728 7.59821 70.7667 7.59821C71.2636 7.49413 71.7606 7.59821 72.2576 7.80639L72.4563 5.93283C72.0588 5.82874 71.6612 5.72466 71.2636 5.72466C69.9715 5.93283 68.7789 6.66144 67.9837 7.7023V5.62057C66.791 6.141 65.5983 6.66144 64.3062 6.97369V7.59821C65.9959 7.91047 65.9959 8.32682 65.9959 9.67994V16.5496C65.9959 18.4232 65.6977 18.6314 65.1014 18.7355Z\" fill=\"#131314\"/>\n                <path d=\"M73.4504 13.1149C73.4504 8.95143 76.3327 5.82884 79.8115 5.82884C81.0042 5.82884 82.1969 6.03701 83.2902 6.45335C83.1908 7.39013 83.1908 8.74326 83.1908 9.57595H82.1968C82.0975 8.01465 81.5011 6.97379 79.6127 6.97379C77.3267 6.97379 75.4382 9.05552 75.4382 12.8026C75.4382 16.5497 77.3267 18.3192 80.1096 18.3192C81.2029 18.3192 82.2962 18.0069 83.1908 17.4865L83.2902 18.2151C82.2962 19.4642 80.9048 20.0887 79.4139 19.9846C75.7364 19.9846 73.4504 17.2783 73.4504 13.1149Z\" fill=\"#131314\"/>\n                <path d=\"M100.585 11.2412C100.585 6.03685 103.964 1.97748 108.834 1.97748C110.424 1.97748 112.015 2.28974 113.506 2.81017C113.506 3.9005 113.581 4.99082 113.667 6.21962L113.67 6.27395C113.682 6.43528 113.693 6.59901 113.704 6.76546H112.71C112.71 4.78782 111.12 3.12243 109.132 3.12243H108.834C105.256 3.12243 102.97 6.34911 102.97 10.9289C102.97 15.5087 105.256 18.7354 108.834 18.7354C109.927 18.8395 111.021 18.5272 112.015 18.1109V14.9883C112.015 13.3229 111.617 12.9066 110.921 12.8025L109.927 12.5943V11.7616C110.21 11.7616 110.541 11.7788 110.935 11.7991C111.512 11.829 112.222 11.8657 113.108 11.8657C114.301 11.8657 115.195 11.8657 115.792 11.7616V12.5943L114.996 12.8025C114.201 13.0106 114.002 13.427 114.002 14.9883V19.0477C112.213 19.6722 110.424 19.9844 108.536 19.9844C103.467 19.9844 100.585 16.4455 100.585 11.2412Z\" fill=\"#131314\"/>\n                <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M122.848 12.2821C119.469 12.2821 117.282 13.9475 117.282 16.5497C117.282 16.6538 117.282 16.7579 117.382 16.7579C117.481 18.6314 119.071 19.9845 120.86 19.8805C122.252 19.8805 123.544 19.1518 124.339 18.0069V18.3192C124.538 19.36 125.333 19.9845 126.327 19.8805C127.023 19.8805 127.718 19.6723 128.315 19.36V18.6314C126.724 18.6314 126.227 18.2151 126.227 16.8619C126.227 15.5715 126.254 14.3921 126.28 13.2521C126.304 12.1855 126.327 11.1528 126.327 10.0963C126.327 7.49417 124.836 5.7247 121.854 5.7247C120.463 5.7247 119.171 6.34922 118.177 7.286L118.276 8.22278C119.171 7.70235 120.264 7.49417 121.258 7.49417C123.345 7.49417 124.24 8.53504 124.24 10.7209V12.2821H122.848ZM124.339 13.4271C124.24 14.0516 124.24 16.1333 124.24 17.0701C123.445 17.9028 122.451 18.3192 121.457 18.3192H121.258C120.165 18.2151 119.369 17.2783 119.369 16.1333C119.369 14.468 120.662 13.4271 123.345 13.4271H124.339Z\" fill=\"#131314\"/>\n                <path d=\"M131.296 16.6535V7.38983H129.706V6.45305C131.097 5.72445 132.091 4.37132 132.389 2.81003H133.284V6.03671H137.16V7.38983H133.284V16.2372C133.284 17.9026 133.781 18.6312 135.073 18.6312C135.769 18.6312 136.365 18.5271 136.961 18.3189L137.061 18.8393C136.266 19.672 135.272 20.0884 134.178 19.9843C131.992 19.9843 131.296 18.9434 131.296 16.6535Z\" fill=\"#131314\"/>\n                <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M144.218 5.82878C140.739 5.82878 138.353 8.84729 138.353 13.1148C138.353 17.2783 140.441 19.9845 144.317 19.8804C146.205 19.8804 147.895 19.0478 148.392 18.2151L148.293 17.4865C147.199 18.111 146.007 18.3191 144.814 18.3191C141.832 18.3191 140.441 15.8211 140.441 12.8026V11.9699H148.988C149.088 11.6576 149.088 11.3454 149.088 11.0331V10.6168C148.988 7.91051 146.802 5.72469 144.218 5.82878ZM146.901 10.3045C146.901 10.7208 146.702 10.929 146.305 10.929H140.54C140.739 9.05546 141.932 6.97373 144.118 6.97373H144.317C145.907 7.1819 147.1 8.63911 146.901 10.3045Z\" fill=\"#131314\"/>\n            </svg>\n        </a>\n    </div>\n</div>\n<div class=\"main\">\n    <div id=\"rgw1_689d9fc6c02e1\" class=\"react-container\"><div class=\"challenge-content\"><div class=\"challenge-icon\"><svg width=\"96\" height=\"96\" viewBox=\"0 0 96 96\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M42.3054 12.8624C45.3047 7.16372 53.4648 7.16368 56.4641 12.8624L89.8387 76.274C92.6425 81.6013 88.7794 88 82.7593 88H16.0102C9.99015 88 6.12705 81.6013 8.93088 76.274L42.3054 12.8624Z\" fill=\"#BAD5F7\"></path><path d=\"M50 56C47.7909 56 46 54.2091 46 52V40C46 37.7909 47.7909 36 50 36C52.2091 36 54 37.7909 54 40V52C54 54.2091 52.2091 56 50 56Z\" fill=\"white\"></path><path d=\"M44 66C44 62.6863 46.6863 60 50 60C53.3137 60 56 62.6863 56 66C56 69.3137 53.3137 72 50 72C46.6863 72 44 69.3137 44 66Z\" fill=\"white\"></path></svg></div><div class=\"challenge-heading\"><h1>Security check required</h1></div><div class=\"challenge-message\"><p>We&#x27;ve detected unusual activity from your network. To continue, complete the security check below.</p></div><div class=\"challenge-captcha\"><div class=\"main-wrapper\" role=\"main\"><div class=\"main-content\"><noscript><div class=\"h2\"><span id=\"challenge-error-text\">Enable JavaScript and cookies to continue</span></div></noscript></div></div><script>(function(){window._cf_chl_opt = {cvId: '3',cZone: 'www.researchgate.net',cType: 'managed',cRay: '9c5c5527a85803c9',cH: 'fegsiXLEsxklrRReaM.yi8.hjXsg8JKWYew3dYB7aDs-1769727489-1.2.1.1-H3XLS762yhoECYjckrRZuLPcUreOms5Seyo5QncTjar2G3DMYv4dwbUbYMz9NGE9',cUPMDTk:\"\\/publication\\/380080358_Exploring_the_impact_of_machine_learning_on_dance_performance_a_systematic_review?__cf_chl_tk=BvU9Y66hyjPSosXOQyQ9YWpF2b89lRpPApVCuRMXbFg-1769727489-1.0.1.1-1QxUxiwJKjXwxy.KgbyJ6t8bQknGSKRPh_ZVCeDY_Co\",cFPWv: 'b',cITimeS: '1769727489',cTplC:1,cTplV:5,cTplB: '0',fa:\"\\/publication\\/380080358_Exploring_the_impact_of_machine_learning_on_dance_performance_a_systematic_review?__cf_chl_f_tk=BvU9Y66hyjPSosXOQyQ9YWpF2b89lRpPApVCuRMXbFg-1769727489-1.0.1.1-1QxUxiwJKjXwxy.KgbyJ6t8bQknGSKRPh_ZVCeDY_Co\",md: 'PxoIB08yCN61zDA4BHUDCpKj0XitrQCJsYMy69YLu3U-1769727489-1.2.1.1-JQiezyQy2eHSXr3DI6SSd49U3YaaKC8BOjQDwhRAS09WI_GSmw3ULefkBd.HAgU2ZQJ2AzAShXgF7v9xnG1IGHPLlKmYD7sQlWvQszWMCY6LNuZcRSzZ.gfuyqc0gXczzBvmNeIazSK7sgIO.ftHydLD1ZZo6qKe6SrakHWschGJH7U_3tvLwdvkw5HAbPSwW..sEq0XNLq0ahcSn.Hmk4CPVZiM.taIAZKf1vVpi0JEA3SMFSH_DI44ZhjALkW9A4Fe8buP9Xs20tBwOsocB4yjFBdUw0KR2Q05JbDOK2CxbWECeQFF7c2Ncg6G5EETfiR5908DCaAIpOMzBzHUBPMgRrXUuu8J3LISrEQhnEsmqjShh8NAOfMW11ZBGorH7TPSZvfISEIQ_kaPMQ1B.4auNx.pBewIypYPOf40iY9uj16gFvyanO4CuN2PJD97bNJhsHcrXStFtb7MPeyCFp5SBrzucUG9GAVxC8JyJTCm.omtMebo1oz0DvqqhtaMGverxJslsBz5z9v34olSEqYe45qwOqm7gnrI3t_i9zacqlIQQWDDb6ccUlMZeVD5wBacX.Eac0mE3IAYRSRrLxtMozmvxPmAisP_V000e.3eiXmUfuT4SZcQ6lVwCOG05WDwqOwRCzdfpG8Bb4IUS1h_fPK3Gjsvc0NlwFZaC7ffNHnbZFu_sUBRxJJkU0hm4Y0qlhkaRoMOVMTF48gGwZVFi6lWmVYLbMsWphMVs60SbtNVKO8QvZUMSu1DwQRpbR.MTL_D1rz7Kw0VUjwIYagLDVV1J9.n.wj.1KbgJbjEwMAEnX4p1Jd0Y.yGMqyqFFE.NMwDrKf5adB8lU5U5J3_IC5QWdsi.yy3OD8NRSUB48o8LXsXgc1VQHhqOIhukhJEGsWeGud2DkpjFczxA.YOHkEdEATsubx7aYu.8VdGozqLzP5RlPoyMR2rWJbl_wE_AZwNhtqLwscHO54_wB5kJf_t6zzXe1BIQRXrmLQKOoTo15gubdQmps4l6zTUpksuxa7tqN0Z0HYAM2YO.UyJduvUyfBKcaR.nyeXJd9y_SIdZ3nX8aXomQc8DKK0cqKAHVy2T0hxuUfkeo69rLDuYRHt7RlHJLCbNPhdrj4',mdrd: 'zPoOvSesYdt2SAskmraOQKz_GY7Q0INpvFFSCsMXYBg-1769727489-1.2.1.1-LcQZt71dC_Hk8KkfG9VbiAab1fGDyGVwBjBWNjNZMUlECgG2GH1ZHTfToOjtw73fhEmDoyPdAuLNjcPTf.gmes2PLtHFkiApn2hLjSqMY43z2VmIbZsVqrZKniQVMvyDufNEXJ7RMEYpbkz3ZQWFG0JKgjNVuRWkRs2kZvHxgmXOto7hZSv87av8auMz6AUMfueHEOObsa0i56FjBXPfBDovQu4KwJkS0qv5sRdBVdaMzpXXZvlskbWMQy9RP1sjh_opVQ58WROAN2bKPzSDH8oEY0Tej2yPJeLZ6Oi4LyiWZQe2u0_MBNeAtmlJv71XXFW1C0iY0w7IzXOmZtnB1Wispax3qBUZK0iRvf.ulU5z0mrpoIwsxw4u7K_gR4i7XZp8.Z95lRumR.ONJB2M6SiYZezMsWc9beH1E0QE2jF1iUZfOFdtwzplRnPtsU7u4akkcvWMjSOenqQKGn2ZAK5i_G_nvhUrEmi5n3NMkNR2XeVy3u70geMLLAFdzV3y9Jmj.ZJ5_9PbCqlS9DarRLd9Ppwr8F8bWILwvUSrqQlWWn0S9k8hugHjzvRcnXXms4RoKD3FajgQgI.TFHondAM5UAf.S4PNyR4w7WeUvcSH7CPJJkib05JjRVIaAwNU.zvoPTHxoDGejB7kCUyvalyp8ovjx.Mm10vs72DLD9SyLa.dNy1y3fO9PWCyxAIPyR_jg3j6j_MdVT1tiorZgtUjx78yssZZDLASW3WCDdFGiy6eduFEyf6jnkUxei7V8JC9v1i0R.XjwPZkeFGEHazS24SKlTe7j0H.ifKjUM7L5.o1lHd0F7FeSuMy_QKJuPP37_uGFTV_9XBZ.XRExWtYpT6zDoRLX3oXp0kAln_BZkgYCCUnaT_k77KF9A7G2wiHRasdOzv94I2A7DacdhiqA2V7mDJmHnvOaaG4AFYEyAshTwrAA17_Ll3uPNaK._lCnT_rAonDAekngzsbe.OQ0gATh.PV2jlXAaoIBvGXSQ.bq.OeI0qN9n31CSpmqq2Pru73qR3Am5L6cO.NdlwOydkWmg_AS5b_oyIuZCqv3yMu64vJn5UQaJzjmEOMsq6h6ipVeCjXEq6Z_lGYl987aijLE53SWq2DuNd6niuiJmWxDibTdZ6KIZYmCZ29AzsIYtKL4a6GeRQs1h6nbN16.KR8u1_hBmwcba08.3Bli043YvZq2dixJ8cAOW.3a1djwvoIGSRew4Ar372XSkGCkmsgIG_UHAcT8cIyVr48wbqhmM8gXiIjjPGNKIo5tr8_Swgzgd4e_UKH4zlF0WtIxvmbaNEuvJ5KOMY2onSsTn5546.Fi2KHZViSyoJIcAJp0fXG.vQsWPLCfBUzVBKAiWQs8rYT.JhjiESinf48TBVZI_Pqq1E2XgZMCHniTXgSlY38atUzAOkoPLNP62uUcKEQ0MnNuQS86W7toeW_KuBj7FfkCs3ym7kGuxaq8uHD1.f1i0tb_JaWmI9524g4_UebMXhLl3Vb7dvJtX9GhkCH38MVZ0S2QZUCTMP48r8_uZ1eD9EZPv1i_0mjcvV3x.aQa2vEUpHPYIgRtEFbT91Szsg1wbOwDyhg3AIonk3LsypJnETJgvVcxjXQuAF8Q8fp2mvNsKnp5ZaC1H4kcZyNZpmo401rDEAI9jyAOMGuWSrlmTHGy2zu0cLsblzbis4_DFoKF3BccK7CsTmeyoo5HUpl0x6fwqAzKOzKAPbpzOFvU7ogzKKTVR_i3LPx4fj8Xj_ENGC9G5DxX5GHypzbSte764uVs7MA97pfDTkE0i.RXjUSFQjJoQXQA5gKHjBgGeYkvKT9fz.c0m_BST3sj9Ef_M2Q.wDyhUN4r2U7PMVSVIn2JY43FMZXarX26f8.ZTv49BYBsUhxOFxSgDswIb4OsgX_GjcaSfASb38M.xvto5GZUzXRDReJXmvXJTjZz0z2.8emWGO16wWwwhOexAoi4WHboN733tGRnnqtNN8eQ4GQ6cHOu.2YrX3idb8X_xQVjwYYDwW5OpohK.rZRG9jaNWK4Lt8VO1R_JaVUG7mG0rkPJ_BC_KN4CsV9nbd7eYN454F2qwh8iE1.rEzWuSRK4Ewr8Utc1dMdoxY6YQpH5i9VBIc6mRb3thC0PTfxuLcU0Y3.1jKLypg3bfZUI38_0NwbhyHYZptPvW.QnCUy387AiMtYsFYP0o9cSN2hGItiLLfMYtIgAP_WgPAzxmNnS9apO522CkZJ9AR20nDuXuoPm8JG5Yx..Sei2EBrd8lrmDUYxxjuf5CEojplvWPDYD0lrX3MBMN6Sb307UvwdGQXbpapgpy88bIhEtqFHD_CPOMJnhOxvHwUTq9SnwEabpkDXeyXtsEgQMAfctYv90arc0N1vkcxb1HXbeLcL.ul7SzJUuVU10lRSP.jfITn.bkjkPBG6ytbwu08lRSD8E_O4O7OT0smT7I4Xw3m5kX4RuogABh9yxhhcjuaI5_FkvsuXZHxD_Sgb0ZltcLwjvFkVEwvJ185mfNXs0y12iit7sHUDGV8urQJvsX_mLi_DazbrgJdv2dZhXsCoK4mUAgV67Gi3W4gD_cH28OeJwy8uDsY1cMu8yMD0HyWRaWAi0j8FLNNz9iWur6V9c8OPedjTu6RSYnE7dI.Yat7L5mwW_LguwLCF5LZm6iRjwGVL5zAZwJpdVSWL79U.xi2MV9d6D0_y4GlspC.VFSjicGKWbqLlCtZNvAntXYWH50J1eFkdrI2RDZuJqKZOd_xM8ax.O.sTq31Wtwiq5qRxPHdTzCgtsk0.6nTc7v24FdIunaMP.RC5x.6Vv8FhrifVhVbdGnRcXNBorlOCQ7kKiEdP6GF5Z_EMtKIXnSQW0I8v5ACGb82k2a7hsvua55Ef79r.7twtxLvOpnKugIMwnRW79S46HkQ0g',};var a = document.createElement('script');a.src = '/cdn-cgi/challenge-platform/h/b/orchestrate/chl_page/v1?ray=9c5c5527a85803c9';window._cf_chl_opt.cOgUHash = location.hash === '' && location.href.indexOf('#') !== -1 ? '#' : location.hash;window._cf_chl_opt.cOgUQuery = location.search === '' && location.href.slice(0, location.href.length - window._cf_chl_opt.cOgUHash.length).indexOf('?') !== -1 ? '?' : location.search;if (window.history && window.history.replaceState) {var ogU = location.pathname + window._cf_chl_opt.cOgUQuery + window._cf_chl_opt.cOgUHash;history.replaceState(null, null,\"\\/publication\\/380080358_Exploring_the_impact_of_machine_learning_on_dance_performance_a_systematic_review?__cf_chl_rt_tk=BvU9Y66hyjPSosXOQyQ9YWpF2b89lRpPApVCuRMXbFg-1769727489-1.0.1.1-1QxUxiwJKjXwxy.KgbyJ6t8bQknGSKRPh_ZVCeDY_Co\"+ window._cf_chl_opt.cOgUHash);a.onload = function() {history.replaceState(null, null, ogU);}}document.getElementsByTagName('head')[0].appendChild(a);}());</script></div><div class=\"challenge-additional-info\"><p>Ray ID: 9c5c5527a85803c9</p><p>Client IP: 84.123.228.20</p></div><div class=\"challenge-footer\"><p>© <span id=\"footer-year\"></span> ResearchGate GmbH. All rights reserved.</p></div></div></div></div>\n<script>\n    var y = \"2008-\" + new Date().getFullYear();\n    var node = document.getElementById('footer-year');\n    node.appendChild(document.createTextNode(y));\n</script>\n</body>\n</html>\n"
+    ],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://www.researchgate.net/publication/390548627_Machination_Semiotics_of_IArt_Dance_and_Artificial_Intelligence",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:09.165Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "unreachable",
+    "urlAccessible": false,
+    "contentType": "unknown",
+    "httpStatusCode": 0,
+    "errors": [
+      "URL accessibility check failed: Error: HTTP GET https://www.researchgate.net/publication/390548627_Machination_Semiotics_of_IArt_Dance_and_Artificial_Intelligence failed with status code 429:\n\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <meta name=\"robots\" content=\"noindex\"/>\n    <title>ResearchGate - Temporarily Unavailable</title>\n    <style>\n        /* Reset and base styles */\n        * {\n            box-sizing: border-box;\n        }\n        \n        body, p, h1, h2 {\n            margin: 0;\n            padding: 0;\n            outline: none;\n        }\n        \n        a, a:hover {\n            text-decoration: none;\n            cursor: pointer;\n        }\n        \n        body {\n            height: 100vh;\n            color: #39393A;\n            font-family: 'Inter', Arial, sans-serif;\n            font-size: 16px;\n            line-height: 1.5;\n            text-align: center;\n            word-wrap: break-word;\n            text-rendering: optimizeLegibility;\n            -webkit-font-smoothing: antialiased;\n            background: #FFFFFF;\n        }\n        \n        /* Header styles */\n        .error-navbar {\n            box-sizing: border-box;\n            display: flex;\n            flex-direction: row;\n            align-items: center;\n            padding: 0px 20px;\n            margin: 0;\n            width: 100%;\n            height: 64px;\n            background: #F6F6F6;\n            border-bottom: 1px solid #E8E8E8;\n            position: relative;\n            z-index: 10;\n        }\n        \n        .logo-container {\n            display: flex;\n            flex-direction: row;\n            align-items: center;\n            padding: 0px;\n            gap: 32px;\n            width: 149.09px;\n            height: 20px;\n            flex: none;\n            order: 0;\n            flex-grow: 0;\n        }\n        \n        .logo-link {\n            display: flex;\n            flex-direction: column;\n            justify-content: center;\n            align-items: center;\n            padding: 0px;\n            gap: 10px;\n            width: 149.09px;\n            height: 20px;\n            flex: none;\n            order: 0;\n            flex-grow: 0;\n        }\n        \n        .error-navbar-logo {\n            width: 149.09px;\n            height: 20px;\n            flex: none;\n            order: 0;\n            flex-grow: 0;\n        }\n        \n        /* Main container */\n        .main {\n            display: flex;\n            flex-direction: column;\n            min-height: calc(100vh - 64px);\n            justify-content: center;\n            align-items: center;\n            background: #F6F6F6;\n            padding: 20px;\n        }\n\n        /* Challenge content container */\n        .challenge-content {\n            display: flex;\n            flex-direction: column;\n            justify-content: center;\n            align-items: center;\n            width: 100%;\n            width: 576px;\n            margin: 0 auto;\n            gap: 16px;\n        }\n\n        /* Warning icon */\n        .challenge-icon {\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            width: 96px;\n            height: 96px;\n        }\n\n        .challenge-icon svg {\n            width: 96px;\n            height: 96px;\n        }\n\n        /* Heading */\n        .challenge-heading h1 {\n            font-family: 'Inter', Arial, sans-serif;\n            font-weight: 600;\n            font-size: 22px;\n            line-height: 1.3;\n            color: #39393A;\n            margin: 0;\n        }\n\n        /* Main message */\n        .challenge-message p {\n            font-family: 'Inter', Arial, sans-serif;\n            font-weight: 400;\n            font-size: 16px;\n            line-height: 1.5;\n            color: #39393A;\n            margin: 0;\n            max-width: 500px;\n        }\n\n        /* CAPTCHA container */\n        .challenge-captcha {\n            width: 100%;\n            max-width: 576px;\n            min-height: 64px;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n        }\n\n        .challenge-captcha ul {\n            list-style: none;\n            padding-left: 0;\n        }\n\n        /* Login promo section */\n        .challenge-login-promo {\n            width: 100%;\n            max-width: 500px;\n        }\n\n        .login-promo-content {\n            display: flex;\n            flex-direction: column;\n            align-items: center;\n            gap: 16px;\n            padding: 16px 0px;\n        }\n\n        .login-promo-main {\n            display: flex;\n            align-items: center;\n            gap: 16px;\n            width: 100%;\n            justify-content: center;\n        }\n\n        .login-promo-text-section {\n            flex: 1;\n            text-align: center;\n        }\n\n        .login-promo-title {\n            font-family: 'Inter', Arial, sans-serif;\n            font-weight: 600;\n            font-size: 16px;\n            color: #39393A;\n            margin: 0 0 8px 0;\n        }\n\n        .login-promo-text {\n            font-family: 'Inter', Arial, sans-serif;\n            font-weight: 400;\n            font-size: 16px;\n            line-height: 1.5;\n            color: #39393A;\n            margin: 0;\n        }\n\n        /* Button container */\n        .login-buttons {\n            display: flex;\n            flex-direction: row;\n            justify-content: center;\n            align-items: flex-start;\n            padding: 0px;\n            gap: 8px;\n            margin-top: 10px;\n        }\n\n        /* Button styles */\n        .btn {\n            box-sizing: border-box;\n            display: flex;\n            flex-direction: row;\n            justify-content: center;\n            align-items: center;\n            padding: 0px 16px;\n            gap: 4px;\n            height: 32px;\n            border-radius: 16px;\n            font-family: 'Inter', Arial, sans-serif;\n            font-style: normal;\n            font-weight: 400;\n            font-size: 14px;\n            line-height: 20px;\n            text-decoration: none;\n            cursor: pointer;\n            transition: all 0.2s ease;\n            flex: none;\n            flex-grow: 0;\n            white-space: nowrap;\n        }\n\n        .btn-primary {\n            background: #006DD9;\n            color: #FFFFFF;\n            border: none;\n        }\n\n        .btn-primary:hover {\n            background: #0056B3;\n            color: #FFFFFF;\n        }\n\n        .btn-secondary {\n            background: transparent;\n            color: #006DD9;\n            border: 1px solid #006DD9;\n        }\n\n        .btn-secondary:hover {\n            background: #F0F7FF;\n            color: #006DD9;\n            border: 1px solid #006DD9;\n        }\n\n        /* Additional info */\n        .challenge-additional-info {\n            display: flex;\n            flex-direction: column;\n            align-items: center;\n            gap: 8px;\n        }\n\n        .challenge-additional-info p {\n            font-family: 'Inter', Arial, sans-serif;\n            font-weight: 400;\n            font-size: 14px;\n            line-height: 1.4;\n            color: #39393A;\n            margin: 0;\n        }\n\n        /* Footer */\n        .challenge-footer {\n        }\n\n        .challenge-footer p {\n            font-family: 'Inter', Arial, sans-serif;\n            font-weight: 400;\n            font-size: 12px;\n            line-height: 1.3;\n            color: #6F6F71;\n            margin: 0;\n        }\n\n        /* Mobile responsive */\n        @media (max-width: 767px) {\n            .error-navbar {\n                padding: 0px 16px;\n            }\n            \n            .main {\n                padding: 20px;\n                min-height: calc(100vh - 64px);\n            }\n            \n            .challenge-content {\n                width: auto;\n                max-width: 576px;\n            }\n            \n            .challenge-heading h1 {\n                font-size: 22px;\n            }\n            \n            .challenge-message p,\n            .login-promo-text {\n                font-size: 16px;\n            }\n\n            .challenge-icon {\n                width: 96px;\n                height: 96px;\n            }\n            \n            .challenge-icon svg {\n                width: 96px;\n                height: 96px;\n            }\n\n            .login-promo-main {\n                flex-direction: column;\n                gap: 16px;\n            }\n\n            .login-promo-text-section {\n                order: 2;\n            }\n            \n            .login-buttons {\n                flex-direction: column;\n                align-items: stretch;\n                gap: 8px;\n                width: 100%;\n            }\n            \n            .btn {\n                min-width: 140px;\n                padding: 0px 20px;\n            }\n            \n            .challenge-captcha {\n                min-height: 64px;\n            }\n        }\n    </style>\n<meta http-equiv=\"refresh\" content=\"360\">\n</head>\n<body>\n<div class=\"error-navbar\">\n    <div class=\"logo-container\">\n        <a href=\"https://www.researchgate.net\" class=\"logo-link\">\n            <svg class=\"error-navbar-logo\" width=\"150\" height=\"20\" viewBox=\"0 0 150 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                <path d=\"M86.3714 18.7355L85.4769 18.8396L85.5763 19.4642C86.272 19.3601 87.2659 19.3601 88.2599 19.3601C88.801 19.3601 89.3716 19.3909 89.8915 19.419C90.3265 19.4426 90.7259 19.4642 91.0428 19.4642V18.7355L90.1483 18.6315C89.5519 18.5274 89.2538 18.4233 89.2538 16.4457V8.431C90.1483 7.80648 91.2416 7.39013 92.3349 7.39013C94.6209 7.39013 95.1179 8.74326 95.1179 10.825V16.5497C95.1179 18.4233 94.8197 18.6315 94.2234 18.7355L93.3288 18.8396V19.5682C94.0246 19.4642 95.0185 19.4642 96.0124 19.4642C96.5535 19.4642 97.1241 19.495 97.644 19.5231C98.0789 19.5466 98.4784 19.5682 98.7954 19.5682V18.8396L97.9009 18.7355C97.3045 18.6315 97.0063 18.5274 97.0063 16.5497V10.5127C97.0063 7.80648 96.1118 5.82884 93.0307 5.82884C91.6392 5.93292 90.2477 6.55744 89.2538 7.59831V0C88.0611 0.624518 86.8684 1.04086 85.5763 1.45721V2.18581C87.2659 2.49807 87.2659 2.81033 87.2659 4.26754V16.5497C87.2659 18.4233 86.9678 18.6315 86.3714 18.7355Z\" fill=\"#131314\"/>\n                <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M6.16229 11.8658C7.2556 14.1557 8.64708 16.2374 10.138 18.2151C11.0325 19.2559 12.3246 19.8804 13.7161 19.7764C14.1136 19.7764 14.5112 19.7763 14.8094 19.5682V18.8396C13.8154 18.7355 12.9209 18.2151 12.2252 17.3824C10.7343 15.5088 9.34282 13.5312 8.24951 11.4494C10.4361 10.929 11.927 9.05545 12.0264 6.76555C12.0264 3.64296 9.74039 2.18575 6.75864 2.18575C5.88924 2.18575 5.10896 2.21686 4.40157 2.24506C3.81502 2.26845 3.27856 2.28984 2.78297 2.28984H0V3.12253L0.993917 3.3307C1.68966 3.43479 2.08723 3.74705 2.08723 5.51651V16.5497C2.08723 18.2151 1.68966 18.6314 0.993917 18.7355L0 18.9437V19.7764C0.695742 19.6723 1.98783 19.6723 3.18054 19.6723C3.85674 19.6723 4.62878 19.7057 5.29743 19.7347C5.80813 19.7568 6.25858 19.7764 6.55985 19.7764V18.9437L5.16837 18.7355C4.47263 18.6314 4.07506 18.2151 4.07506 16.5497V11.8658H6.16229ZM6.26168 3.53887C8.54769 3.53887 9.83978 4.78791 9.83978 6.97372C9.83978 9.15954 8.34891 10.6167 5.9635 10.6167C5.06898 10.6167 4.67141 10.6167 4.07506 10.5127V3.53887H6.26168Z\" fill=\"#131314\"/>\n                <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M21.1701 5.82895C17.6913 5.82895 15.3059 8.84746 15.3059 13.115C15.3059 17.2785 17.3932 19.9847 21.3688 19.8806C23.2573 19.8806 24.9469 19.0479 25.4439 18.2152L25.3445 17.4866C24.2512 18.1111 23.0585 18.3193 21.8658 18.3193C18.884 18.3193 17.4926 15.8212 17.4926 12.8027V11.97H26.0402V10.5128C25.9409 7.80659 23.7542 5.72486 21.1701 5.82895ZM23.953 10.3047C23.953 10.721 23.8536 10.9292 23.3567 10.9292H17.592C17.7907 9.05563 18.9834 6.9739 21.1701 6.9739H21.3688C22.9591 7.18207 24.1518 8.63928 23.953 10.3047Z\" fill=\"#131314\"/>\n                <path d=\"M28.2266 19.3601C28.2266 18.111 28.2266 16.9661 28.1272 15.717H29.1211C29.3199 17.6947 29.9163 18.7355 32.2023 18.7355C33.8919 18.7355 34.9852 17.7988 34.9852 16.2375C34.9852 14.6805 33.6169 14.1714 32.1207 13.6149C30.3163 12.9436 28.326 12.2033 28.326 9.47186C28.326 7.28605 30.2144 5.82884 32.7986 5.82884C33.9913 5.82884 35.184 6.1411 36.2773 6.55744V9.68003H35.2834C35.3828 8.32691 34.4883 7.07787 33.1962 6.8697H32.5998C31.0096 6.8697 30.0156 7.59831 30.0156 8.95143C30.0156 10.3891 31.3377 10.9176 32.8037 11.5036C34.6279 12.2328 36.6749 13.0511 36.6749 15.8211C36.6749 18.0069 34.6871 19.8805 32.1029 19.8805C30.8108 19.9846 29.5187 19.7764 28.2266 19.3601Z\" fill=\"#131314\"/>\n                <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M44.9249 5.82895C41.4461 5.82895 39.0607 8.84746 39.0607 13.115C39.0607 17.2785 41.148 19.9847 45.1236 19.8806C47.0121 19.8806 48.7017 19.0479 49.1987 18.2152L49.0993 17.4866C48.006 18.1111 46.8133 18.3193 45.6206 18.3193C42.6388 18.3193 41.2474 15.8212 41.2474 12.8027V11.97H49.795V10.5128C49.6957 7.80659 47.509 5.72486 44.9249 5.82895ZM47.6084 10.3047C47.6084 10.721 47.509 10.9292 47.0121 10.9292H41.2474C41.4461 9.05563 42.6388 6.9739 44.8255 6.9739H45.0242C46.6145 7.18207 47.8072 8.63928 47.6084 10.3047Z\" fill=\"#131314\"/>\n                <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M51.2862 16.5497C51.2862 13.9475 53.4728 12.2821 56.8522 12.2821H58.2436V10.7209C58.2436 8.53504 57.3491 7.49417 55.2619 7.49417C54.268 7.49417 53.1747 7.70235 52.2801 8.22278L52.1807 7.286C53.1747 6.34922 54.4668 5.7247 55.8582 5.7247C58.84 5.7247 60.3309 7.49417 60.3309 10.0963C60.3309 11.1528 60.3077 12.1849 60.2837 13.2515C60.258 14.3914 60.2315 15.5715 60.2315 16.8619C60.2315 18.2151 60.7284 18.6314 62.3187 18.6314V19.36C61.7224 19.6723 61.0266 19.8805 60.3309 19.8805C59.337 19.9845 58.5418 19.2559 58.4424 18.3192V18.0069C57.6473 19.1518 56.3552 19.8805 54.9637 19.8805C53.1747 19.9845 51.5844 18.6314 51.485 16.7579C51.2862 16.7579 51.2862 16.6538 51.2862 16.5497ZM58.1443 17.07C58.1443 16.1332 58.1443 14.0516 58.2436 13.4271H57.2497C54.5662 13.4271 53.2741 14.468 53.2741 16.1333C53.2741 17.2783 54.0692 18.2151 55.1625 18.3192H55.3613C56.4546 18.3192 57.4485 17.9027 58.1443 17.07Z\" fill=\"#131314\"/>\n                <path d=\"M65.1014 18.7355L64.2068 18.8395L64.3062 19.4641C64.6232 19.4641 65.002 19.4425 65.4145 19.4189C65.9075 19.3908 66.4486 19.36 66.9898 19.36C67.531 19.36 68.19 19.3908 68.7904 19.4189C69.2927 19.4425 69.754 19.4641 70.0709 19.4641V18.7355L68.8782 18.6314C68.2819 18.5273 67.9837 18.4232 67.9837 16.4456V8.63908C68.7789 8.01456 69.7728 7.59821 70.7667 7.59821C71.2636 7.49413 71.7606 7.59821 72.2576 7.80639L72.4563 5.93283C72.0588 5.82874 71.6612 5.72466 71.2636 5.72466C69.9715 5.93283 68.7789 6.66144 67.9837 7.7023V5.62057C66.791 6.141 65.5983 6.66144 64.3062 6.97369V7.59821C65.9959 7.91047 65.9959 8.32682 65.9959 9.67994V16.5496C65.9959 18.4232 65.6977 18.6314 65.1014 18.7355Z\" fill=\"#131314\"/>\n                <path d=\"M73.4504 13.1149C73.4504 8.95143 76.3327 5.82884 79.8115 5.82884C81.0042 5.82884 82.1969 6.03701 83.2902 6.45335C83.1908 7.39013 83.1908 8.74326 83.1908 9.57595H82.1968C82.0975 8.01465 81.5011 6.97379 79.6127 6.97379C77.3267 6.97379 75.4382 9.05552 75.4382 12.8026C75.4382 16.5497 77.3267 18.3192 80.1096 18.3192C81.2029 18.3192 82.2962 18.0069 83.1908 17.4865L83.2902 18.2151C82.2962 19.4642 80.9048 20.0887 79.4139 19.9846C75.7364 19.9846 73.4504 17.2783 73.4504 13.1149Z\" fill=\"#131314\"/>\n                <path d=\"M100.585 11.2412C100.585 6.03685 103.964 1.97748 108.834 1.97748C110.424 1.97748 112.015 2.28974 113.506 2.81017C113.506 3.9005 113.581 4.99082 113.667 6.21962L113.67 6.27395C113.682 6.43528 113.693 6.59901 113.704 6.76546H112.71C112.71 4.78782 111.12 3.12243 109.132 3.12243H108.834C105.256 3.12243 102.97 6.34911 102.97 10.9289C102.97 15.5087 105.256 18.7354 108.834 18.7354C109.927 18.8395 111.021 18.5272 112.015 18.1109V14.9883C112.015 13.3229 111.617 12.9066 110.921 12.8025L109.927 12.5943V11.7616C110.21 11.7616 110.541 11.7788 110.935 11.7991C111.512 11.829 112.222 11.8657 113.108 11.8657C114.301 11.8657 115.195 11.8657 115.792 11.7616V12.5943L114.996 12.8025C114.201 13.0106 114.002 13.427 114.002 14.9883V19.0477C112.213 19.6722 110.424 19.9844 108.536 19.9844C103.467 19.9844 100.585 16.4455 100.585 11.2412Z\" fill=\"#131314\"/>\n                <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M122.848 12.2821C119.469 12.2821 117.282 13.9475 117.282 16.5497C117.282 16.6538 117.282 16.7579 117.382 16.7579C117.481 18.6314 119.071 19.9845 120.86 19.8805C122.252 19.8805 123.544 19.1518 124.339 18.0069V18.3192C124.538 19.36 125.333 19.9845 126.327 19.8805C127.023 19.8805 127.718 19.6723 128.315 19.36V18.6314C126.724 18.6314 126.227 18.2151 126.227 16.8619C126.227 15.5715 126.254 14.3921 126.28 13.2521C126.304 12.1855 126.327 11.1528 126.327 10.0963C126.327 7.49417 124.836 5.7247 121.854 5.7247C120.463 5.7247 119.171 6.34922 118.177 7.286L118.276 8.22278C119.171 7.70235 120.264 7.49417 121.258 7.49417C123.345 7.49417 124.24 8.53504 124.24 10.7209V12.2821H122.848ZM124.339 13.4271C124.24 14.0516 124.24 16.1333 124.24 17.0701C123.445 17.9028 122.451 18.3192 121.457 18.3192H121.258C120.165 18.2151 119.369 17.2783 119.369 16.1333C119.369 14.468 120.662 13.4271 123.345 13.4271H124.339Z\" fill=\"#131314\"/>\n                <path d=\"M131.296 16.6535V7.38983H129.706V6.45305C131.097 5.72445 132.091 4.37132 132.389 2.81003H133.284V6.03671H137.16V7.38983H133.284V16.2372C133.284 17.9026 133.781 18.6312 135.073 18.6312C135.769 18.6312 136.365 18.5271 136.961 18.3189L137.061 18.8393C136.266 19.672 135.272 20.0884 134.178 19.9843C131.992 19.9843 131.296 18.9434 131.296 16.6535Z\" fill=\"#131314\"/>\n                <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M144.218 5.82878C140.739 5.82878 138.353 8.84729 138.353 13.1148C138.353 17.2783 140.441 19.9845 144.317 19.8804C146.205 19.8804 147.895 19.0478 148.392 18.2151L148.293 17.4865C147.199 18.111 146.007 18.3191 144.814 18.3191C141.832 18.3191 140.441 15.8211 140.441 12.8026V11.9699H148.988C149.088 11.6576 149.088 11.3454 149.088 11.0331V10.6168C148.988 7.91051 146.802 5.72469 144.218 5.82878ZM146.901 10.3045C146.901 10.7208 146.702 10.929 146.305 10.929H140.54C140.739 9.05546 141.932 6.97373 144.118 6.97373H144.317C145.907 7.1819 147.1 8.63911 146.901 10.3045Z\" fill=\"#131314\"/>\n            </svg>\n        </a>\n    </div>\n</div>\n<div class=\"main\">\n    <div id=\"rgw1_689d9fc6c02e1\" class=\"react-container\"><div class=\"challenge-content\"><div class=\"challenge-icon\"><svg width=\"96\" height=\"96\" viewBox=\"0 0 96 96\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M42.3054 12.8624C45.3047 7.16372 53.4648 7.16368 56.4641 12.8624L89.8387 76.274C92.6425 81.6013 88.7794 88 82.7593 88H16.0102C9.99015 88 6.12705 81.6013 8.93088 76.274L42.3054 12.8624Z\" fill=\"#BAD5F7\"></path><path d=\"M50 56C47.7909 56 46 54.2091 46 52V40C46 37.7909 47.7909 36 50 36C52.2091 36 54 37.7909 54 40V52C54 54.2091 52.2091 56 50 56Z\" fill=\"white\"></path><path d=\"M44 66C44 62.6863 46.6863 60 50 60C53.3137 60 56 62.6863 56 66C56 69.3137 53.3137 72 50 72C46.6863 72 44 69.3137 44 66Z\" fill=\"white\"></path></svg></div><div class=\"challenge-heading\"><h1>Security check required</h1></div><div class=\"challenge-message\"><p>We&#x27;ve detected unusual activity from your network. To continue, complete the security check below.</p></div><div class=\"challenge-captcha\"><div class=\"main-wrapper\" role=\"main\"><div class=\"main-content\"><noscript><div class=\"h2\"><span id=\"challenge-error-text\">Enable JavaScript and cookies to continue</span></div></noscript></div></div><script>(function(){window._cf_chl_opt = {cvId: '3',cZone: 'www.researchgate.net',cType: 'managed',cRay: '9c5c5527a85d03c9',cH: 'IE81Qq2sqcVZqxFE0Kvb6qpZcp6ryFe5lO3VvX6KGhw-1769727489-1.2.1.1-CM9GI832b5kJZpm8lvi.bLh2EhClrtwUvRSzhgzWFNQj4KyvU4JD1KGDgNwnpx2H',cUPMDTk:\"\\/publication\\/390548627_Machination_Semiotics_of_IArt_Dance_and_Artificial_Intelligence?__cf_chl_tk=hBwCjsS4PUO9pH4S9XhQTA.EB97GY2QD.1IqxhyP6ME-1769727489-1.0.1.1-TrEBHstzzoL6PWtWr7TSScXAHvKenBzt9D6eoaDJn2M\",cFPWv: 'b',cITimeS: '1769727489',cTplC:1,cTplV:5,cTplB: '0',fa:\"\\/publication\\/390548627_Machination_Semiotics_of_IArt_Dance_and_Artificial_Intelligence?__cf_chl_f_tk=hBwCjsS4PUO9pH4S9XhQTA.EB97GY2QD.1IqxhyP6ME-1769727489-1.0.1.1-TrEBHstzzoL6PWtWr7TSScXAHvKenBzt9D6eoaDJn2M\",md: '15Tp2pI_b8OOM1IchPOXsk0Uzrh1CQ.e_rv7O1byoxY-1769727489-1.2.1.1-TqLrB8EllFd369y6zkPHKciNp6zV6ZGgWjSJEAy3s3CXWGGAsOm_HAuTgYBUSBDRcH370EbTAtVjshUKswH3WFbCDNPiHpFhqLqT_plCt8RwFcngCwbYD.RUz6zC.1Yp8tgQt3G4SGHw1jTQ6H0mTJl_60LkBTVQ53VoYp5axTyxdT_C6pc8NCL2NPEdzZ_i7pFQ.bnntIRhOofDecD7sbUz8IVXDHXJUgCvN5DFqv_8NRpW10xHL5bI2RsQGpV1b2d0mSIbGr09siQPBzWo0gUF0bPosk.pTsCAl132VBojlFSqFlSJrXB47n4qgXN0eYE6oH52Vv9rWRVuZC.kxJuN8gNZ7KBW51M7dhVpShsRly5O8bvbBBmbYRTfJzkU50gv0N1I8PY4lqPS7erVu501qM6UeaWaieyNGIJEELn3M_AthysefPTRrc_r5B5DhDNH8VZys3fii.Izlr9y0ZH5i1MlXQpITJLE6ftNtGXD9MVgM08nabc9NSXkzEhvH700nQ65RrgVVwOqZ4lqzoYDPQ3IFzX7uz9Q839ShvyuY2I_b65RjPaHnB6X7m3s3m_TLGLGxd1pv7Jq9PKfuhui2IJ2DVfui3RvHpIZqDewfHVrbgfKIz9Jg4xiv0vUHcRn72HJbOoJkuqE6LKeeY758sOM4YjH6D1YIBP1wqYQ_uZBwSsY2DL.FdzsOdPpiboiF2LN8BjfD.DAvF6l51Pm4R9NQ9jcb5WblnMftwqeM5SubJ9ORxYDqmoxrbJPBJYn0iWylO6fpPokFhvs0uLADieOwGo0d89VInfGVSW6AyRa93KMuA4JXA699JgxFNo6Yt_wAPmrSAYfgvT_sgxkZROmSZRqJzHaFHUNCbjgi64q3erahNTRI.FBm7cx.HYt7slDdyOYJtmB82HsF9GHYaxQIx_9L6prPhmCcTR1fcJk9r_tDXVNWsQCnhmBVY_KIE.JOvIazO3IwWN_0ObyqhtT43TYA3haIB4WiammIZjFKSeagBAlW1yzCGPQljbfflLJvU49t4IPd8SAkahv5WhhShAg2BtP0bpOU4nesx.d7LBn4FgmYyXb9solfqANzKLFif2guTjIrM_s4w',mdrd: 'T4.h3aRlsUwk8NA4UwjrFR2ZzKrOqts_zTsaSrGzLv0-1769727489-1.2.1.1-MRb80RZvCk0WHDiGMbFuI_uXnHhhYz7XuyRJaaDW9jd6urjeuw24dsVZPC05kkkg_jOM3.PqN7KRuEunHRs_318POHebpAtfjM9hkNSsiaAKJRIQgk8QTsJpYWC0MJHi9mczr1OuI3gEXKNHD8uZ7i4h_lrac2ciL73ZNbx8oaUZPII382Yl9sfgk4F4xHjepwiL.ZSXRJLv0oiMM.XbzklXqFeKtFKnIZnohER9u02jNk1GHf8sPQbueXdsYxbXhzwqKida6TRNshYYILCSekCo5U2e7Es6n40nDvmHw7ZTowwNo3fW2743qz.VXCI7cQuhctZBJmaEBYw2Uc0ngr_6kYYgF_H5yqy3HxrcFjRMSIXm9LsAdSHZsgXEJbGPFq64SAH3MRWCOe7Dtv5gO4BV.Gg4juv8HhFfBKw..SfBAE5SVJEqmWhdasjbjGMlH5hMOTHZWdLDaZfnt7S2u.m80tc2ypfgL45xvSmJOeXSXPW8I8VvVj2g81MXP.k.ULxLtxeA87Vysm4RjRfJ_FK8bvsOGa.EqjOvuuKPmGCmNn9RYCDoWnEzBh4GsEyCq6jiN_XbIC7uvGDuoE6knh2B16klt.v4LjOobr7Y632gxpcJLdd9XMVyYKAvUuSZYxHsYQcG7IP9fvRYdfDg.8geU3_8m_9skor_TMlkhdQBDxl7_rPOAUMC6E1Soe36vbNuTx8KJfNcU2T9hgx_15PrnwZu9lMljaaz_MRbdDm0tnrKzol3hyVYxDqYLhToA1tVNsL.R5yfDU8mZEbrVfynZlRWKs9_aFj67nXuIRxO4cUbsCuCQep.bnXFvTIdPNlM7mWZU4Wifs4fThRZUafPKRC5geBIPB6ABTiOOvxZ2y7E10h3H9tXzHxz_WSxG10XhNhBJBtxrT14qhvz9CrWeNXsalE7GM2cN25jkq9mJg5vh9hkrGpSBH2kq.WrAyDk18sz7kerjFg369nik82SVtYvJ3luJsDyzpjSvyEU_q8_hVgkJwxd8m5Z9Pg4F9KGgJ3l7CsNuF44JgN7Ov52TQep29turkZwpc3J8Z0_MhP6tN7sHkNbAUmRqNpChTJgmRH0nIPVFYnhHNNoRtU8j1LYPBEN8ov6VxLTV.Xs5acgmDAbuUpG_HBfI0z_TwBMRFW5eU.Hvt3BhsZQ2mzRIFLacuu9oVe8HwU7WO58n8cBodvLQXL0WesvDwoy6lgpiMBqwvbbdzl1LTLel2FFE1ASFW3DwYNHXIOX3jdrDwpT2yU7sP3BYODYNczM2DYLTAzyti4q85qxxXvZgURgcSBZYDu3HrnfbbSrAqv_05NrvZlaPGJIo1RCbo49QW3uyGKRj6A1PWlREp7NoSCQKBfQKx7ehccocZpcFP9TrOGdHzFHyr6FIFNqM.LkPrCo.7RfdJj2XSC4buC3eK5XCXFYIEXqHN0ROev_6JiuxBtRDMeyLXVB8Ktsyi3FRzkEYDFWM2QWBwwR9jcUgX88Fia2EdsuWyUa9RZ.llaYIMo5VKE40mtOMPUMFUWyRHNDKjjkO5urdQs9whBvMdGLVAkyUUILo.rzxXuaONZFnlA0IT2zx_nE0d7f7G_aAowSAzyYEY4KcPQY39XW0Fnc7sZriDhkNebp2PKVpZJmNgwnYbKDEqSKuV0RxhA.rTsilPqiB8ZVo6p4YXXFT.c85vv6xFxkQZZ7efQdhuMiMCA2joUxZ8T_uplDTmMdQR8Lo6b1A6BWATWfO2fu5vR0nGel23j6B76yPp7T2JYBIHi2zaHQ26sTAKcntY8OM6jfBjVO9NyHd_2yXdg57ymJfVpmyWhgbbi6MJXBDgeuetrxKSNpAZjRZ_JSQ6m71PJgAmr3Unb0b.qaGysd2.55gJO4_su_.LJa4BHRT7mAC0pKXtBg2lYFU8HkTWryWVO8YTzEJsDsdcf0wW3QFtdBmwqNc6ZUIgdcJ25u7Ch3PRXEzlHJ.NIYkoONq7pd.maBj6kVkXgU.XyHCLIlUTDzAPzFW0ahuu90Z5c9ie6MeLmyvmnkw3QG_5cyQzjtxqCVks_NYO9pCskdk88cuAE7Jks124CZIBaaIIz0qheNO.kCUgoeXTbksfe8tc_esRY0ldyoUk_DQRtzZsoPlETwZaC8D8r596BwNCGHsHiA1ZHZdANVK085m5tUsLDfS_m3fubRov5J2rqmS94RGD3msVSsOGvahYcuGW_Z2aZ2UAXApLSd3SUbwLk6j60zxncNVaeW_Huz__.bdp1HlsBrlFSjSHyg24WRQ1LY2DVRybJ8oz8Xzu757Y4i.4WuQ3yPjd5KnQPxv8mKHZpAfw_pvXFSiPtgGDtIWBJxC4iIwxZfdQ0mQZy7skAJl3pD8XtpurFdHpOITg4aSXEuZf12YxZb1qcSrGdbz3j9juNHTOfjzm3B._erOXyi25xVybXLzq6LMG38m.0Zn7cgRsyQotcrVN2XUBmt5PYLAYq49bdT1BioyfoJo9mPEy0N8AmLFKqLZJ3ET5na.kaZ7w',};var a = document.createElement('script');a.src = '/cdn-cgi/challenge-platform/h/b/orchestrate/chl_page/v1?ray=9c5c5527a85d03c9';window._cf_chl_opt.cOgUHash = location.hash === '' && location.href.indexOf('#') !== -1 ? '#' : location.hash;window._cf_chl_opt.cOgUQuery = location.search === '' && location.href.slice(0, location.href.length - window._cf_chl_opt.cOgUHash.length).indexOf('?') !== -1 ? '?' : location.search;if (window.history && window.history.replaceState) {var ogU = location.pathname + window._cf_chl_opt.cOgUQuery + window._cf_chl_opt.cOgUHash;history.replaceState(null, null,\"\\/publication\\/390548627_Machination_Semiotics_of_IArt_Dance_and_Artificial_Intelligence?__cf_chl_rt_tk=hBwCjsS4PUO9pH4S9XhQTA.EB97GY2QD.1IqxhyP6ME-1769727489-1.0.1.1-TrEBHstzzoL6PWtWr7TSScXAHvKenBzt9D6eoaDJn2M\"+ window._cf_chl_opt.cOgUHash);a.onload = function() {history.replaceState(null, null, ogU);}}document.getElementsByTagName('head')[0].appendChild(a);}());</script></div><div class=\"challenge-additional-info\"><p>Ray ID: 9c5c5527a85d03c9</p><p>Client IP: 84.123.228.20</p></div><div class=\"challenge-footer\"><p>© <span id=\"footer-year\"></span> ResearchGate GmbH. All rights reserved.</p></div></div></div></div>\n<script>\n    var y = \"2008-\" + new Date().getFullYear();\n    var node = document.getElementById('footer-year');\n    node.appendChild(document.createTextNode(y));\n</script>\n</body>\n</html>\n"
+    ],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://www.researchgate.net/publication/398779213_AI-GENERATED_DANCE_MOVEMENTS_AND_CREATIVE_OWNERSHIP",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:09.222Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "unreachable",
+    "urlAccessible": false,
+    "contentType": "unknown",
+    "httpStatusCode": 0,
+    "errors": [
+      "URL accessibility check failed: Error: HTTP GET https://www.researchgate.net/publication/398779213_AI-GENERATED_DANCE_MOVEMENTS_AND_CREATIVE_OWNERSHIP failed with status code 429:\n\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <meta name=\"robots\" content=\"noindex\"/>\n    <title>ResearchGate - Temporarily Unavailable</title>\n    <style>\n        /* Reset and base styles */\n        * {\n            box-sizing: border-box;\n        }\n        \n        body, p, h1, h2 {\n            margin: 0;\n            padding: 0;\n            outline: none;\n        }\n        \n        a, a:hover {\n            text-decoration: none;\n            cursor: pointer;\n        }\n        \n        body {\n            height: 100vh;\n            color: #39393A;\n            font-family: 'Inter', Arial, sans-serif;\n            font-size: 16px;\n            line-height: 1.5;\n            text-align: center;\n            word-wrap: break-word;\n            text-rendering: optimizeLegibility;\n            -webkit-font-smoothing: antialiased;\n            background: #FFFFFF;\n        }\n        \n        /* Header styles */\n        .error-navbar {\n            box-sizing: border-box;\n            display: flex;\n            flex-direction: row;\n            align-items: center;\n            padding: 0px 20px;\n            margin: 0;\n            width: 100%;\n            height: 64px;\n            background: #F6F6F6;\n            border-bottom: 1px solid #E8E8E8;\n            position: relative;\n            z-index: 10;\n        }\n        \n        .logo-container {\n            display: flex;\n            flex-direction: row;\n            align-items: center;\n            padding: 0px;\n            gap: 32px;\n            width: 149.09px;\n            height: 20px;\n            flex: none;\n            order: 0;\n            flex-grow: 0;\n        }\n        \n        .logo-link {\n            display: flex;\n            flex-direction: column;\n            justify-content: center;\n            align-items: center;\n            padding: 0px;\n            gap: 10px;\n            width: 149.09px;\n            height: 20px;\n            flex: none;\n            order: 0;\n            flex-grow: 0;\n        }\n        \n        .error-navbar-logo {\n            width: 149.09px;\n            height: 20px;\n            flex: none;\n            order: 0;\n            flex-grow: 0;\n        }\n        \n        /* Main container */\n        .main {\n            display: flex;\n            flex-direction: column;\n            min-height: calc(100vh - 64px);\n            justify-content: center;\n            align-items: center;\n            background: #F6F6F6;\n            padding: 20px;\n        }\n\n        /* Challenge content container */\n        .challenge-content {\n            display: flex;\n            flex-direction: column;\n            justify-content: center;\n            align-items: center;\n            width: 100%;\n            width: 576px;\n            margin: 0 auto;\n            gap: 16px;\n        }\n\n        /* Warning icon */\n        .challenge-icon {\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            width: 96px;\n            height: 96px;\n        }\n\n        .challenge-icon svg {\n            width: 96px;\n            height: 96px;\n        }\n\n        /* Heading */\n        .challenge-heading h1 {\n            font-family: 'Inter', Arial, sans-serif;\n            font-weight: 600;\n            font-size: 22px;\n            line-height: 1.3;\n            color: #39393A;\n            margin: 0;\n        }\n\n        /* Main message */\n        .challenge-message p {\n            font-family: 'Inter', Arial, sans-serif;\n            font-weight: 400;\n            font-size: 16px;\n            line-height: 1.5;\n            color: #39393A;\n            margin: 0;\n            max-width: 500px;\n        }\n\n        /* CAPTCHA container */\n        .challenge-captcha {\n            width: 100%;\n            max-width: 576px;\n            min-height: 64px;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n        }\n\n        .challenge-captcha ul {\n            list-style: none;\n            padding-left: 0;\n        }\n\n        /* Login promo section */\n        .challenge-login-promo {\n            width: 100%;\n            max-width: 500px;\n        }\n\n        .login-promo-content {\n            display: flex;\n            flex-direction: column;\n            align-items: center;\n            gap: 16px;\n            padding: 16px 0px;\n        }\n\n        .login-promo-main {\n            display: flex;\n            align-items: center;\n            gap: 16px;\n            width: 100%;\n            justify-content: center;\n        }\n\n        .login-promo-text-section {\n            flex: 1;\n            text-align: center;\n        }\n\n        .login-promo-title {\n            font-family: 'Inter', Arial, sans-serif;\n            font-weight: 600;\n            font-size: 16px;\n            color: #39393A;\n            margin: 0 0 8px 0;\n        }\n\n        .login-promo-text {\n            font-family: 'Inter', Arial, sans-serif;\n            font-weight: 400;\n            font-size: 16px;\n            line-height: 1.5;\n            color: #39393A;\n            margin: 0;\n        }\n\n        /* Button container */\n        .login-buttons {\n            display: flex;\n            flex-direction: row;\n            justify-content: center;\n            align-items: flex-start;\n            padding: 0px;\n            gap: 8px;\n            margin-top: 10px;\n        }\n\n        /* Button styles */\n        .btn {\n            box-sizing: border-box;\n            display: flex;\n            flex-direction: row;\n            justify-content: center;\n            align-items: center;\n            padding: 0px 16px;\n            gap: 4px;\n            height: 32px;\n            border-radius: 16px;\n            font-family: 'Inter', Arial, sans-serif;\n            font-style: normal;\n            font-weight: 400;\n            font-size: 14px;\n            line-height: 20px;\n            text-decoration: none;\n            cursor: pointer;\n            transition: all 0.2s ease;\n            flex: none;\n            flex-grow: 0;\n            white-space: nowrap;\n        }\n\n        .btn-primary {\n            background: #006DD9;\n            color: #FFFFFF;\n            border: none;\n        }\n\n        .btn-primary:hover {\n            background: #0056B3;\n            color: #FFFFFF;\n        }\n\n        .btn-secondary {\n            background: transparent;\n            color: #006DD9;\n            border: 1px solid #006DD9;\n        }\n\n        .btn-secondary:hover {\n            background: #F0F7FF;\n            color: #006DD9;\n            border: 1px solid #006DD9;\n        }\n\n        /* Additional info */\n        .challenge-additional-info {\n            display: flex;\n            flex-direction: column;\n            align-items: center;\n            gap: 8px;\n        }\n\n        .challenge-additional-info p {\n            font-family: 'Inter', Arial, sans-serif;\n            font-weight: 400;\n            font-size: 14px;\n            line-height: 1.4;\n            color: #39393A;\n            margin: 0;\n        }\n\n        /* Footer */\n        .challenge-footer {\n        }\n\n        .challenge-footer p {\n            font-family: 'Inter', Arial, sans-serif;\n            font-weight: 400;\n            font-size: 12px;\n            line-height: 1.3;\n            color: #6F6F71;\n            margin: 0;\n        }\n\n        /* Mobile responsive */\n        @media (max-width: 767px) {\n            .error-navbar {\n                padding: 0px 16px;\n            }\n            \n            .main {\n                padding: 20px;\n                min-height: calc(100vh - 64px);\n            }\n            \n            .challenge-content {\n                width: auto;\n                max-width: 576px;\n            }\n            \n            .challenge-heading h1 {\n                font-size: 22px;\n            }\n            \n            .challenge-message p,\n            .login-promo-text {\n                font-size: 16px;\n            }\n\n            .challenge-icon {\n                width: 96px;\n                height: 96px;\n            }\n            \n            .challenge-icon svg {\n                width: 96px;\n                height: 96px;\n            }\n\n            .login-promo-main {\n                flex-direction: column;\n                gap: 16px;\n            }\n\n            .login-promo-text-section {\n                order: 2;\n            }\n            \n            .login-buttons {\n                flex-direction: column;\n                align-items: stretch;\n                gap: 8px;\n                width: 100%;\n            }\n            \n            .btn {\n                min-width: 140px;\n                padding: 0px 20px;\n            }\n            \n            .challenge-captcha {\n                min-height: 64px;\n            }\n        }\n    </style>\n<meta http-equiv=\"refresh\" content=\"360\">\n</head>\n<body>\n<div class=\"error-navbar\">\n    <div class=\"logo-container\">\n        <a href=\"https://www.researchgate.net\" class=\"logo-link\">\n            <svg class=\"error-navbar-logo\" width=\"150\" height=\"20\" viewBox=\"0 0 150 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                <path d=\"M86.3714 18.7355L85.4769 18.8396L85.5763 19.4642C86.272 19.3601 87.2659 19.3601 88.2599 19.3601C88.801 19.3601 89.3716 19.3909 89.8915 19.419C90.3265 19.4426 90.7259 19.4642 91.0428 19.4642V18.7355L90.1483 18.6315C89.5519 18.5274 89.2538 18.4233 89.2538 16.4457V8.431C90.1483 7.80648 91.2416 7.39013 92.3349 7.39013C94.6209 7.39013 95.1179 8.74326 95.1179 10.825V16.5497C95.1179 18.4233 94.8197 18.6315 94.2234 18.7355L93.3288 18.8396V19.5682C94.0246 19.4642 95.0185 19.4642 96.0124 19.4642C96.5535 19.4642 97.1241 19.495 97.644 19.5231C98.0789 19.5466 98.4784 19.5682 98.7954 19.5682V18.8396L97.9009 18.7355C97.3045 18.6315 97.0063 18.5274 97.0063 16.5497V10.5127C97.0063 7.80648 96.1118 5.82884 93.0307 5.82884C91.6392 5.93292 90.2477 6.55744 89.2538 7.59831V0C88.0611 0.624518 86.8684 1.04086 85.5763 1.45721V2.18581C87.2659 2.49807 87.2659 2.81033 87.2659 4.26754V16.5497C87.2659 18.4233 86.9678 18.6315 86.3714 18.7355Z\" fill=\"#131314\"/>\n                <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M6.16229 11.8658C7.2556 14.1557 8.64708 16.2374 10.138 18.2151C11.0325 19.2559 12.3246 19.8804 13.7161 19.7764C14.1136 19.7764 14.5112 19.7763 14.8094 19.5682V18.8396C13.8154 18.7355 12.9209 18.2151 12.2252 17.3824C10.7343 15.5088 9.34282 13.5312 8.24951 11.4494C10.4361 10.929 11.927 9.05545 12.0264 6.76555C12.0264 3.64296 9.74039 2.18575 6.75864 2.18575C5.88924 2.18575 5.10896 2.21686 4.40157 2.24506C3.81502 2.26845 3.27856 2.28984 2.78297 2.28984H0V3.12253L0.993917 3.3307C1.68966 3.43479 2.08723 3.74705 2.08723 5.51651V16.5497C2.08723 18.2151 1.68966 18.6314 0.993917 18.7355L0 18.9437V19.7764C0.695742 19.6723 1.98783 19.6723 3.18054 19.6723C3.85674 19.6723 4.62878 19.7057 5.29743 19.7347C5.80813 19.7568 6.25858 19.7764 6.55985 19.7764V18.9437L5.16837 18.7355C4.47263 18.6314 4.07506 18.2151 4.07506 16.5497V11.8658H6.16229ZM6.26168 3.53887C8.54769 3.53887 9.83978 4.78791 9.83978 6.97372C9.83978 9.15954 8.34891 10.6167 5.9635 10.6167C5.06898 10.6167 4.67141 10.6167 4.07506 10.5127V3.53887H6.26168Z\" fill=\"#131314\"/>\n                <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M21.1701 5.82895C17.6913 5.82895 15.3059 8.84746 15.3059 13.115C15.3059 17.2785 17.3932 19.9847 21.3688 19.8806C23.2573 19.8806 24.9469 19.0479 25.4439 18.2152L25.3445 17.4866C24.2512 18.1111 23.0585 18.3193 21.8658 18.3193C18.884 18.3193 17.4926 15.8212 17.4926 12.8027V11.97H26.0402V10.5128C25.9409 7.80659 23.7542 5.72486 21.1701 5.82895ZM23.953 10.3047C23.953 10.721 23.8536 10.9292 23.3567 10.9292H17.592C17.7907 9.05563 18.9834 6.9739 21.1701 6.9739H21.3688C22.9591 7.18207 24.1518 8.63928 23.953 10.3047Z\" fill=\"#131314\"/>\n                <path d=\"M28.2266 19.3601C28.2266 18.111 28.2266 16.9661 28.1272 15.717H29.1211C29.3199 17.6947 29.9163 18.7355 32.2023 18.7355C33.8919 18.7355 34.9852 17.7988 34.9852 16.2375C34.9852 14.6805 33.6169 14.1714 32.1207 13.6149C30.3163 12.9436 28.326 12.2033 28.326 9.47186C28.326 7.28605 30.2144 5.82884 32.7986 5.82884C33.9913 5.82884 35.184 6.1411 36.2773 6.55744V9.68003H35.2834C35.3828 8.32691 34.4883 7.07787 33.1962 6.8697H32.5998C31.0096 6.8697 30.0156 7.59831 30.0156 8.95143C30.0156 10.3891 31.3377 10.9176 32.8037 11.5036C34.6279 12.2328 36.6749 13.0511 36.6749 15.8211C36.6749 18.0069 34.6871 19.8805 32.1029 19.8805C30.8108 19.9846 29.5187 19.7764 28.2266 19.3601Z\" fill=\"#131314\"/>\n                <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M44.9249 5.82895C41.4461 5.82895 39.0607 8.84746 39.0607 13.115C39.0607 17.2785 41.148 19.9847 45.1236 19.8806C47.0121 19.8806 48.7017 19.0479 49.1987 18.2152L49.0993 17.4866C48.006 18.1111 46.8133 18.3193 45.6206 18.3193C42.6388 18.3193 41.2474 15.8212 41.2474 12.8027V11.97H49.795V10.5128C49.6957 7.80659 47.509 5.72486 44.9249 5.82895ZM47.6084 10.3047C47.6084 10.721 47.509 10.9292 47.0121 10.9292H41.2474C41.4461 9.05563 42.6388 6.9739 44.8255 6.9739H45.0242C46.6145 7.18207 47.8072 8.63928 47.6084 10.3047Z\" fill=\"#131314\"/>\n                <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M51.2862 16.5497C51.2862 13.9475 53.4728 12.2821 56.8522 12.2821H58.2436V10.7209C58.2436 8.53504 57.3491 7.49417 55.2619 7.49417C54.268 7.49417 53.1747 7.70235 52.2801 8.22278L52.1807 7.286C53.1747 6.34922 54.4668 5.7247 55.8582 5.7247C58.84 5.7247 60.3309 7.49417 60.3309 10.0963C60.3309 11.1528 60.3077 12.1849 60.2837 13.2515C60.258 14.3914 60.2315 15.5715 60.2315 16.8619C60.2315 18.2151 60.7284 18.6314 62.3187 18.6314V19.36C61.7224 19.6723 61.0266 19.8805 60.3309 19.8805C59.337 19.9845 58.5418 19.2559 58.4424 18.3192V18.0069C57.6473 19.1518 56.3552 19.8805 54.9637 19.8805C53.1747 19.9845 51.5844 18.6314 51.485 16.7579C51.2862 16.7579 51.2862 16.6538 51.2862 16.5497ZM58.1443 17.07C58.1443 16.1332 58.1443 14.0516 58.2436 13.4271H57.2497C54.5662 13.4271 53.2741 14.468 53.2741 16.1333C53.2741 17.2783 54.0692 18.2151 55.1625 18.3192H55.3613C56.4546 18.3192 57.4485 17.9027 58.1443 17.07Z\" fill=\"#131314\"/>\n                <path d=\"M65.1014 18.7355L64.2068 18.8395L64.3062 19.4641C64.6232 19.4641 65.002 19.4425 65.4145 19.4189C65.9075 19.3908 66.4486 19.36 66.9898 19.36C67.531 19.36 68.19 19.3908 68.7904 19.4189C69.2927 19.4425 69.754 19.4641 70.0709 19.4641V18.7355L68.8782 18.6314C68.2819 18.5273 67.9837 18.4232 67.9837 16.4456V8.63908C68.7789 8.01456 69.7728 7.59821 70.7667 7.59821C71.2636 7.49413 71.7606 7.59821 72.2576 7.80639L72.4563 5.93283C72.0588 5.82874 71.6612 5.72466 71.2636 5.72466C69.9715 5.93283 68.7789 6.66144 67.9837 7.7023V5.62057C66.791 6.141 65.5983 6.66144 64.3062 6.97369V7.59821C65.9959 7.91047 65.9959 8.32682 65.9959 9.67994V16.5496C65.9959 18.4232 65.6977 18.6314 65.1014 18.7355Z\" fill=\"#131314\"/>\n                <path d=\"M73.4504 13.1149C73.4504 8.95143 76.3327 5.82884 79.8115 5.82884C81.0042 5.82884 82.1969 6.03701 83.2902 6.45335C83.1908 7.39013 83.1908 8.74326 83.1908 9.57595H82.1968C82.0975 8.01465 81.5011 6.97379 79.6127 6.97379C77.3267 6.97379 75.4382 9.05552 75.4382 12.8026C75.4382 16.5497 77.3267 18.3192 80.1096 18.3192C81.2029 18.3192 82.2962 18.0069 83.1908 17.4865L83.2902 18.2151C82.2962 19.4642 80.9048 20.0887 79.4139 19.9846C75.7364 19.9846 73.4504 17.2783 73.4504 13.1149Z\" fill=\"#131314\"/>\n                <path d=\"M100.585 11.2412C100.585 6.03685 103.964 1.97748 108.834 1.97748C110.424 1.97748 112.015 2.28974 113.506 2.81017C113.506 3.9005 113.581 4.99082 113.667 6.21962L113.67 6.27395C113.682 6.43528 113.693 6.59901 113.704 6.76546H112.71C112.71 4.78782 111.12 3.12243 109.132 3.12243H108.834C105.256 3.12243 102.97 6.34911 102.97 10.9289C102.97 15.5087 105.256 18.7354 108.834 18.7354C109.927 18.8395 111.021 18.5272 112.015 18.1109V14.9883C112.015 13.3229 111.617 12.9066 110.921 12.8025L109.927 12.5943V11.7616C110.21 11.7616 110.541 11.7788 110.935 11.7991C111.512 11.829 112.222 11.8657 113.108 11.8657C114.301 11.8657 115.195 11.8657 115.792 11.7616V12.5943L114.996 12.8025C114.201 13.0106 114.002 13.427 114.002 14.9883V19.0477C112.213 19.6722 110.424 19.9844 108.536 19.9844C103.467 19.9844 100.585 16.4455 100.585 11.2412Z\" fill=\"#131314\"/>\n                <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M122.848 12.2821C119.469 12.2821 117.282 13.9475 117.282 16.5497C117.282 16.6538 117.282 16.7579 117.382 16.7579C117.481 18.6314 119.071 19.9845 120.86 19.8805C122.252 19.8805 123.544 19.1518 124.339 18.0069V18.3192C124.538 19.36 125.333 19.9845 126.327 19.8805C127.023 19.8805 127.718 19.6723 128.315 19.36V18.6314C126.724 18.6314 126.227 18.2151 126.227 16.8619C126.227 15.5715 126.254 14.3921 126.28 13.2521C126.304 12.1855 126.327 11.1528 126.327 10.0963C126.327 7.49417 124.836 5.7247 121.854 5.7247C120.463 5.7247 119.171 6.34922 118.177 7.286L118.276 8.22278C119.171 7.70235 120.264 7.49417 121.258 7.49417C123.345 7.49417 124.24 8.53504 124.24 10.7209V12.2821H122.848ZM124.339 13.4271C124.24 14.0516 124.24 16.1333 124.24 17.0701C123.445 17.9028 122.451 18.3192 121.457 18.3192H121.258C120.165 18.2151 119.369 17.2783 119.369 16.1333C119.369 14.468 120.662 13.4271 123.345 13.4271H124.339Z\" fill=\"#131314\"/>\n                <path d=\"M131.296 16.6535V7.38983H129.706V6.45305C131.097 5.72445 132.091 4.37132 132.389 2.81003H133.284V6.03671H137.16V7.38983H133.284V16.2372C133.284 17.9026 133.781 18.6312 135.073 18.6312C135.769 18.6312 136.365 18.5271 136.961 18.3189L137.061 18.8393C136.266 19.672 135.272 20.0884 134.178 19.9843C131.992 19.9843 131.296 18.9434 131.296 16.6535Z\" fill=\"#131314\"/>\n                <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M144.218 5.82878C140.739 5.82878 138.353 8.84729 138.353 13.1148C138.353 17.2783 140.441 19.9845 144.317 19.8804C146.205 19.8804 147.895 19.0478 148.392 18.2151L148.293 17.4865C147.199 18.111 146.007 18.3191 144.814 18.3191C141.832 18.3191 140.441 15.8211 140.441 12.8026V11.9699H148.988C149.088 11.6576 149.088 11.3454 149.088 11.0331V10.6168C148.988 7.91051 146.802 5.72469 144.218 5.82878ZM146.901 10.3045C146.901 10.7208 146.702 10.929 146.305 10.929H140.54C140.739 9.05546 141.932 6.97373 144.118 6.97373H144.317C145.907 7.1819 147.1 8.63911 146.901 10.3045Z\" fill=\"#131314\"/>\n            </svg>\n        </a>\n    </div>\n</div>\n<div class=\"main\">\n    <div id=\"rgw1_689d9fc6c02e1\" class=\"react-container\"><div class=\"challenge-content\"><div class=\"challenge-icon\"><svg width=\"96\" height=\"96\" viewBox=\"0 0 96 96\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M42.3054 12.8624C45.3047 7.16372 53.4648 7.16368 56.4641 12.8624L89.8387 76.274C92.6425 81.6013 88.7794 88 82.7593 88H16.0102C9.99015 88 6.12705 81.6013 8.93088 76.274L42.3054 12.8624Z\" fill=\"#BAD5F7\"></path><path d=\"M50 56C47.7909 56 46 54.2091 46 52V40C46 37.7909 47.7909 36 50 36C52.2091 36 54 37.7909 54 40V52C54 54.2091 52.2091 56 50 56Z\" fill=\"white\"></path><path d=\"M44 66C44 62.6863 46.6863 60 50 60C53.3137 60 56 62.6863 56 66C56 69.3137 53.3137 72 50 72C46.6863 72 44 69.3137 44 66Z\" fill=\"white\"></path></svg></div><div class=\"challenge-heading\"><h1>Security check required</h1></div><div class=\"challenge-message\"><p>We&#x27;ve detected unusual activity from your network. To continue, complete the security check below.</p></div><div class=\"challenge-captcha\"><div class=\"main-wrapper\" role=\"main\"><div class=\"main-content\"><noscript><div class=\"h2\"><span id=\"challenge-error-text\">Enable JavaScript and cookies to continue</span></div></noscript></div></div><script>(function(){window._cf_chl_opt = {cvId: '3',cZone: 'www.researchgate.net',cType: 'managed',cRay: '9c5c5527d8b603c9',cH: 'w5_MXfWgcRUfmUnHInnJfPmOvcYtduKwXqeNQ1Pzgzk-1769727489-1.2.1.1-r18Er4KiF3dv1QIuS7WuJwZq1EA3_ox2n903N6mKpJuBQhrsGH4SBpzTcDyUM9uL',cUPMDTk:\"\\/publication\\/398779213_AI-GENERATED_DANCE_MOVEMENTS_AND_CREATIVE_OWNERSHIP?__cf_chl_tk=odi.0mw6QR3P3HrS8Qan4Rm0e._mCAUpQM.Nn0KHg9g-1769727489-1.0.1.1-7YynDHbPLE0jAzMuQnQZURJHA5IVGx6g4ffbgTGxNDU\",cFPWv: 'b',cITimeS: '1769727489',cTplC:1,cTplV:5,cTplB: '0',fa:\"\\/publication\\/398779213_AI-GENERATED_DANCE_MOVEMENTS_AND_CREATIVE_OWNERSHIP?__cf_chl_f_tk=odi.0mw6QR3P3HrS8Qan4Rm0e._mCAUpQM.Nn0KHg9g-1769727489-1.0.1.1-7YynDHbPLE0jAzMuQnQZURJHA5IVGx6g4ffbgTGxNDU\",md: 'Rtc59CNwbEExW40hLzsJcZ4SFyFp3CQUUTRoJ4VWdBk-1769727489-1.2.1.1-zvu.Eq_pxfwNMU2BuTDKYF1B.0EekExUOLj6tcyGUN7V0VfRLE5WxNymP6NLlWT_iZoro_cW31HVCghgK.M7A9Xz8ZX6v3Jf9UHWpRZoevffu.D7bUnKbYyApFIiJhdu46akNJNTA4RTpTJFv3i1oenGequzUCaQnrCmqyrqJje.IyIoTc4tFlj6kZuHeSY3ZmCzTmOFehEKckCoKrF4L8s5sFbbUrdXX2tvtgtt.LAHhJjajIMAQ8JHCbN9JzUhfv.4gbfh..U0zxpIOlLrJhe2JD3pyfOxKMs3p8N4_2OyO35rm9CNGC2KbuHmSNAV.9B7Omw8lmaSY.14VQuwde1Tf92jG0zv1jd8PJaEhuT.7us91eLMZJ5PwgDB_vQeO6aP7IFkg79RhNWbxNJZTIpyUXoyH_aK4vSFP6A7JS_lDSzlOEly64VNjpI3wX39PhGnRyo40DgsXjELGSbt7nDXatym1GdVo5puJV7ZMXrJloiMqSozLmS073WDPAjbVmGz7XaHmNm40xWDyFRwCI0BiMxw1CXCucMXb9i5HVmQjD1wd1I_GDQVTT0xaKnUM8S46GLRorjGJLzTvqgiMsS5ypkBO_7ErfQ94VTpyaRcjjYFxfNRLio3oNjcVUjsvFmvgXX_WLtkG4erZymMqApXUGwmZaiFGb_LCNNDsEr5n3FYH955_UstvTpeJ.6Y6c4Wg1WVdw9ryBumhEkfPXW5.Jgl0mCZToF9aLFfoHQr.D3W2IBQ30lyFXoJOGYHNrvCNGVcayD7e4fG6.pd.OoOewaLWAhp9v3iOTLlQ_nW1WhqYI22j_AIeK.ID5FFaSlv0Bo1YsP.sdtAWTIbe.S8.iDP9mrhl6kiiE7CRlP9egmrrwj5eBAvdGsxYluMznaVXR7KAx9ISq7nelfYSJpnHbyAI1z6_VR0PCXQQmTymBr2wAPgI6QpC0fYKlPnkjYI3hZtz.FRXHwrQ7fbroY5_g_V2Oj.4jwJ7Kzhh1v07QIQHcrIT6iM3f2XKX0zBZsLPhToJ6Xzo18pSkCUFNtGSP9fnMWH7adlQ_Q.jGxEWkFGj4xziBOvgDhfVwRj',mdrd: 'MEvkm.Rb3x.aQAcy2ycfpKKojQZbf3MK2qvxDLUIwHo-1769727489-1.2.1.1-PyI6C12cnUbQwgIs2CEQXUqza5eUCJpRgdZ1MYGWTZUKY_ya8qBlv32TcMi7P6GvBq2zVma1gYuc4LnhUBqjNOzPEzR3VXQ_9Vin9uYZ3qDvzuepke3FYfCjuribWRgM_euuuF.8OqjIY6.c5Sb5SuFoASKLqijGOPmyBKq47Cdw4TK.aD7Nu2vMrN3hM_G8V4HQrEftzH9sk3N.8JYVhWdqeYdjQp5IAXDCqWfxp7Kt7fsNceg2HCuvRO1LFSehQtKeKLhq7il32evOBuC3BXy2wajVLy1xDYoTpzOVClHO6M4_8pH7f2mpgMxT5eR8NdZU3giWk.DYlQSpE4U51A_AJ5hPLFMsuLYK2MkZm9bOlQQDinXB3W42onLVExHjoR..14cxwfAw740NLFUanj9pgajV3t23M4zbBy03DuFuRHkWofsHSH8bWYozeLivYs3C7S1aJvBiMayBo58GdWG0KcSlRtOe61yhTSWUR4SBMnO4enBeT.AsbHSzWgtTOr7VLnYmvmRhQT.P5j6UuvdZSGq0FwxkIYkz49iDUJnJ79MZLgGWmfnexxolDrVqCJdsoFVcILggYIPdRdw_tIn5ETthG89Vp_MTfmWXozyXiJ6.NSem4.uPRQGA4ecLIH9Mgzw8czU_dHsL8kkfHcDKI3Fab.Rbj1oAVtQEsfhKM1SnDDQNhZfT33cmXlgp0Tllws7r_vezSwwxKjWrO_XZBl4cAkOMD_YEXLmtWCDr9ry.mkHDRAQTWelB6Y5VjFm1MoYB77etkNtdYj_q7Td5pHIQfrzgfZtZgulDLOrLH9ngdOFGheBr4G8BDuPL4sS02SeXI1RWqSOl9nGrDkFwxoHer1IAUXLxSAGySgpWXIckrJDhQmmhjQhtKHSKXXmNz.IMlj2MDIMzWdbJ_iKApqp3L2tlc85nldh4IJEqOjsAVRuumcFORjTbSnBTS2ClixfEKrsEQRsnN3NWQB3rxS7PrtBruw4oxLdX7YyV2_f9sHMxPOSWsAXKs551v4GKKuXoA.lVSDdDzL432ipr68z5WGYBnnFieEiXFHDj2U5rvDGV6bvpkM1m3q13fsriajpFE82bHSbaMf.3vk8jRBFmHuzQYfLc.P3s8y2ydCxa8ZEFwaadHKZ0SgMXg1xdvp4sIItnFbvh_433zYMBX.i2tP2BIyeM4tPUkOtmQPPFQZEjzk4lL4uP3Jyjdq8eOIABhvkc2Cqxlpmn9dv6T0VMaVuP7AKoXiMjCsFEy1.DDDD0lsT9Hpu_wQIPS1TDroTBYaKYWT1yLFJBDLg9X_EqeinU2uKk0gQYK3X1hy3GCHRYh4orEUgMZBEw9nni0FIHWNtWzjhVbpnF6xX9DKcxHwJa6ylClRBydIezgRY4tQ2c9xT9_Ze_j.GclcCCL29.YQ6M7cb1LHah3MVTgPgoAxJLpDmWyXlIyyO._vgoY9dlomkHFhu3T38aLNXd13os2nUQzv3UEbMpXcistyddm3utoR2C_96U2_UZcv5STdG8u63_bgMWYutfcX6b8TQSoNhorQ86L_74p0Uf3tp8RjB2Ikd6braVboqj_TsqFE1lafq.8V8c_jGF2OUch2yV_LCu28TL2.FWyFoRKjtG8irpfIZouG2DxvOTGg.xrK.EgdxCs_hI9EYmm9Z4UNBccMpERMIp500iLmgpLSfZB8KPuQf6vrVg5oJUoUsb7H7AVeUctYwqFx1EFlLl46jix.HugEJh668Kri75IZmFSvaGcaRSwXKceeLgXV1KpsC.bO20cMuoVCZ3KfjLBK3edzIzlgmmMUbD5rVQlU4lahpjxsqMANxKx1l75NDvGhN3iHrIhixiYr6kJOhpNZXKslRPWj0PIS0gycGCmjfE40aTPm1fTz85uapim5YUmZCK5a7yeBRGagAZlMkuxMcNCRxklx25CHbDefn61i9WaER6w8r42QPAQOqsjz0CNmJqrM0QMod4Is5KQ4vRhNCrEdM2fdbYdC3g8lzRVBjVnVzreYZZtM4d7GEidxD3oONTHasETjxahvKTB5z_KK8ItbUb_PCJvd_eDa.FFUrbjd8AYZzuhQYmnPzYUbTsGerUP3LD3TqGORG71nTwaz4dNN.KXPGFDzRLKzclt7P0aiuvAG549fjC0KmHyjzr1.dWaZd.xAZ2jzTg6teNx82jmR5G4QeJnrWR.G9Py.l3owTQIgho1qNzd5Gl7fQtEYzQBe_nVRDf.wfciipNbSJVJ4eDI2uQqi9NL.kR3OqyJzxE7AxZnElYFNtiUbWdLjxp.wpu3klFSnorVNK9uUAWTPX7z6bQo4KYf3I.Xl0Vx49LCZefZN_UdoCrj_yYo8iymdq_8SBmKmkINFujYe517Fa1daMLaeMwb8pTccDgM02RjfuafukHAncwaU5FpPvpUOtRmZqmSagApcgF7yBOVf5y0TPSxNF6OXKwo7gUbl7IHvHSoVjvrCDGHoQhpQ7E72a4PuzaKtRfRB9ptKc2fxY37iAYK_hCJQ',};var a = document.createElement('script');a.src = '/cdn-cgi/challenge-platform/h/b/orchestrate/chl_page/v1?ray=9c5c5527d8b603c9';window._cf_chl_opt.cOgUHash = location.hash === '' && location.href.indexOf('#') !== -1 ? '#' : location.hash;window._cf_chl_opt.cOgUQuery = location.search === '' && location.href.slice(0, location.href.length - window._cf_chl_opt.cOgUHash.length).indexOf('?') !== -1 ? '?' : location.search;if (window.history && window.history.replaceState) {var ogU = location.pathname + window._cf_chl_opt.cOgUQuery + window._cf_chl_opt.cOgUHash;history.replaceState(null, null,\"\\/publication\\/398779213_AI-GENERATED_DANCE_MOVEMENTS_AND_CREATIVE_OWNERSHIP?__cf_chl_rt_tk=odi.0mw6QR3P3HrS8Qan4Rm0e._mCAUpQM.Nn0KHg9g-1769727489-1.0.1.1-7YynDHbPLE0jAzMuQnQZURJHA5IVGx6g4ffbgTGxNDU\"+ window._cf_chl_opt.cOgUHash);a.onload = function() {history.replaceState(null, null, ogU);}}document.getElementsByTagName('head')[0].appendChild(a);}());</script></div><div class=\"challenge-additional-info\"><p>Ray ID: 9c5c5527d8b603c9</p><p>Client IP: 84.123.228.20</p></div><div class=\"challenge-footer\"><p>© <span id=\"footer-year\"></span> ResearchGate GmbH. All rights reserved.</p></div></div></div></div>\n<script>\n    var y = \"2008-\" + new Date().getFullYear();\n    var node = document.getElementById('footer-year');\n    node.appendChild(document.createTextNode(y));\n</script>\n</body>\n</html>\n"
+    ],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://www.researchgate.net/publication/394290217_Inteligencia_Artificial_y_teatro_posthumano_un_marco_conceptual_para_la_agenciacreativa_distribuidaArtificial_Intelligence_and_Posthuman_Theater_A_Conceptual_Framework_for_Distributed_Creative_AgencyI",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:09.223Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "unreachable",
+    "urlAccessible": false,
+    "contentType": "unknown",
+    "httpStatusCode": 0,
+    "errors": [
+      "URL accessibility check failed: Error: HTTP GET https://www.researchgate.net/publication/394290217_Inteligencia_Artificial_y_teatro_posthumano_un_marco_conceptual_para_la_agenciacreativa_distribuidaArtificial_Intelligence_and_Posthuman_Theater_A_Conceptual_Framework_for_Distributed_Creative_AgencyI failed with status code 429:\n\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <meta name=\"robots\" content=\"noindex\"/>\n    <title>ResearchGate - Temporarily Unavailable</title>\n    <style>\n        /* Reset and base styles */\n        * {\n            box-sizing: border-box;\n        }\n        \n        body, p, h1, h2 {\n            margin: 0;\n            padding: 0;\n            outline: none;\n        }\n        \n        a, a:hover {\n            text-decoration: none;\n            cursor: pointer;\n        }\n        \n        body {\n            height: 100vh;\n            color: #39393A;\n            font-family: 'Inter', Arial, sans-serif;\n            font-size: 16px;\n            line-height: 1.5;\n            text-align: center;\n            word-wrap: break-word;\n            text-rendering: optimizeLegibility;\n            -webkit-font-smoothing: antialiased;\n            background: #FFFFFF;\n        }\n        \n        /* Header styles */\n        .error-navbar {\n            box-sizing: border-box;\n            display: flex;\n            flex-direction: row;\n            align-items: center;\n            padding: 0px 20px;\n            margin: 0;\n            width: 100%;\n            height: 64px;\n            background: #F6F6F6;\n            border-bottom: 1px solid #E8E8E8;\n            position: relative;\n            z-index: 10;\n        }\n        \n        .logo-container {\n            display: flex;\n            flex-direction: row;\n            align-items: center;\n            padding: 0px;\n            gap: 32px;\n            width: 149.09px;\n            height: 20px;\n            flex: none;\n            order: 0;\n            flex-grow: 0;\n        }\n        \n        .logo-link {\n            display: flex;\n            flex-direction: column;\n            justify-content: center;\n            align-items: center;\n            padding: 0px;\n            gap: 10px;\n            width: 149.09px;\n            height: 20px;\n            flex: none;\n            order: 0;\n            flex-grow: 0;\n        }\n        \n        .error-navbar-logo {\n            width: 149.09px;\n            height: 20px;\n            flex: none;\n            order: 0;\n            flex-grow: 0;\n        }\n        \n        /* Main container */\n        .main {\n            display: flex;\n            flex-direction: column;\n            min-height: calc(100vh - 64px);\n            justify-content: center;\n            align-items: center;\n            background: #F6F6F6;\n            padding: 20px;\n        }\n\n        /* Challenge content container */\n        .challenge-content {\n            display: flex;\n            flex-direction: column;\n            justify-content: center;\n            align-items: center;\n            width: 100%;\n            width: 576px;\n            margin: 0 auto;\n            gap: 16px;\n        }\n\n        /* Warning icon */\n        .challenge-icon {\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            width: 96px;\n            height: 96px;\n        }\n\n        .challenge-icon svg {\n            width: 96px;\n            height: 96px;\n        }\n\n        /* Heading */\n        .challenge-heading h1 {\n            font-family: 'Inter', Arial, sans-serif;\n            font-weight: 600;\n            font-size: 22px;\n            line-height: 1.3;\n            color: #39393A;\n            margin: 0;\n        }\n\n        /* Main message */\n        .challenge-message p {\n            font-family: 'Inter', Arial, sans-serif;\n            font-weight: 400;\n            font-size: 16px;\n            line-height: 1.5;\n            color: #39393A;\n            margin: 0;\n            max-width: 500px;\n        }\n\n        /* CAPTCHA container */\n        .challenge-captcha {\n            width: 100%;\n            max-width: 576px;\n            min-height: 64px;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n        }\n\n        .challenge-captcha ul {\n            list-style: none;\n            padding-left: 0;\n        }\n\n        /* Login promo section */\n        .challenge-login-promo {\n            width: 100%;\n            max-width: 500px;\n        }\n\n        .login-promo-content {\n            display: flex;\n            flex-direction: column;\n            align-items: center;\n            gap: 16px;\n            padding: 16px 0px;\n        }\n\n        .login-promo-main {\n            display: flex;\n            align-items: center;\n            gap: 16px;\n            width: 100%;\n            justify-content: center;\n        }\n\n        .login-promo-text-section {\n            flex: 1;\n            text-align: center;\n        }\n\n        .login-promo-title {\n            font-family: 'Inter', Arial, sans-serif;\n            font-weight: 600;\n            font-size: 16px;\n            color: #39393A;\n            margin: 0 0 8px 0;\n        }\n\n        .login-promo-text {\n            font-family: 'Inter', Arial, sans-serif;\n            font-weight: 400;\n            font-size: 16px;\n            line-height: 1.5;\n            color: #39393A;\n            margin: 0;\n        }\n\n        /* Button container */\n        .login-buttons {\n            display: flex;\n            flex-direction: row;\n            justify-content: center;\n            align-items: flex-start;\n            padding: 0px;\n            gap: 8px;\n            margin-top: 10px;\n        }\n\n        /* Button styles */\n        .btn {\n            box-sizing: border-box;\n            display: flex;\n            flex-direction: row;\n            justify-content: center;\n            align-items: center;\n            padding: 0px 16px;\n            gap: 4px;\n            height: 32px;\n            border-radius: 16px;\n            font-family: 'Inter', Arial, sans-serif;\n            font-style: normal;\n            font-weight: 400;\n            font-size: 14px;\n            line-height: 20px;\n            text-decoration: none;\n            cursor: pointer;\n            transition: all 0.2s ease;\n            flex: none;\n            flex-grow: 0;\n            white-space: nowrap;\n        }\n\n        .btn-primary {\n            background: #006DD9;\n            color: #FFFFFF;\n            border: none;\n        }\n\n        .btn-primary:hover {\n            background: #0056B3;\n            color: #FFFFFF;\n        }\n\n        .btn-secondary {\n            background: transparent;\n            color: #006DD9;\n            border: 1px solid #006DD9;\n        }\n\n        .btn-secondary:hover {\n            background: #F0F7FF;\n            color: #006DD9;\n            border: 1px solid #006DD9;\n        }\n\n        /* Additional info */\n        .challenge-additional-info {\n            display: flex;\n            flex-direction: column;\n            align-items: center;\n            gap: 8px;\n        }\n\n        .challenge-additional-info p {\n            font-family: 'Inter', Arial, sans-serif;\n            font-weight: 400;\n            font-size: 14px;\n            line-height: 1.4;\n            color: #39393A;\n            margin: 0;\n        }\n\n        /* Footer */\n        .challenge-footer {\n        }\n\n        .challenge-footer p {\n            font-family: 'Inter', Arial, sans-serif;\n            font-weight: 400;\n            font-size: 12px;\n            line-height: 1.3;\n            color: #6F6F71;\n            margin: 0;\n        }\n\n        /* Mobile responsive */\n        @media (max-width: 767px) {\n            .error-navbar {\n                padding: 0px 16px;\n            }\n            \n            .main {\n                padding: 20px;\n                min-height: calc(100vh - 64px);\n            }\n            \n            .challenge-content {\n                width: auto;\n                max-width: 576px;\n            }\n            \n            .challenge-heading h1 {\n                font-size: 22px;\n            }\n            \n            .challenge-message p,\n            .login-promo-text {\n                font-size: 16px;\n            }\n\n            .challenge-icon {\n                width: 96px;\n                height: 96px;\n            }\n            \n            .challenge-icon svg {\n                width: 96px;\n                height: 96px;\n            }\n\n            .login-promo-main {\n                flex-direction: column;\n                gap: 16px;\n            }\n\n            .login-promo-text-section {\n                order: 2;\n            }\n            \n            .login-buttons {\n                flex-direction: column;\n                align-items: stretch;\n                gap: 8px;\n                width: 100%;\n            }\n            \n            .btn {\n                min-width: 140px;\n                padding: 0px 20px;\n            }\n            \n            .challenge-captcha {\n                min-height: 64px;\n            }\n        }\n    </style>\n<meta http-equiv=\"refresh\" content=\"360\">\n</head>\n<body>\n<div class=\"error-navbar\">\n    <div class=\"logo-container\">\n        <a href=\"https://www.researchgate.net\" class=\"logo-link\">\n            <svg class=\"error-navbar-logo\" width=\"150\" height=\"20\" viewBox=\"0 0 150 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                <path d=\"M86.3714 18.7355L85.4769 18.8396L85.5763 19.4642C86.272 19.3601 87.2659 19.3601 88.2599 19.3601C88.801 19.3601 89.3716 19.3909 89.8915 19.419C90.3265 19.4426 90.7259 19.4642 91.0428 19.4642V18.7355L90.1483 18.6315C89.5519 18.5274 89.2538 18.4233 89.2538 16.4457V8.431C90.1483 7.80648 91.2416 7.39013 92.3349 7.39013C94.6209 7.39013 95.1179 8.74326 95.1179 10.825V16.5497C95.1179 18.4233 94.8197 18.6315 94.2234 18.7355L93.3288 18.8396V19.5682C94.0246 19.4642 95.0185 19.4642 96.0124 19.4642C96.5535 19.4642 97.1241 19.495 97.644 19.5231C98.0789 19.5466 98.4784 19.5682 98.7954 19.5682V18.8396L97.9009 18.7355C97.3045 18.6315 97.0063 18.5274 97.0063 16.5497V10.5127C97.0063 7.80648 96.1118 5.82884 93.0307 5.82884C91.6392 5.93292 90.2477 6.55744 89.2538 7.59831V0C88.0611 0.624518 86.8684 1.04086 85.5763 1.45721V2.18581C87.2659 2.49807 87.2659 2.81033 87.2659 4.26754V16.5497C87.2659 18.4233 86.9678 18.6315 86.3714 18.7355Z\" fill=\"#131314\"/>\n                <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M6.16229 11.8658C7.2556 14.1557 8.64708 16.2374 10.138 18.2151C11.0325 19.2559 12.3246 19.8804 13.7161 19.7764C14.1136 19.7764 14.5112 19.7763 14.8094 19.5682V18.8396C13.8154 18.7355 12.9209 18.2151 12.2252 17.3824C10.7343 15.5088 9.34282 13.5312 8.24951 11.4494C10.4361 10.929 11.927 9.05545 12.0264 6.76555C12.0264 3.64296 9.74039 2.18575 6.75864 2.18575C5.88924 2.18575 5.10896 2.21686 4.40157 2.24506C3.81502 2.26845 3.27856 2.28984 2.78297 2.28984H0V3.12253L0.993917 3.3307C1.68966 3.43479 2.08723 3.74705 2.08723 5.51651V16.5497C2.08723 18.2151 1.68966 18.6314 0.993917 18.7355L0 18.9437V19.7764C0.695742 19.6723 1.98783 19.6723 3.18054 19.6723C3.85674 19.6723 4.62878 19.7057 5.29743 19.7347C5.80813 19.7568 6.25858 19.7764 6.55985 19.7764V18.9437L5.16837 18.7355C4.47263 18.6314 4.07506 18.2151 4.07506 16.5497V11.8658H6.16229ZM6.26168 3.53887C8.54769 3.53887 9.83978 4.78791 9.83978 6.97372C9.83978 9.15954 8.34891 10.6167 5.9635 10.6167C5.06898 10.6167 4.67141 10.6167 4.07506 10.5127V3.53887H6.26168Z\" fill=\"#131314\"/>\n                <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M21.1701 5.82895C17.6913 5.82895 15.3059 8.84746 15.3059 13.115C15.3059 17.2785 17.3932 19.9847 21.3688 19.8806C23.2573 19.8806 24.9469 19.0479 25.4439 18.2152L25.3445 17.4866C24.2512 18.1111 23.0585 18.3193 21.8658 18.3193C18.884 18.3193 17.4926 15.8212 17.4926 12.8027V11.97H26.0402V10.5128C25.9409 7.80659 23.7542 5.72486 21.1701 5.82895ZM23.953 10.3047C23.953 10.721 23.8536 10.9292 23.3567 10.9292H17.592C17.7907 9.05563 18.9834 6.9739 21.1701 6.9739H21.3688C22.9591 7.18207 24.1518 8.63928 23.953 10.3047Z\" fill=\"#131314\"/>\n                <path d=\"M28.2266 19.3601C28.2266 18.111 28.2266 16.9661 28.1272 15.717H29.1211C29.3199 17.6947 29.9163 18.7355 32.2023 18.7355C33.8919 18.7355 34.9852 17.7988 34.9852 16.2375C34.9852 14.6805 33.6169 14.1714 32.1207 13.6149C30.3163 12.9436 28.326 12.2033 28.326 9.47186C28.326 7.28605 30.2144 5.82884 32.7986 5.82884C33.9913 5.82884 35.184 6.1411 36.2773 6.55744V9.68003H35.2834C35.3828 8.32691 34.4883 7.07787 33.1962 6.8697H32.5998C31.0096 6.8697 30.0156 7.59831 30.0156 8.95143C30.0156 10.3891 31.3377 10.9176 32.8037 11.5036C34.6279 12.2328 36.6749 13.0511 36.6749 15.8211C36.6749 18.0069 34.6871 19.8805 32.1029 19.8805C30.8108 19.9846 29.5187 19.7764 28.2266 19.3601Z\" fill=\"#131314\"/>\n                <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M44.9249 5.82895C41.4461 5.82895 39.0607 8.84746 39.0607 13.115C39.0607 17.2785 41.148 19.9847 45.1236 19.8806C47.0121 19.8806 48.7017 19.0479 49.1987 18.2152L49.0993 17.4866C48.006 18.1111 46.8133 18.3193 45.6206 18.3193C42.6388 18.3193 41.2474 15.8212 41.2474 12.8027V11.97H49.795V10.5128C49.6957 7.80659 47.509 5.72486 44.9249 5.82895ZM47.6084 10.3047C47.6084 10.721 47.509 10.9292 47.0121 10.9292H41.2474C41.4461 9.05563 42.6388 6.9739 44.8255 6.9739H45.0242C46.6145 7.18207 47.8072 8.63928 47.6084 10.3047Z\" fill=\"#131314\"/>\n                <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M51.2862 16.5497C51.2862 13.9475 53.4728 12.2821 56.8522 12.2821H58.2436V10.7209C58.2436 8.53504 57.3491 7.49417 55.2619 7.49417C54.268 7.49417 53.1747 7.70235 52.2801 8.22278L52.1807 7.286C53.1747 6.34922 54.4668 5.7247 55.8582 5.7247C58.84 5.7247 60.3309 7.49417 60.3309 10.0963C60.3309 11.1528 60.3077 12.1849 60.2837 13.2515C60.258 14.3914 60.2315 15.5715 60.2315 16.8619C60.2315 18.2151 60.7284 18.6314 62.3187 18.6314V19.36C61.7224 19.6723 61.0266 19.8805 60.3309 19.8805C59.337 19.9845 58.5418 19.2559 58.4424 18.3192V18.0069C57.6473 19.1518 56.3552 19.8805 54.9637 19.8805C53.1747 19.9845 51.5844 18.6314 51.485 16.7579C51.2862 16.7579 51.2862 16.6538 51.2862 16.5497ZM58.1443 17.07C58.1443 16.1332 58.1443 14.0516 58.2436 13.4271H57.2497C54.5662 13.4271 53.2741 14.468 53.2741 16.1333C53.2741 17.2783 54.0692 18.2151 55.1625 18.3192H55.3613C56.4546 18.3192 57.4485 17.9027 58.1443 17.07Z\" fill=\"#131314\"/>\n                <path d=\"M65.1014 18.7355L64.2068 18.8395L64.3062 19.4641C64.6232 19.4641 65.002 19.4425 65.4145 19.4189C65.9075 19.3908 66.4486 19.36 66.9898 19.36C67.531 19.36 68.19 19.3908 68.7904 19.4189C69.2927 19.4425 69.754 19.4641 70.0709 19.4641V18.7355L68.8782 18.6314C68.2819 18.5273 67.9837 18.4232 67.9837 16.4456V8.63908C68.7789 8.01456 69.7728 7.59821 70.7667 7.59821C71.2636 7.49413 71.7606 7.59821 72.2576 7.80639L72.4563 5.93283C72.0588 5.82874 71.6612 5.72466 71.2636 5.72466C69.9715 5.93283 68.7789 6.66144 67.9837 7.7023V5.62057C66.791 6.141 65.5983 6.66144 64.3062 6.97369V7.59821C65.9959 7.91047 65.9959 8.32682 65.9959 9.67994V16.5496C65.9959 18.4232 65.6977 18.6314 65.1014 18.7355Z\" fill=\"#131314\"/>\n                <path d=\"M73.4504 13.1149C73.4504 8.95143 76.3327 5.82884 79.8115 5.82884C81.0042 5.82884 82.1969 6.03701 83.2902 6.45335C83.1908 7.39013 83.1908 8.74326 83.1908 9.57595H82.1968C82.0975 8.01465 81.5011 6.97379 79.6127 6.97379C77.3267 6.97379 75.4382 9.05552 75.4382 12.8026C75.4382 16.5497 77.3267 18.3192 80.1096 18.3192C81.2029 18.3192 82.2962 18.0069 83.1908 17.4865L83.2902 18.2151C82.2962 19.4642 80.9048 20.0887 79.4139 19.9846C75.7364 19.9846 73.4504 17.2783 73.4504 13.1149Z\" fill=\"#131314\"/>\n                <path d=\"M100.585 11.2412C100.585 6.03685 103.964 1.97748 108.834 1.97748C110.424 1.97748 112.015 2.28974 113.506 2.81017C113.506 3.9005 113.581 4.99082 113.667 6.21962L113.67 6.27395C113.682 6.43528 113.693 6.59901 113.704 6.76546H112.71C112.71 4.78782 111.12 3.12243 109.132 3.12243H108.834C105.256 3.12243 102.97 6.34911 102.97 10.9289C102.97 15.5087 105.256 18.7354 108.834 18.7354C109.927 18.8395 111.021 18.5272 112.015 18.1109V14.9883C112.015 13.3229 111.617 12.9066 110.921 12.8025L109.927 12.5943V11.7616C110.21 11.7616 110.541 11.7788 110.935 11.7991C111.512 11.829 112.222 11.8657 113.108 11.8657C114.301 11.8657 115.195 11.8657 115.792 11.7616V12.5943L114.996 12.8025C114.201 13.0106 114.002 13.427 114.002 14.9883V19.0477C112.213 19.6722 110.424 19.9844 108.536 19.9844C103.467 19.9844 100.585 16.4455 100.585 11.2412Z\" fill=\"#131314\"/>\n                <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M122.848 12.2821C119.469 12.2821 117.282 13.9475 117.282 16.5497C117.282 16.6538 117.282 16.7579 117.382 16.7579C117.481 18.6314 119.071 19.9845 120.86 19.8805C122.252 19.8805 123.544 19.1518 124.339 18.0069V18.3192C124.538 19.36 125.333 19.9845 126.327 19.8805C127.023 19.8805 127.718 19.6723 128.315 19.36V18.6314C126.724 18.6314 126.227 18.2151 126.227 16.8619C126.227 15.5715 126.254 14.3921 126.28 13.2521C126.304 12.1855 126.327 11.1528 126.327 10.0963C126.327 7.49417 124.836 5.7247 121.854 5.7247C120.463 5.7247 119.171 6.34922 118.177 7.286L118.276 8.22278C119.171 7.70235 120.264 7.49417 121.258 7.49417C123.345 7.49417 124.24 8.53504 124.24 10.7209V12.2821H122.848ZM124.339 13.4271C124.24 14.0516 124.24 16.1333 124.24 17.0701C123.445 17.9028 122.451 18.3192 121.457 18.3192H121.258C120.165 18.2151 119.369 17.2783 119.369 16.1333C119.369 14.468 120.662 13.4271 123.345 13.4271H124.339Z\" fill=\"#131314\"/>\n                <path d=\"M131.296 16.6535V7.38983H129.706V6.45305C131.097 5.72445 132.091 4.37132 132.389 2.81003H133.284V6.03671H137.16V7.38983H133.284V16.2372C133.284 17.9026 133.781 18.6312 135.073 18.6312C135.769 18.6312 136.365 18.5271 136.961 18.3189L137.061 18.8393C136.266 19.672 135.272 20.0884 134.178 19.9843C131.992 19.9843 131.296 18.9434 131.296 16.6535Z\" fill=\"#131314\"/>\n                <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M144.218 5.82878C140.739 5.82878 138.353 8.84729 138.353 13.1148C138.353 17.2783 140.441 19.9845 144.317 19.8804C146.205 19.8804 147.895 19.0478 148.392 18.2151L148.293 17.4865C147.199 18.111 146.007 18.3191 144.814 18.3191C141.832 18.3191 140.441 15.8211 140.441 12.8026V11.9699H148.988C149.088 11.6576 149.088 11.3454 149.088 11.0331V10.6168C148.988 7.91051 146.802 5.72469 144.218 5.82878ZM146.901 10.3045C146.901 10.7208 146.702 10.929 146.305 10.929H140.54C140.739 9.05546 141.932 6.97373 144.118 6.97373H144.317C145.907 7.1819 147.1 8.63911 146.901 10.3045Z\" fill=\"#131314\"/>\n            </svg>\n        </a>\n    </div>\n</div>\n<div class=\"main\">\n    <div id=\"rgw1_689d9fc6c02e1\" class=\"react-container\"><div class=\"challenge-content\"><div class=\"challenge-icon\"><svg width=\"96\" height=\"96\" viewBox=\"0 0 96 96\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M42.3054 12.8624C45.3047 7.16372 53.4648 7.16368 56.4641 12.8624L89.8387 76.274C92.6425 81.6013 88.7794 88 82.7593 88H16.0102C9.99015 88 6.12705 81.6013 8.93088 76.274L42.3054 12.8624Z\" fill=\"#BAD5F7\"></path><path d=\"M50 56C47.7909 56 46 54.2091 46 52V40C46 37.7909 47.7909 36 50 36C52.2091 36 54 37.7909 54 40V52C54 54.2091 52.2091 56 50 56Z\" fill=\"white\"></path><path d=\"M44 66C44 62.6863 46.6863 60 50 60C53.3137 60 56 62.6863 56 66C56 69.3137 53.3137 72 50 72C46.6863 72 44 69.3137 44 66Z\" fill=\"white\"></path></svg></div><div class=\"challenge-heading\"><h1>Security check required</h1></div><div class=\"challenge-message\"><p>We&#x27;ve detected unusual activity from your network. To continue, complete the security check below.</p></div><div class=\"challenge-captcha\"><div class=\"main-wrapper\" role=\"main\"><div class=\"main-content\"><noscript><div class=\"h2\"><span id=\"challenge-error-text\">Enable JavaScript and cookies to continue</span></div></noscript></div></div><script>(function(){window._cf_chl_opt = {cvId: '3',cZone: 'www.researchgate.net',cType: 'managed',cRay: '9c5c5527d8d903c9',cH: '3j71nSaAon5QKitqseG7W1ZFzj1zXrotVnk.y2qDyFY-1769727489-1.2.1.1-bYA2eaEsG3z1FLi7v7RSPTGTS7o5uZwOY_iPq4uYNbPDRzCsYsmCGvbmQ1MvG_4s',cUPMDTk:\"\\/publication\\/394290217_Inteligencia_Artificial_y_teatro_posthumano_un_marco_conceptual_para_la_agenciacreativa_distribuidaArtificial_Intelligence_and_Posthuman_Theater_A_Conceptual_Framework_for_Distributed_Creative_AgencyI?__cf_chl_tk=p8EtLYzyxoO0r9HKunh1HZhDw4Sk3gmAJ70Cpn3du5g-1769727489-1.0.1.1-gGxR729TWSpKDcJXCh2D8zQeCi7j99eUss4_Hx85OyQ\",cFPWv: 'b',cITimeS: '1769727489',cTplC:1,cTplV:5,cTplB: '0',fa:\"\\/publication\\/394290217_Inteligencia_Artificial_y_teatro_posthumano_un_marco_conceptual_para_la_agenciacreativa_distribuidaArtificial_Intelligence_and_Posthuman_Theater_A_Conceptual_Framework_for_Distributed_Creative_AgencyI?__cf_chl_f_tk=p8EtLYzyxoO0r9HKunh1HZhDw4Sk3gmAJ70Cpn3du5g-1769727489-1.0.1.1-gGxR729TWSpKDcJXCh2D8zQeCi7j99eUss4_Hx85OyQ\",md: 'ari5Tz.9EveCJWxyKr4zRe6HUjDQJh0NOChN0wqKHf0-1769727489-1.2.1.1-7Z9IbUknc5ysI45xLeekAmRCwJn1HjDzM.eg6GOpIOCOoPNWE34wfsUZfvjh3mubD86X7QrS0a_X77hqlj_6vso0q1DWhgb5FN1nEfwDb64DeTtWwMFkldEvDL.sl4D_Y8VPP0asZ6zgZm8xKb7.xE0V7ER2LRHh8VdgCpK0m.rJwbS_9SRDk0Plm9mXgqbl7XAZKmDQzvqS2wek8w3HEeDu0kQXhcCLpmBvV0RFd.utFELBAPPDcYW_F211PQQxnkdYyYIA34OONyro2HEegWZkl0AetjL3.u9S9CMo0UdSh6hbRUDgCjzenAkPLfoujS6jSfjkhZfPHXLxKHcZkKO6sTnfZsrDCtLPPnqxJI6l.OQWoSidYLcoCZBnR1wVA6vGOZkzxpvIf2cd5KUaHlZq8R5MT.Kb6xWf1yCz.S98jcPgZElearakFxaAIaEPUjpO5BsS0U.W.vIouelYn4EGCbCqjY.AMp0XPQIWMnsRe3nl6ZCAeFPWLesXtnkWodo9Mwiyp6udaLC0NxQHOt6gSqbXBs2FnWkhOUa7Ui0Z6Ioqh_igpQS4iitWpuw99IOoIQi72p3vD_uwdIf1tMQerY4VhV90035D6MwU7pWOIihwdQTh1Z2_LEL2od5P18Pg1TUmrRTAsFr_Akj0ZQ1D1bUQMNarDq6Rti0FvLvb0Yyl6hrwTctCXUSkV0P2tgW2p7PyVl8cdsEd1sYbmJD4PJV4wBiH2mgp2RkCnURDf_fzBzZr1iMwmJMrnGTYfNvMghuB3EjLVnlxGCjkCtkdISnroPWOrUNIyCFaS0TMq4u0hvoiR1wvPRufV4joUaoqdN__mZg77wi39RRRNRb7NnlLFSsD7jvFfMCTzD2kzxwKXK57mmkGPrvECYaCPnYi9rcH6F2ED3IC8X4jWyFzW8Pio.5zbTeG5xnwACqvI9t1Of3vLCsEmWVCedEKOxoF_sIwN8X.viV2gmBE3DiCa9GF.p5YG0l6kleg.nKcSxjSzYKBUuW0N4aV.k8jnIf17jl1gp89NKpf9K72yE1x9wmUfet7E.PYSk5Fc.pPHYvePuRfHshUD_reBaPDl0v2wohgQKZzUHQpNM6GW4AMNUW86aYlBjRIBb9cpuaMhKwCqrFENFdpmicDIY6ADr1ESLOVyVwykF2yA5Lu0A4ZGmx2SNQyVg5yL6UP6DKHLdDFU7H9N.lu6gsrAenqt17kvb.pLNyGhcLzpCVNUWvTRd6Wuu9vJi3iFhNOJtab9efQwv8AxHP0voWecerH',mdrd: 'gYveGWW5siD7oVMW9gbj.SDyKysHLY.79PgBWcb6byQ-1769727489-1.2.1.1-AjVynHWuZfoLMQ7tUlRcAHYC.5OiT2wShE5_98HsJL0TP6xCnz8Jf0lUB4rEY8u3E_daYK0ymAo_QQpg192O54q8BcZ9qTZzPf7uHF2TOXUIQ3i6_8lrUYWpV0t1OjXrCC9xwGmflCr.KHuytTSN5uVoZbWJQmxn3dRl8EEHWdpa7R7zwcz1YNofbtfOnCUo.b5cMUd.dEpJOSlfteX6AyafhtQhf58z7_hActlx6RQZsqv5OIBEseJW_tGiLEEjbhes3bT7oX4pQ.hErv_po56nRY0rTx.Tzqt8TE5ciAPDCpGkupasS4.6FlPw5jqScvAImqXL_qRTNxHBAwWEYW0Eom728keAygn9SiFNz89sGpIhf_iTQ5nWJUrgDTmYNIh.cjKM9c6zeLc9PWvDndB5VNhWM_LbqUxlSlaw11lrq5wcyV__2dHDbNGEia1u0SiAX6ckPzjjEPX45lSLwD6Z6uloLv1kZSe9wrQf7v3U9N6sIBavm4NvgAN5JO3NW2rXIcqolZRl0YFZnRzBSQeGnZ961e4MSerju_t.CujA4Y3VIjMmqFg5hyDPs81SyY6.Cl.hAFwnKHxzadXzlRCj.8l5ifYKAYEPK9PAAGYaCv0MCzZTDOhH5b.ODh0BwPJxXIo5JEAZOFiAs0QQ2uba0LhaQtE8OvrxRqArFYgPV4POTLSYRkWoPUoRuM_bnSzFqGUfE0.J25EWJ0b6s3mVCyxtB_x.GwaK2FphkwMYYupDLXOKvXTAd6Cc6O7m43y_ODVHybc8XmvQ2Arx_FV7fuCCZYFX_8R1L6A3eiwJQHUsKc1MxZLF22eaHB.rSNUk7UN8sI60zvePZpnfYRZUrx3XSlhB7HQE5NIQYLBD5x19fHqNeO1Y_KGwnTosyfi63MqK.YyeROU28yHKrNtwjkwmHev7MpqKN0c1ZbsDMRtKE0LRa44G9T_0zenPzS8gGT7yTlloxEp2vHoUuI3K8aeXP7OLHiObpBimZOckgKA0Yedfq0vWzvA6j74uyUKAtlFXauQ2nAVmaYXjT6dCDSNLAr0Evsgy3aQlS2srGrwz9kGPZBNkj4D.n0RwLZEQ6o9IgiTo.9G5gvqmCdL1A3ISuylS9mSm6zT4kX0s7YjR9OeLFKAS11K1vBGcd.vg4vQ4XUu4mJDObzaNQFblt_oy2.uFfVlL5u.7bgN1gUV6Uvi0e8bv_UkcSSf5mKu1OyLLz0R5FEcokRSqjXPKmQn5KgUawc4OzI_D..YZ5yqXohyEk5z3ObwIkRCxH4CLW7U54T8yLWGEBTVfF5roGwGxVh.Uvw8oBeAcafvjT724WUf4uCNMsXlLenPmVhaaNenS6tjmGUvcNKyKL.fyS.WpOBlDy9K_CK1VBjAZkyKzUmoO6H6VV9aoFJPPGN08glxBt2awN8DiZR85Wb9MOM8I_947l32qYuvlvMp34hBBygWPtDirNYaEdckBl28xHQfwuvNWKW8frrT0OLxk3Y6aivlULeXA8DtonbJUWa12oC_GT8OR90rCUTwp1Jrg8A2UKe.pwwLlKJzxDsfoQCBQRbM.Cs83xLbe1Kkc5PUIxMquCt9pYLV1oCzxc8m7Jjd29ydtKKQveRn6P51kRPztjqoCUlopMLd42sAeunctxD.neTRkUbPKFJv0u4W_miY.xEv.Q3D6O2r_.tEiCT6TI8IPvzveX4H6RnTIn.td7x3x7yCRPb8JbXiTnwJFxInDTE176zaY9k3xTiXdKgVaCEMFi8J7XlKXEsQvJctCsPOsvy.HDqR4Bn3qeWaHTWvGbTgsFhCrap9nSZ69MpwzwaTCrm1QtP0buAY8Ca9Fb8BRIe3yXCRb8Q_aYlF8QESWF3WPYVK_zFZPIG.AgNYfbz.aNDpjcMBOkT8v_cWtkldlenqpTpL1RXI8Ks2aRI4_pnVT3AukBGD9HJizUbx2S5xOP9kspIWWlMjzLI3FJ7PqpDHNC4EWgmtgnrVR9gYPVP_R6RKrtGPhFLO.72w_XOpJ4oUZzFwy4_tmdYXV9SFXe0YDVA1Yw9kGZwZ_FW5Qaxq8Jr_rhPjNvr3pW4.O9DqgMpa3ReAYbNTn2E.1iggg3pVnHkKX3ds_JAd0O7qgJNDSeHG7mSROCFwKl9Pqr771n8VfBgsw__2D10jNyn.SyS8WEHjDtPo4HWwFMpPeZ9oaUj0P2K9ZIO5syXeCCh3fmBxoW_t.UF10bOEIyBb6zqYftosXEWGxEjhWuGwTk_em__vLOqpzCuinwwUICtdOmxnlputFdxWDSXo..w25oRvVIZMmzqcw030HUoXMFXB_Raf2GQ6ZIq2CmeMotHv0t7.HT9o82wL_5QV5ynSSk5fMV2kbanevo7PCFolM0uiyJqFqdOObbreQdM23KonKiOvU5iGSUdZKXNV4QBKds3ZevGqbunjjnqjXKLVTmZgGpNnxWJJdHM_Nf8rxXMdEiUfXxBhRtgETBgRiUAd1IdpM12iAgWfUKPYVDInqmriF8z8DwFCekA',};var a = document.createElement('script');a.src = '/cdn-cgi/challenge-platform/h/b/orchestrate/chl_page/v1?ray=9c5c5527d8d903c9';window._cf_chl_opt.cOgUHash = location.hash === '' && location.href.indexOf('#') !== -1 ? '#' : location.hash;window._cf_chl_opt.cOgUQuery = location.search === '' && location.href.slice(0, location.href.length - window._cf_chl_opt.cOgUHash.length).indexOf('?') !== -1 ? '?' : location.search;if (window.history && window.history.replaceState) {var ogU = location.pathname + window._cf_chl_opt.cOgUQuery + window._cf_chl_opt.cOgUHash;history.replaceState(null, null,\"\\/publication\\/394290217_Inteligencia_Artificial_y_teatro_posthumano_un_marco_conceptual_para_la_agenciacreativa_distribuidaArtificial_Intelligence_and_Posthuman_Theater_A_Conceptual_Framework_for_Distributed_Creative_AgencyI?__cf_chl_rt_tk=p8EtLYzyxoO0r9HKunh1HZhDw4Sk3gmAJ70Cpn3du5g-1769727489-1.0.1.1-gGxR729TWSpKDcJXCh2D8zQeCi7j99eUss4_Hx85OyQ\"+ window._cf_chl_opt.cOgUHash);a.onload = function() {history.replaceState(null, null, ogU);}}document.getElementsByTagName('head')[0].appendChild(a);}());</script></div><div class=\"challenge-additional-info\"><p>Ray ID: 9c5c5527d8d903c9</p><p>Client IP: 84.123.228.20</p></div><div class=\"challenge-footer\"><p>© <span id=\"footer-year\"></span> ResearchGate GmbH. All rights reserved.</p></div></div></div></div>\n<script>\n    var y = \"2008-\" + new Date().getFullYear();\n    var node = document.getElementById('footer-year');\n    node.appendChild(document.createTextNode(y));\n</script>\n</body>\n</html>\n"
+    ],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://www.uio.no/ritmo/english/news-and-events/blog/2025/diego-marin-bucio/",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:09.274Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://www.theguardian.com/culture/2023/oct/01/hollywood-writers-strike-artificial-intelligence",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:09.275Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "8e11559d-60f0-4a7f-bb91-99ac0c5a2d63",
+        "label": "The Guardian",
+        "creator": "Philipp Zumstein, Bao Trinh",
+        "priority": 100
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://www.tandfonline.com/doi/full/10.1080/14794713.2025.2515754",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:09.275Z",
+    "itemKey": null,
+    "identifiers": [
+      "10.1080/14794713.2025.2515754"
+    ],
+    "validIdentifiers": [
+      "10.1080/14794713.2025.2515754"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": false,
+    "contentType": "unknown",
+    "httpStatusCode": null,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://www.imf.org/en/publications/fandd/issues/2025/03/a-place-for-human-talent-in-the-ai-age-marina-tavares",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:08.953Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://www.mckinsey.com/mgi/our-research/generative-ai-and-the-future-of-work-in-america",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:08.979Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [],
+    "status": "partial_success",
+    "processingRecommendation": "ai-resolvable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [
+      "AI identifier extraction failed: [Exception... \"Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsIChannel.contentDisposition]\"  nsresult: \"0x80040111 (NS_ERROR_NOT_AVAILABLE)\"  location: \"JS frame :: file:///Users/henry/Developer/Projects/Packages/Thesis-Workflow/ZoteroCitationLinker/build/lib.js :: makeChatRequest :: line 3099\"  data: no]"
+    ],
+    "disambiguationUsed": false,
+    "aiTranslation": true
+  },
+  {
+    "url": "https://curve.mit.edu/exploring-shift-traditional-generative-ai",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:08.691Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://www.uio.no/ritmo/english/people/phd-fellows/dabucio/",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:09.283Z",
+    "itemKey": null,
+    "identifiers": [
+      "10.61820/ha.2954-470X.1831",
+      "10.21825/documenta.93276",
+      "10.14483/25909398.19823",
+      "10.1145/3687272.3688302",
+      "10.29057/ia.v11i22.10684",
+      "10.20935/AL3664",
+      "9786077030263",
+      "9786078584727",
+      "0771-8640",
+      "2390-0288",
+      "2007-4921",
+      "2771-9359",
+      "https:/diegomarin.art/portfolio/the-origins-of-intelligence/",
+      "https:/masters.filescat.uab.cat/muet/classe-magistral-amb-diego-marin-bucio/"
+    ],
+    "validIdentifiers": [
+      "10.21825/documenta.93276",
+      "10.61820/ha.2954-470X.1831",
+      "10.14483/25909398.19823",
+      "10.1145/3687272.3688302",
+      "10.29057/ia.v11i22.10684",
+      "10.20935/AL3664",
+      "9786077030263",
+      "9786078584727"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "primaryDOI": "10.21825/documenta.93276",
+    "primaryDOIScore": 48,
+    "primaryDOIConfidence": "low",
+    "alternativeDOIs": [
+      {
+        "doi": "10.14483/25909398.19823",
+        "score": 48,
+        "confidence": "low"
+      },
+      {
+        "doi": "10.1145/3687272.3688302",
+        "score": 48,
+        "confidence": "low"
+      }
+    ],
+    "disambiguationUsed": true,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://www.vicon.com/resources/press/a-new-era-for-motion-capture-vicon-enters-markerless-market-with-unparalleled-accuracy/",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:09.320Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://themarkup.org/show-your-work/2026/01/21/how-we-tested-ai-generated-dance-videos",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:08.834Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://www.nature.com/articles/s41598-025-21266-1?error=cookies_not_supported&code=0de4ad40-70ef-44a4-938a-ce6605651de2",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:09.144Z",
+    "itemKey": null,
+    "identifiers": [
+      "10.1038/s41598-025-21266-1",
+      "10.1155/2013/593247",
+      "10.1007/s00521-017-3193-3",
+      "10.1007/s11704-021-0236-9&#xA;",
+      "10.1002/adma.202412006&#xA;",
+      "10.1109/TIM.2025.3562973&#xA;",
+      "10.1038/s41598-025-93758-z&#xA;",
+      "10.32604/cmc.2024.053547&#xA;",
+      "10.3389/fphys.2024.1344887&#xA;",
+      "10.1038/s41598-025-87752-8&#xA;",
+      "10.1016/j.measurement.2025.117579&#xA;",
+      "10.1093/bib/bbad431&#xA;",
+      "10.1109/TETCI.2024.3356163&#xA;",
+      "10.1016/j.jvcir.2024.104210&#xA;",
+      "10.1007/s11431-023-2541-x&#xA;",
+      "10.1109/TMECH.2024.3453037&#xA;",
+      "10.1007/s11263-025-02392-9&#xA;",
+      "10.1088/1361-6420/ad2cf7&#xA;",
+      "10.1109/LRA.2025.3575644&#xA;",
+      "10.1109/JIOT.2025.3595765&#xA;",
+      "10.48550/arXiv.2507.02870&#xA;",
+      "10.1155/2013/593247&#xA;",
+      "10.1007/s00521-017-3193-3&#xA;",
+      "10.1007/s11704-021-0236-9",
+      "10.1002/adma.202412006",
+      "10.1109/TIM.2025.3562973",
+      "10.1038/s41598-025-93758-z",
+      "10.32604/cmc.2024.053547",
+      "10.3389/fphys.2024.1344887",
+      "10.1038/s41598-025-87752-8",
+      "10.1016/j.measurement.2025.117579",
+      "10.1093/bib/bbad431",
+      "10.1109/TETCI.2024.3356163",
+      "10.1016/j.jvcir.2024.104210",
+      "10.1007/s11431-023-2541-x",
+      "10.1109/TMECH.2024.3453037",
+      "10.1007/s11263-025-02392-9",
+      "10.1088/1361-6420/ad2cf7",
+      "10.1109/LRA.2025.3575644",
+      "10.1109/JIOT.2025.3595765",
+      "10.48550/arXiv.2507.02870",
+      "10.1038/s41598-025-21266-1&amp;api_key=",
+      "2045-2322",
+      "2008.08171",
+      "1709.04875",
+      "10.1007/s10462-021-10039-7",
+      "10.1371%2Fjournal.pone.0050901",
+      "10.1525%2Fmts.2003.25.2.305",
+      "10.1016%2Fj.jbiomech.2022.111178",
+      "10.1109%2FTMM.2021.3066115",
+      "10.1002%2Fadma.202412006",
+      "10.1109%2FTIM.2025.3562973",
+      "10.1038%2Fs41598-025-93758-z",
+      "10.32604%2Fcmc.2024.053547",
+      "10.3389%2Ffphys.2024.1344887",
+      "10.1038%2Fs41598-025-87752-8",
+      "10.1016%2Fj.measurement.2025.117579",
+      "10.1093%2Fbib%2Fbbad431",
+      "10.1109%2FTETCI.2024.3356163",
+      "10.1016%2Fj.jvcir.2024.104210",
+      "10.1109%2FTMECH.2024.3453037",
+      "10.1088%2F1361-6420%2Fad2cf7",
+      "10.1109%2FLRA.2025.3575644",
+      "10.1109%2FJIOT.2025.3595765",
+      "10.48550%2FarXiv.2507.02870",
+      "10.1109%2FTNSRE.2020.3040716",
+      "10.3390%2Fmath12233787",
+      "10.1007/s40747-023-01100-9",
+      "10.1109%2FTMM.2014.2377553",
+      "10.1121%2F1.421129",
+      "10.1080%2F01472526.2015.1085227",
+      "10.1080%2F14647890120100809",
+      "10.1075%2Fpc.11.2.06ste",
+      "10.1016%2Fj.bica.2016.07.004",
+      "10.1525%2Fmp.2020.37.5.403",
+      "10.1016%2Fj.datak.2007.03.016",
+      "10.1109%2FTEVC.2008.927706",
+      "10.1109%2FJSEN.2020.3018629",
+      "10.3390%2Fijgi8090390",
+      "10.1186/s40537-024-01050-0",
+      "doi:10.1038/s41598-025-21266-1"
+    ],
+    "validIdentifiers": [
+      "10.1038/s41598-025-21266-1",
+      "10.1155/2013/593247",
+      "10.1007/s00521-017-3193-3",
+      "10.1007/s11704-021-0236-9&#xA;",
+      "10.1002/adma.202412006&#xA;",
+      "10.1109/TIM.2025.3562973&#xA;",
+      "10.1038/s41598-025-93758-z&#xA;",
+      "10.32604/cmc.2024.053547&#xA;",
+      "10.3389/fphys.2024.1344887&#xA;",
+      "10.1038/s41598-025-87752-8&#xA;",
+      "10.1016/j.measurement.2025.117579&#xA;",
+      "10.1093/bib/bbad431&#xA;",
+      "10.1109/TETCI.2024.3356163&#xA;",
+      "10.1016/j.jvcir.2024.104210&#xA;",
+      "10.1007/s11431-023-2541-x&#xA;",
+      "10.1109/TMECH.2024.3453037&#xA;",
+      "10.1007/s11263-025-02392-9&#xA;",
+      "10.1088/1361-6420/ad2cf7&#xA;",
+      "10.1109/LRA.2025.3575644&#xA;",
+      "10.1109/JIOT.2025.3595765&#xA;",
+      "10.48550/arXiv.2507.02870&#xA;",
+      "10.1155/2013/593247&#xA;",
+      "10.1007/s00521-017-3193-3&#xA;",
+      "10.1007/s11704-021-0236-9",
+      "10.1002/adma.202412006",
+      "10.1109/TIM.2025.3562973",
+      "10.1038/s41598-025-93758-z",
+      "10.32604/cmc.2024.053547",
+      "10.3389/fphys.2024.1344887",
+      "10.1038/s41598-025-87752-8",
+      "10.1016/j.measurement.2025.117579",
+      "10.1093/bib/bbad431",
+      "10.1109/TETCI.2024.3356163",
+      "10.1016/j.jvcir.2024.104210",
+      "10.1007/s11431-023-2541-x",
+      "10.1109/TMECH.2024.3453037",
+      "10.1007/s11263-025-02392-9",
+      "10.1088/1361-6420/ad2cf7",
+      "10.1109/LRA.2025.3575644",
+      "10.1109/JIOT.2025.3595765",
+      "10.48550/arXiv.2507.02870",
+      "10.1038/s41598-025-21266-1&amp;api_key=",
+      "2008.08171",
+      "1709.04875",
+      "10.1007/s10462-021-10039-7",
+      "10.1525%2Fmts.2003.25.2.305",
+      "10.48550%2FarXiv.2507.02870",
+      "10.1007/s40747-023-01100-9",
+      "10.1016%2Fj.bica.2016.07.004",
+      "10.1186/s40537-024-01050-0",
+      "doi:10.1038/s41598-025-21266-1"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "primaryDOI": "10.1038/s41598-025-21266-1",
+    "primaryDOIScore": 72,
+    "primaryDOIConfidence": "medium",
+    "alternativeDOIs": [
+      {
+        "doi": "10.1007/s00521-017-3193-3",
+        "score": 48,
+        "confidence": "low"
+      },
+      {
+        "doi": "10.1155/2013/593247",
+        "score": 47,
+        "confidence": "low"
+      }
+    ],
+    "disambiguationUsed": true,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://diegomarin.art/embodying-the-artificial-human-ai-co-creation-of-dance/",
+    "success": true,
+    "timestamp": "2026-01-29T22:58:08.701Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [],
+    "status": "partial_success",
+    "processingRecommendation": "ai-resolvable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [
+      "AI identifier extraction failed: [Exception... \"Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsIChannel.contentDisposition]\"  nsresult: \"0x80040111 (NS_ERROR_NOT_AVAILABLE)\"  location: \"JS frame :: file:///Users/henry/Developer/Projects/Packages/Thesis-Workflow/ZoteroCitationLinker/build/lib.js :: makeChatRequest :: line 3099\"  data: no]"
+    ],
+    "disambiguationUsed": false,
+    "aiTranslation": true
+  }
+]
