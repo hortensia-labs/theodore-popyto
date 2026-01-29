@@ -21,11 +21,26 @@ Estos capítulos requieren que los capítulos 3 y 4 estén completos:
 
 | Orden | Capítulo | Dependencias | Prompt |
 |-------|----------|--------------|--------|
-| 1 | Cap. 5: El Marco "Resistencia Encarnada" | Cap. 3 + Cap. 4 | Por crear |
+| 1 | Cap. 5: El Marco "Resistencia Encarnada" | Cap. 3 + Cap. 4 + Sources propios | `SRAMA-capitulo-5-marco-resistencia.md` |
 | 2 | Cap. 6: Discusión | Cap. 3 + Cap. 4 + Cap. 5 | Por crear |
 | 3 | Cap. 1: Introducción | Todos los anteriores | Por crear |
 | 4 | Cap. 2: Metodología | Todos los anteriores | Por crear |
 | 5 | Cap. 7: Conclusiones | Todos los anteriores | Por crear |
+
+### ⚠️ Preparación Especial para Capítulo 5
+
+El Capítulo 5 requiere **generar sources propios** antes de ejecutar SRAMA:
+
+1. **Usar los prompts FA existentes** en `research/prompts/capitulo-5/`:
+   - `FA_Cap5_1_Dimension_Cognicion.md`
+   - `FA_Cap5_2_Dimension_Valor_Artistico.md`
+   - `FA_Cap5_3_Dimension_Interaccion.md`
+   - `FA_Cap5_4_Dimension_SocioCultural.md`
+
+2. **Generar investigación ético-política** (NUEVO):
+   - `DR_Cap5_Dimension_Etico_Politica.md`
+
+Ver detalles completos en `SRAMA-capitulo-5-marco-resistencia.md`
 
 ---
 

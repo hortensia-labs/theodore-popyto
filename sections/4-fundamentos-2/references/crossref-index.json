@@ -1,34 +1,122 @@
 {
-  "sections": [
+  "chapter": "Capítulo 4: Fundamentos Teóricos II: El Contexto Tecno-Económico de la Automatización",
+  "generated": "2026-01-29",
+  "anchors": [
     {
-      "id": "4.1.1-tareas-rutinarias",
-      "title": "Tareas Rutinarias vs. No Rutinarias en el Trabajo Creativo",
-      "file": "4.1.1-tareas-rutinarias.md"
+      "id": "tareas-rutinarias-no-rutinarias",
+      "file": "content/4.1.1-tareas-rutinarias.md",
+      "heading": "4.1.1. Tareas Rutinarias vs. No Rutinarias en el Trabajo Creativo",
+      "level": 2,
+      "description": "Marco teórico del enfoque basado en tareas (ALM), taxonomía rutinario/no-rutinario, paradoja de Polanyi, salvaguarda metodológica"
     },
     {
-      "id": "4.1.2-desagregacion-danza",
-      "title": "La Desagregación de las Profesiones de Danza",
-      "file": "4.1.2-desagregacion-danza.md"
+      "id": "desagregacion-profesiones-danza",
+      "file": "content/4.1.2-desagregacion-danza.md",
+      "heading": "4.1.2. La Desagregación de las Profesiones de Danza",
+      "level": 2,
+      "description": "Análisis granular de tareas de coreógrafo y bailarín, cuellos de botella para automatización, omisiones del modelo económico"
     },
     {
-      "id": "4.1.3-aumento-complementariedad",
-      "title": "Potencialidades de Aumento y Complementariedad Tecnológica",
-      "file": "4.1.3-aumento-complementariedad.md"
+      "id": "aumento-complementariedad",
+      "file": "content/4.1.3-aumento-complementariedad.md",
+      "heading": "4.1.3. Potencialidades de Aumento y Complementariedad Tecnológica",
+      "level": 2,
+      "description": "Paradigma de complementariedad, ejemplos de IA para danza (Living Archive, EDGE, LuminAI), human-in-the-loop, artista como curador"
     },
     {
-      "id": "4.2.1-modelos-actuales",
-      "title": "Modelos Actuales y su Aplicación en Dominios Creativos",
-      "file": "4.2.1-modelos-actuales.md"
+      "id": "modelos-iag-actuales",
+      "file": "content/4.2.1-modelos-iag.md",
+      "heading": "4.2.1. Modelos Actuales y su Aplicación en Dominios Creativos",
+      "level": 2,
+      "description": "Arquitecturas de IAG (Transformers, GANs, Difusión), generación de movimiento humano, aplicaciones en industrias creativas"
     },
     {
-      "id": "4.2.2-brecha-comprension",
-      "title": "La Brecha entre Procesamiento de Datos y Comprensión del Mundo",
-      "file": "4.2.2-brecha-procesamiento.md"
+      "id": "brecha-comprension",
+      "file": "content/4.2.2-brecha-comprension.md",
+      "heading": "4.2.2. La Brecha entre Procesamiento de Datos y Comprensión del Mundo",
+      "level": 2,
+      "description": "Limitaciones estructurales de IA: conocimiento tácito, ausencia de embodiment, expresividad, improvisación, implicaciones éticas, autenticidad"
     },
     {
-      "id": "4.3-sintesis-leib-tarea",
-      "title": "La Tensión Productiva entre el Leib y la 'Tarea'",
-      "file": "4.3-sintesis-intermedia.md"
+      "id": "sintesis-leib-tarea",
+      "file": "content/4.3-sintesis-leib-tarea.md",
+      "heading": "4.3. Síntesis Intermedia II: La Tensión Productiva entre el Leib y la 'Tarea'",
+      "level": 2,
+      "description": "Síntesis de perspectivas económica y fenomenológica, salvaguarda fenomenológica, crítica al determinismo, preparación para Capítulo 5"
+    }
+  ],
+  "internal_references": [
+    {
+      "from": "4.1.3-aumento-complementariedad.md",
+      "to": "#brecha-comprension",
+      "context": "Referencia a implicaciones éticas y cuestiones de autoría"
+    },
+    {
+      "from": "4.3-sintesis-leib-tarea.md",
+      "to": "#aumento-complementariedad",
+      "context": "Referencia a sección sobre complementariedad"
+    }
+  ],
+  "pending_external_references": [
+    {
+      "marker": "[PENDIENTE: ref Cap 3 - definición Leib]",
+      "files": [
+        "4.1.1-tareas-rutinarias.md",
+        "4.2.2-brecha-comprension.md",
+        "4.3-sintesis-leib-tarea.md"
+      ],
+      "target_chapter": 3,
+      "target_section": "3.1.1"
+    },
+    {
+      "marker": "[PENDIENTE: ref Cap 3 - inteligencia kinestésica]",
+      "files": [
+        "4.1.2-desagregacion-danza.md",
+        "4.2.2-brecha-comprension.md"
+      ],
+      "target_chapter": 3,
+      "target_section": "3.1.2"
+    },
+    {
+      "marker": "[PENDIENTE: ref Cap 3 - cognición corporeizada]",
+      "files": [
+        "4.1.2-desagregacion-danza.md"
+      ],
+      "target_chapter": 3,
+      "target_section": "3.1"
+    },
+    {
+      "marker": "[PENDIENTE: ref Cap 3 - presencia escénica]",
+      "files": [
+        "4.1.2-desagregacion-danza.md"
+      ],
+      "target_chapter": 3,
+      "target_section": "3.1.3"
+    },
+    {
+      "marker": "[PENDIENTE: ref Cap 3 - distinción Körper/Leib]",
+      "files": [
+        "4.2.2-brecha-comprension.md"
+      ],
+      "target_chapter": 3,
+      "target_section": "3.1.1"
+    },
+    {
+      "marker": "[PENDIENTE: ref Cap 3 - sección sobre Leib/Körper]",
+      "files": [
+        "4.3-sintesis-leib-tarea.md"
+      ],
+      "target_chapter": 3,
+      "target_section": "3.1.1"
+    },
+    {
+      "marker": "[PENDIENTE: ref Cap 5]",
+      "files": [
+        "4.2.2-brecha-comprension.md",
+        "4.3-sintesis-leib-tarea.md"
+      ],
+      "target_chapter": 5,
+      "target_section": "TBD"
     }
   ]
 }

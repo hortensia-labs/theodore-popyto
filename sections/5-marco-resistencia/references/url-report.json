@@ -1,0 +1,1593 @@
+[
+  {
+    "url": "https://dingdingding.org/issue-4/excavating-the-politics-of-ai-an-interview-with-kate-crawford/",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:14.374Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://dingdingding.org/issue-4/excavating-the-politics-of-ai-an-interview-with-kate-crawford/#:~:text=There%20are%20many%20ways%20to,AI%20is%20politics%20all%20the",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:14.373Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://bytemedirk.medium.com/the-ethical-implications-of-ai-on-creative-professionals-38ec6ed983e2#:~:text=who%20accused%20Allen%20of%20cheating,undermining%20the%20importance%20of%20human",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:14.372Z",
+    "itemKey": null,
+    "identifiers": [
+      "2302.04222",
+      "2310.13828"
+    ],
+    "validIdentifiers": [
+      "2302.04222",
+      "2310.13828"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://dingdingding.org/issue-4/excavating-the-politics-of-ai-an-interview-with-kate-crawford/#:~:text=amplifies%20and%20reproduces%20the%20forms,and%20the%20possibility%20of%20refusing",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:14.373Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://dingdingding.org/issue-4/excavating-the-politics-of-ai-an-interview-with-kate-crawford/#:~:text=Instead%2C%20we%20should%20focus%20more,we%20should%20focus%20on%20the",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:14.373Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://bytemedirk.medium.com/the-ethical-implications-of-ai-on-creative-professionals-38ec6ed983e2",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:14.372Z",
+    "itemKey": null,
+    "identifiers": [
+      "2302.04222",
+      "2310.13828"
+    ],
+    "validIdentifiers": [
+      "2302.04222",
+      "2310.13828"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://bytemedirk.medium.com/the-ethical-implications-of-ai-on-creative-professionals-38ec6ed983e2#:~:text=The%20New%20York%20Times%20has,De%20Vynck%20%26%20Izadi%2C%202023",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:14.363Z",
+    "itemKey": null,
+    "identifiers": [
+      "2302.04222",
+      "2310.13828"
+    ],
+    "validIdentifiers": [
+      "2302.04222",
+      "2310.13828"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://bytemedirk.medium.com/the-ethical-implications-of-ai-on-creative-professionals-38ec6ed983e2#:~:text=In%202022%2C%20the%20Colorado%20State,Roose%2C%202022",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:14.364Z",
+    "itemKey": null,
+    "identifiers": [
+      "2302.04222",
+      "2310.13828"
+    ],
+    "validIdentifiers": [
+      "2302.04222",
+      "2310.13828"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://bytemedirk.medium.com/the-ethical-implications-of-ai-on-creative-professionals-38ec6ed983e2#:~:text=In%20January%202023%2C%20artists%20sued,Tangermann%2C%202023",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:14.366Z",
+    "itemKey": null,
+    "identifiers": [
+      "2302.04222",
+      "2310.13828"
+    ],
+    "validIdentifiers": [
+      "2302.04222",
+      "2310.13828"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://en.wikipedia.org/wiki/How_We_Became_Posthuman",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:14.374Z",
+    "itemKey": null,
+    "identifiers": [
+      "1891-1781",
+      "894210852",
+      "10.5749%2Fminnesota%2F9780816679157.003.0003",
+      "10.2307%2F778755",
+      "10.18261%2FISSN1891-1781-2014-02-05",
+      "10.4324%2F9781003432272-27%2Fkatherine-hayles-1999-became-posthuman-jesper-olsson",
+      "10.1353%2Ftech.2000.0079",
+      "10.1086%2F495699",
+      "10.1353%2Fmfs.1999.0096"
+    ],
+    "validIdentifiers": [
+      "894210852",
+      "10.5749%2Fminnesota%2F9780816679157.003.0003",
+      "10.1353%2Ftech.2000.0079",
+      "10.1353%2Fmfs.1999.0096"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://faculty.cc.gatech.edu/~beki/cs4001/Winner.pdf",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:14.865Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "ai-resolvable",
+    "urlAccessible": true,
+    "contentType": "pdf",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": true
+  },
+  {
+    "url": "https://faculty.cc.gatech.edu/~beki/cs4001/Winner.pdf#:~:text=Robert%20Moses%27s%20bridges%2C%20after%20all%2C,carry%20automobiles%20from%20one%20point",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:14.866Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "ai-resolvable",
+    "urlAccessible": true,
+    "contentType": "pdf",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": true
+  },
+  {
+    "url": "https://faculty.cc.gatech.edu/~beki/cs4001/Winner.pdf#:~:text=One%20poignant%20illustration%20can%20be,weed%20out%20the%20bad",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:14.867Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "ai-resolvable",
+    "urlAccessible": true,
+    "contentType": "pdf",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": true
+  },
+  {
+    "url": "https://faculty.cc.gatech.edu/~beki/cs4001/Winner.pdf#:~:text=enhance%20the%20power%2C%20authority%2C%20and,way%20that%20it%20produces%20a",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:14.868Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "ai-resolvable",
+    "urlAccessible": true,
+    "contentType": "pdf",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": true
+  },
+  {
+    "url": "https://faculty.cc.gatech.edu/~beki/cs4001/Winner.pdf#:~:text=Indeed%2C%20many%20of%20the%20most,been%20stacked%20long%20in%20ad",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:14.868Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "ai-resolvable",
+    "urlAccessible": true,
+    "contentType": "pdf",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": true
+  },
+  {
+    "url": "https://faculty.cc.gatech.edu/~beki/cs4001/Winner.pdf#:~:text=to%20another%3B%20McCormick%27s%20machines%20were,not%20include%20attention%20to%20the",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:14.869Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "ai-resolvable",
+    "urlAccessible": true,
+    "contentType": "pdf",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": true
+  },
+  {
+    "url": "https://en.wikipedia.org/wiki/How_We_Became_Posthuman#:~:text=exercising%20their%20will%20through%20individual,studies%20to%20develop%20her%20arguments",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:14.865Z",
+    "itemKey": null,
+    "identifiers": [
+      "1891-1781",
+      "894210852",
+      "10.5749%2Fminnesota%2F9780816679157.003.0003",
+      "10.2307%2F778755",
+      "10.18261%2FISSN1891-1781-2014-02-05",
+      "10.4324%2F9781003432272-27%2Fkatherine-hayles-1999-became-posthuman-jesper-olsson",
+      "10.1353%2Ftech.2000.0079",
+      "10.1086%2F495699",
+      "10.1353%2Fmfs.1999.0096"
+    ],
+    "validIdentifiers": [
+      "894210852",
+      "10.5749%2Fminnesota%2F9780816679157.003.0003",
+      "10.1353%2Ftech.2000.0079",
+      "10.1353%2Fmfs.1999.0096"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://en.wikipedia.org/wiki/How_We_Became_Posthuman#:~:text=certain%20conception%20of%20the%20human,2%20%5D%3A%20286%E2%80%93287",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:14.854Z",
+    "itemKey": null,
+    "identifiers": [
+      "1891-1781",
+      "894210852",
+      "10.5749%2Fminnesota%2F9780816679157.003.0003",
+      "10.2307%2F778755",
+      "10.18261%2FISSN1891-1781-2014-02-05",
+      "10.4324%2F9781003432272-27%2Fkatherine-hayles-1999-became-posthuman-jesper-olsson",
+      "10.1353%2Ftech.2000.0079",
+      "10.1086%2F495699",
+      "10.1353%2Fmfs.1999.0096"
+    ],
+    "validIdentifiers": [
+      "894210852",
+      "10.5749%2Fminnesota%2F9780816679157.003.0003",
+      "10.1353%2Ftech.2000.0079",
+      "10.1353%2Fmfs.1999.0096"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://en.wikipedia.org/wiki/How_We_Became_Posthuman#:~:text=Hayles%20sees%20the%20posthuman%20not,studies%20to%20develop%20her%20arguments",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:14.854Z",
+    "itemKey": null,
+    "identifiers": [
+      "1891-1781",
+      "894210852",
+      "10.5749%2Fminnesota%2F9780816679157.003.0003",
+      "10.2307%2F778755",
+      "10.18261%2FISSN1891-1781-2014-02-05",
+      "10.4324%2F9781003432272-27%2Fkatherine-hayles-1999-became-posthuman-jesper-olsson",
+      "10.1353%2Ftech.2000.0079",
+      "10.1086%2F495699",
+      "10.1353%2Fmfs.1999.0096"
+    ],
+    "validIdentifiers": [
+      "894210852",
+      "10.5749%2Fminnesota%2F9780816679157.003.0003",
+      "10.1353%2Ftech.2000.0079",
+      "10.1353%2Fmfs.1999.0096"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://medium.com/@jesscastellote/craftsmanship-why-doing-things-well-matters-also-in-the-arts-12c51869ac4a#:~:text=I%E2%80%99ve%20been%20reading%20Richard%20Sennett%E2%80%99s,and%20execution%20are%20inseparably%20bound",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:15.345Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "6c957d6b-a554-474f-81a9-91c178fef65d",
+        "label": "Medium",
+        "creator": "Philipp Zumstein",
+        "priority": 100
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://medium.com/@jesscastellote/craftsmanship-why-doing-things-well-matters-also-in-the-arts-12c51869ac4a#:~:text=Sennett%20defines%20craftsmanship%20as%20the,This",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:15.345Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "6c957d6b-a554-474f-81a9-91c178fef65d",
+        "label": "Medium",
+        "creator": "Philipp Zumstein",
+        "priority": 100
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://medium.com/@jesscastellote/craftsmanship-why-doing-things-well-matters-also-in-the-arts-12c51869ac4a",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:15.345Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "6c957d6b-a554-474f-81a9-91c178fef65d",
+        "label": "Medium",
+        "creator": "Philipp Zumstein",
+        "priority": 100
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://katecrawford.net/atlas",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:15.288Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://medium.com/@jesscastellote/craftsmanship-why-doing-things-well-matters-also-in-the-arts-12c51869ac4a#:~:text=particular%20character,It%20is%20immersion",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:15.486Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "6c957d6b-a554-474f-81a9-91c178fef65d",
+        "label": "Medium",
+        "creator": "Philipp Zumstein",
+        "priority": 100
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://katecrawford.net/atlas#:~:text=While%20technical%20systems%20present%20a,the%20expense%20of%20the%20many",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:15.287Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://medium.com/artists-and-machine-intelligence/what-is-ami-ccd936394a83",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:15.541Z",
+    "itemKey": null,
+    "identifiers": [
+      "1508.06576"
+    ],
+    "validIdentifiers": [
+      "1508.06576"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://medium.com/@jesscastellote/craftsmanship-why-doing-things-well-matters-also-in-the-arts-12c51869ac4a#:~:text=through%20resistance%20%E2%80%94%20of%20the,It%20is%20immersion",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:15.540Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "6c957d6b-a554-474f-81a9-91c178fef65d",
+        "label": "Medium",
+        "creator": "Philipp Zumstein",
+        "priority": 100
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://medium.com/artists-and-machine-intelligence/what-is-ami-ccd936394a83#:~:text=,%E2%80%9D",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:15.613Z",
+    "itemKey": null,
+    "identifiers": [
+      "1508.06576"
+    ],
+    "validIdentifiers": [
+      "1508.06576"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://medium.com/artists-and-machine-intelligence/what-is-ami-ccd936394a83#:~:text=Walter%20Benjamin%20illustrated%20this%20point,a%20%E2%80%9Cchauvinist%20rag%E2%80%9D",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:15.652Z",
+    "itemKey": null,
+    "identifiers": [
+      "1508.06576"
+    ],
+    "validIdentifiers": [
+      "1508.06576"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://medium.com/artists-and-machine-intelligence/what-is-ami-ccd936394a83#:~:text=,2",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:15.645Z",
+    "itemKey": null,
+    "identifiers": [
+      "1508.06576"
+    ],
+    "validIdentifiers": [
+      "1508.06576"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://houstonlawreview.org/article/92132-what-is-an-author-copyright-authorship-of-ai-art-through-a-philosophical-lens",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:14.867Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7268972/",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:15.732Z",
+    "itemKey": null,
+    "identifiers": [
+      "10.1007/s42438-020-00139-y",
+      "9781509535255"
+    ],
+    "validIdentifiers": [
+      "10.1007/s42438-020-00139-y",
+      "9781509535255"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7268972/#:~:text=At%20the%20outset%2C%20Braidotti%20asks,techno%20through%20material%20immanence",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:15.797Z",
+    "itemKey": null,
+    "identifiers": [
+      "10.1007/s42438-020-00139-y",
+      "9781509535255"
+    ],
+    "validIdentifiers": [
+      "10.1007/s42438-020-00139-y",
+      "9781509535255"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7268972/#:~:text=Braidotti%20claims%20%E2%80%98%E2%80%9Cwe%E2%80%9D%20are%20situated%2C,86%E2%80%9387",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:15.798Z",
+    "itemKey": null,
+    "identifiers": [
+      "10.1007/s42438-020-00139-y",
+      "9781509535255"
+    ],
+    "validIdentifiers": [
+      "10.1007/s42438-020-00139-y",
+      "9781509535255"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7268972/#:~:text=Consciousness%20is%20distributed,same%E2%80%9D%20kind%20of%20subject%E2%80%99%20%2854",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:15.917Z",
+    "itemKey": null,
+    "identifiers": [
+      "10.1007/s42438-020-00139-y",
+      "9781509535255"
+    ],
+    "validIdentifiers": [
+      "10.1007/s42438-020-00139-y",
+      "9781509535255"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://houstonlawreview.org/article/92132-what-is-an-author-copyright-authorship-of-ai-art-through-a-philosophical-lens#:~:text=,a%20photographer%20behind%20a%20camera",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:15.284Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7268972/#:~:text=Posthuman%20Knowledge,techno%20through%20material%20immanence",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:15.994Z",
+    "itemKey": null,
+    "identifiers": [
+      "10.1007/s42438-020-00139-y",
+      "9781509535255"
+    ],
+    "validIdentifiers": [
+      "10.1007/s42438-020-00139-y",
+      "9781509535255"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7268972/#:~:text=Posthuman%20Knowledge,world%20is%20%E2%80%98contiguous%20and%20co",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:16.055Z",
+    "itemKey": null,
+    "identifiers": [
+      "10.1007/s42438-020-00139-y",
+      "9781509535255"
+    ],
+    "validIdentifiers": [
+      "10.1007/s42438-020-00139-y",
+      "9781509535255"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7268972/#:~:text=adopt%20a%20position%20of%20relationship,this",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:16.069Z",
+    "itemKey": null,
+    "identifiers": [
+      "10.1007/s42438-020-00139-y",
+      "9781509535255"
+    ],
+    "validIdentifiers": [
+      "10.1007/s42438-020-00139-y",
+      "9781509535255"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7268972/#:~:text=perspective%20acknowledges%20multiplicity%2C%20but%20avoids,same%E2%80%9D%20kind%20of%20subject%E2%80%99%20%2854",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:16.185Z",
+    "itemKey": null,
+    "identifiers": [
+      "10.1007/s42438-020-00139-y",
+      "9781509535255"
+    ],
+    "validIdentifiers": [
+      "10.1007/s42438-020-00139-y",
+      "9781509535255"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7268972/#:~:text=process%20ontology%20,Braidotti%202019%3A%2048",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:16.253Z",
+    "itemKey": null,
+    "identifiers": [
+      "10.1007/s42438-020-00139-y",
+      "9781509535255"
+    ],
+    "validIdentifiers": [
+      "10.1007/s42438-020-00139-y",
+      "9781509535255"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7268972/#:~:text=technology%20%2810%29,matter%2C%20posthumanism%20exposes%20power%20hierarchies",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:16.264Z",
+    "itemKey": null,
+    "identifiers": [
+      "10.1007/s42438-020-00139-y",
+      "9781509535255"
+    ],
+    "validIdentifiers": [
+      "10.1007/s42438-020-00139-y",
+      "9781509535255"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://houstonlawreview.org/article/92132-what-is-an-author-copyright-authorship-of-ai-art-through-a-philosophical-lens#:~:text=What%20Is%20an%20%22Author%22%3F,a%20photographer%20behind%20a%20camera",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:15.286Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://thecreativestore.co.nz/creative-talk/digital/exploring-the-ethics-of-artificial-intelligence-in-art/",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:16.564Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [],
+    "status": "partial_success",
+    "processingRecommendation": "ai-resolvable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [
+      "AI identifier extraction failed: [Exception... \"Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsIChannel.contentDisposition]\"  nsresult: \"0x80040111 (NS_ERROR_NOT_AVAILABLE)\"  location: \"JS frame :: file:///Users/henry/Developer/Projects/Packages/Thesis-Workflow/ZoteroCitationLinker/build/lib.js :: makeChatRequest :: line 3099\"  data: no]"
+    ],
+    "disambiguationUsed": false,
+    "aiTranslation": true
+  },
+  {
+    "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4551487",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:15.693Z",
+    "itemKey": null,
+    "identifiers": [
+      "10.2139/ssrn.4551487"
+    ],
+    "validIdentifiers": [
+      "10.2139/ssrn.4551487"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4551487#:~:text=The%20article%20criticises%20the%20neutrality,the%20right%20values%20to%20be",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:15.705Z",
+    "itemKey": null,
+    "identifiers": [
+      "10.2139/ssrn.4551487"
+    ],
+    "validIdentifiers": [
+      "10.2139/ssrn.4551487"
+    ],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "extractable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://virginialawreview.org/articles/regulating-hidden-ai-authorship/",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:18.727Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://virginialawreview.org/articles/regulating-hidden-ai-authorship/#:~:text=Regulating%20Hidden%20AI%20Authorship%20,were%20created%20using%20generative%20AI",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:18.744Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://virginialawreview.org/articles/regulating-hidden-ai-authorship/#:~:text=Review%20virginialawreview,were%20created%20using%20generative%20AI",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:18.751Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://web.mit.edu",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:18.788Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://web.mit.edu/allanmc/www/benjamin.pdf",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:18.789Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "ai-resolvable",
+    "urlAccessible": true,
+    "contentType": "pdf",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": true
+  },
+  {
+    "url": "https://web.mit.edu/allanmc/www/benjamin.pdf#:~:text=3%20One%20might%20subsume%20the,is%20the%20aura%20of%20the",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:18.813Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "ai-resolvable",
+    "urlAccessible": true,
+    "contentType": "pdf",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": true
+  },
+  {
+    "url": "https://web.mit.edu/allanmc/www/benjamin.pdf#:~:text=say%3A%20that%20which%20withers%20in,is%20the%20aura%20of%20the",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:18.814Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [],
+    "status": "success",
+    "processingRecommendation": "ai-resolvable",
+    "urlAccessible": true,
+    "contentType": "pdf",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": true
+  },
+  {
+    "url": "https://www.hhrjournal.org/2020/12/08/editorial-enter-the-cyborgs-health-and-human-rights-in-the-digital-age/",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:18.834Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://www.hhrjournal.org/2020/12/08/editorial-enter-the-cyborgs-health-and-human-rights-in-the-digital-age/#:~:text=In%20Donna%20Haraway%E2%80%99s%201992%20A,rapidly%20reshaped%20by%20this%20pandemic",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:18.834Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://www.noemamag.com/what-is-ai-doing-to-art/",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:18.862Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://www.noemamag.com/what-is-ai-doing-to-art/#:~:text=The%20answer%2C%20negotiated%20after%20a,an%20industrializing%20Europe%20and%20drove",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:18.862Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://www.noemamag.com/what-is-ai-doing-to-art/#:~:text=and%20the%20genre%20of%20portraiture,the%20technology%20in%20troubling%20ways",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:18.899Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://www.noemamag.com/what-is-ai-doing-to-art/#:~:text=expression%20simultaneously,and%20drove%20its%20commercial%20proliferation",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:18.899Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://www.sequencr.ai/insights/the-timeless-value-of-craft-in-the-age-of-ai#:~:text=AI%2C%20for%20all%20its%20advancements%2C,years%20of%20honing%20a%20craft",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:18.947Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [],
+    "status": "partial_success",
+    "processingRecommendation": "ai-resolvable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [
+      "AI identifier extraction failed: [Exception... \"Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsIChannel.contentDisposition]\"  nsresult: \"0x80040111 (NS_ERROR_NOT_AVAILABLE)\"  location: \"JS frame :: file:///Users/henry/Developer/Projects/Packages/Thesis-Workflow/ZoteroCitationLinker/build/lib.js :: makeChatRequest :: line 3099\"  data: no]"
+    ],
+    "disambiguationUsed": false,
+    "aiTranslation": true
+  },
+  {
+    "url": "https://www.sequencr.ai/insights/the-timeless-value-of-craft-in-the-age-of-ai",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:18.946Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [],
+    "status": "partial_success",
+    "processingRecommendation": "ai-resolvable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [
+      "AI identifier extraction failed: [Exception... \"Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsIChannel.contentDisposition]\"  nsresult: \"0x80040111 (NS_ERROR_NOT_AVAILABLE)\"  location: \"JS frame :: file:///Users/henry/Developer/Projects/Packages/Thesis-Workflow/ZoteroCitationLinker/build/lib.js :: makeChatRequest :: line 3099\"  data: no]"
+    ],
+    "disambiguationUsed": false,
+    "aiTranslation": true
+  },
+  {
+    "url": "https://www.sequencr.ai/insights/the-timeless-value-of-craft-in-the-age-of-ai#:~:text=Craft%20is%20inherently%20slow%2C%20shaped,but%20as%20expressions%20of%20artistry",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:19.244Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [],
+    "status": "partial_success",
+    "processingRecommendation": "ai-resolvable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [
+      "AI identifier extraction failed: [Exception... \"Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsIChannel.contentDisposition]\"  nsresult: \"0x80040111 (NS_ERROR_NOT_AVAILABLE)\"  location: \"JS frame :: file:///Users/henry/Developer/Projects/Packages/Thesis-Workflow/ZoteroCitationLinker/build/lib.js :: makeChatRequest :: line 3099\"  data: no]"
+    ],
+    "disambiguationUsed": false,
+    "aiTranslation": true
+  },
+  {
+    "url": "https://thecreativestore.co.nz/creative-talk/digital/exploring-the-ethics-of-artificial-intelligence-in-art/#:~:text=Exploring%20the%20Ethics%20of%20Artificial,intricate%20and%20demand%20careful",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:18.329Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [],
+    "status": "partial_success",
+    "processingRecommendation": "ai-resolvable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [
+      "AI identifier extraction failed: [Exception... \"Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsIChannel.contentDisposition]\"  nsresult: \"0x80040111 (NS_ERROR_NOT_AVAILABLE)\"  location: \"JS frame :: file:///Users/henry/Developer/Projects/Packages/Thesis-Workflow/ZoteroCitationLinker/build/lib.js :: makeChatRequest :: line 3099\"  data: no]"
+    ],
+    "disambiguationUsed": false,
+    "aiTranslation": true
+  },
+  {
+    "url": "https://race-and-social-justice-review.law.miami.edu/from-south-park-to-sora-how-ai-is-rewiring-economics-of-creativity/#:~:text=Labor%20negotiations%20are%20evolving%20in,budget%20decisions%2C%20and%20staffing%20levels",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:16.458Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://race-and-social-justice-review.law.miami.edu/from-south-park-to-sora-how-ai-is-rewiring-economics-of-creativity/",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:16.339Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://international-and-comparative-law-review.law.miami.edu/ai-authorship-and-copyright-a-comparison-between-the-united-states-and-the-european-union/#:~:text=a%20larger%20human,not%20bar%20copyright%20protection",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:15.288Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://race-and-social-justice-review.law.miami.edu/from-south-park-to-sora-how-ai-is-rewiring-economics-of-creativity/#:~:text=dynamic%20concentrates%20economic%20power%20in,generated%20videos%20flood%20online",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:16.559Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://race-and-social-justice-review.law.miami.edu/from-south-park-to-sora-how-ai-is-rewiring-economics-of-creativity/#:~:text=Generative%20AI%20does%20not%20just,This",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:16.346Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://international-and-comparative-law-review.law.miami.edu/ai-authorship-and-copyright-a-comparison-between-the-united-states-and-the-european-union/",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:15.289Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  },
+  {
+    "url": "https://race-and-social-justice-review.law.miami.edu/from-south-park-to-sora-how-ai-is-rewiring-economics-of-creativity/#:~:text=digitally%20reproducing%20performers%20without%20consent,budget%20decisions%2C%20and%20staffing%20levels",
+    "success": true,
+    "timestamp": "2026-01-28T17:58:16.540Z",
+    "itemKey": null,
+    "identifiers": [],
+    "validIdentifiers": [],
+    "webTranslators": [
+      {
+        "translatorID": "951c027d-74ac-47d4-a107-9c3069ab7b48",
+        "label": "Embedded Metadata",
+        "creator": "Simon Kornblith and Avram Lyon",
+        "priority": 320
+      }
+    ],
+    "status": "success",
+    "processingRecommendation": "translatable",
+    "urlAccessible": true,
+    "contentType": "html",
+    "httpStatusCode": 200,
+    "errors": [],
+    "disambiguationUsed": false,
+    "aiTranslation": false
+  }
+]
