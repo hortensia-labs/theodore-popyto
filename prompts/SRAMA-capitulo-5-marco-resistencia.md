@@ -5,20 +5,24 @@
 Antes de ejecutar este prompt, verifica que:
 
 ### 1. Capítulos 3 y 4 están COMPLETOS
+
 - [ ] `sections/3-fundamentos-1/content/` contiene todos los archivos de contenido
 - [ ] `sections/4-fundamentos-2/content/` contiene todos los archivos de contenido
 - [ ] Ambos capítulos han pasado la validación de continuity-agent
 
 ### 2. Sources del Capítulo 5 están GENERADOS
+
 El Capítulo 5 requiere sources específicos que deben generarse ANTES de ejecutar SRAMA:
 
 **Dimensiones del Marco (usar prompts FA existentes):**
+
 - [ ] `5.2.1-dimension-cognicion.md` ← Generar con `FA_Cap5_1_Dimension_Cognicion.md`
 - [ ] `5.2.2-dimension-valor.md` ← Generar con `FA_Cap5_2_Dimension_Valor_Artistico.md`
 - [ ] `5.2.3-dimension-interaccion.md` ← Generar con `FA_Cap5_3_Dimension_Interaccion.md`
 - [ ] `5.2.4-dimension-sociocultural.md` ← Generar con `FA_Cap5_4_Dimension_SocioCultural.md`
 
 **Dimensión Ético-Política (NUEVO - CRÍTICO):**
+
 - [ ] `5.3-dimension-etico-politica.md` ← Generar con `DR_Cap5_Dimension_Etico_Politica.md`
 
 Todos estos archivos deben estar en `sections/5-marco-resistencia/sources/`
@@ -30,6 +34,7 @@ Todos estos archivos deben estar en `sections/5-marco-resistencia/sources/`
 ### Archivos a incluir como contexto (@)
 
 **Obligatorios:**
+
 ```
 @core/Base de la tesis.md
 @core/Indice de contenidos.md
@@ -39,17 +44,20 @@ Todos estos archivos deben estar en `sections/5-marco-resistencia/sources/`
 ```
 
 **Sources del Capítulo 5:**
+
 ```
 @sections/5-marco-resistencia/sources/
 ```
 
 **Contenido de Capítulos 3 y 4 (CRÍTICO):**
+
 ```
 @sections/3-fundamentos-1/content/
 @sections/4-fundamentos-2/content/
 ```
 
 **Opcional pero recomendado:**
+
 ```
 @sections/3-fundamentos-1/_section-outline.md
 @sections/4-fundamentos-2/_section-outline.md
@@ -232,10 +240,12 @@ Por favor, ejecuta el pipeline completo y proporciona actualizaciones de progres
 ### Verificación de Prerrequisitos
 
 **Capítulos anteriores:**
+
 - [ ] Cap 3 completo y validado
 - [ ] Cap 4 completo y validado
 
 **Sources del Capítulo 5:**
+
 - [ ] 5.2.1-dimension-cognicion.md existe
 - [ ] 5.2.2-dimension-valor.md existe
 - [ ] 5.2.3-dimension-interaccion.md existe
@@ -243,6 +253,7 @@ Por favor, ejecuta el pipeline completo y proporciona actualizaciones de progres
 - [ ] 5.3-dimension-etico-politica.md existe
 
 **Estructura:**
+
 - [ ] Carpeta `sections/5-marco-resistencia/content/` existe
 - [ ] Carpeta `sections/5-marco-resistencia/evaluation/` existe
 
@@ -253,31 +264,39 @@ Por favor, ejecuta el pipeline completo y proporciona actualizaciones de progres
 Antes de ejecutar este prompt SRAMA, sigue este orden:
 
 ### Paso 1: Verificar Caps 3 y 4
+
 ```
 Confirma que sections/3-fundamentos-1/content/ y 
 sections/4-fundamentos-2/content/ están completos.
 ```
 
 ### Paso 2: Generar Sources de las 4 Dimensiones
+
 Ejecuta los prompts FA existentes, uno por uno, en este orden:
+
 1. `FA_Cap5_1_Dimension_Cognicion.md` → guarda resultado en sources/
 2. `FA_Cap5_2_Dimension_Valor_Artistico.md` → guarda resultado en sources/
 3. `FA_Cap5_3_Dimension_Interaccion.md` → guarda resultado en sources/
 4. `FA_Cap5_4_Dimension_SocioCultural.md` → guarda resultado en sources/
 
 Cada uno requiere como contexto:
+
 - Cap 3 completo
 - Cap 4 completo (especialmente los sources DR_Cap4)
 
 ### Paso 3: Generar Source Ético-Político
+
 Ejecuta:
+
 ```
 research/prompts/capitulo-5/DR_Cap5_Dimension_Etico_Politica.md
 ```
+
 Este es investigación NUEVA, no depende de Caps 3 y 4.
 Guarda el resultado en `sections/5-marco-resistencia/sources/5.3-dimension-etico-politica.md`
 
 ### Paso 4: Ejecutar SRAMA
+
 Con todos los sources listos, ejecuta este prompt SRAMA.
 
 ---
