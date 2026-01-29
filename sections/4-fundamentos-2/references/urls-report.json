@@ -1,7 +1,7 @@
 [
   {
     "url": "https://Lilith.Aeon”*",
-    "error": "HTTP 400: {\"success\":false,\"error\":{\"type\":\"ValidationError\",\"message\":\"Invalid URL format\",\"timestamp\":\"2026-01-29T16:00:55.117Z\"}}",
+    "error": "HTTP 400: {\"success\":false,\"error\":{\"type\":\"ValidationError\",\"message\":\"Invalid URL format\",\"timestamp\":\"2026-01-29T22:58:12.028Z\"}}",
     "status_code": 400
   }
 ]
