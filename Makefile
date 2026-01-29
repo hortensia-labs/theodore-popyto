@@ -2,11 +2,11 @@
 # Handles any section folder structure under tesis/
 
 # Configuration
-SECTIONS_ROOT = /Users/henry/Workbench/Theodore/sections
-GENERATED_ROOT = /Users/henry/Workbench/Theodore/generated
+SECTIONS_ROOT = /Users/henry/Workbench/PopytoNoPhd/theodore-popyto/sections
+GENERATED_ROOT = /Users/henry/Workbench/PopytoNoPhd/theodore-popyto/generated
 MARKDOWN_OUTPUT = $(GENERATED_ROOT)/markdown
 ICML_OUTPUT = $(GENERATED_ROOT)/icml
-SCRIPTS_ROOT = /Users/henry/Workbench/Theodore/lib
+SCRIPTS_ROOT = /Users/henry/Workbench/PopytoNoPhd/theodore-popyto/lib
 
 # File patterns for automatic discovery
 NUMBERED_PATTERN = [0-9]*.md
