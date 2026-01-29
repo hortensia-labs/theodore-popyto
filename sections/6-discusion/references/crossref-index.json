@@ -1,0 +1,361 @@
+{
+  "section": "6-discusion",
+  "chapter": "Capítulo 6: Discusión: Aplicación Heurística y Crítica del Marco",
+  "generated": "2026-01-29",
+  "anchors": {
+    "local": [
+      {
+        "id": "capitulo-6",
+        "file": "6.0-introduccion-discusion.md",
+        "title": "Capítulo 6: Discusión"
+      },
+      {
+        "id": "intro-cap6",
+        "file": "6.0-introduccion-discusion.md",
+        "title": "Introducción al Capítulo"
+      },
+      {
+        "id": "validacion-vinetas",
+        "file": "6.1.0-intro-vinetas.md",
+        "title": "Validación mediante Viñetas Analíticas"
+      },
+      {
+        "id": "intro-vinetas",
+        "file": "6.1.0-intro-vinetas.md",
+        "title": "Introducción a las Viñetas"
+      },
+      {
+        "id": "vineta-ballet",
+        "file": "6.1.1-vineta-A-ballet.md",
+        "title": "Viñeta A: Pedagogía del Ballet Clásico"
+      },
+      {
+        "id": "vineta-A-caso",
+        "file": "6.1.1-vineta-A-ballet.md",
+        "title": "Presentación del caso (Ballet)"
+      },
+      {
+        "id": "vineta-A-D1",
+        "file": "6.1.1-vineta-A-ballet.md",
+        "title": "D1: Cognición Corporeizada (Ballet)"
+      },
+      {
+        "id": "vineta-A-D2",
+        "file": "6.1.1-vineta-A-ballet.md",
+        "title": "D2: Trabajo Creativo (Ballet)"
+      },
+      {
+        "id": "vineta-A-D3",
+        "file": "6.1.1-vineta-A-ballet.md",
+        "title": "D3: Valor Estético (Ballet)"
+      },
+      {
+        "id": "vineta-A-D4",
+        "file": "6.1.1-vineta-A-ballet.md",
+        "title": "D4: Contextualización Cultural (Ballet)"
+      },
+      {
+        "id": "vineta-A-etica",
+        "file": "6.1.1-vineta-A-ballet.md",
+        "title": "Lente Ético-Política (Ballet)"
+      },
+      {
+        "id": "vineta-A-conclusion",
+        "file": "6.1.1-vineta-A-ballet.md",
+        "title": "Conclusión Viñeta A"
+      },
+      {
+        "id": "vineta-coreografia",
+        "file": "6.1.2-vineta-B-coreografia.md",
+        "title": "Viñeta B: Coreografía Aumentada"
+      },
+      {
+        "id": "vineta-B-caso",
+        "file": "6.1.2-vineta-B-coreografia.md",
+        "title": "Presentación del caso (Coreografía)"
+      },
+      {
+        "id": "vineta-B-D1",
+        "file": "6.1.2-vineta-B-coreografia.md",
+        "title": "D1: El Cuerpo como Filtro"
+      },
+      {
+        "id": "vineta-B-D2",
+        "file": "6.1.2-vineta-B-coreografia.md",
+        "title": "D2: Coreógrafo Aumentado"
+      },
+      {
+        "id": "vineta-B-D3",
+        "file": "6.1.2-vineta-B-coreografia.md",
+        "title": "D3: Nuevos Criterios Estéticos"
+      },
+      {
+        "id": "vineta-B-D4",
+        "file": "6.1.2-vineta-B-coreografia.md",
+        "title": "D4: Apropiación Crítica"
+      },
+      {
+        "id": "vineta-B-socio-hermeneutico",
+        "file": "6.1.2-vineta-B-coreografia.md",
+        "title": "Socio Hermenéutico en Acción"
+      },
+      {
+        "id": "vineta-B-criterios",
+        "file": "6.1.2-vineta-B-coreografia.md",
+        "title": "Criterios para Co-creación"
+      },
+      {
+        "id": "vineta-B-conclusion",
+        "file": "6.1.2-vineta-B-coreografia.md",
+        "title": "Conclusión Viñeta B"
+      },
+      {
+        "id": "vineta-posthumano",
+        "file": "6.1.3-vineta-C-posthumano.md",
+        "title": "Viñeta C: Ejecutante Posthumano"
+      },
+      {
+        "id": "vineta-C-caso",
+        "file": "6.1.3-vineta-C-posthumano.md",
+        "title": "Presentación del caso (Posthumano)"
+      },
+      {
+        "id": "vineta-C-ausencia-leib",
+        "file": "6.1.3-vineta-C-posthumano.md",
+        "title": "Cuando el Leib está ausente"
+      },
+      {
+        "id": "vineta-C-transformacion-valor",
+        "file": "6.1.3-vineta-C-posthumano.md",
+        "title": "Transformación del valor estético"
+      },
+      {
+        "id": "vineta-C-nueva-estetica",
+        "file": "6.1.3-vineta-C-posthumano.md",
+        "title": "Nueva categoría estética"
+      },
+      {
+        "id": "vineta-C-revelacion",
+        "file": "6.1.3-vineta-C-posthumano.md",
+        "title": "Revelación por contraste"
+      },
+      {
+        "id": "vineta-C-reflexion",
+        "file": "6.1.3-vineta-C-posthumano.md",
+        "title": "Reflexión filosófica"
+      },
+      {
+        "id": "vineta-C-etica",
+        "file": "6.1.3-vineta-C-posthumano.md",
+        "title": "Lente Ético-Política (Posthumano)"
+      },
+      {
+        "id": "vineta-C-conclusion",
+        "file": "6.1.3-vineta-C-posthumano.md",
+        "title": "Conclusión Viñeta C"
+      },
+      {
+        "id": "sintesis-vinetas",
+        "file": "6.1.4-sintesis-vinetas.md",
+        "title": "Síntesis de las Viñetas"
+      },
+      {
+        "id": "patrones-vinetas",
+        "file": "6.1.4-sintesis-vinetas.md",
+        "title": "Patrones transversales"
+      },
+      {
+        "id": "poder-heuristico",
+        "file": "6.1.4-sintesis-vinetas.md",
+        "title": "Poder heurístico demostrado"
+      },
+      {
+        "id": "refinamientos",
+        "file": "6.1.4-sintesis-vinetas.md",
+        "title": "Ajustes sugeridos"
+      },
+      {
+        "id": "implicaciones-marco",
+        "file": "6.2.0-intro-implicaciones.md",
+        "title": "Implicaciones del Marco"
+      },
+      {
+        "id": "intro-implicaciones",
+        "file": "6.2.0-intro-implicaciones.md",
+        "title": "Introducción a Implicaciones"
+      },
+      {
+        "id": "implicaciones-investigacion",
+        "file": "6.2.1-investigacion-futura.md",
+        "title": "Para Investigación Futura"
+      },
+      {
+        "id": "implicaciones-artistas",
+        "file": "6.2.2-artistas-creadores.md",
+        "title": "Para Artistas y Creadores"
+      },
+      {
+        "id": "implicaciones-formacion",
+        "file": "6.2.3-formacion-danza.md",
+        "title": "Para Formación en Danza"
+      },
+      {
+        "id": "implicaciones-politicas",
+        "file": "6.2.4-politicas-tecnologia.md",
+        "title": "Para Políticas y Tecnología"
+      },
+      {
+        "id": "autocritica",
+        "file": "6.3-autocritica.md",
+        "title": "Autocrítica del Marco"
+      },
+      {
+        "id": "fortalezas-marco",
+        "file": "6.3-autocritica.md",
+        "title": "Fortalezas del Marco"
+      },
+      {
+        "id": "limitaciones-marco",
+        "file": "6.3-autocritica.md",
+        "title": "Limitaciones del Marco"
+      },
+      {
+        "id": "futuras-iteraciones",
+        "file": "6.3-autocritica.md",
+        "title": "Futuras Iteraciones"
+      }
+    ],
+    "external_references": [
+      {
+        "target": "#arquitectura-marco",
+        "chapter": "5",
+        "description": "Arquitectura del marco"
+      },
+      {
+        "target": "#cognicion-corporeizada",
+        "chapter": "3",
+        "description": "Pilar de cognición corporeizada"
+      },
+      {
+        "target": "#conocimiento-tacito",
+        "chapter": "3",
+        "description": "Conocimiento tácito"
+      },
+      {
+        "target": "#presencia-escenica",
+        "chapter": "3",
+        "description": "Presencia escénica"
+      },
+      {
+        "target": "#cuerpo-conocimiento",
+        "chapter": "3",
+        "description": "Cuerpo como lugar de conocimiento"
+      },
+      {
+        "target": "#intencionalidad",
+        "chapter": "3",
+        "description": "Intencionalidad autoral"
+      },
+      {
+        "target": "#anclaje-cultural",
+        "chapter": "3",
+        "description": "Anclaje cultural del gesto"
+      },
+      {
+        "target": "#tareas-rutinarias",
+        "chapter": "4",
+        "description": "Tareas rutinarias vs no rutinarias"
+      },
+      {
+        "target": "#brecha-comprension",
+        "chapter": "4",
+        "description": "Brecha de comprensión de IA"
+      },
+      {
+        "target": "#aumento-complementariedad",
+        "chapter": "4",
+        "description": "Potencialidades de aumento"
+      },
+      {
+        "target": "#dimension-cognicion",
+        "chapter": "5",
+        "description": "Dimensión 1: Cognición"
+      },
+      {
+        "target": "#dimension-trabajo",
+        "chapter": "5",
+        "description": "Dimensión 2: Trabajo"
+      },
+      {
+        "target": "#dimension-valor",
+        "chapter": "5",
+        "description": "Dimensión 3: Valor"
+      },
+      {
+        "target": "#dimension-poetica",
+        "chapter": "5",
+        "description": "Dimensión 4: Poética"
+      },
+      {
+        "target": "#analisis-poder",
+        "chapter": "5",
+        "description": "Análisis de poder"
+      },
+      {
+        "target": "#codificable-valor",
+        "chapter": "5",
+        "description": "Codificable y valor"
+      },
+      {
+        "target": "#interrelaciones",
+        "chapter": "5",
+        "description": "Interrelaciones del marco"
+      },
+      {
+        "target": "#sistema-dinamico",
+        "chapter": "5",
+        "description": "Marco como sistema dinámico"
+      },
+      {
+        "target": "#proposito-marco",
+        "chapter": "5",
+        "description": "Propósito del marco"
+      },
+      {
+        "target": "#funcion-propositiva",
+        "chapter": "5",
+        "description": "Función propositiva"
+      },
+      {
+        "target": "#funcion-analitica",
+        "chapter": "5",
+        "description": "Función analítica"
+      },
+      {
+        "target": "#componentes-marco",
+        "chapter": "5",
+        "description": "Componentes del marco"
+      },
+      {
+        "target": "#lente-etico-politica",
+        "chapter": "5",
+        "description": "Lente ético-política"
+      },
+      {
+        "target": "#sintesis-cap3",
+        "chapter": "3",
+        "description": "Síntesis Cap 3"
+      },
+      {
+        "target": "#4.3-sintesis-leib-tarea",
+        "chapter": "4",
+        "description": "Síntesis Leib-Tarea"
+      }
+    ]
+  },
+  "statistics": {
+    "total_local_anchors": 44,
+    "total_external_references": 25,
+    "files_with_anchors": 12
+  }
+}
