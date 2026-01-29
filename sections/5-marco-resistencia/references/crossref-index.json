@@ -1,0 +1,376 @@
+{
+  "chapter": 5,
+  "title": "El Marco 'Resistencia Encarnada': Un Modelo para el Análisis y la Co-Creación",
+  "generated": "2026-01-29",
+  "anchors": {
+    "capitulo-5": {
+      "file": "5.1-arquitectura-marco.md",
+      "heading": "Capítulo 5: El Marco \"Resistencia Encarnada\"",
+      "level": 1
+    },
+    "arquitectura-marco": {
+      "file": "5.1-arquitectura-marco.md",
+      "heading": "5.1. Arquitectura General del Marco",
+      "level": 2
+    },
+    "definicion-marco": {
+      "file": "5.1-arquitectura-marco.md",
+      "heading": "5.1.1. Definición Formal del Marco",
+      "level": 3
+    },
+    "proposito-marco": {
+      "file": "5.1-arquitectura-marco.md",
+      "heading": "5.1.2. Propósito Dual del Marco",
+      "level": 3
+    },
+    "funciones-marco": {
+      "file": "5.1-arquitectura-marco.md",
+      "heading": "5.1.3. Las Dos Funciones del Marco",
+      "level": 3
+    },
+    "funcion-analitica": {
+      "file": "5.1-arquitectura-marco.md",
+      "heading": "Función Analítica: Evaluar la Resistencia Encarnada",
+      "level": 4
+    },
+    "funcion-propositiva": {
+      "file": "5.1-arquitectura-marco.md",
+      "heading": "Función Propositiva: Diseñar Colaboración Significativa",
+      "level": 4
+    },
+    "componentes-marco": {
+      "file": "5.1-arquitectura-marco.md",
+      "heading": "5.1.4. Los Componentes del Marco",
+      "level": 3
+    },
+    "justificacion-arquitectura": {
+      "file": "5.1-arquitectura-marco.md",
+      "heading": "5.1.5. Justificación de la Arquitectura",
+      "level": 3
+    },
+    "pilares-interaccion": {
+      "file": "5.2.1-dimension-cognicion.md",
+      "heading": "5.2. Los Cuatro Pilares en Interacción",
+      "level": 2
+    },
+    "dimension-cognicion": {
+      "file": "5.2.1-dimension-cognicion.md",
+      "heading": "5.2.1. Dimensión 1: La Singularidad de la Cognición Corporeizada",
+      "level": 3
+    },
+    "brecha-ontologica": {
+      "file": "5.2.1-dimension-cognicion.md",
+      "heading": "Contraste con la IA: la brecha ontológica",
+      "level": 4
+    },
+    "definicion-dim1": {
+      "file": "5.2.1-dimension-cognicion.md",
+      "heading": "Definición formal de la dimensión (D1)",
+      "level": 4
+    },
+    "dimension-trabajo": {
+      "file": "5.2.2-dimension-trabajo.md",
+      "heading": "5.2.2. Dimensión 2: La Complejidad del Trabajo Creativo-Colaborativo",
+      "level": 3
+    },
+    "trabajo-creativo": {
+      "file": "5.2.2-dimension-trabajo.md",
+      "heading": "El trabajo dancístico como sistema complejo",
+      "level": 4
+    },
+    "definicion-dim2": {
+      "file": "5.2.2-dimension-trabajo.md",
+      "heading": "Definición formal de la dimensión (D2)",
+      "level": 4
+    },
+    "dimension-valor": {
+      "file": "5.2.3-dimension-valor.md",
+      "heading": "5.2.3. Dimensión 3: La Generación de Valor y Significado Estético",
+      "level": 3
+    },
+    "valor-estetico": {
+      "file": "5.2.3-dimension-valor.md",
+      "heading": "Síntesis de las fuentes del valor estético",
+      "level": 4
+    },
+    "sintaxis-semantica": {
+      "file": "5.2.3-dimension-valor.md",
+      "heading": "Contraste con la IA: sintaxis sin semántica",
+      "level": 4
+    },
+    "definicion-dim3": {
+      "file": "5.2.3-dimension-valor.md",
+      "heading": "Definición formal de la dimensión (D3)",
+      "level": 4
+    },
+    "dimension-poetica": {
+      "file": "5.2.4-dimension-poetica.md",
+      "heading": "5.2.4. Dimensión 4: La Poética y Contextualización Cultural",
+      "level": 3
+    },
+    "capital-simbolico": {
+      "file": "5.2.4-dimension-poetica.md",
+      "heading": "El campo artístico: capital simbólico y legitimación",
+      "level": 4
+    },
+    "guardianes-institucionales": {
+      "file": "5.2.4-dimension-poetica.md",
+      "heading": "El rol de guardianes institucionales",
+      "level": 4
+    },
+    "definicion-dim4": {
+      "file": "5.2.4-dimension-poetica.md",
+      "heading": "Definición formal de la dimensión (D4)",
+      "level": 4
+    },
+    "lente-etico-politica": {
+      "file": "5.3.1-analisis-poder.md",
+      "heading": "5.3. La Lente Transversal: La Dimensión Ético-Política",
+      "level": 2
+    },
+    "analisis-poder": {
+      "file": "5.3.1-analisis-poder.md",
+      "heading": "5.3.1. El Análisis de Poder: ¿Cui bono?",
+      "level": 3
+    },
+    "neutralidad-tecnologica": {
+      "file": "5.3.1-analisis-poder.md",
+      "heading": "La tecnología nunca es neutral",
+      "level": 4
+    },
+    "cui-bono": {
+      "file": "5.3.1-analisis-poder.md",
+      "heading": "La pregunta fundamental: ¿quién se beneficia?",
+      "level": 4
+    },
+    "problematizacion-frontera": {
+      "file": "5.3.2-problematizacion-frontera.md",
+      "heading": "5.3.2. La Problematización de la Frontera Humano/Automatizable",
+      "level": 3
+    },
+    "frontera-construida": {
+      "file": "5.3.2-problematizacion-frontera.md",
+      "heading": "La frontera como construcción social, no natural",
+      "level": 4
+    },
+    "posthumanismo": {
+      "file": "5.3.2-problematizacion-frontera.md",
+      "heading": "Perspectiva posthumanista",
+      "level": 4
+    },
+    "codificable-valor": {
+      "file": "5.3.3-codificable-valor.md",
+      "heading": "5.3.3. Desvinculando \"Codificable\" de \"Sin Valor\"",
+      "level": 3
+    },
+    "valor-oficio": {
+      "file": "5.3.3-codificable-valor.md",
+      "heading": "El valor del oficio: más allá de la novedad",
+      "level": 4
+    },
+    "revalorizacion-tecnica": {
+      "file": "5.3.3-codificable-valor.md",
+      "heading": "Reivindicación de lo técnico y lo repetitivo",
+      "level": 4
+    },
+    "interrelaciones": {
+      "file": "5.4-interrelaciones.md",
+      "heading": "5.4. El Modelo en Acción: Interrelaciones y Visión Holística",
+      "level": 2
+    },
+    "sistema-dinamico": {
+      "file": "5.4-interrelaciones.md",
+      "heading": "El marco como sistema dinámico, no checklist",
+      "level": 3
+    },
+    "aplicacion-marco": {
+      "file": "5.4-interrelaciones.md",
+      "heading": "Ejemplos de análisis multi-dimensional",
+      "level": 3
+    },
+    "representacion-visual": {
+      "file": "5.5-representacion-visual.md",
+      "heading": "5.5. Representación Visual del Marco",
+      "level": 2
+    },
+    "diagrama-marco": {
+      "file": "5.5-representacion-visual.md",
+      "heading": "Descripción del diagrama propuesto",
+      "level": 3
+    }
+  },
+  "external_references": {
+    "to_chapter_3": [
+      {
+        "anchor": "cognicion-corporeizada",
+        "used_in": [
+          "5.1-arquitectura-marco.md",
+          "5.2.1-dimension-cognicion.md"
+        ]
+      },
+      {
+        "anchor": "cuerpo-conocimiento",
+        "used_in": [
+          "5.2.1-dimension-cognicion.md"
+        ]
+      },
+      {
+        "anchor": "conocimiento-tacito",
+        "used_in": [
+          "5.2.1-dimension-cognicion.md"
+        ]
+      },
+      {
+        "anchor": "presencia-escenica",
+        "used_in": [
+          "5.2.1-dimension-cognicion.md"
+        ]
+      },
+      {
+        "anchor": "enaccion",
+        "used_in": [
+          "5.2.1-dimension-cognicion.md"
+        ]
+      },
+      {
+        "anchor": "estetica-valor",
+        "used_in": [
+          "5.1-arquitectura-marco.md",
+          "5.2.3-dimension-valor.md"
+        ]
+      },
+      {
+        "anchor": "intencionalidad-artistica",
+        "used_in": [
+          "5.2.3-dimension-valor.md"
+        ]
+      },
+      {
+        "anchor": "autenticidad-performativa",
+        "used_in": [
+          "5.2.3-dimension-valor.md"
+        ]
+      },
+      {
+        "anchor": "expresividad-emocional",
+        "used_in": [
+          "5.2.3-dimension-valor.md"
+        ]
+      },
+      {
+        "anchor": "empatia-kinestetica",
+        "used_in": [
+          "5.2.3-dimension-valor.md"
+        ]
+      },
+      {
+        "anchor": "valor-finitud",
+        "used_in": [
+          "5.2.3-dimension-valor.md"
+        ]
+      },
+      {
+        "anchor": "poetica-danza",
+        "used_in": [
+          "5.1-arquitectura-marco.md"
+        ]
+      },
+      {
+        "anchor": "anclaje-cultural",
+        "used_in": [
+          "5.2.4-dimension-poetica.md"
+        ]
+      },
+      {
+        "anchor": "sintesis-cap3",
+        "used_in": [
+          "5.1-arquitectura-marco.md"
+        ]
+      }
+    ],
+    "to_chapter_4": [
+      {
+        "anchor": "4.1.1-tareas-rutinarias",
+        "used_in": [
+          "5.1-arquitectura-marco.md",
+          "5.2.2-dimension-trabajo.md"
+        ]
+      },
+      {
+        "anchor": "4.1.2-desagregacion-danza",
+        "used_in": [
+          "5.2.2-dimension-trabajo.md"
+        ]
+      },
+      {
+        "anchor": "4.1.3-aumento-complementariedad",
+        "used_in": [
+          "5.2.2-dimension-trabajo.md",
+          "5.2.4-dimension-poetica.md"
+        ]
+      },
+      {
+        "anchor": "4.2.1-modelos-iag",
+        "used_in": [
+          "5.1-arquitectura-marco.md",
+          "5.2.3-dimension-valor.md"
+        ]
+      },
+      {
+        "anchor": "4.2.2-brecha-comprension",
+        "used_in": [
+          "5.2.1-dimension-cognicion.md"
+        ]
+      },
+      {
+        "anchor": "4.3-sintesis-leib-tarea",
+        "used_in": [
+          "5.1-arquitectura-marco.md",
+          "5.2.2-dimension-trabajo.md"
+        ]
+      }
+    ]
+  },
+  "internal_references": [
+    {
+      "from": "5.2.2-dimension-trabajo.md",
+      "to": "#dimension-cognicion"
+    },
+    {
+      "from": "5.2.3-dimension-valor.md",
+      "to": "#dimension-cognicion"
+    },
+    {
+      "from": "5.2.3-dimension-valor.md",
+      "to": "#dimension-trabajo"
+    },
+    {
+      "from": "5.2.4-dimension-poetica.md",
+      "to": "#dimension-cognicion"
+    },
+    {
+      "from": "5.2.4-dimension-poetica.md",
+      "to": "#dimension-trabajo"
+    },
+    {
+      "from": "5.2.4-dimension-poetica.md",
+      "to": "#dimension-valor"
+    },
+    {
+      "from": "5.4-interrelaciones.md",
+      "to": "#dimension-cognicion"
+    },
+    {
+      "from": "5.4-interrelaciones.md",
+      "to": "#dimension-trabajo"
+    },
+    {
+      "from": "5.4-interrelaciones.md",
+      "to": "#dimension-valor"
+    },
+    {
+      "from": "5.4-interrelaciones.md",
+      "to": "#dimension-poetica"
+    }
+  ]
+}
