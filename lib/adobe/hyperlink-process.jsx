@@ -15,14 +15,11 @@ var reportsDir = "/Users/henry/Workbench/PopytoNoPhd/theodore-popyto/generated/r
 
 var CONFIG = {
     REGISTRY_PATH: "/Users/henry/Workbench/PopytoNoPhd/theodore-popyto/generated/data/url-registry.json",
-    VERSION: "1.0.0",
-    // Placeholder URLs that Pandoc might use
-    PLACEHOLDER_PATTERNS: [
-        "http://example.com",
-        "https://example.com",
-        "http://placeholder",
-        "https://placeholder"
-    ]
+    VERSION: "1.1.0"
+    // Note: Placeholder detection removed in v1.1.0
+    // Pandoc may use placeholders OR the first URL for all destinations.
+    // The new approach trusts the hyperlink NAME as the source of truth,
+    // correcting any destination whose URL differs from its hyperlink name.
 };
 
 var sessionState = {
@@ -337,6 +334,14 @@ function processDocumentHyperlinks(doc, documentName) {
             var currentURL = destination.destinationURL;
             var hyperlinkName = hyperlink.name;
 
+            // Debug: Log each URL hyperlink being examined
+            log("DEBUG", "Examining URL hyperlink", {
+                document: documentName,
+                hyperlinkName: hyperlinkName,
+                currentDestURL: currentURL,
+                needsCorrection: (hyperlinkName !== currentURL) ? "YES" : "NO"
+            });
+
             // Check if this needs correction
             var intendedURL = extractIntendedURL(hyperlinkName, currentURL);
 
@@ -370,38 +375,42 @@ function processDocumentHyperlinks(doc, documentName) {
 
 /**
  * Extract the intended URL from hyperlink name or registry
- * @param {string} hyperlinkName - Name of the hyperlink (may contain URL)
+ *
+ * IMPORTANT: The hyperlink NAME is the source of truth for the intended URL.
+ * Pandoc stores the correct URL in the hyperlink's name property, but may set
+ * all destination URLs to the same value (either a placeholder like "http://example.com"
+ * OR the first URL encountered in the document).
+ *
+ * @param {string} hyperlinkName - Name of the hyperlink (contains the intended URL)
  * @param {string} currentURL - Current destination URL
- * @returns {string|null} Intended URL or null if not found
+ * @returns {string|null} Intended URL if correction needed, or null if already correct
  */
 function extractIntendedURL(hyperlinkName, currentURL) {
-    // Check if current URL is a placeholder
-    var isPlaceholder = false;
-    for (var p = 0; p < CONFIG.PLACEHOLDER_PATTERNS.length; p++) {
-        if (currentURL.indexOf(CONFIG.PLACEHOLDER_PATTERNS[p]) === 0) {
-            isPlaceholder = true;
-            break;
+    // Strategy 1: Extract URL from hyperlink name (primary strategy)
+    // The hyperlink name is the source of truth - Pandoc stores the intended URL here
+    if (hyperlinkName && (hyperlinkName.indexOf("http://") === 0 || hyperlinkName.indexOf("https://") === 0 || hyperlinkName.indexOf("mailto:") === 0)) {
+        // If the hyperlink name (intended URL) differs from current destination URL,
+        // return it for correction. This handles both:
+        // - Placeholder URLs (http://example.com)
+        // - Wrong real URLs (when Pandoc uses first URL for all destinations)
+        if (hyperlinkName !== currentURL) {
+            return hyperlinkName;
         }
-    }
-
-    // If not a placeholder, no correction needed
-    if (!isPlaceholder) {
+        // Already correct, no change needed
         return null;
     }
 
-    // Strategy 1: Extract URL from hyperlink name
-    // Pandoc often stores the intended URL in the hyperlink name
-    if (hyperlinkName && (hyperlinkName.indexOf("http://") === 0 || hyperlinkName.indexOf("https://") === 0)) {
-        return hyperlinkName;
-    }
-
     // Strategy 2: Look up in registry by link text (if registry available)
+    // This is a fallback for when the hyperlink name is the display text, not the URL
     if (sessionState.urlRegistry && sessionState.urlRegistry.urls) {
-        // The hyperlink name might be the link text
         for (var u = 0; u < sessionState.urlRegistry.urls.length; u++) {
             var registryEntry = sessionState.urlRegistry.urls[u];
             if (registryEntry.linkText === hyperlinkName) {
-                return registryEntry.url;
+                // Found a match - return the URL if it differs from current
+                if (registryEntry.url !== currentURL) {
+                    return registryEntry.url;
+                }
+                return null;
             }
         }
     }
