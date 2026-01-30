@@ -31,7 +31,7 @@ define load_env
 endef
 
 # Phony targets
-.PHONY: help clean compile validate-section merge-section compile-icml list-sections remove-numbers compile-data scan-ref update-links update-book crossref-process fix-url-hyperlinks compile-all-r compile-all-u compile-all-ru reformat-bibliography update-toc validate-citations clean-validation validate-citations-watch test-citations ira-revision validate-crossreferences merge-all merge-parallel clean-merged merge-all-r merge-parallel-r
+.PHONY: help clean compile validate-section merge-section compile-icml list-sections remove-numbers compile-data scan-citations scan-hyperlinks scan-ref update-links update-book crossref-process fix-url-hyperlinks compile-all-r compile-all-u compile-all-ru reformat-bibliography update-toc validate-citations clean-validation validate-citations-watch test-citations ira-revision validate-crossreferences merge-all merge-parallel clean-merged merge-all-r merge-parallel-r
 
 # Generic compile target: make compile [section-folder]
 compile:
@@ -195,10 +195,30 @@ validate-crossreferences:
 	@echo "🔗 Validating cross-references..."
 	@python3 $(SCRIPTS_ROOT)/validate-crossreferences.py $(MARKDOWN_OUTPUT) $(GENERATED_ROOT)/data/crossref-registry.json
 
+# Scan citations from generated markdown files
+scan-citations:
+	@echo "📝 Scanning citations from markdown files..."
+	@python3 $(SCRIPTS_ROOT)/scan-citations.py $(MARKDOWN_OUTPUT) $(GENERATED_ROOT)/data
+
+# Scan URL hyperlinks from generated markdown files
+scan-hyperlinks:
+	@echo "🔗 Scanning URL hyperlinks from markdown files..."
+	@python3 $(SCRIPTS_ROOT)/scan-hyperlinks.py $(MARKDOWN_OUTPUT) $(GENERATED_ROOT)/data/url-registry.json
+
 # Compile data from generated markdown files: citations, cross-references, and URL hyperlinks
 compile-data:
 	@echo "📊 Compiling data: citations, cross-references, and URL hyperlinks..."
-	@python3 $(SCRIPTS_ROOT)/compile-data.py $(MARKDOWN_OUTPUT) $(GENERATED_ROOT)/data
+	@echo ""
+	@echo "📝 Step 1: Scanning citations..."
+	@$(MAKE) scan-citations
+	@echo ""
+	@echo "🔗 Step 2: Scanning URL hyperlinks..."
+	@$(MAKE) scan-hyperlinks
+	@echo ""
+	@echo "🔍 Step 3: Scanning cross-reference anchors..."
+	@$(MAKE) scan-ref
+	@echo ""
+	@echo "🎉 Data compilation complete!"
 
 # Update InDesign book document links using AppleScript
 update-links:
@@ -291,8 +311,8 @@ compile-all:
 	@echo "🔄 Step 2: Parallel ICML conversion..."
 	@$(MAKE) compile-icml
 	@echo ""
-	@echo "🔍 Step 3: Scanning anchors and building registry..."
-	@$(MAKE) scan-ref
+	@echo "🔍 Step 3: Scanning citations, hyperlinks, and anchors to build registry..."
+	@$(MAKE) compile-data
 	@echo ""
 	@echo "🔍 Step 4: Validate cross-references..."
 	@$(MAKE) validate-crossreferences
@@ -308,8 +328,8 @@ compile-all-r:
 	@echo "🔄 Step 2: Parallel ICML conversion..."
 	@$(MAKE) compile-icml
 	@echo ""
-	@echo "🔍 Step 3: Scanning anchors and building registry..."
-	@$(MAKE) scan-ref
+	@echo "🔍 Step 3: Scanning citations, hyperlinks, and anchors to build registry..."
+	@$(MAKE) compile-data
 	@echo ""
 	@echo "🔍 Step 4: Validate cross-references..."
 	@$(MAKE) validate-crossreferences
@@ -325,8 +345,8 @@ compile-all-u:
 	@echo "🔄 Step 2: Parallel ICML conversion..."
 	@$(MAKE) compile-icml
 	@echo ""
-	@echo "🔍 Step 3: Scanning anchors and building registry..."
-	@$(MAKE) scan-ref
+	@echo "🔍 Step 3: Scanning citations, hyperlinks, and anchors to build registry..."
+	@$(MAKE) compile-data
 	@echo ""
 	@echo "🔍 Step 4: Validate cross-references..."
 	@$(MAKE) validate-crossreferences
@@ -345,7 +365,7 @@ compile-all-ru:
 	@echo "🔄 Step 2: Parallel ICML conversion..."
 	@$(MAKE) compile-icml
 	@echo ""
-	@echo "🔍 Step 3: Scanning anchors and building registry..."
+	@echo "🔍 Step 3: Scanning citations, hyperlinks, and anchors to build registry..."
 	@$(MAKE) compile-data
 	@echo ""
 	@echo "🔍 Step 4: Validate cross-references..."
@@ -426,8 +446,10 @@ help:
 	@echo "  $(GREEN)make compile-all-u$(RESET)         - Compile all sections, build registry, and update InDesign links"
 	@echo "  $(GREEN)make compile-all-ru$(RESET)        - Compile all sections, remove numbers, build registry, and update links"
 	@echo "  $(GREEN)make list-sections$(RESET)         - List all available sections"
-	@echo "  $(GREEN)make compile-data$(RESET)          - Extract citations and cross-references from generated files"
-	@echo "  $(GREEN)make scan-ref$(RESET)              - Scan markdown files and build anchor registry"
+	@echo "  $(GREEN)make compile-data$(RESET)          - Compile all data: citations, hyperlinks, cross-references"
+	@echo "  $(GREEN)make scan-citations$(RESET)       - Scan citations from generated markdown files"
+	@echo "  $(GREEN)make scan-hyperlinks$(RESET)      - Scan URL hyperlinks from generated markdown files"
+	@echo "  $(GREEN)make scan-ref$(RESET)              - Scan cross-reference anchors and build registry"
 	@echo "  $(GREEN)make update-links$(RESET)          - Update InDesign book document links"
 	@echo "  $(GREEN)make update-book$(RESET)           - Update InDesign book (sync styles, update numbers, preflight)"
 	@echo "  $(GREEN)make crossref-process$(RESET)      - Process cross-references in InDesign book documents"
@@ -467,7 +489,9 @@ help:
 	@echo "  $(WHITE)make validate-citations$(RESET)    $(BLUE)# Full citation validation with AI analysis$(RESET)"
 	@echo "  $(WHITE)make validate-citations-quick$(RESET) $(BLUE)# Quick citation validation without AI$(RESET)"
 	@echo "  $(WHITE)make validate-citations-watch$(RESET) $(BLUE)# Citation validation in watch mode$(RESET)"
-	@echo "  $(WHITE)make compile-data$(RESET)          $(BLUE)# Extract citations from all generated files$(RESET)"
+	@echo "  $(WHITE)make compile-data$(RESET)          $(BLUE)# Compile all data: citations, hyperlinks, cross-refs$(RESET)"
+	@echo "  $(WHITE)make scan-citations$(RESET)       $(BLUE)# Scan citations from generated markdown files$(RESET)"
+	@echo "  $(WHITE)make scan-hyperlinks$(RESET)      $(BLUE)# Scan URL hyperlinks from generated markdown files$(RESET)"
 	@echo "  $(WHITE)make update-links$(RESET)          $(BLUE)# Update InDesign book document links$(RESET)"
 	@echo "  $(WHITE)make update-book$(RESET)           $(BLUE)# Update InDesign book (sync styles, update numbers, preflight)$(RESET)"
 	@echo "  $(WHITE)make crossref-process$(RESET)      $(BLUE)# Process cross-references in InDesign book documents$(RESET)"
