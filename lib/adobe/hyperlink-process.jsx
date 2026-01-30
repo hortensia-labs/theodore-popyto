@@ -1,172 +1,718 @@
 /*
- * Hyperlink URL Destination Logging Script
- * Logs all hyperlink URL destinations in the currently open InDesign document
+ * URL Hyperlink Correction Script
+ * Fixes malformed URL hyperlinks where Pandoc sets HyperlinkURLDestination URLs to
+ * placeholder values (e.g., "http://example.com") while storing the intended URL
+ * in the hyperlink's name property.
+ *
  * Compatible with ECMAScript 3 (ExtendScript)
  */
 
+// Include essential modules
+#include "modules/json2.js"
+#include "modules/indesign/book-manager.jsx"
+
+var reportsDir = "/Users/henry/Workbench/PopytoNoPhd/theodore-popyto/generated/reports/url-hyperlinks";
+
+var CONFIG = {
+    REGISTRY_PATH: "/Users/henry/Workbench/PopytoNoPhd/theodore-popyto/generated/data/url-registry.json",
+    VERSION: "1.0.0",
+    // Placeholder URLs that Pandoc might use
+    PLACEHOLDER_PATTERNS: [
+        "http://example.com",
+        "https://example.com",
+        "http://placeholder",
+        "https://placeholder"
+    ]
+};
+
+var sessionState = {
+    currentBook: null,
+    bookContents: [],
+    urlRegistry: null,
+    processedDocuments: [],
+    stats: {
+        startTime: new Date().getTime(),
+        totalCorrections: 0,
+        documentsProcessed: 0,
+        reusedDestinations: 0,
+        updatedDestinations: 0,
+        createdDestinations: 0,
+        orphansRemoved: 0,
+        errors: 0,
+        warnings: 0
+    },
+    capturedLogs: {
+        errors: [],
+        warnings: [],
+        corrections: []
+    }
+};
+
+// Simple logging with capture for JSON report
+function log(level, message, context) {
+    var time = new Date().toString().substring(16, 24);
+    var logLine = "[" + time + "] [" + level + "] " + message;
+    if (context) {
+        logLine += " |";
+        for (var key in context) {
+            if (context.hasOwnProperty(key)) {
+                logLine += " " + key + "=" + String(context[key]);
+            }
+        }
+    }
+
+    // Capture errors, warnings, and corrections for JSON report
+    if (level === "ERROR" || level === "WARN" || level === "CORRECTION") {
+        var logEntry = {
+            timestamp: time,
+            level: level,
+            message: message,
+            context: context || {},
+            fullLogLine: logLine
+        };
+
+        if (level === "ERROR") {
+            sessionState.capturedLogs.errors.push(logEntry);
+        } else if (level === "WARN") {
+            sessionState.capturedLogs.warnings.push(logEntry);
+        } else if (level === "CORRECTION") {
+            sessionState.capturedLogs.corrections.push(logEntry);
+        }
+    }
+
+    $.writeln(logLine);
+}
+
 function main() {
     try {
-        $.writeln("=== HYPERLINK URL DESTINATION LOGGING ===");
-        $.writeln("");
+        $.writeln("=== URL HYPERLINK CORRECTION PROCESSING ===");
+        log("INFO", "Processing started", { version: CONFIG.VERSION });
 
-        // Get the active document
-        if (app.documents.length === 0) {
-            $.writeln("ERROR: No document is currently open");
-            return "ERROR: No document open";
-        }
-
-        var doc = app.activeDocument;
-        $.writeln("Document: " + doc.name);
-        $.writeln("");
-
-        // Get all hyperlink URL destinations
-        var urlDestinations = doc.hyperlinkURLDestinations;
-        var totalDestinations = urlDestinations.length;
-
-        $.writeln("Total Hyperlink URL Destinations: " + totalDestinations);
-        $.writeln("=".repeat(80));
-        $.writeln("");
-
-        if (totalDestinations === 0) {
-            $.writeln("No hyperlink URL destinations found in this document.");
-            return "SUCCESS: No URL destinations found";
-        }
-
-        // Iterate through all URL destinations
-        for (var i = 0; i < totalDestinations; i++) {
-            var destination = urlDestinations[i];
-
-            $.writeln("Destination #" + (i + 1) + ":");
-            $.writeln("  Name: " + destination.name);
-            $.writeln("  URL: " + destination.destinationURL);
-
-            // Try to get the unique key if available
-            try {
-                if (destination.destinationUniqueKey !== undefined) {
-                    $.writeln("  Unique Key: " + destination.destinationUniqueKey);
-                }
-            } catch (e) {
-                // Property might not be available in all versions
-            }
-
-            // Check if this destination is referenced by any hyperlinks
-            var hyperlinks = doc.hyperlinks;
-            var referencingLinks = [];
-
-            for (var h = 0; h < hyperlinks.length; h++) {
-                var link = hyperlinks[h];
-                try {
-                    // Check if this hyperlink's destination matches our URL destination
-                    if (link.destination && link.destination.id === destination.id) {
-                        referencingLinks.push(link.name);
-                    }
-                } catch (e) {
-                    // Skip if we can't access the link's destination
-                }
-            }
-
-            if (referencingLinks.length > 0) {
-                $.writeln("  Referenced by " + referencingLinks.length + " hyperlink(s):");
-                for (var r = 0; r < referencingLinks.length; r++) {
-                    $.writeln("    - " + referencingLinks[r]);
-                }
-            } else {
-                $.writeln("  Referenced by: (none - orphaned destination)");
-            }
-
-            $.writeln("");
-        }
-
-        $.writeln("=".repeat(80));
-        $.writeln("");
-
-        // Log all hyperlink objects
-        $.writeln("=== HYPERLINK OBJECTS ===");
-        $.writeln("");
-
-        var hyperlinks = doc.hyperlinks;
-        var totalHyperlinks = hyperlinks.length;
-
-        $.writeln("Total Hyperlinks: " + totalHyperlinks);
-        $.writeln("=".repeat(80));
-        $.writeln("");
-
-        if (totalHyperlinks === 0) {
-            $.writeln("No hyperlinks found in this document.");
+        // Phase 1: Registry Loading (optional, graceful fallback)
+        log("INFO", "Loading URL registry", { path: CONFIG.REGISTRY_PATH });
+        sessionState.urlRegistry = loadURLRegistry();
+        if (sessionState.urlRegistry) {
+            log("INFO", "URL registry loaded", {
+                totalURLs: sessionState.urlRegistry.metadata.totalURLs,
+                uniqueURLs: sessionState.urlRegistry.metadata.totalUniqueURLs
+            });
         } else {
-            for (var h = 0; h < totalHyperlinks; h++) {
-                var link = hyperlinks[h];
+            log("WARN", "URL registry not available, using name-based extraction only", {});
+        }
 
-                $.writeln("Hyperlink #" + (h + 1) + ":");
-                $.writeln("  Name: " + link.name);
+        // Phase 2: Book Initialization
+        log("INFO", "Initializing book", {});
+        var bookResult = BookManager.getActiveBook();
+        if (!bookResult.success) {
+            log("FATAL", "Book access failed", { error: bookResult.error });
+            return "FATAL_ERROR: " + bookResult.error;
+        }
 
-                // Get hyperlink source information
-                try {
-                    if (link.source) {
-                        $.writeln("  Source Type: " + link.source.constructor.name);
+        sessionState.currentBook = bookResult.book;
+        log("INFO", "Book initialized", {
+            name: sessionState.currentBook.name,
+            documents: bookResult.metadata.documentCount
+        });
 
-                        // Try to get source text if it's a text source
-                        try {
-                            if (link.source.sourceText) {
-                                var sourceText = link.source.sourceText.contents;
-                                // Truncate long text
-                                if (sourceText.length > 50) {
-                                    sourceText = sourceText.substring(0, 47) + "...";
-                                }
-                                $.writeln("  Source Text: \"" + sourceText + "\"");
-                            }
-                        } catch (e) {
-                            // Source might not have text
-                        }
-                    }
-                } catch (e) {
-                    $.writeln("  Source: (unable to access)");
-                }
+        // Phase 3: Document Access
+        log("INFO", "Getting accessible documents", {});
+        var documentsResult = BookManager.getAccessibleDocuments(sessionState.currentBook, null);
+        if (!documentsResult.success || documentsResult.documents.length === 0) {
+            log("FATAL", "No accessible documents", {});
+            return "FATAL_ERROR: No accessible documents";
+        }
 
-                // Get hyperlink destination information
-                try {
-                    if (link.destination) {
-                        $.writeln("  Destination Type: " + link.destination.constructor.name);
+        sessionState.bookContents = documentsResult.documents;
+        log("INFO", "Documents found", {
+            accessible: documentsResult.documents.length,
+            inaccessible: documentsResult.inaccessible.length
+        });
 
-                        // Check what type of destination and log appropriate info
-                        if (link.destination.destinationURL !== undefined) {
-                            $.writeln("  Destination URL: " + link.destination.destinationURL);
-                        } else if (link.destination.destinationPage !== undefined) {
-                            $.writeln("  Destination Page: " + link.destination.destinationPage.name);
-                        } else {
-                            $.writeln("  Destination Name: " + link.destination.name);
-                        }
-                    } else {
-                        $.writeln("  Destination: (none)");
-                    }
-                } catch (e) {
-                    $.writeln("  Destination: (unable to access)");
-                }
+        // Phase 4: Process URL Hyperlinks in Each Document
+        log("INFO", "Starting URL hyperlink processing", {});
+        var processingResult = processAllDocuments();
+        log("INFO", "URL hyperlink processing completed", processingResult.stats);
 
-                // Get visibility and other properties
-                try {
-                    $.writeln("  Visible: " + link.visible);
-                    $.writeln("  Hidden: " + link.hidden);
-                } catch (e) {
-                    // Properties might not be available
-                }
+        // Phase 5: Cleanup Orphaned Destinations
+        log("INFO", "Starting orphan cleanup", {});
+        var cleanupResult = cleanupOrphanedDestinations();
+        log("INFO", "Orphan cleanup completed", cleanupResult);
 
-                $.writeln("");
+        // Phase 6: Generate Report
+        var duration = new Date().getTime() - sessionState.stats.startTime;
+        var isSuccess = sessionState.stats.errors === 0;
+
+        log("INFO", "Processing complete", {
+            corrections: sessionState.stats.totalCorrections,
+            documents: sessionState.stats.documentsProcessed,
+            reused: sessionState.stats.reusedDestinations,
+            updated: sessionState.stats.updatedDestinations,
+            created: sessionState.stats.createdDestinations,
+            orphansRemoved: sessionState.stats.orphansRemoved,
+            duration: duration + "ms"
+        });
+
+        $.writeln("=== PROCESSING COMPLETE ===");
+        $.writeln("Total Corrections: " + sessionState.stats.totalCorrections);
+        $.writeln("Documents Processed: " + sessionState.stats.documentsProcessed);
+        $.writeln("Correction Methods:");
+        $.writeln("  - Reused existing destinations: " + sessionState.stats.reusedDestinations);
+        $.writeln("  - Updated orphan destinations: " + sessionState.stats.updatedDestinations);
+        $.writeln("  - Created new destinations: " + sessionState.stats.createdDestinations);
+        $.writeln("Orphans Removed: " + sessionState.stats.orphansRemoved);
+        $.writeln("Processing Time: " + (duration / 1000).toFixed(1) + " seconds");
+
+        if (sessionState.stats.errors > 0 || sessionState.stats.warnings > 0) {
+            $.writeln("PROCESSING ISSUES:");
+            if (sessionState.stats.errors > 0) {
+                $.writeln("  - Errors: " + sessionState.stats.errors);
+            }
+            if (sessionState.stats.warnings > 0) {
+                $.writeln("  - Warnings: " + sessionState.stats.warnings);
             }
         }
 
-        $.writeln("=".repeat(80));
-        $.writeln("=== LOGGING COMPLETE ===");
-        $.writeln("Total URL Destinations Logged: " + totalDestinations);
-        $.writeln("Total Hyperlinks Logged: " + totalHyperlinks);
+        // Generate JSON report
+        generateJSONReport(isSuccess, duration);
 
-        return "SUCCESS: Logged " + totalDestinations + " URL destination(s) and " + totalHyperlinks + " hyperlink(s)";
+        var resultMessage = isSuccess ? "SUCCESS" : "COMPLETED_WITH_ISSUES";
+        resultMessage += ": URL hyperlink processing completed. ";
+        resultMessage += "Corrections: " + sessionState.stats.totalCorrections;
+        resultMessage += ", Documents: " + sessionState.stats.documentsProcessed;
+
+        if (sessionState.stats.errors > 0) {
+            resultMessage += ", Errors: " + sessionState.stats.errors;
+        }
+        if (sessionState.stats.warnings > 0) {
+            resultMessage += ", Warnings: " + sessionState.stats.warnings;
+        }
+
+        return resultMessage;
 
     } catch (error) {
         $.writeln("FATAL ERROR: " + error.message);
         $.writeln("Error type: " + (error.name || "Error"));
         $.writeln("Error line: " + (error.line || "unknown"));
+        log("FATAL", "Processing failed", {
+            error: error.message,
+            type: error.name || "Error"
+        });
         return "FATAL_ERROR: " + error.message;
+    }
+}
+
+/**
+ * Loads the URL registry from JSON file
+ * @returns {Object|null} Registry object or null if not available
+ */
+function loadURLRegistry() {
+    try {
+        var jsonFile = new File(CONFIG.REGISTRY_PATH);
+        if (!jsonFile.exists) {
+            log("WARN", "URL registry file not found", { path: CONFIG.REGISTRY_PATH });
+            return null;
+        }
+
+        jsonFile.encoding = "UTF-8";
+        if (!jsonFile.open("r")) {
+            log("WARN", "Cannot open URL registry file", {});
+            return null;
+        }
+
+        var jsonString = jsonFile.read();
+        jsonFile.close();
+
+        if (!jsonString || jsonString.length === 0) {
+            log("WARN", "URL registry file is empty", {});
+            return null;
+        }
+
+        var jsonData = JSON.parse(jsonString);
+        if (!jsonData || !jsonData.urls) {
+            log("WARN", "Invalid URL registry structure", {});
+            return null;
+        }
+
+        return jsonData;
+
+    } catch (error) {
+        log("WARN", "URL registry loading error", { error: error.message });
+        return null;
+    }
+}
+
+/**
+ * Process all documents in the book
+ * @returns {Object} Processing result with stats
+ */
+function processAllDocuments() {
+    var stats = {
+        corrections: 0,
+        documentsProcessed: 0,
+        errors: 0
+    };
+
+    for (var i = 0; i < sessionState.bookContents.length; i++) {
+        var bookContent = sessionState.bookContents[i];
+        var documentName = bookContent.name.replace(/\.indd$/, "");
+
+        try {
+            var openResult = BookManager.openDocument(bookContent, null);
+            if (!openResult.success) {
+                log("WARN", "Could not open document", { document: documentName });
+                stats.errors++;
+                continue;
+            }
+
+            var doc = openResult.document;
+            var docResult = processDocumentHyperlinks(doc, documentName);
+
+            stats.corrections += docResult.corrections;
+            stats.documentsProcessed++;
+
+            sessionState.stats.totalCorrections += docResult.corrections;
+            sessionState.stats.documentsProcessed++;
+
+            // Save document if changes were made
+            if (docResult.corrections > 0) {
+                try {
+                    doc.save();
+                    log("INFO", "Document saved", { document: documentName, corrections: docResult.corrections });
+                } catch (saveError) {
+                    log("WARN", "Could not save document", { document: documentName, error: saveError.message });
+                }
+            }
+
+            // Close document if we opened it
+            if (!openResult.wasAlreadyOpen) {
+                BookManager.closeDocument(doc, false, null);
+            }
+
+        } catch (docError) {
+            log("ERROR", "Error processing document", {
+                document: documentName,
+                error: docError.message
+            });
+            stats.errors++;
+            sessionState.stats.errors++;
+        }
+    }
+
+    return { stats: stats };
+}
+
+/**
+ * Process hyperlinks in a single document
+ * @param {Document} doc - InDesign document
+ * @param {string} documentName - Name of the document
+ * @returns {Object} Result with correction count
+ */
+function processDocumentHyperlinks(doc, documentName) {
+    var corrections = 0;
+
+    var hyperlinks = doc.hyperlinks;
+    var totalHyperlinks = hyperlinks.length;
+
+    log("INFO", "Processing document hyperlinks", {
+        document: documentName,
+        hyperlinks: totalHyperlinks
+    });
+
+    for (var h = 0; h < totalHyperlinks; h++) {
+        var hyperlink = hyperlinks[h];
+
+        try {
+            // Check if this hyperlink has a URL destination
+            if (!hyperlink.destination) {
+                continue;
+            }
+
+            // Check if destination is a URL destination
+            var destType = hyperlink.destination.constructor.name;
+            if (destType !== "HyperlinkURLDestination") {
+                continue;
+            }
+
+            var destination = hyperlink.destination;
+            var currentURL = destination.destinationURL;
+            var hyperlinkName = hyperlink.name;
+
+            // Check if this needs correction
+            var intendedURL = extractIntendedURL(hyperlinkName, currentURL);
+
+            if (intendedURL && intendedURL !== currentURL) {
+                // Apply correction using three-tier approach
+                var correctionResult = applyCorrection(doc, hyperlink, destination, intendedURL, documentName);
+
+                if (correctionResult.success) {
+                    corrections++;
+                    log("CORRECTION", "URL corrected", {
+                        document: documentName,
+                        oldURL: currentURL,
+                        newURL: intendedURL,
+                        method: correctionResult.method
+                    });
+                }
+            }
+
+        } catch (linkError) {
+            log("WARN", "Error processing hyperlink", {
+                document: documentName,
+                hyperlink: hyperlink.name,
+                error: linkError.message
+            });
+            sessionState.stats.warnings++;
+        }
+    }
+
+    return { corrections: corrections };
+}
+
+/**
+ * Extract the intended URL from hyperlink name or registry
+ * @param {string} hyperlinkName - Name of the hyperlink (may contain URL)
+ * @param {string} currentURL - Current destination URL
+ * @returns {string|null} Intended URL or null if not found
+ */
+function extractIntendedURL(hyperlinkName, currentURL) {
+    // Check if current URL is a placeholder
+    var isPlaceholder = false;
+    for (var p = 0; p < CONFIG.PLACEHOLDER_PATTERNS.length; p++) {
+        if (currentURL.indexOf(CONFIG.PLACEHOLDER_PATTERNS[p]) === 0) {
+            isPlaceholder = true;
+            break;
+        }
+    }
+
+    // If not a placeholder, no correction needed
+    if (!isPlaceholder) {
+        return null;
+    }
+
+    // Strategy 1: Extract URL from hyperlink name
+    // Pandoc often stores the intended URL in the hyperlink name
+    if (hyperlinkName && (hyperlinkName.indexOf("http://") === 0 || hyperlinkName.indexOf("https://") === 0)) {
+        return hyperlinkName;
+    }
+
+    // Strategy 2: Look up in registry by link text (if registry available)
+    if (sessionState.urlRegistry && sessionState.urlRegistry.urls) {
+        // The hyperlink name might be the link text
+        for (var u = 0; u < sessionState.urlRegistry.urls.length; u++) {
+            var registryEntry = sessionState.urlRegistry.urls[u];
+            if (registryEntry.linkText === hyperlinkName) {
+                return registryEntry.url;
+            }
+        }
+    }
+
+    return null;
+}
+
+/**
+ * Apply URL correction using three-tier approach: REUSE → UPDATE → CREATE
+ * @param {Document} doc - InDesign document
+ * @param {Hyperlink} hyperlink - Hyperlink to correct
+ * @param {HyperlinkURLDestination} destination - Current destination
+ * @param {string} intendedURL - Correct URL to set
+ * @param {string} documentName - Document name for logging
+ * @returns {Object} Result with success status and method used
+ */
+function applyCorrection(doc, hyperlink, destination, intendedURL, documentName) {
+    try {
+        // Tier 1: REUSE - Find existing destination with correct URL
+        var existingDest = findExistingURLDestination(doc, intendedURL);
+        if (existingDest) {
+            hyperlink.destination = existingDest;
+            sessionState.stats.reusedDestinations++;
+            return { success: true, method: "REUSE" };
+        }
+
+        // Tier 2: UPDATE - Update the current destination if it's orphaned or unique
+        // Check if this destination is only used by this hyperlink
+        var destUsageCount = countDestinationUsage(doc, destination);
+        if (destUsageCount <= 1) {
+            destination.destinationURL = intendedURL;
+            destination.name = intendedURL;
+            sessionState.stats.updatedDestinations++;
+            return { success: true, method: "UPDATE" };
+        }
+
+        // Tier 3: CREATE - Create new destination
+        var newDest = doc.hyperlinkURLDestinations.add({
+            destinationURL: intendedURL,
+            name: intendedURL
+        });
+        hyperlink.destination = newDest;
+        sessionState.stats.createdDestinations++;
+        return { success: true, method: "CREATE" };
+
+    } catch (error) {
+        log("ERROR", "Correction failed", {
+            document: documentName,
+            url: intendedURL,
+            error: error.message
+        });
+        sessionState.stats.errors++;
+        return { success: false, method: null, error: error.message };
+    }
+}
+
+/**
+ * Find an existing URL destination with the specified URL
+ * @param {Document} doc - InDesign document
+ * @param {string} url - URL to find
+ * @returns {HyperlinkURLDestination|null} Existing destination or null
+ */
+function findExistingURLDestination(doc, url) {
+    var destinations = doc.hyperlinkURLDestinations;
+
+    for (var d = 0; d < destinations.length; d++) {
+        var dest = destinations[d];
+        if (dest.destinationURL === url) {
+            return dest;
+        }
+    }
+
+    return null;
+}
+
+/**
+ * Count how many hyperlinks use a specific destination
+ * @param {Document} doc - InDesign document
+ * @param {HyperlinkURLDestination} destination - Destination to check
+ * @returns {number} Usage count
+ */
+function countDestinationUsage(doc, destination) {
+    var count = 0;
+    var hyperlinks = doc.hyperlinks;
+
+    for (var h = 0; h < hyperlinks.length; h++) {
+        try {
+            if (hyperlinks[h].destination && hyperlinks[h].destination.id === destination.id) {
+                count++;
+            }
+        } catch (e) {
+            // Skip if can't access
+        }
+    }
+
+    return count;
+}
+
+/**
+ * Cleanup orphaned URL destinations across all documents
+ * @returns {Object} Cleanup result
+ */
+function cleanupOrphanedDestinations() {
+    var totalRemoved = 0;
+
+    for (var i = 0; i < sessionState.bookContents.length; i++) {
+        var bookContent = sessionState.bookContents[i];
+        var documentName = bookContent.name.replace(/\.indd$/, "");
+
+        try {
+            var openResult = BookManager.openDocument(bookContent, null);
+            if (!openResult.success) {
+                continue;
+            }
+
+            var doc = openResult.document;
+            var removed = removeOrphanedDestinations(doc);
+
+            if (removed > 0) {
+                totalRemoved += removed;
+                sessionState.stats.orphansRemoved += removed;
+
+                try {
+                    doc.save();
+                } catch (saveError) {
+                    log("WARN", "Could not save after orphan cleanup", { document: documentName });
+                }
+            }
+
+            if (!openResult.wasAlreadyOpen) {
+                BookManager.closeDocument(doc, false, null);
+            }
+
+        } catch (docError) {
+            log("WARN", "Error during orphan cleanup", {
+                document: documentName,
+                error: docError.message
+            });
+        }
+    }
+
+    return { removed: totalRemoved };
+}
+
+/**
+ * Remove orphaned URL destinations from a document
+ * @param {Document} doc - InDesign document
+ * @returns {number} Number of orphans removed
+ */
+function removeOrphanedDestinations(doc) {
+    var removed = 0;
+    var destinations = doc.hyperlinkURLDestinations;
+
+    // Collect orphans first (can't modify collection while iterating)
+    var orphans = [];
+
+    for (var d = destinations.length - 1; d >= 0; d--) {
+        var dest = destinations[d];
+        var usage = countDestinationUsage(doc, dest);
+
+        if (usage === 0) {
+            orphans.push(dest);
+        }
+    }
+
+    // Remove orphans
+    for (var o = 0; o < orphans.length; o++) {
+        try {
+            orphans[o].remove();
+            removed++;
+        } catch (e) {
+            // Skip if can't remove
+        }
+    }
+
+    return removed;
+}
+
+/**
+ * Generate comprehensive JSON report
+ * @param {boolean} isSuccess - Whether processing was successful
+ * @param {number} duration - Processing duration in milliseconds
+ */
+function generateJSONReport(isSuccess, duration) {
+    try {
+        var report = {
+            sessionInfo: {
+                version: CONFIG.VERSION,
+                timestamp: new Date().toString(),
+                duration: duration,
+                processingTimeSeconds: (duration / 1000).toFixed(1)
+            },
+            results: {
+                status: isSuccess ? "SUCCESS" : "COMPLETED_WITH_ISSUES",
+                totalCorrections: sessionState.stats.totalCorrections,
+                documentsProcessed: sessionState.stats.documentsProcessed,
+                correctionMethods: {
+                    reused: sessionState.stats.reusedDestinations,
+                    updated: sessionState.stats.updatedDestinations,
+                    created: sessionState.stats.createdDestinations
+                },
+                orphansRemoved: sessionState.stats.orphansRemoved
+            },
+            issues: {
+                errors: sessionState.stats.errors,
+                warnings: sessionState.stats.warnings
+            },
+            capturedLogs: {
+                errors: sessionState.capturedLogs.errors,
+                warnings: sessionState.capturedLogs.warnings,
+                corrections: sessionState.capturedLogs.corrections,
+                totalCorrectionEntries: sessionState.capturedLogs.corrections.length
+            },
+            statistics: {
+                documentsInBook: sessionState.bookContents.length,
+                documentsProcessed: sessionState.stats.documentsProcessed,
+                registryAvailable: sessionState.urlRegistry !== null,
+                registryURLCount: sessionState.urlRegistry ? sessionState.urlRegistry.metadata.totalURLs : 0
+            }
+        };
+
+        var jsonString = JSON.stringify(report, null, 2);
+        var filename = "fix-report.json";
+        var filepath = reportsDir + "/" + filename;
+
+        createDirectoryIfNeeded(reportsDir);
+        var success = writeTextFile(filepath, jsonString);
+
+        if (success) {
+            $.writeln("JSON report generated: " + filepath);
+            log("INFO", "JSON report generated", { filepath: filepath });
+        } else {
+            $.writeln("WARNING: Could not write JSON report");
+            log("WARN", "JSON report generation failed", { filepath: filepath });
+        }
+
+    } catch (error) {
+        $.writeln("ERROR: JSON report generation failed: " + error.message);
+        log("ERROR", "JSON report generation error", { error: error.message });
+    }
+}
+
+/**
+ * Creates directory if it doesn't exist
+ */
+function createDirectoryIfNeeded(dirPath) {
+    try {
+        var pathParts = dirPath.split("/");
+        var currentPath = "";
+
+        for (var p = 0; p < pathParts.length; p++) {
+            if (pathParts[p]) {
+                currentPath += (currentPath ? "/" : "") + pathParts[p];
+                var folder = new Folder(currentPath);
+
+                if (!folder.exists) {
+                    var created = folder.create();
+                    if (!created) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
+
+    } catch (error) {
+        return false;
+    }
+}
+
+/**
+ * Writes text to file
+ */
+function writeTextFile(filepath, content) {
+    try {
+        var file = new File(filepath);
+        file.encoding = "UTF-8";
+
+        if (file.parent && !file.parent.exists) {
+            file.parent.create();
+        }
+
+        if (file.open("w")) {
+            file.write(content);
+            file.close();
+            return true;
+        } else {
+            try {
+                if (file.exists) {
+                    file.remove();
+                }
+
+                if (file.open("w", "TEXT", "????")) {
+                    file.write(content);
+                    file.close();
+                    return true;
+                }
+            } catch (altError) {
+                // Silent fallback failure
+            }
+
+            return false;
+        }
+
+    } catch (error) {
+        log("ERROR", "Failed to write file", {
+            error: error.message,
+            filepath: filepath
+        });
+        return false;
     }
 }
 
@@ -179,4 +725,5 @@ String.prototype.repeat = String.prototype.repeat || function(count) {
     return result;
 };
 
+// Run the script
 main();

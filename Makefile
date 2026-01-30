@@ -31,7 +31,7 @@ define load_env
 endef
 
 # Phony targets
-.PHONY: help clean compile validate-section merge-section compile-icml list-sections remove-numbers compile-data scan-ref update-links update-book crossref-process compile-all-r compile-all-u compile-all-ru reformat-bibliography update-toc validate-citations clean-validation validate-citations-watch test-citations ira-revision validate-crossreferences merge-all merge-parallel clean-merged merge-all-r merge-parallel-r
+.PHONY: help clean compile validate-section merge-section compile-icml list-sections remove-numbers compile-data scan-ref update-links update-book crossref-process fix-url-hyperlinks compile-all-r compile-all-u compile-all-ru reformat-bibliography update-toc validate-citations clean-validation validate-citations-watch test-citations ira-revision validate-crossreferences merge-all merge-parallel clean-merged merge-all-r merge-parallel-r
 
 # Generic compile target: make compile [section-folder]
 compile:
@@ -195,10 +195,10 @@ validate-crossreferences:
 	@echo "🔗 Validating cross-references..."
 	@python3 $(SCRIPTS_ROOT)/validate-crossreferences.py $(MARKDOWN_OUTPUT) $(GENERATED_ROOT)/data/crossref-registry.json
 
-# Extract citations and cross-references from generated markdown files
+# Compile data from generated markdown files: citations, cross-references, and URL hyperlinks
 compile-data:
-	@echo "📊 Extracting citations and cross-references..."
-	@python3 $(SCRIPTS_ROOT)/extract-citations-crossrefs.py $(MARKDOWN_OUTPUT) $(GENERATED_ROOT)/data
+	@echo "📊 Compiling data: citations, cross-references, and URL hyperlinks..."
+	@python3 $(SCRIPTS_ROOT)/compile-data.py $(MARKDOWN_OUTPUT) $(GENERATED_ROOT)/data
 
 # Update InDesign book document links using AppleScript
 update-links:
@@ -252,6 +252,26 @@ crossref-process:
 		exit 1; \
 	fi
 
+# Fix URL hyperlinks in InDesign book documents
+fix-url-hyperlinks:
+	@echo "🔗 Fixing URL hyperlinks in InDesign book documents..."
+	@if [ ! -f "$(SCRIPTS_ROOT)/adobe/runner.applescript" ]; then \
+		echo "$(RED)❌ Error: AppleScript not found: $(SCRIPTS_ROOT)/adobe/runner.applescript$(RESET)"; \
+		exit 1; \
+	fi
+	@if [ ! -f "$(SCRIPTS_ROOT)/adobe/hyperlink-process.jsx" ]; then \
+		echo "$(RED)❌ Error: JSX script not found: $(SCRIPTS_ROOT)/adobe/hyperlink-process.jsx$(RESET)"; \
+		exit 1; \
+	fi
+	@osascript "$(SCRIPTS_ROOT)/adobe/runner.applescript" "hyperlink-process.jsx"
+	@if [ $$? -eq 0 ]; then \
+		echo "✅ URL hyperlinks fixed successfully in all InDesign book documents!"; \
+	else \
+		echo "$(RED)❌ Error: Failed to fix URL hyperlinks$(RESET)"; \
+		echo "$(YELLOW)💡 Tip: Make sure InDesign is running and the book document is open$(RESET)"; \
+		exit 1; \
+	fi
+
 # Clean all generated files
 clean:
 	@echo "🧹 Cleaning generated files..."
@@ -259,6 +279,7 @@ clean:
 	@rm -f $(ICML_OUTPUT)/*.icml 2>/dev/null || true
 	@rm -f $(GENERATED_ROOT)/data/*.ctcr.md 2>/dev/null || true
 	@rm -f $(GENERATED_ROOT)/data/crossref-registry.json 2>/dev/null || true
+	@rm -f $(GENERATED_ROOT)/data/url-registry.json 2>/dev/null || true
 	@echo "✅ Cleanup complete"
 
 # Compile all valid sections
@@ -325,13 +346,16 @@ compile-all-ru:
 	@$(MAKE) compile-icml
 	@echo ""
 	@echo "🔍 Step 3: Scanning anchors and building registry..."
-	@$(MAKE) scan-ref
+	@$(MAKE) compile-data
 	@echo ""
 	@echo "🔍 Step 4: Validate cross-references..."
 	@$(MAKE) validate-crossreferences
 	@echo ""
 	@echo "🔗 Step 5: Updating InDesign book document links..."
 	@$(MAKE) update-links
+	@echo ""
+	@echo "🔗 Step 5.5: Fixing URL hyperlinks..."
+	@$(MAKE) fix-url-hyperlinks
 	@echo ""
 	@echo "🔗 Step 6: Processing cross-references in InDesign book documents..."
 	@$(MAKE) crossref-process
@@ -407,6 +431,7 @@ help:
 	@echo "  $(GREEN)make update-links$(RESET)          - Update InDesign book document links"
 	@echo "  $(GREEN)make update-book$(RESET)           - Update InDesign book (sync styles, update numbers, preflight)"
 	@echo "  $(GREEN)make crossref-process$(RESET)      - Process cross-references in InDesign book documents"
+	@echo "  $(GREEN)make fix-url-hyperlinks$(RESET)   - Fix URL hyperlinks in InDesign book documents"
 	@echo "  $(GREEN)make reformat-bibliography$(RESET) - Reformat bibliography ICML file paragraph styles $(YELLOW)requires BIBLIOGRAPHY_SECTION variable in .env file$(RESET)"
 	@echo "  $(GREEN)make update-toc$(RESET)            - Update Table of Contents in InDesign $(YELLOW)requires TOC_DOCUMENT and TOC_STYLE variables in .env file$(RESET)"
 	@echo "  $(GREEN)make validate-citations$(RESET)    - Validate all citations against bibliography (full analysis)"
@@ -446,6 +471,7 @@ help:
 	@echo "  $(WHITE)make update-links$(RESET)          $(BLUE)# Update InDesign book document links$(RESET)"
 	@echo "  $(WHITE)make update-book$(RESET)           $(BLUE)# Update InDesign book (sync styles, update numbers, preflight)$(RESET)"
 	@echo "  $(WHITE)make crossref-process$(RESET)      $(BLUE)# Process cross-references in InDesign book documents$(RESET)"
+	@echo "  $(WHITE)make fix-url-hyperlinks$(RESET)   $(BLUE)# Fix URL hyperlinks in InDesign book documents$(RESET)"
 	@echo "  $(WHITE)make reformat-bibliography$(RESET) $(BLUE)# Reformat bibliography ICML paragraph styles$(RESET)"
 	@echo "  $(WHITE)make update-toc$(RESET)            $(BLUE)# Update Table of Contents in InDesign$(RESET)"
 	@echo "  $(WHITE)make compile-icml$(RESET)          $(BLUE)# Convert all sections to ICML$(RESET)"
