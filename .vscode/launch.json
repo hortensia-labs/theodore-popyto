@@ -5,7 +5,7 @@
             "type": "extendscript-debug",
             "request": "launch",
             "name": "Launch Current JSX in InDesign",
-            "hostAppSpecifier": "indesign-20.064",
+            "hostAppSpecifier": "indesign-21.064",
             "engineName": "main",
             "bringToFront": true,
             "debugLevel": 1
@@ -14,7 +14,7 @@
             "type": "extendscript-debug",
             "request": "launch",
             "name": "Launch Selected JSX in InDesign",
-            "hostAppSpecifier": "indesign-20.064",
+            "hostAppSpecifier": "indesign-21.064",
             "engineName": "main",
             "script": "${workspaceFolder}/lib/adobe/${input:scriptName}",
             "bringToFront": true,
@@ -24,7 +24,7 @@
             "type": "extendscript-debug",
             "request": "attach",
             "name": "Attach to InDesign Engine",
-            "hostAppSpecifier": "indesign-20.064",
+            "hostAppSpecifier": "indesign-21.064",
             "engineName": "main"
         }
     ],

@@ -11,10 +11,10 @@
 #include "modules/indesign/destination-manager.jsx"
 #include "modules/indesign/hyperlink-manager.jsx"
 
-var reportsDir = "/Users/henry/Workbench/Theodore/generated/reports/crossref";
+var reportsDir = "/Users/henry/Workbench/PopytoNoPhd/theodore-popyto/generated/reports/crossref";
 
 var CONFIG = {
-    REGISTRY_PATH: "/Users/henry/Workbench/Theodore/generated/data/crossref-registry.json",
+    REGISTRY_PATH: "/Users/henry/Workbench/PopytoNoPhd/theodore-popyto/generated/data/crossref-registry.json",
     VERSION: "2.0.0-working"
 };
 
