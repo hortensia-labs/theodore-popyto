@@ -1,0 +1,321 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-03-08",
+  "chapter": "7-conclusiones",
+  "anchors": [
+    {
+      "id": "recapitulacion-objetivos",
+      "section": "7.1",
+      "title": "Recapitulación de Objetivos y Hallazgos Teóricos",
+      "file": "sections/7-conclusiones/content/7.1-recapitulacion.md",
+      "line": 1,
+      "referenced_by": []
+    },
+    {
+      "id": "tabla-objetivos-cumplimiento",
+      "section": "7.1",
+      "title": "Tabla de cumplimiento de objetivos",
+      "file": "sections/7-conclusiones/content/7.1-recapitulacion.md",
+      "line": 15,
+      "referenced_by": []
+    },
+    {
+      "id": "contribucion-principal",
+      "section": "7.2",
+      "title": "Contribución Principal de la Tesis al Conocimiento",
+      "file": "sections/7-conclusiones/content/7.2-contribucion.md",
+      "line": 1,
+      "referenced_by": []
+    },
+    {
+      "id": "modelo-transferible",
+      "section": "7.2",
+      "title": "Un modelo transferible, no solo un análisis de la danza",
+      "file": "sections/7-conclusiones/content/7.2-contribucion.md",
+      "line": 5,
+      "referenced_by": []
+    },
+    {
+      "id": "lente-etico-politica-contribucion",
+      "section": "7.2",
+      "title": "La lente ético-política como componente estructural",
+      "file": "sections/7-conclusiones/content/7.2-contribucion.md",
+      "line": 11,
+      "referenced_by": []
+    },
+    {
+      "id": "implicaciones-generales",
+      "section": "7.3",
+      "title": "Implicaciones Generales: Repensando la Creatividad en la Era de la IA",
+      "file": "sections/7-conclusiones/content/7.3-implicaciones.md",
+      "line": 1,
+      "referenced_by": []
+    },
+    {
+      "id": "creatividad-encarnada",
+      "section": "7.3",
+      "title": "La danza como laboratorio epistemológico",
+      "file": "sections/7-conclusiones/content/7.3-implicaciones.md",
+      "line": 5,
+      "referenced_by": []
+    },
+    {
+      "id": "socio-hermeneutico-general",
+      "section": "7.3",
+      "title": "El futuro como diseño de colaboraciones",
+      "file": "sections/7-conclusiones/content/7.3-implicaciones.md",
+      "line": 17,
+      "referenced_by": []
+    },
+    {
+      "id": "lineas-futuras",
+      "section": "7.4",
+      "title": "Sugerencias para Futuras Líneas de Investigación",
+      "file": "sections/7-conclusiones/content/7.4-lineas-futuras.md",
+      "line": 1,
+      "referenced_by": []
+    },
+    {
+      "id": "lineas-empiricas",
+      "section": "7.4",
+      "title": "Eje empírico: la prioridad inmediata",
+      "file": "sections/7-conclusiones/content/7.4-lineas-futuras.md",
+      "line": 5,
+      "referenced_by": []
+    },
+    {
+      "id": "lineas-teoricas",
+      "section": "7.4",
+      "title": "Eje teórico: desarrollo del marco",
+      "file": "sections/7-conclusiones/content/7.4-lineas-futuras.md",
+      "line": 15,
+      "referenced_by": []
+    },
+    {
+      "id": "consideraciones-finales",
+      "section": "7.5",
+      "title": "Consideraciones Finales: Hacia una Danza del Futuro",
+      "file": "sections/7-conclusiones/content/7.5-consideraciones.md",
+      "line": 1,
+      "referenced_by": []
+    },
+    {
+      "id": "danza-del-futuro",
+      "section": "7.5",
+      "title": "La danza del futuro",
+      "file": "sections/7-conclusiones/content/7.5-consideraciones.md",
+      "line": 9,
+      "referenced_by": []
+    }
+  ],
+  "outgoing_references": [
+    {
+      "from_file": "sections/7-conclusiones/content/7.1-recapitulacion.md",
+      "from_section": "7.1",
+      "line": 3,
+      "format": "Paragraph Number & Page Number",
+      "target_anchor": "objetivos",
+      "target_file": "sections/1-introduccion/content/1.5-objetivos.md",
+      "target_section": "1.5",
+      "status": "valid"
+    },
+    {
+      "from_file": "sections/7-conclusiones/content/7.1-recapitulacion.md",
+      "from_section": "7.1",
+      "line": 7,
+      "format": "Paragraph Number & Page Number",
+      "target_anchor": "sintesis-cap3",
+      "target_file": "sections/3-fundamentos-1/content/3.4-sintesis.md",
+      "target_section": "3.4",
+      "status": "valid"
+    },
+    {
+      "from_file": "sections/7-conclusiones/content/7.1-recapitulacion.md",
+      "from_section": "7.1",
+      "line": 7,
+      "format": "Paragraph Number & Page Number",
+      "target_anchor": "sintesis-leib-tarea",
+      "target_file": "sections/4-fundamentos-2/content/4.3-sintesis-leib-tarea.md",
+      "target_section": "4.3",
+      "status": "valid"
+    },
+    {
+      "from_file": "sections/7-conclusiones/content/7.1-recapitulacion.md",
+      "from_section": "7.1",
+      "line": 7,
+      "format": "Paragraph Number & Page Number",
+      "target_anchor": "arquitectura-marco",
+      "target_file": "sections/5-marco-resistencia/content/5.1-arquitectura-marco.md",
+      "target_section": "5.1",
+      "status": "valid"
+    },
+    {
+      "from_file": "sections/7-conclusiones/content/7.1-recapitulacion.md",
+      "from_section": "7.1",
+      "line": 13,
+      "format": "Paragraph Number & Page Number",
+      "target_anchor": "sintesis-vinetas",
+      "target_file": "sections/6-discusion/content/6.1.4-sintesis-vinetas.md",
+      "target_section": "6.1.4",
+      "status": "valid"
+    },
+    {
+      "from_file": "sections/7-conclusiones/content/7.1-recapitulacion.md",
+      "from_section": "7.1",
+      "line": 26,
+      "format": "Paragraph Number & Page Number",
+      "target_anchor": "pregunta-hipotesis",
+      "target_file": "sections/1-introduccion/content/1.4-pregunta-hipotesis.md",
+      "target_section": "1.4",
+      "status": "valid"
+    },
+    {
+      "from_file": "sections/7-conclusiones/content/7.2-contribucion.md",
+      "from_section": "7.2",
+      "line": 7,
+      "format": "Paragraph Number & Page Number",
+      "target_anchor": "definicion-marco",
+      "target_file": "sections/5-marco-resistencia/content/5.1-arquitectura-marco.md",
+      "target_section": "5.1.1",
+      "status": "valid"
+    },
+    {
+      "from_file": "sections/7-conclusiones/content/7.2-contribucion.md",
+      "from_section": "7.2",
+      "line": 13,
+      "format": "Paragraph Number & Page Number",
+      "target_anchor": "funcion-analitica",
+      "target_file": "sections/5-marco-resistencia/content/5.1-arquitectura-marco.md",
+      "target_section": "5.1",
+      "status": "valid"
+    },
+    {
+      "from_file": "sections/7-conclusiones/content/7.2-contribucion.md",
+      "from_section": "7.2",
+      "line": 21,
+      "format": "Paragraph Number & Page Number",
+      "target_anchor": "funcion-propositiva",
+      "target_file": "sections/5-marco-resistencia/content/5.1-arquitectura-marco.md",
+      "target_section": "5.1",
+      "status": "valid"
+    },
+    {
+      "from_file": "sections/7-conclusiones/content/7.3-implicaciones.md",
+      "from_section": "7.3",
+      "line": 3,
+      "format": "Paragraph Number & Page Number",
+      "target_anchor": "contexto-gran-dislocacion",
+      "target_file": "sections/1-introduccion/content/1.1-contexto.md",
+      "target_section": "1.1",
+      "status": "valid"
+    },
+    {
+      "from_file": "sections/7-conclusiones/content/7.3-implicaciones.md",
+      "from_section": "7.3",
+      "line": 19,
+      "format": "Paragraph Number & Page Number",
+      "target_anchor": "interrelaciones",
+      "target_file": "sections/5-marco-resistencia/content/5.4-interrelaciones.md",
+      "target_section": "5.4",
+      "status": "valid"
+    },
+    {
+      "from_file": "sections/7-conclusiones/content/7.3-implicaciones.md",
+      "from_section": "7.3",
+      "line": 21,
+      "format": "Paragraph Number & Page Number",
+      "target_anchor": "sistema-dinamico",
+      "target_file": "sections/5-marco-resistencia/content/5.4-interrelaciones.md",
+      "target_section": "5.4",
+      "status": "valid"
+    },
+    {
+      "from_file": "sections/7-conclusiones/content/7.4-lineas-futuras.md",
+      "from_section": "7.4",
+      "line": 3,
+      "format": "Paragraph Number & Page Number",
+      "target_anchor": "autocritica",
+      "target_file": "sections/6-discusion/content/6.3-autocritica.md",
+      "target_section": "6.3",
+      "status": "valid"
+    },
+    {
+      "from_file": "sections/7-conclusiones/content/7.4-lineas-futuras.md",
+      "from_section": "7.4",
+      "line": 3,
+      "format": "Paragraph Number & Page Number",
+      "target_anchor": "implicaciones-investigacion",
+      "target_file": "sections/6-discusion/content/6.2.1-investigacion-futura.md",
+      "target_section": "6.2.1",
+      "status": "valid"
+    },
+    {
+      "from_file": "sections/7-conclusiones/content/7.4-lineas-futuras.md",
+      "from_section": "7.4",
+      "line": 13,
+      "format": "Paragraph Number & Page Number",
+      "target_anchor": "limitaciones-marco",
+      "target_file": "sections/6-discusion/content/6.3-autocritica.md",
+      "target_section": "6.3.2",
+      "status": "valid"
+    },
+    {
+      "from_file": "sections/7-conclusiones/content/7.4-lineas-futuras.md",
+      "from_section": "7.4",
+      "line": 19,
+      "format": "Paragraph Number & Page Number",
+      "target_anchor": "futuras-iteraciones",
+      "target_file": "sections/6-discusion/content/6.3-autocritica.md",
+      "target_section": "6.3.3",
+      "status": "valid"
+    },
+    {
+      "from_file": "sections/7-conclusiones/content/7.4-lineas-futuras.md",
+      "from_section": "7.4",
+      "line": 21,
+      "format": "Paragraph Number & Page Number",
+      "target_anchor": "refinamientos",
+      "target_file": "sections/6-discusion/content/6.1.4-sintesis-vinetas.md",
+      "target_section": "6.1.4",
+      "status": "valid"
+    },
+    {
+      "from_file": "sections/7-conclusiones/content/7.5-consideraciones.md",
+      "from_section": "7.5",
+      "line": 3,
+      "format": "Paragraph Number & Page Number",
+      "target_anchor": "contexto-gran-dislocacion",
+      "target_file": "sections/1-introduccion/content/1.1-contexto.md",
+      "target_section": "1.1",
+      "status": "valid"
+    },
+    {
+      "from_file": "sections/7-conclusiones/content/7.5-consideraciones.md",
+      "from_section": "7.5",
+      "line": 5,
+      "format": "Paragraph Number & Page Number",
+      "target_anchor": "definicion-marco",
+      "target_file": "sections/5-marco-resistencia/content/5.1-arquitectura-marco.md",
+      "target_section": "5.1.1",
+      "status": "valid"
+    }
+  ],
+  "internal_references": [],
+  "statistics": {
+    "total_anchors_defined": 13,
+    "total_outgoing_references": 19,
+    "unique_target_anchors": 17,
+    "internal_references": 0,
+    "valid_references": 19,
+    "invalid_references": 0,
+    "orphaned_anchors": 13,
+    "broken_references": 0
+  },
+  "target_chapters_referenced": {
+    "1-introduccion": ["objetivos", "pregunta-hipotesis", "contexto-gran-dislocacion"],
+    "3-fundamentos-1": ["sintesis-cap3"],
+    "4-fundamentos-2": ["sintesis-leib-tarea"],
+    "5-marco-resistencia": ["arquitectura-marco", "definicion-marco", "funcion-analitica", "funcion-propositiva", "interrelaciones", "sistema-dinamico"],
+    "6-discusion": ["sintesis-vinetas", "refinamientos", "autocritica", "implicaciones-investigacion", "limitaciones-marco", "futuras-iteraciones"]
+  }
+}

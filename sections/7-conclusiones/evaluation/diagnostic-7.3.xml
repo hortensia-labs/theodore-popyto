@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<analysis_report file="sections/7-conclusiones/content/7.3-implicaciones.md" date="2026-03-08" word_count="780" language="es">
+
+    <!-- ============================================================ -->
+    <!-- SYNTACTIC REPETITION — SEVERITY: HIGH                        -->
+    <!-- ============================================================ -->
+
+    <issue type="Syntactic Repetition" severity="high">
+        <location>Global — lines 3, 7, 9, 15, 19, 21, 25, 27</location>
+        <explanation>The "no X sino Y" / "no solo X sino Y" construction appears approximately 11 times in ~780 words, an exceptionally high density. Instances include:
+            — "no solo como objeto de estudio sino como dispositivo de revelación" (line 7)
+            — "no solo recorre un léxico mental" (line 9)
+            — "no ejecuta un algoritmo de variaciones" (line 9)
+            — "no son 'datos'… son modos de ser" (line 15)
+            — "No se trata de información almacenada… sino de una forma de saber" (line 15)
+            — "No se trata de competir sino de diseñar" (line 19)
+            — "no es una metáfora circunscrita a la danza" (line 21)
+            — "no como un campo de batalla sino como un taller de diseño" (line 21)
+            — "no una versión inferior" (line 15)
+            — "no es un lujo académico" (line 27)
+            — "no puede hacerse sin preguntar" (line 25)
+        Human academic writing uses this rhetorical pattern occasionally for emphasis; here it functions as the dominant argumentative device, creating a mechanical rhythm that is characteristic of AI text generators defaulting to a single contrastive template.</explanation>
+    </issue>
+
+    <issue type="Syntactic Repetition" severity="medium">
+        <location>Paragraph 3, Sentences 2–3 (line 9)</location>
+        <explanation>Two consecutive sentences follow an identical template: "El [profesional] que [verbo]… no [verbo negado]; [verbo alternativo] desde…":
+            — "El escritor que busca la palabra justa no solo recorre un léxico mental; siente el ritmo…"
+            — "El músico que improvisa no ejecuta un algoritmo de variaciones; responde desde un saber tácito…"
+        Both sentences are nearly identical in length (~22 words each) and mirror each other syntactically. Human writers would typically vary at least the connector, subordination level, or sentence length between parallel examples.</explanation>
+    </issue>
+
+    <issue type="Syntactic Repetition" severity="medium">
+        <location>Global — lines 7, 9, 21, 25, 27</location>
+        <explanation>Overuse of tricolon (lists of three) as a structural crutch. At least 7 instances in 780 words:
+            — "instrumento, medio y obra" (line 7)
+            — "la gravedad, la fatiga, la respiración, el tacto" (line 9, tetracolon variant)
+            — "evaluar, contextualizar, decidir" (line 21)
+            — "experiencia acumulada, sensibilidad al contexto, capacidad de juicio" (line 21)
+            — "laborales, económicas y culturales" (line 25)
+            — "materiales, sociales y políticas" (line 27)
+            — "reproducir desigualdades existentes, homogeneizar la diversidad estética y devaluar oficios" (line 27)
+        While tricolons are a legitimate rhetorical device, their saturation here creates a formulaic cadence. AI models favor tricolons because they produce balanced, "complete"-sounding enumerations.</explanation>
+    </issue>
+
+    <issue type="Syntactic Repetition" severity="medium">
+        <location>Global — sentence openings throughout</location>
+        <explanation>An overwhelming majority of sentences begin with definite articles (La, El, Lo, Las, Los) or demonstratives (Esta, Esa). Out of approximately 25 sentences, roughly 20 open this way. Human academic Spanish typically varies openings with adverbial phrases, subordinate clauses, prepositional phrases, or inverted structures. The lack of variety in sentence-initial positions is a strong AI marker.</explanation>
+    </issue>
+
+    <!-- ============================================================ -->
+    <!-- STRUCTURAL UNIFORMITY — SEVERITY: HIGH                       -->
+    <!-- ============================================================ -->
+
+    <issue type="Structural Uniformity" severity="high">
+        <location>Subsections: lines 5–9, 11–15, 17–21, 23–27</location>
+        <explanation>Every subsection after the introduction follows an identical two-paragraph template:
+            — Subsection "La danza como laboratorio epistemológico": 2 paragraphs
+            — Subsection "Repensar la 'inteligencia' desde el Leib": 2 paragraphs
+            — Subsection "El futuro como diseño de colaboraciones": 2 paragraphs
+            — Subsection "La dimensión ética como condición de posibilidad": 2 paragraphs
+        This mechanical uniformity (4 subsections × 2 paragraphs each) is highly characteristic of AI-generated outlines. Human writing shows natural asymmetry — some ideas require more development, others less.</explanation>
+    </issue>
+
+    <issue type="Structural Uniformity" severity="medium">
+        <location>All subsections</location>
+        <explanation>Each subsection follows the same internal pattern: (1) open with a conceptual assertion, (2) develop with elaboration or examples, (3) close with a synthesizing or forward-pointing statement. This three-beat rhythm repeats identically across all four subsections without variation. Human writers typically vary their argumentative structures — sometimes opening with an example, sometimes with a question, sometimes building toward the concept rather than stating it first.</explanation>
+    </issue>
+
+    <!-- ============================================================ -->
+    <!-- LOW BURSTINESS — SEVERITY: MEDIUM                            -->
+    <!-- ============================================================ -->
+
+    <issue type="Low Burstiness" severity="medium">
+        <location>Paragraph 6, lines 19</location>
+        <explanation>Three consecutive sentences of nearly identical length: ~19, ~15, ~17 words. The narrow range (15–19) produces a monotonous rhythmic cadence. Human writing characteristically alternates between longer elaborative sentences and short, punchy ones for emphasis.</explanation>
+    </issue>
+
+    <issue type="Low Burstiness" severity="medium">
+        <location>Paragraph 8, line 25</location>
+        <explanation>Three sentences of very similar length: ~19, ~23, ~25 words. The range is narrow and the progression is nearly linear (incrementing by ~3 words each), producing a mechanical feel. This contrasts with, e.g., paragraph 5 (line 15), which does show good burstiness with a range of 11–38 words.</explanation>
+    </issue>
+
+    <issue type="Low Burstiness" severity="medium">
+        <location>Paragraph 9, line 27</location>
+        <explanation>The last two sentences are identical in length (~33 words each), and the paragraph's range (25, 33, 33) is narrow. This terminal uniformity weakens the closing of the section, where a punchy short sentence or a longer cumulative one would create more impact.</explanation>
+    </issue>
+
+    <!-- ============================================================ -->
+    <!-- FORMULAIC TRANSITIONS — SEVERITY: MEDIUM                     -->
+    <!-- ============================================================ -->
+
+    <issue type="Formulaic Transitions" severity="medium">
+        <location>Line 3 (opening paragraph)</location>
+        <explanation>"La contribución de esta tesis se articuló en la sección anterior… Esta sección explora esas implicaciones generales" follows the standard AI pattern of mechanical meta-discourse: summarize previous section → announce current section. Human writers typically achieve transitions through argumentative momentum rather than explicit signposting of this mechanical nature.</explanation>
+    </issue>
+
+    <issue type="Formulaic Transitions" severity="medium">
+        <location>Line 29 (closing paragraph)</location>
+        <explanation>"Habiendo ampliado la perspectiva desde la danza hacia la creatividad humana en general, corresponde ahora aterrizar estas reflexiones en una agenda concreta: ¿qué investigaciones podrían continuar este trabajo?" is a textbook transitional bridge sentence. The gerund opening ("Habiendo ampliado"), the explicit spatial metaphor ("aterrizar"), and the rhetorical question signaling the next section are all hallmarks of AI-generated chapter transitions.</explanation>
+    </issue>
+
+    <issue type="Formulaic Transitions" severity="low">
+        <location>Line 7</location>
+        <explanation>"A lo largo de esta investigación" is a formulaic temporal opener common in AI-generated academic Spanish. While not inherently problematic, combined with other patterns it contributes to predictability.</explanation>
+    </issue>
+
+    <!-- ============================================================ -->
+    <!-- GENERIC VOCABULARY — SEVERITY: LOW-MEDIUM                    -->
+    <!-- ============================================================ -->
+
+    <issue type="Generic Vocabulary" severity="medium">
+        <location>Lines 23, 27</location>
+        <explanation>The phrase "condición de posibilidad" appears twice — once in the subsection heading ("La dimensión ética como condición de posibilidad") and once in the body text ("es una condición de posibilidad para que la reflexión…"). This Kantian-philosophical term is used as a generic intensifier rather than with precise philosophical import, which is a pattern common in AI-generated academic text that reaches for impressive-sounding but under-specified philosophical language.</explanation>
+    </issue>
+
+    <issue type="Generic Vocabulary" severity="low">
+        <location>Line 7</location>
+        <explanation>"Dispositivo de revelación" is a somewhat generic academic coinage. While not a typical AI vocabulary tell in the English sense ("delve," "crucial"), in Spanish academic AI output, abstract noun + "de" + abstract noun constructions tend to accumulate as substitutes for concrete description.</explanation>
+    </issue>
+
+    <!-- ============================================================ -->
+    <!-- MISSING HEDGING LANGUAGE — SEVERITY: LOW                     -->
+    <!-- ============================================================ -->
+
+    <issue type="Absolute Claims" severity="low">
+        <location>Line 7</location>
+        <explanation>"la danza expone con nitidez" — presents as unqualified fact what is an interpretive claim. A hedge like "permite exponer" or "tiende a exponer" would signal human epistemic caution.</explanation>
+    </issue>
+
+    <issue type="Absolute Claims" severity="low">
+        <location>Line 13</location>
+        <explanation>"esta separación resulta insostenible" — categorical dismissal without qualification. Could benefit from "parece resultar" or "resulta, al menos desde esta perspectiva, insostenible."</explanation>
+    </issue>
+
+    <issue type="Missing Hedging Language" severity="low">
+        <location>Line 21</location>
+        <explanation>"Esa función hermenéutica es constitutivamente corporal" — presented as ontological fact. The assertive "es constitutivamente" could be modulated to "parece ser constitutivamente" or "puede entenderse como constitutivamente." Note, however, that the text does include some hedging elsewhere ("sugiere que," "al menos para," "probablemente," "tienden a"), so hedging is not entirely absent — it is unevenly distributed.</explanation>
+    </issue>
+
+    <!-- ============================================================ -->
+    <!-- LOW PERPLEXITY — SEVERITY: LOW                               -->
+    <!-- ============================================================ -->
+
+    <issue type="Low Perplexity" severity="low">
+        <location>Global</location>
+        <explanation>The text maintains a consistently academic register without unexpected word choices, colloquialisms, or register shifts. While appropriate for a thesis conclusion, the absolute absence of any surprising lexical choice across 780 words suggests high predictability. Human academic writers occasionally introduce a vivid metaphor, a conversational aside, or a discipline-specific neologism that breaks the expected pattern. The one exception is "test de estrés" (line 9), which is a welcome register break — but it is the only one in the entire section.</explanation>
+    </issue>
+
+    <!-- ============================================================ -->
+    <!-- POSITIVE HUMAN MARKERS                                       -->
+    <!-- ============================================================ -->
+
+    <positive_markers>
+        <marker type="Rhetorical Questions">Lines 15 ("¿la IA es creativa?"), 15 ("¿qué tipo de creatividad produce…?"), 19 ("¿quién gana…?"), 21 ("¿qué colaboraciones preservan…?"), 25 ("qué cuerpos… qué tradiciones"), 29 ("¿qué investigaciones…?"). Good density and variety of rhetorical questions, a pattern more characteristic of human writing than AI.</marker>
+        <marker type="Em-Dash Parentheticals">Multiple uses of em-dashes for parenthetical insertions (lines 3, 9, 15, 21, 25) add rhythmic variation and a sense of spontaneous elaboration that human writers characteristically employ.</marker>
+        <marker type="Creative Metaphor">"Test de estrés" (line 9) applied to theories of creativity is an unexpected register-mixing metaphor. "Campo de batalla" vs "taller de diseño" (line 21) is a vivid contrast. These suggest some human authorial voice.</marker>
+        <marker type="Some Hedging Present">"sugiere que" (line 13), "al menos para" (line 13), "probablemente" (line 9), "tienden a subestimar" (line 9) — hedging language is present in several key passages, though unevenly distributed.</marker>
+        <marker type="Italics for Technical Terms">Consistent use of *Leib* in italics to mark a technical philosophical concept shows awareness of disciplinary conventions.</marker>
+    </positive_markers>
+
+    <!-- ============================================================ -->
+    <!-- SUMMARY                                                      -->
+    <!-- ============================================================ -->
+
+    <summary>
+        <overall_risk level="MEDIUM-HIGH">The text exhibits several strong AI-generation signatures, particularly: (1) extreme overuse of the "no X sino Y" contrastive construction (~11 instances in 780 words), (2) mechanical structural uniformity (all four subsections follow an identical 2-paragraph template), (3) excessive tricolon lists, and (4) uniformity in sentence openings. However, the text also contains genuine human-like markers including rhetorical questions, creative metaphors, em-dash parentheticals, and some appropriate hedging, which partially offset the AI signals.</overall_risk>
+        <priority_issues>
+            1. CRITICAL: "No…sino" pattern saturation — reduce from ~11 to 3–4 maximum, varying the contrastive device
+            2. HIGH: Structural uniformity — break the 2-paragraph-per-subsection template; vary subsection lengths
+            3. MEDIUM: Tricolon overuse — convert some lists of three to other structures (dyads, single illustrative examples, or longer enumerations)
+            4. MEDIUM: Sentence opening monotony — introduce adverbial, prepositional, or subordinate clause openings
+            5. MEDIUM: Low burstiness in paragraphs 6, 8, 9 — introduce sentence length variation
+            6. LOW-MEDIUM: Formulaic opening and closing transitions
+        </priority_issues>
+    </summary>
+
+</analysis_report>

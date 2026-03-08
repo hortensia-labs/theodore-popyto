@@ -1,0 +1,153 @@
+<analysis_report file="7.4-lineas-futuras.md" generated="2026-03-08" severity="MODERATE-HIGH">
+
+    <!-- ============================================================ -->
+    <!-- STRUCTURAL UNIFORMITY: TEMPLATE PARAGRAPHS — PRIMARY ISSUE   -->
+    <!-- ============================================================ -->
+
+    <issue type="Structural Uniformity">
+        <location>§lineas-empiricas — three bold-headed sub-subsections; §lineas-teoricas — three bold-headed sub-subsections</location>
+        <explanation>The six bold-headed research lines (Estudios fenomenológicos, Investigación de recepción, Documentación de procesos, Extensión a otras artes, Inclusión de tradiciones, Herramientas operativas) all follow a nearly identical template:
+
+TEMPLATE:
+1. **Bold label.** + Opening sentence describing the research line in conditional mood.
+2. One or two sentences elaborating methodology or scope.
+3. Rhetorical question(s) OR cross-reference to earlier section.
+4. Closing sentence assessing the potential outcome.
+
+This mechanical uniformity across six consecutive items creates a list-processing texture. Human academic writing on future research typically varies the depth, structure, and rhetorical posture across items — developing some lines at length with genuine speculation and compressing others into brief mentions. Here, all six receive approximately equal treatment (60–90 words each), producing the regularity of a template-filled catalogue rather than a reflective research agenda.</explanation>
+    </issue>
+
+    <!-- ============================================================ -->
+    <!-- SYNTACTIC REPETITION: CONDITIONAL VERB SATURATION             -->
+    <!-- ============================================================ -->
+
+    <issue type="Syntactic Repetition">
+        <location>Entire document — 12 instances of conditional mood verbs</location>
+        <explanation>The text uses conditional verb forms (condicional simple) with extraordinary density:
+
+1. "Sería fértil investigar" (P3)
+2. "podría revelar" (P3)
+3. "podrían refinar" (P3)
+4. "consistiría en estudiar" (P4)
+5. "permitirían triangular" (P4)
+6. "convocaría a seguir" (P5)
+7. "ofrecerían evidencia" (P5)
+8. "exigiría identificar" (P6)
+9. "se beneficiaría de" (P6)
+10. "requeriría investigación" (P7)
+11. "podrían derivarse" (P8)
+12. "podría explorar" (P9)
+
+Twelve conditional verbs in ~680 words (one every ~57 words) creates a monotonous hedging rhythm. While conditionals are appropriate in a "future research" section, human writers vary their epistemic framing: some lines would use indicative mood for near-certain extensions ("El siguiente paso es…"), others would use subjunctive for speculative possibilities ("Cabría explorar si…"), and others would use imperative for urgent priorities ("Es necesario que…"). The uniform conditional voice flattens the epistemic landscape into a single register of polite suggestion.</explanation>
+    </issue>
+
+    <!-- ============================================================ -->
+    <!-- SYNTACTIC REPETITION: "Una [NOUN]" OPENINGS                   -->
+    <!-- ============================================================ -->
+
+    <issue type="Syntactic Repetition">
+        <location>P3 S2, P4 S1, P5 S1, P9 S4</location>
+        <explanation>Four sentences introducing new research lines begin with the identical syntactic frame "Una + [noun phrase]":
+
+- "Una metodología de investigación-creación…" (P3)
+- "Una línea prometedora consistiría en…" (P4)
+- "Una tercera línea empírica convocaría a…" (P5)
+- "Una línea de investigación meta-teórica podría explorar…" (P9)
+
+The "Una línea…" construction appears three times, making it the default template for introducing new research directions. Human writers would vary this: "También resultaría valioso…", "Convendría abrir…", "Se impone la necesidad de…", "Merece atención…", or simply starting with the object of study. The repetition signals a single generative pattern being replicated.</explanation>
+    </issue>
+
+    <!-- ============================================================ -->
+    <!-- LOW BURSTINESS                                                -->
+    <!-- ============================================================ -->
+
+    <issue type="Low Burstiness">
+        <location>P5, P6, P8 — three bold-headed subsections</location>
+        <explanation>Several sub-subsections consist of exactly two long sentences with no short sentence to break the rhythm:
+
+- §Documentación de procesos (P5): Two sentences of approximately 35 and 30 words. No short sentence.
+- §Extensión a otras artes performativas (P6): Five sentences averaging ~23 words. While the two rhetorical questions are shorter (~15 words), the overall distribution is narrow: no sentence is under 12 words or over 35.
+- §Herramientas operativas (P8): Two sentences of approximately 38 and 22 words. No short emphatic sentence.
+
+The §Eje meta-teórico section provides better burstiness (short-long-short-very long-medium-medium pattern), which suggests some human intervention in that section specifically. The empirical and theoretical axes are more uniform.</explanation>
+    </issue>
+
+    <!-- ============================================================ -->
+    <!-- FORMULAIC TRANSITIONS                                         -->
+    <!-- ============================================================ -->
+
+    <issue type="Formulaic Transitions">
+        <location>P1, P2, P10 (closing)</location>
+        <explanation>Three transitional passages use highly formulaic structures:
+
+1. OPENING: "Toda tesis teórica deja tras de sí un terreno de posibilidades abiertas." (P1) — This is a stock academic opener for future research sections. Its sententious tone ("Toda tesis teórica…") is a generality that any thesis could use verbatim without modification.
+
+2. BRIDGE TO EMPIRICAL AXIS: "Su próximo paso natural es la confrontación con la experiencia vivida de quienes habitan los escenarios que el marco analiza." (P2) — The "next natural step" construction is a predictable bridging device.
+
+3. CLOSING: "Con los objetivos cumplidos, la contribución destilada, las implicaciones ampliadas y la agenda futura propuesta, resta solo el cierre: la visión que esta investigación nos deja." (P10) — This sentence enumerates four previous sections using past participles ("cumplidos, destilada, ampliadas, propuesta") in a mechanical checklist pattern. The participial-enumeration-plus-bridge formula is characteristic of AI-generated chapter closings that summarize by listing rather than by resonating.</explanation>
+    </issue>
+
+    <!-- ============================================================ -->
+    <!-- GENERIC VOCABULARY                                            -->
+    <!-- ============================================================ -->
+
+    <issue type="Generic Vocabulary">
+        <location>P3, P5, P6, P8</location>
+        <explanation>Several phrases rely on academic vocabulary that sounds authoritative but lacks specificity:
+
+- "fricciones productivas" (P3) — A fashionable academic collocation that has become a cliché in interdisciplinary writing.
+- "evidencia situada" (P5) — Appropriated from situated knowledge discourse without specifying what "situated" adds here beyond signaling theoretical awareness.
+- "variantes disciplinares rigurosamente fundamentadas" (P6) — "Rigurosamente fundamentadas" is an intensifier that adds confidence without content.
+- "cerrando la distancia entre la reflexión académica y la toma de decisiones cotidiana" (P8) — A stock phrase about the theory-practice gap that could appear in any thesis in any discipline.
+
+These phrases function as academic register markers rather than carriers of specific meaning.</explanation>
+    </issue>
+
+    <!-- ============================================================ -->
+    <!-- CROSS-FILE PHRASE REPETITION                                  -->
+    <!-- ============================================================ -->
+
+    <issue type="Low Perplexity">
+        <location>P9, S3 — cross-reference to 7.2-contribucion.md P1</location>
+        <explanation>The phrase "no es solo un ejercicio académico" appears verbatim in both this file (P9: "Esta reflexión epistemológica no es solo un ejercicio académico: tiene consecuencias prácticas") and in 7.2-contribucion.md (P1: "no es solo un ejercicio académico que responde a una pregunta de investigación"). Both uses follow the same syntactic pattern: negation + "ejercicio académico" + colon or relative clause introducing the "real" significance.
+
+Additionally, the phrase "tiene consecuencias prácticas" also appears in both files (7.2 P5: "Esta integración tiene consecuencias prácticas"; 7.4 P9: "tiene consecuencias prácticas para cualquier marco interdisciplinario"). Repeated deployment of the same phrase across independently titled sections suggests a generative model drawing from a stable internal lexicon rather than a human writer who would naturally vary the expression.</explanation>
+    </issue>
+
+    <!-- ============================================================ -->
+    <!-- MISSING HEDGING LANGUAGE (paradoxical)                        -->
+    <!-- ============================================================ -->
+
+    <issue type="Missing Hedging Language">
+        <location>P2 S1–S2; P10</location>
+        <explanation>While the conditional verb saturation (noted above) creates excessive hedging within the research lines themselves, the framing paragraphs swing to the opposite extreme — making confident claims without qualification:
+
+- "El marco 'Resistencia Encarnada' fue construido y validado mediante herramientas argumentativas." (P2) — "Validado" is a strong claim for a theoretical framework; more cautious phrasing might be "evaluado" or "justificado."
+- "Su próximo paso natural es la confrontación con la experiencia vivida…" (P2) — Declaring what the "natural next step" is presupposes a linear research trajectory without acknowledging alternatives.
+- "Con los objetivos cumplidos…" (P10) — Asserts objective fulfillment without qualification.
+
+This binary alternation — excessive hedging inside research proposals, zero hedging in framing claims — creates an inconsistent epistemic register that is characteristic of AI text, which tends to apply hedging as a surface feature (in conditionals) rather than as an integrated rhetorical stance.</explanation>
+    </issue>
+
+    <!-- ============================================================ -->
+    <!-- POSITIVE HUMAN MARKERS                                        -->
+    <!-- ============================================================ -->
+
+    <issue type="Positive — Human Writing Markers">
+        <location>Various</location>
+        <explanation>The text exhibits several features that suggest human authorial voice or effective human-AI collaboration:
+
+1. EFFECTIVE RHETORICAL QUESTIONS: "¿Perciben los artistas su cuerpo como 'socio hermenéutico'?" (P3) and "¿Puede la noción de 'tarea' reformularse fenomenológicamente sin perder su utilidad analítica?" (P9) are specific, intellectually engaged questions that go beyond generic curiosity.
+
+2. DOMAIN-SPECIFIC REFERENCES: Mention of kathak, bharatanatyam, danzas indígenas americanas (P7) shows concrete rather than generic cultural awareness.
+
+3. META-THEORETICAL SELF-AWARENESS: The entire §Eje meta-teórico section (P9–P10) demonstrates a reflexive turn that is rare in AI-generated text, questioning the epistemological foundations of the thesis's own methodology.
+
+4. PARENTHETICAL QUALIFICATION: "quizá, el menos visible pero el más ambicioso" (P9) is a natural human aside that introduces intellectual modesty.
+
+5. BURSTINESS IN §EJE META-TEÓRICO: The sentence length pattern (short-long-short-very long-medium-medium) in P9 shows effective human rhythm management, suggesting this section may have received more human attention than the catalogue sections above.
+
+These markers are notable but do not override the structural and syntactic uniformity issues identified in the catalogue portions of the text.</explanation>
+    </issue>
+
+</analysis_report>

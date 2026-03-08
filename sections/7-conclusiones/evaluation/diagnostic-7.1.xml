@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diagnostic_report>
+    <metadata>
+        <file>sections/7-conclusiones/content/7.1-recapitulacion.md</file>
+        <section>7.1 Recapitulación de Objetivos y Hallazgos Teóricos</section>
+        <language>es</language>
+        <word_count>870</word_count>
+        <analysis_date>2026-03-08</analysis_date>
+        <overall_severity>MODERATE</overall_severity>
+        <summary>The text exhibits several AI-characteristic patterns, most prominently extreme structural uniformity in the four-objective paragraphs, heavy reliance on "El/La + noun" sentence openers (over 50% of sentences), and repetitive vocabulary clusters around "articular" (6 occurrences) and "co-creación significativa" (4 identical collocations). Partial mitigation exists in the matización paragraph, which introduces genuine academic caution, and in some effective use of em-dashes and italics for rhetorical variation. Burstiness is moderate—sentences skew consistently long with limited short-sentence punctuation.</summary>
+    </metadata>
+
+    <analysis_report>
+
+        <!-- ===== STRUCTURAL UNIFORMITY ===== -->
+
+        <issue type="Structural Uniformity" severity="HIGH">
+            <location>Objectives 1–4 (Paragraphs 2–5)</location>
+            <explanation>The four objective paragraphs follow a nearly identical template: (1) bold label "Objetivo N: [description]", (2) summary of what was accomplished, (3) reference to specific chapter(s), (4) conclusive statement of the result. This mechanical parallelism—while arguably functional for a recapitulation—produces a list-like rhythm that modern AI detectors flag as templated generation. Human writers typically vary their recapitulation strategies: foregrounding one objective narratively, compressing another, embedding self-reflection unevenly. Here the balance is artificially symmetric.</explanation>
+        </issue>
+
+        <issue type="Structural Uniformity" severity="MODERATE">
+            <location>Confirmation section (Paragraph 7) — enumerated components (a), (b), (c)</location>
+            <explanation>The confirmation of the hypothesis is organized as a triple enumeration "(a) identificar los mecanismos... (b) modelar posibilidades... (c) analizar críticamente..." Each component follows the same grammatical pattern: infinitive verb + object + gerund/participial complement. This mechanically balanced tripartite structure is a common AI-generation signature when summarizing multi-component claims.</explanation>
+        </issue>
+
+        <!-- ===== SYNTACTIC REPETITION ===== -->
+
+        <issue type="Syntactic Repetition" severity="HIGH">
+            <location>Throughout — sentence openers</location>
+            <explanation>Over 50% of sentences (approximately 13 out of 25) begin with the pattern "El/La + noun phrase": "El Capítulo 3...", "El Capítulo 4...", "El Capítulo 5...", "El resultado...", "El marco..." (3 times), "La síntesis crítica...", "La Viñeta B...", "La validación argumentativa...", "La autocrítica...", "La integración...", "La triple función...", "La distinción...", "Las viñetas analíticas...". This heavy reliance on definite-article-initiated noun phrases produces a monotonous cadence characteristic of AI text, where the model defaults to the statistically safest sentence-opening pattern in Spanish academic prose.</explanation>
+        </issue>
+
+        <issue type="Syntactic Repetition" severity="MODERATE">
+            <location>Objective 1 (Paragraph 2), sentences 2–4</location>
+            <explanation>Three consecutive sentences follow the pattern "El Capítulo [N] + past tense verb + object": "El Capítulo 3 estableció...", "El Capítulo 4 complementó...", "El Capítulo 5 integró...". While referencing chapters sequentially is logical, human writers typically vary the syntax—embedding one reference as a subordinate clause, fronting a conceptual point in another. The unvaried parallel construction here reads as enumeration-by-template.</explanation>
+        </issue>
+
+        <issue type="Syntactic Repetition" severity="MODERATE">
+            <location>Paragraph 2 and Paragraph 4</location>
+            <explanation>The "no X sino Y" contrastive structure appears twice in close proximity: "no consistió en una yuxtaposición de perspectivas sino en una integración estratificada" (Obj 1) and "El resultado no fue una suma de partes sino un modelo" (Obj 1, closing). A near-identical rhetorical device—"no solo identificar... sino orientar"—appears in Objective 3. While contrastive pairs are natural in academic prose, three instances of the same syntactic frame within ~400 words suggests mechanical reliance on a single rhetorical pattern.</explanation>
+        </issue>
+
+        <!-- ===== GENERIC VOCABULARY ===== -->
+
+        <issue type="Generic Vocabulary" severity="MODERATE">
+            <location>Paragraph 1, sentence 2: "herramientas conceptuales, la arquitectura teórica y la validación argumentativa"</location>
+            <explanation>This tricolon uses three abstract meta-academic nouns without specifying what makes these particular tools, architecture, or validation distinct. The phrase reads as a generic academic summary that could describe virtually any theoretical thesis. A human writer would more likely foreground one concrete conceptual contribution rather than listing three vague categories.</explanation>
+        </issue>
+
+        <issue type="Generic Vocabulary" severity="MODERATE">
+            <location>Matización paragraph (Paragraph 8): "produce herramientas conceptuales operativas y genera análisis que enriquecen la comprensión de un fenómeno complejo"</location>
+            <explanation>"Herramientas conceptuales operativas" and "enriquecen la comprensión de un fenómeno complejo" are formulaic academic filler phrases. They convey positive evaluation without specifying what the tools are or how comprehension is enriched. The phrase "fenómeno complejo" is particularly generic—it could refer to anything. Human academic writing tends to name the specific enrichment or conceptual advance.</explanation>
+        </issue>
+
+        <issue type="Generic Vocabulary" severity="LOW">
+            <location>Objective 4, sentence 2: "aspectos no obvios"</location>
+            <explanation>The phrase "aspectos no obvios" is vague where specificity is expected. The text then enumerates examples (parenthetical list), but the framing phrase itself is a placeholder that a more careful human writer would replace with a more precise characterization—e.g., "tensiones latentes" or "dinámicas inadvertidas".</explanation>
+        </issue>
+
+        <issue type="Generic Vocabulary" severity="LOW">
+            <location>Objective 4, sentence 3: "configuraciones preferibles"</location>
+            <explanation>"Configuraciones preferibles" is imprecise. Preferable by what criterion? For whom? The vagueness suggests a generic summarization rather than a carefully worded academic claim. Human writers in a conclusion would typically specify the evaluative framework for "preferable."</explanation>
+        </issue>
+
+        <!-- ===== REPETITIVE VOCABULARY (AI Vocabulary Markers) ===== -->
+
+        <issue type="AI Vocabulary Markers" severity="MODERATE">
+            <location>Throughout — "articular" and derivatives</location>
+            <explanation>The verb "articular" and its forms appear 6 times in ~870 words: "articular los mecanismos" (P1), "articulando la tensión productiva" (Obj 1), "Articular los mecanismos de co-creación" (Obj 3 heading), "articulando criterios" (P7), "articulada mediante" (table), "articular *qué significa*" (P9). This frequency (≈0.7% of word tokens for a single lemma) is unusually high. While "articular" is a legitimate academic term, its saturation suggests the generative model locked onto it as the default verb for expressing conceptual integration. Human writers typically alternate with near-synonyms: "vincular," "conjugar," "ensamblar," "entretejer."</explanation>
+        </issue>
+
+        <issue type="AI Vocabulary Markers" severity="MODERATE">
+            <location>Throughout — "co-creación significativa"</location>
+            <explanation>The collocation "co-creación significativa" appears as a frozen phrase 4 times (P1, Obj 3, table, P7) without lexical variation. This exact-repetition pattern—where a key concept is always rendered in the same two-word form—is a statistical marker of AI generation. Human academic writers typically introduce pronominal substitution ("esta modalidad colaborativa"), paraphrase ("formas de creación conjunta dotadas de sentido"), or simply use the term bare ("co-creación") once the modifier has been established.</explanation>
+        </issue>
+
+        <issue type="AI Vocabulary Markers" severity="LOW">
+            <location>Objective 1, sentence 1: "integración estratificada"</location>
+            <explanation>"Integración estratificada" reads as an AI-generated intensifier rather than a precisely defined methodological term. The word "estratificada" implies layers, but the text does not clarify what the strata are at this point (the chapter reference is given, but the sentence itself is assertive without being informative). This combination of impressive-sounding adjective + abstract noun is a common AI pattern.</explanation>
+        </issue>
+
+        <!-- ===== LOW BURSTINESS ===== -->
+
+        <issue type="Low Burstiness" severity="MODERATE">
+            <location>Objectives 1–4 (Paragraphs 2–5)</location>
+            <explanation>Sentence length analysis across the four objective paragraphs shows a narrow range: most sentences fall between 25 and 45 words. Only the final sentence of Objective 2 ("La distinción entre Körper y Leib operó como eje vertebrador...") dips below 20 words. The absence of very short sentences (under 12 words)—which human writers use for emphasis, recapitulation, or rhetorical pause—produces a flat rhythmic profile. Academic writing in Spanish typically intersperses brief punchy observations among longer analytical sentences.</explanation>
+        </issue>
+
+        <issue type="Low Burstiness" severity="MODERATE">
+            <location>Confirmation of hypothesis (Paragraph 7)</location>
+            <explanation>This paragraph consists of two sentences, both exceeding 50 words. The first is a 60+ word sentence with nested subordination and a triple enumeration. The second extends to ~40 words. The absence of any short punctuating sentence between these two elephantine constructions makes the paragraph rhythmically monolithic. A human writer would typically insert a brief transitional or synthesizing sentence to provide breathing room.</explanation>
+        </issue>
+
+        <issue type="Low Burstiness" severity="LOW">
+            <location>Final paragraph (Paragraph 9)</location>
+            <explanation>The closing transition is a single sentence of moderate length. While this is not inherently problematic, the consistent avoidance of very short sentences throughout the entire text (no sentence under 12 words exists in the document) represents an abnormal distribution. Human academic writing, even in dense theoretical sections, typically includes at least 10–15% of sentences in the "short" range for rhythmic contrast.</explanation>
+        </issue>
+
+        <!-- ===== MISSING HEDGING LANGUAGE ===== -->
+
+        <issue type="Missing Hedging Language" severity="MODERATE">
+            <location>Objectives 1–3 (Paragraphs 2–4): assertive claim verbs</location>
+            <explanation>The objective paragraphs use categorical verbs without hedging: "estableció" (established), "complementó" (complemented), "integró" (integrated), "demostraron" (demonstrated), "mostró con especial claridad" (showed with particular clarity), "funcionan simultáneamente" (function simultaneously). In a theoretical thesis where claims are argumentative rather than empirical, this level of assertiveness is atypical of careful human scholarship, which would more likely use "buscó establecer," "contribuyó a integrar," or "sugirieron que las dimensiones podrían funcionar." The directness reads as AI-generated confidence.</explanation>
+        </issue>
+
+        <issue type="Missing Hedging Language" severity="LOW">
+            <location>Objective 3, sentence 3: "el juicio estético encarnado opera como filtro curatorial"</location>
+            <explanation>The claim that embodied aesthetic judgment "operates as" a curatorial filter is presented as an established fact. Given that this is a theoretical model, not an empirically validated finding, a hedging qualifier ("parece operar como," "puede conceptualizarse como") would be more appropriate. The absence of such qualification is minor but contributes to the overall pattern of AI-style categorical assertion.</explanation>
+        </issue>
+
+        <issue type="Absolute Claims" severity="LOW">
+            <location>Confirmation paragraph (P7): "permite afirmar que la hipótesis de trabajo... se confirma en sus tres componentes"</location>
+            <explanation>While the subsequent matización paragraph qualifies this claim, the initial statement is absolute: the hypothesis "is confirmed." In a purely theoretical thesis, human writers typically embed the qualification within the claim itself (e.g., "permite sostener con razonable confianza que..."). The structure here—bold claim first, qualification as separate afterthought—mirrors AI generation patterns where hedging is added as a formulaic disclaimer rather than woven into the argument.</explanation>
+        </issue>
+
+        <!-- ===== FORMULAIC TRANSITIONS ===== -->
+
+        <issue type="Formulaic Transitions" severity="MODERATE">
+            <location>Paragraph 1, sentence 3: "Corresponde ahora evaluar de manera explícita en qué medida..."</location>
+            <explanation>This metatextual transition ("It now falls to us to evaluate explicitly to what extent...") is a common AI-generated organizational signal. While academic writing uses such devices, the phrasing is highly formulaic and could be found verbatim in many AI-generated thesis conclusions. A human writer might integrate this transition more subtly, or omit the metatextual signposting in favor of simply proceeding with the evaluation.</explanation>
+        </issue>
+
+        <issue type="Formulaic Transitions" severity="MODERATE">
+            <location>Final paragraph (P9): "Tras demostrar *que* se cumplieron los objetivos, corresponde articular *qué significa*..."</location>
+            <explanation>This closing transition follows an identical rhetorical pattern to the opening one: "Corresponde [ahora/—] + infinitive verb." The parallel use of "corresponde" as a transitional device at both the opening and closing of the section is a notable mechanical echo. The italicized "que" / "qué significa" contrast, while rhetorically clever, is a typical AI embellishment—a neat parallelism that serves as structural decoration rather than advancing the argument.</explanation>
+        </issue>
+
+        <issue type="Formulaic Transitions" severity="LOW">
+            <location>Paragraph 8, sentence 1: "No obstante, esta confirmación merece una matización."</location>
+            <explanation>"No obstante" followed by a metacommentary on the need for qualification is a predictable concessive-move in AI-generated academic text. The construction is functional but formulaic. Human writers often integrate the concession into the claim itself rather than signaling it explicitly with a dedicated sentence.</explanation>
+        </issue>
+
+        <!-- ===== POSITIVE HUMAN INDICATORS ===== -->
+
+        <issue type="Human Writing Indicator" severity="POSITIVE">
+            <location>Matización paragraph (P8)</location>
+            <explanation>This paragraph demonstrates genuine academic self-awareness: "El marco demuestra que la hipótesis es *sostenible* y *productiva*, no que sea la única articulación posible." The distinction between "sostenible/productiva" and "única" reflects authentic intellectual caution. The sentence "Otras configuraciones de campos disciplinares podrían generar marcos igualmente iluminadores" shows appropriate hedging with the conditional "podrían." This paragraph is the strongest human-sounding element in the text.</explanation>
+        </issue>
+
+        <issue type="Human Writing Indicator" severity="POSITIVE">
+            <location>Objective 4: autocrítica reference</location>
+            <explanation>The mention that "La autocrítica del marco reconoció con honestidad que esta validación es argumentativa y no empírica" introduces an element of intellectual honesty that AI models rarely generate spontaneously. The word "honestidad" and the explicit acknowledgment of epistemic limitations suggest human authorial awareness, though the phrasing itself is somewhat formulaic.</explanation>
+        </issue>
+
+        <issue type="Human Writing Indicator" severity="POSITIVE">
+            <location>Throughout — use of Leib/Körper distinction</location>
+            <explanation>The consistent deployment of the phenomenological Leib/Körper distinction as a conceptual thread demonstrates domain-specific expertise and terminological precision that generic AI models typically lack. This specialized vocabulary anchored in Husserlian phenomenology elevates the text above generic AI output.</explanation>
+        </issue>
+
+    </analysis_report>
+
+    <severity_summary>
+        <high_issues count="2">Structural uniformity in objective paragraphs; syntactic repetition in sentence openers (El/La + noun)</high_issues>
+        <moderate_issues count="11">Sequential chapter enumeration pattern; contrastive structure repetition; generic vocabulary (2 instances); "articular" saturation; "co-creación significativa" frozen collocation; low burstiness in objectives and confirmation; missing hedging in assertive claims; formulaic transitions (opening and closing "corresponde")</moderate_issues>
+        <low_issues count="6">Generic terms "aspectos no obvios" and "configuraciones preferibles"; "integración estratificada" as AI intensifier; absence of short sentences; specific unheedged claims; "No obstante" formulaic concession</low_issues>
+        <positive_indicators count="3">Matización paragraph with genuine hedging; autocrítica with intellectual honesty; domain-specific Leib/Körper phenomenological terminology</positive_indicators>
+    </severity_summary>
+
+    <recommendations>
+        <recommendation priority="1">Break structural symmetry across objective paragraphs: vary length, embed one objective as a subordinate discussion within another, or foreground the most significant objective narratively while compressing others.</recommendation>
+        <recommendation priority="2">Diversify sentence openers: reduce "El/La + noun" pattern to under 30% of sentences. Use adverbial fronting ("De manera significativa,..."), participial openings ("Fundamentado en..."), or sentence-initial subordinate clauses.</recommendation>
+        <recommendation priority="3">Vary the "articular" verb: replace at least 3 of 6 occurrences with contextually appropriate alternatives (conjugar, entretejer, vincular, ensamblar, hilvanar).</recommendation>
+        <recommendation priority="4">Paraphrase "co-creación significativa": after the first use, alternate with "esta modalidad colaborativa," "formas de creación conjunta dotadas de sentido," or simply "co-creación" where the modifier is contextually implied.</recommendation>
+        <recommendation priority="5">Embed hedging within claims: rather than asserting categorically and then qualifying in a separate paragraph, integrate epistemic markers ("sugiere," "permite sostener con razonable confianza") into the objective-completion statements themselves.</recommendation>
+        <recommendation priority="6">Introduce short sentences (under 12 words) for rhythmic variation: e.g., "El resultado fue revelador." or "Esto no era evidente." placed strategically after long analytical sentences.</recommendation>
+    </recommendations>
+
+</diagnostic_report>

@@ -1,0 +1,114 @@
+<analysis_report file="7.2-contribucion.md" generated="2026-03-08" severity="MODERATE">
+
+    <!-- ============================================================ -->
+    <!-- SYNTACTIC REPETITION: "no X sino Y" PATTERN — PRIMARY ISSUE  -->
+    <!-- ============================================================ -->
+
+    <issue type="Syntactic Repetition">
+        <location>Entire document — 8 instances across paragraphs 1–7</location>
+        <explanation>The contrastive construction "no X sino Y" (or its variant "no es X sino Y") appears eight times throughout the text, forming the dominant argumentative structure of the entire section:
+
+1. "no es solo un ejercicio académico… constituye una aportación" (P1)
+2. "no fue arbitraria sino estratégica" (P3)
+3. "no es un apéndice sino un componente estructural" (P4, S3)
+4. "no es una cautela marginal sino una protección constitutiva" (P5, S3)
+5. "No se trata de imponer una terminología sino de ofrecer conceptos-bisagra" (P7, S2)
+6. "no como rechazo reactivo sino como cualidad afirmativa" (P9, S2)
+7. "no como sumisión ni dominación sino como diálogo" (P9, S3)
+8. "no estamos ante una batalla… sino ante la pregunta" (P9, S4)
+
+Eight instances of the same syntactic skeleton in ~750 words is statistically anomalous. Human writers typically vary their contrastive strategies using concessive clauses ("aunque…"), adversative conjunctions ("sin embargo"), or lexical contrast without the "no…sino" frame. The uniform reliance on a single binary construction suggests a generative model that has latched onto one effective argumentative template and replicated it across all four subsections.</explanation>
+    </issue>
+
+    <!-- ============================================================ -->
+    <!-- STRUCTURAL UNIFORMITY                                         -->
+    <!-- ============================================================ -->
+
+    <issue type="Structural Uniformity">
+        <location>Subsections §modelo-transferible, §lente-etico-politica, §vocabulario-compartido, §superacion-del-binarismo</location>
+        <explanation>All four subsections follow an almost identical two-paragraph template:
+- Paragraph A: Present a claim about the contribution with an initial contrast or reframing move.
+- Paragraph B: Develop practical implications or consequences of that claim.
+
+Each subsection is approximately 80–120 words, producing a mechanically balanced structure. Human academic writing in "contribution" sections tends to weight subsections unevenly, giving more space to the most novel contribution and compressing less surprising ones. The uniform allocation of roughly equal space to all four points suggests a list-processing approach rather than a rhetorically weighted argument.</explanation>
+    </issue>
+
+    <issue type="Structural Uniformity">
+        <location>Closing paragraph (P10)</location>
+        <explanation>The final paragraph uses a formulaic synthesis-and-transition structure: "Esta contribución cuádruple —[list of four items]— no agota lo que la tesis ofrece, pero condensa aquello que no estaba disponible en la literatura existente. Si la danza nos ha enseñado esto, la pregunta natural es: [rhetorical question]. A esa ampliación dedicamos la sección siguiente."
+
+This three-move closing (enumerate → hedge → bridge to next section) is a highly predictable template. The parenthetical enumeration "—modelo transferible, integración ético-política, vocabulario compartido, superación del binarismo—" mirrors a table-of-contents summary rather than a rhetorically crafted conclusion. Human writers tend to close with a resonant image or an echo of a key phrase rather than with an inventory checklist.</explanation>
+    </issue>
+
+    <!-- ============================================================ -->
+    <!-- LOW BURSTINESS                                                -->
+    <!-- ============================================================ -->
+
+    <issue type="Low Burstiness">
+        <location>Paragraphs 3, 7, 9 — subsections §modelo-transferible (P2), §vocabulario-compartido (P2), §superacion-del-binarismo (P2)</location>
+        <explanation>Several paragraphs exhibit strings of two or three consecutive long sentences (25+ words each) with no short sentence intervening to break the rhythm:
+
+- P3 (modelo-transferible, second paragraph): four sentences averaging ~25 words, with only the first sentence ("La elección de la danza como objeto de estudio no fue arbitraria sino estratégica") functioning as a short opener. The remaining three sentences are of similar medium-to-long length.
+- P7 (vocabulario compartido, second paragraph): three sentences of 20, 18, and 28 words — uniformly medium-long.
+- P9 (superación del binarismo, second paragraph): four sentences of 16, 28, 19, and 42 words — while the range is wider, the middle two sentences create a flat middle zone.
+
+Human academic writing typically intersperses very short clarifying or emphatic sentences within long argumentative stretches. The text does this well in P4–P5 ("'Resistencia Encarnada' invierte esa lógica." / "Esta integración tiene consecuencias prácticas.") but fails to replicate that variation consistently.</explanation>
+    </issue>
+
+    <!-- ============================================================ -->
+    <!-- GENERIC VOCABULARY                                            -->
+    <!-- ============================================================ -->
+
+    <issue type="Generic Vocabulary">
+        <location>P1, S2; P5, S4; P7, S3</location>
+        <explanation>Several phrases rely on broad, unspecific academic language that could apply to virtually any thesis contribution:
+
+- "ofrece algo que no existía en la literatura y que abre posibilidades concretas para la investigación, la práctica y la política cultural" (P1) — The tricolon "investigación, práctica, política cultural" is a stock enumeration. "Posibilidades concretas" is paradoxically vague.
+- "transforma el marco de herramienta descriptiva en instrumento de atención epistémica" (P5) — "instrumento de atención epistémica" is an impressive-sounding but semantically diffuse phrase.
+- "constituye una contribución tan significativa como la arquitectura teórica misma" (P7) — Self-referential valorization without specifying what makes it significant.
+
+These phrases function as placeholders of gravitas rather than carriers of precise meaning.</explanation>
+    </issue>
+
+    <!-- ============================================================ -->
+    <!-- FORMULAIC TRANSITIONS                                         -->
+    <!-- ============================================================ -->
+
+    <issue type="Formulaic Transitions">
+        <location>P1, S3; P5, S1; P10, S3</location>
+        <explanation>Three transitional or metadiscursive sentences use formulaic connectors:
+
+- "En esta sección destilamos las cuatro dimensiones de esa contribución." (P1) — Telegraphing structure with "en esta sección" + number preview is a mechanical organizational cue.
+- "Esta integración tiene consecuencias prácticas." (P5) — The "This X has practical consequences" template is generic and overused in AI-generated academic text.
+- "A esa ampliación dedicamos la sección siguiente." (P10) — Standard cross-reference bridge.
+
+While each is individually acceptable, the combination of all three in a ~750-word text creates a navigational scaffolding pattern more typical of machine-generated text, which tends to over-signpost.</explanation>
+    </issue>
+
+    <!-- ============================================================ -->
+    <!-- CROSS-FILE PHRASE REPETITION                                  -->
+    <!-- ============================================================ -->
+
+    <issue type="Low Perplexity">
+        <location>P1, S2 — cross-reference to 7.4-lineas-futuras.md P27</location>
+        <explanation>The phrase "no es solo un ejercicio académico" appears verbatim in both section 7.2 (paragraph 1) and section 7.4 (paragraph on meta-theoretical reflection). Identical phraseology across two different sections of the same chapter suggests either copy-paste residue or — more characteristically — a generative model drawing from the same latent phrase repertoire across outputs. Human writers typically vary recurrent ideas with different surface expressions.</explanation>
+    </issue>
+
+    <!-- ============================================================ -->
+    <!-- POSITIVE HUMAN MARKERS                                        -->
+    <!-- ============================================================ -->
+
+    <issue type="Positive — Human Writing Markers">
+        <location>Various</location>
+        <explanation>The text exhibits several features that suggest human authorial voice or at least effective human-AI collaboration:
+
+1. EFFECTIVE SHORT SENTENCES: "Resistencia Encarnada invierte esa lógica." (P4) and "Esta integración tiene consecuencias prácticas." (P5) function as rhetorical pivots — a strategy that requires architectural awareness.
+2. DOMAIN-SPECIFIC IMAGERY: The "caso extremo" / stress-test metaphor (P3) and the material-science metaphor for resistance (P9) go beyond generic academic framing.
+3. HEDGING PRESENT: "podría parecer" (P2), conditional mood in key claims.
+4. COLON-DRIVEN ELABORATION: Multiple effective uses of colons to build from premise to specification, which shows syntactic variety beyond the "no X sino Y" skeleton.
+5. RHETORICAL QUESTIONS: "¿qué nos dice sobre la creatividad humana como tal?" (P10) introduces genuine engagement.
+
+These markers are insufficient to override the concerns above but represent elements that AI typically does not produce without human direction.</explanation>
+    </issue>
+
+</analysis_report>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<analysis_report file="sections/7-conclusiones/content/7.5-consideraciones.md" section="7.5" date="2026-03-08" word_count="580" language="es">
+
+    <!-- ============================================================ -->
+    <!-- CRITICAL SEVERITY                                            -->
+    <!-- ============================================================ -->
+
+    <issue type="Syntactic Repetition" severity="critical">
+        <location>Entire text — 12 instances across all paragraphs</location>
+        <explanation>The rhetorical pattern "no X sino/es Y" (negation followed by affirmation) is repeated 12 times in ~580 words, producing a density of approximately 1 instance per 48 words. This is the dominant structural tell in the text. Instances:
+        (1) P2: "La brecha no es técnica; es ontológica"
+        (2) P3: "No como víctima… sino como sujeto"
+        (3) P3: "no es un escudo defensivo; es un vocabulario de empoderamiento"
+        (4) P4: "No una danza que… Tampoco una danza… Imaginamos una danza…"
+        (5) P5: "no delega su juicio estético; lo agudiza"
+        (6) P5: "no se somete a ellos; los habita"
+        (7) P5: "no reemplaza la transmisión… la enriquece"
+        (8) P5: "no por inercia conservadora sino por necesidad ontológica"
+        (9) P6: "no aspira a ser un monumento teórico sino un instrumento vivo"
+        (10) P6: "no reside en la elegancia… sino en su capacidad"
+        (11) P7: "no es un punto final sino un cuerpo en movimiento"
+        (12) P7: "no se escribe en código; se inscribe en cuerpos"
+        Human academic writers occasionally employ this antithetical construction, but at far lower density. The mechanical regularity here strongly suggests AI generation relying on a single rhetorical template to produce contrastive argumentation.</explanation>
+    </issue>
+
+    <issue type="Syntactic Repetition" severity="critical">
+        <location>Paragraph 5 (line 13), sentences 2–4</location>
+        <explanation>Three consecutive sentences follow an identical grammatical template: [Definite article + professional role] + "que" clause + "no" + [negative verb]; + [positive verb with elaboration].
+        — "El coreógrafo que utiliza IA generativa no delega su juicio estético; lo agudiza…"
+        — "La bailarina que interactúa con entornos algorítmicos responsivos no se somete a ellos; los habita…"
+        — "El maestro que incorpora análisis computacional en su pedagogía no reemplaza la transmisión…; la enriquece…"
+        This triple parallelism is mechanically uniform in subject-relative clause-negation-semicolon-affirmation structure. Human writers typically break such patterns after two instances or introduce syntactic variation in the third element. The perfect symmetry across all three is a strong AI marker.</explanation>
+    </issue>
+
+    <!-- ============================================================ -->
+    <!-- HIGH SEVERITY                                                -->
+    <!-- ============================================================ -->
+
+    <issue type="Structural Uniformity" severity="high">
+        <location>Paragraphs 2–7 (lines 5–17)</location>
+        <explanation>Every substantive paragraph follows the same internal architecture: (a) declarative opening statement, (b) elaboration through antithetical contrast using "no X sino Y", (c) closing punch-line sentence with emphatic cadence. This three-part paragraph template repeats without meaningful deviation across five consecutive paragraphs. Human academic conclusions typically show greater architectural variation — some paragraphs might build inductively, others might open with a question, others might embed a concession mid-paragraph. The uniformity here suggests a single generative template applied paragraph after paragraph.</explanation>
+    </issue>
+
+    <issue type="Low Burstiness" severity="high">
+        <location>Paragraphs 1–6 (lines 3–15)</location>
+        <explanation>The six main paragraphs maintain highly consistent internal rhythms. While paragraph 2 opens with a short sentence ("Seis capítulos después, ese lenguaje existe"), most sentences across the text cluster in the 30–50 word range. The text lacks the characteristic human variation where a 6-word sentence sits next to a 60-word one within the same paragraph. The sentence-length standard deviation is unusually low for human academic prose, where emotional emphasis, parenthetical asides, and abrupt shifts in register produce natural burstiness. The only true burst is the final paragraph (line 17), which is noticeably shorter — but even there, both sentences are of similar length.</explanation>
+    </issue>
+
+    <issue type="Low Perplexity" severity="high">
+        <location>Entire text, particularly paragraphs 4–7</location>
+        <explanation>Once the "no X sino Y" rhetorical template is established in paragraph 2, subsequent paragraphs become highly predictable. A reader encountering "no delega su juicio estético" can predict with near-certainty that an affirmative counterpart will follow. This extends to paragraph-level predictability: the triple structure in P5 means that after the first example (choreographer), the reader can predict two more examples with identical syntax. Low perplexity at this scale — where not just words but entire rhetorical moves are predictable — is characteristic of AI-generated text that has locked onto a single argumentative strategy.</explanation>
+    </issue>
+
+    <!-- ============================================================ -->
+    <!-- MODERATE SEVERITY                                            -->
+    <!-- ============================================================ -->
+
+    <issue type="Missing Hedging Language" severity="moderate">
+        <location>Paragraphs 2, 3, 5 (lines 5, 7, 13)</location>
+        <explanation>The text makes numerous declarative assertions without the hedging expected in academic writing:
+        — "ese lenguaje existe" (P2) — presented as accomplished fact without qualification
+        — "La brecha no es técnica; es ontológica" (P2) — absolute categorical claim
+        — "emerge ahora como agente" (P3) — declared without reservation
+        — "el cuerpo vivo permanece como centro gravitacional" (P5) — stated as universal necessity
+        The only instance approaching hedging is "Podemos nombrar" (P2), which is collaborative rather than tentative. For a concluding chapter, some assertiveness is expected, but the total absence of markers such as "podría argumentarse", "según lo analizado", "los hallazgos sugieren", or "en la medida en que" flattens the epistemic texture. Human academic conclusions typically balance conviction with appropriate scholarly caution, even in their strongest claims.</explanation>
+    </issue>
+
+    <issue type="Formulaic Transitions" severity="moderate">
+        <location>Paragraph openings at lines 5, 7, 11, 13, 15, 17</location>
+        <explanation>Paragraph transitions follow a limited repertoire of connective strategies:
+        — P2: "Seis capítulos después" — temporal marker
+        — P3: "Pero la imagen inaugural requiere…" — contrastive with callback
+        — P4: "¿Qué danza imaginamos, entonces…?" — rhetorical question with "entonces"
+        — P5: "En esa danza del futuro" — referential callback
+        — P6: "Esta investigación termina, pero…" — formulaic meta-textual closing
+        — P7: "La última imagen…" — closing callback
+        While callbacks to the "imagen" motif show intentional thematic threading, the mechanical regularity of the alternation (temporal → contrastive → interrogative → referential → meta-textual → closing) feels orchestrated rather than organic. Human writers tend to produce less systematic transition patterns.</explanation>
+    </issue>
+
+    <issue type="Generic Vocabulary" severity="moderate">
+        <location>Paragraphs 3, 5, 6 (lines 7, 13, 15)</location>
+        <explanation>Several phrases rely on generic academic formulations rather than discipline-specific precision:
+        — "un momento de transformación sin precedentes" (P6) — a cliché found frequently in AI-generated text
+        — "navegar esa transformación con lucidez y con agencia" (P6) — "navegar + sustantivo abstracto" is a common AI pattern in Spanish
+        — "vocabulario de empoderamiento" (P3) — broad rather than analytically specific
+        — "centro gravitacional" (P5) — metaphor used generically without elaboration
+        — "instrumento vivo" (P6) — a somewhat stock metaphor
+        Note: The text also deploys genuinely specific vocabulary (Körper/Leib, "dimensiones analíticas", "conciencia ético-política"), which partially mitigates this concern. The issue is localized rather than pervasive.</explanation>
+    </issue>
+
+    <!-- ============================================================ -->
+    <!-- LOW SEVERITY                                                 -->
+    <!-- ============================================================ -->
+
+    <issue type="Absolute Claims" severity="low">
+        <location>Paragraph 5 (line 13), closing sentence</location>
+        <explanation>"En todos estos escenarios, el cuerpo vivo permanece como centro gravitacional: no por inercia conservadora sino por necesidad ontológica." This sentence presents a strong ontological claim as settled fact. In a conclusion, strong claims are acceptable, but the phrase "necesidad ontológica" asserts philosophical necessity without the caveats a human philosopher might introduce (e.g., "lo que hemos argumentado apunta hacia una necesidad que podríamos llamar ontológica"). Severity is low because the thesis framework may indeed support such a claim, and conclusions conventionally permit stronger assertion.</explanation>
+    </issue>
+
+    <!-- ============================================================ -->
+    <!-- POSITIVE INDICATORS (HUMAN CHARACTERISTICS)                  -->
+    <!-- ============================================================ -->
+
+    <positive_indicators>
+        <indicator type="Specific Terminology">The use of Husserl-derived phenomenological concepts (Körper/Leib) and specific references to named researchers (Emily Clarke) demonstrates domain-specific knowledge that generic AI text often lacks.</indicator>
+        <indicator type="Narrative Framing">The text opens with a callback to Chapter 1's inaugural image and sustains this motif through the conclusion. This cross-chapter thematic coherence suggests deliberate compositional intent.</indicator>
+        <indicator type="Rhetorical Question">Paragraph 4 opens with a genuine rhetorical question ("¿Qué danza imaginamos, entonces…?"), introducing a human discursive move that breaks the declarative pattern briefly.</indicator>
+        <indicator type="Embedded Quotation">The direct quote from professional dancers in P1 ("la IA es incapaz de capturar la pasión y la energía compartida con la audiencia") introduces an external voice, which AI-generated text often avoids.</indicator>
+        <indicator type="Lyrical Closing">The final paragraph (line 17) adopts a poetic register ("se inscribe en cuerpos que piensan, que sienten, que resisten — y que, resistiendo, crean") that breaks from the analytical register of prior paragraphs, introducing a human-like tonal shift.</indicator>
+    </positive_indicators>
+
+    <!-- ============================================================ -->
+    <!-- SUMMARY                                                      -->
+    <!-- ============================================================ -->
+
+    <summary>
+        <overall_risk>HIGH</overall_risk>
+        <critical_issues>2</critical_issues>
+        <high_issues>3</high_issues>
+        <moderate_issues>3</moderate_issues>
+        <low_issues>1</low_issues>
+        <primary_concern>The dominant AI indicator is the obsessive repetition of the "no X sino Y" antithetical pattern (12 instances in 580 words), compounded by a perfectly symmetric triple-parallel structure in P5. These syntactic patterns alone would likely trigger advanced AI detection systems. The structural uniformity of paragraphs — each built on the same declare-contrast-conclude template — reinforces the concern.</primary_concern>
+        <secondary_concern>Low burstiness and low perplexity compound the syntactic issues. Sentences cluster in similar length ranges, and the rhetorical predictability once the antithetical template is established makes paragraph-level content guessable. Missing hedging language further flattens the epistemic texture expected in academic prose.</secondary_concern>
+        <mitigating_factors>The text shows genuine strengths: domain-specific phenomenological terminology, narrative continuity with earlier chapters, an embedded quotation from empirical data, and a lyrical final register shift. These elements partially offset the structural concerns and suggest either human compositional intent or a well-prompted AI system with access to thesis context.</mitigating_factors>
+        <recommendation>Priority revision should target: (1) breaking the "no X sino Y" pattern by replacing at least 7-8 of the 12 instances with alternative rhetorical strategies (concession, qualification, reformulation, induction); (2) restructuring P5's triple parallelism to use varied syntax across the three professional examples; (3) introducing hedging markers and epistemic qualifiers in key claims; (4) varying sentence lengths more aggressively within paragraphs to increase burstiness.</recommendation>
+    </summary>
+
+</analysis_report>
