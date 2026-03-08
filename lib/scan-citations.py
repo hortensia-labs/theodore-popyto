@@ -2,160 +2,236 @@
 """
 Scan markdown files and extract citations.
 
-This script scans markdown files for parenthetical citations and extracts them
-with line numbers for further analysis and processing.
+This script scans markdown files for APA 7 style parenthetical citations and extracts them
+with line numbers and URLs from Zotero mappings for further analysis and processing.
 
 Usage:
     python scan-citations.py <markdown_dir> <output_dir>
 
 Arguments:
     markdown_dir: Directory containing markdown files to process
-    output_dir:   Directory where extracted citation files will be saved
+    output_dir:   Directory where citation registry JSON file will be saved
 
 Example:
     python scan-citations.py generated/markdown generated/data
 
 Output:
-    Creates .ctcr.md files for each processed markdown file containing:
-    - Citations with line numbers
-    - Cross-references and parenthetical content
-    - Formatted as: "- [content] @ [line_number]"
+    Creates citation-registry.json in the output directory containing:
+    - document: source markdown file name
+    - line: line number where citation was found
+    - citation: the citation text (e.g., "(Author, 2023)")
+    - content: the full line content
+    - url: matched URL from Zotero mappings (if found)
 
 Exit codes:
     0: Processing completed successfully
     1: Error occurred during processing
+    2: Failed to fetch Zotero mappings
 """
 
 import argparse
+import json
 import re
 import sys
+import urllib.request
 from pathlib import Path
-from typing import List, NamedTuple, Optional
+from typing import List, Dict, Optional, Any
 
 
-class Citation(NamedTuple):
-    """Represents a citation with its context."""
-    line_number: int
-    content: str
-    full_line: str
+# Pattern to match APA 7 style citations: (Author, Year) or (Author et al., Year)
+# Matches: (Text, ####) where #### is a 4-digit year
+# This captures the entire parenthetical group which may contain multiple citations
+CITATION_PATTERN = re.compile(r'\([^)]*?\d{4}[a-z]?(?:\s*;\s*[^)]*?\d{4}[a-z]?)*\)')
+
+# Pattern to split individual citations within a parenthetical group
+# Matches: Author, Year (with optional letter suffix)
+INDIVIDUAL_CITATION_PATTERN = re.compile(r'([^;]+?,\s*\d{4}[a-z]?)')
+
+# Pattern to match markdown links to exclude them from citation extraction
+# Matches: [text](url) or [text](#anchor)
+MARKDOWN_LINK_PATTERN = re.compile(r'\[([^\]]+)\]\([^)]+\)')
+
+# Zotero mappings API endpoint
+ZOTERO_MAPPINGS_URL = "http://localhost:3000/api/zotero-mappings"
 
 
-class ProcessingResult(NamedTuple):
-    """Results of processing a single file."""
-    file_path: Path
-    citations_found: int
-    output_file: Optional[Path]
-    success: bool
-    error_message: Optional[str] = None
-
-
-# Pattern to match parenthetical content that's likely a citation
-CITATION_PATTERN = re.compile(r'\([^)]*[a-zA-Z0-9][^)]*\)')
-
-
-def extract_citations_from_content(content: str) -> List[Citation]:
+def fetch_zotero_mappings() -> Dict[str, Dict[str, str]]:
     """
-    Extract citations from markdown content.
+    Fetch Zotero URL mappings from the API endpoint.
 
-    Looks for parenthetical references: (text) where text contains characters
-    but excludes simple punctuation-only parentheses.
+    Returns:
+        Dictionary mapping URLs to citation information
+        Format: {url: {key: str, citation: str}}
+
+    Raises:
+        Exception if API request fails
+    """
+    try:
+        with urllib.request.urlopen(ZOTERO_MAPPINGS_URL) as response:
+            data = json.loads(response.read().decode('utf-8'))
+            return data
+    except Exception as e:
+        raise Exception(f"Failed to fetch Zotero mappings: {e}")
+
+
+def remove_markdown_links(line: str) -> str:
+    """
+    Remove markdown link syntax from a line to avoid false citation matches.
+
+    Args:
+        line: Line of text potentially containing markdown links
+
+    Returns:
+        Line with markdown links removed
+    """
+    # Replace [text](url) with just the text content
+    return MARKDOWN_LINK_PATTERN.sub(r'\1', line)
+
+
+def normalize_citation(citation: str) -> str:
+    """
+    Normalize citation text to match Zotero mappings format.
+
+    Converts Spanish "y" to English "&" for author conjunctions.
+    Example: (Nonaka y Takeuchi, 1995) -> (Nonaka & Takeuchi, 1995)
+
+    Args:
+        citation: Citation text to normalize
+
+    Returns:
+        Normalized citation text
+    """
+    # Replace " y " with " & " (Spanish to English conjunction)
+    # Use word boundaries to avoid replacing "y" within author names
+    normalized = re.sub(r'\s+y\s+', ' & ', citation)
+    return normalized
+
+
+def extract_citations_from_content(content: str, document_name: str) -> List[Dict[str, Any]]:
+    """
+    Extract APA 7 style citations from markdown content.
+
+    Looks for parenthetical references matching pattern: (Author, Year)
+    Handles multiple citations in the same parentheses: (Author1, Year1; Author2, Year2)
+    Excludes citations within markdown link syntax.
 
     Args:
         content: Markdown content to analyze
+        document_name: Name of the source document
 
     Returns:
-        List of Citation objects with line numbers and content
+        List of citation dictionaries with document, line, citation, and content
     """
     citations = []
 
     for line_num, line in enumerate(content.splitlines(), 1):
-        matches = CITATION_PATTERN.findall(line)
+        # Remove markdown links before extracting citations
+        clean_line = remove_markdown_links(line)
+
+        # Find all parenthetical citation groups
+        matches = CITATION_PATTERN.findall(clean_line)
+
         for match in matches:
-            # Filter out very short or clearly non-citation parentheses
-            if len(match.strip('()')) > 1:
-                citations.append(Citation(
-                    line_number=line_num,
-                    content=match,
-                    full_line=line.strip()
-                ))
+            # Remove outer parentheses
+            inner_content = match.strip('()')
+
+            # Check if this contains multiple citations (separated by semicolons)
+            if ';' in inner_content:
+                # Split by semicolon and process each individual citation
+                individual_citations = INDIVIDUAL_CITATION_PATTERN.findall(inner_content)
+                for individual_citation in individual_citations:
+                    # Reconstruct citation with parentheses
+                    formatted_citation = f"({individual_citation.strip()})"
+                    citations.append({
+                        "document": document_name,
+                        "line": line_num,
+                        "citation": formatted_citation,
+                        "content": line.strip(),
+                        "url": None  # Will be populated later
+                    })
+            else:
+                # Single citation - use as is
+                citations.append({
+                    "document": document_name,
+                    "line": line_num,
+                    "citation": match,
+                    "content": line.strip(),
+                    "url": None  # Will be populated later
+                })
 
     return citations
 
 
-def format_citations_output(citations: List[Citation]) -> str:
+def match_citations_with_urls(citations: List[Dict[str, Any]],
+                              zotero_mappings: Dict[str, Dict[str, str]]) -> None:
     """
-    Format citations for output file.
+    Match extracted citations with URLs from Zotero mappings.
+
+    Modifies citations list in-place, adding URL field where matches are found.
+    Normalizes citations before matching to handle language differences (e.g., "y" -> "&").
 
     Args:
-        citations: List of citations to format
-
-    Returns:
-        Formatted string ready for file output
+        citations: List of citation dictionaries
+        zotero_mappings: Dictionary of URL to citation mappings from Zotero
     """
-    if not citations:
-        return ""
+    # Create reverse mapping: citation text -> URL (first match)
+    citation_to_url = {}
+    for url, mapping in zotero_mappings.items():
+        citation_text = mapping.get("citation", "")
+        if citation_text and citation_text not in citation_to_url:
+            citation_to_url[citation_text] = url
 
-    lines = []
+    # Match citations with URLs
     for citation in citations:
-        # Format: "- [full_line_content] @ [line_number]"
-        formatted_line = f"- {citation.full_line} @ [{citation.line_number}]"
-        lines.append(formatted_line)
+        citation_text = citation["citation"]
 
-    return "\n".join(lines) + "\n"
+        # Try exact match first
+        if citation_text in citation_to_url:
+            citation["url"] = citation_to_url[citation_text]
+        else:
+            # Try normalized match (converts "y" to "&")
+            normalized_citation = normalize_citation(citation_text)
+            if normalized_citation in citation_to_url:
+                citation["url"] = citation_to_url[normalized_citation]
+                # Update the citation text to the normalized version for consistency
+                citation["citation"] = normalized_citation
 
 
-def process_markdown_file(md_file: Path, output_dir: Path) -> ProcessingResult:
+def process_markdown_file(md_file: Path, zotero_mappings: Dict[str, Dict[str, str]]) -> List[Dict[str, Any]]:
     """
     Process a single markdown file and extract citations.
 
     Args:
         md_file: Path to markdown file to process
-        output_dir: Directory where output file will be saved
+        zotero_mappings: Zotero URL mappings
 
     Returns:
-        ProcessingResult with processing details
+        List of citation dictionaries
+
+    Raises:
+        Exception if file processing fails
     """
-    try:
-        # Read the markdown file
-        with open(md_file, 'r', encoding='utf-8') as f:
-            content = f.read()
+    # Read the markdown file
+    with open(md_file, 'r', encoding='utf-8') as f:
+        content = f.read()
 
-        # Extract citations
-        citations = extract_citations_from_content(content)
+    # Extract citations
+    document_name = md_file.stem
+    citations = extract_citations_from_content(content, document_name)
 
-        # Write citations file if citations found
-        output_file = None
-        if citations:
-            section_name = md_file.stem
-            output_file = output_dir / f"{section_name}.ctcr.md"
-            formatted_output = format_citations_output(citations)
-            with open(output_file, 'w', encoding='utf-8') as f:
-                f.write(formatted_output)
+    # Match with URLs from Zotero
+    match_citations_with_urls(citations, zotero_mappings)
 
-        return ProcessingResult(
-            file_path=md_file,
-            citations_found=len(citations),
-            output_file=output_file,
-            success=True
-        )
-
-    except Exception as e:
-        return ProcessingResult(
-            file_path=md_file,
-            citations_found=0,
-            output_file=None,
-            success=False,
-            error_message=str(e)
-        )
+    return citations
 
 
 def scan_citations(markdown_dir: Path, output_dir: Path) -> bool:
     """
-    Scan all markdown files for citations.
+    Scan all markdown files for citations and generate citation registry.
 
     Args:
         markdown_dir: Directory containing markdown files
-        output_dir: Directory for output files
+        output_dir: Directory for output JSON file
 
     Returns:
         True if processing completed successfully, False otherwise
@@ -171,37 +247,64 @@ def scan_citations(markdown_dir: Path, output_dir: Path) -> bool:
         print("💡 Tip: Run 'make compile-all' first to generate files")
         return True
 
-    # Process each file
-    results = []
+    # Fetch Zotero mappings
+    print("🔗 Fetching Zotero mappings...")
+    try:
+        zotero_mappings = fetch_zotero_mappings()
+        print(f"   ✅ Loaded {len(zotero_mappings)} URL mappings")
+    except Exception as e:
+        print(f"   ❌ Error fetching Zotero mappings: {e}")
+        print("   ⚠️  Continuing without URL matching")
+        zotero_mappings = {}
+
+    # Process each file and collect all citations
+    all_citations = []
+    failed_files = []
 
     for md_file in md_files:
         print(f"   📝 Scanning: {md_file.name}")
-        result = process_markdown_file(md_file, output_dir)
-        results.append(result)
+        try:
+            citations = process_markdown_file(md_file, zotero_mappings)
+            all_citations.extend(citations)
 
-        if result.success:
-            if result.citations_found > 0:
-                print(f"   ✅ Found {result.citations_found} citations")
+            if citations:
+                matched_urls = sum(1 for c in citations if c.get("url"))
+                print(f"   ✅ Found {len(citations)} citations ({matched_urls} with URLs)")
             else:
                 print(f"   ⚠️  No citations found")
-        else:
-            print(f"   ❌ Error: {result.error_message}")
+
+        except Exception as e:
+            print(f"   ❌ Error processing {md_file.name}: {e}")
+            failed_files.append(md_file.name)
+
+    # Write citation registry JSON file
+    output_file = output_dir / "citation-registry.json"
+    try:
+        with open(output_file, 'w', encoding='utf-8') as f:
+            json.dump(all_citations, f, indent=2, ensure_ascii=False)
+        print(f"\n💾 Citation registry saved to: {output_file}")
+    except Exception as e:
+        print(f"\n❌ Error writing citation registry: {e}")
+        return False
 
     # Summary statistics
-    total_files = len(results)
-    successful_files = sum(1 for r in results if r.success)
-    files_with_citations = sum(1 for r in results if r.success and r.citations_found > 0)
-    total_citations = sum(r.citations_found for r in results if r.success)
-    failed_files = total_files - successful_files
+    total_files = len(md_files)
+    successful_files = total_files - len(failed_files)
+    files_with_citations = len(set(c["document"] for c in all_citations))
+    total_citations = len(all_citations)
+    citations_with_urls = sum(1 for c in all_citations if c.get("url"))
 
     print(f"\n📊 Citation Scan Summary:")
     print(f"   📄 Files processed: {total_files}")
     print(f"   ✅ Successfully processed: {successful_files}")
     print(f"   📝 Files with citations: {files_with_citations}")
     print(f"   📖 Total citations extracted: {total_citations}")
+    print(f"   🔗 Citations with URLs: {citations_with_urls}")
 
-    if failed_files > 0:
-        print(f"   ❌ Failed files: {failed_files}")
+    if failed_files:
+        print(f"   ❌ Failed files: {len(failed_files)}")
+        for failed_file in failed_files:
+            print(f"      - {failed_file}")
         return False
 
     print(f"✅ Citation scan complete: {total_citations} citations from {files_with_citations} files")

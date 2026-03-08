@@ -6,6 +6,7 @@ SECTIONS_ROOT = /Users/henry/Workbench/PopytoNoPhd/theodore-popyto/sections
 GENERATED_ROOT = /Users/henry/Workbench/PopytoNoPhd/theodore-popyto/generated
 MARKDOWN_OUTPUT = $(GENERATED_ROOT)/markdown
 ICML_OUTPUT = $(GENERATED_ROOT)/icml
+WORD_OUTPUT = $(GENERATED_ROOT)/word
 SCRIPTS_ROOT = /Users/henry/Workbench/PopytoNoPhd/theodore-popyto/lib
 
 # File patterns for automatic discovery
@@ -14,6 +15,9 @@ ALL_MD_PATTERN = *.md
 
 # ICML conversion configuration (production-ready)
 PANDOC_FLAGS = -f markdown+footnotes+definition_lists+smart -t icml -s --wrap=none --reference-links --id-prefix="thesis-"
+
+# Word conversion configuration
+PANDOC_WORD_FLAGS = -f markdown+footnotes+definition_lists+smart -t docx -s
 
 # Default target
 .DEFAULT_GOAL := help
@@ -31,7 +35,7 @@ define load_env
 endef
 
 # Phony targets
-.PHONY: help clean compile validate-section merge-section compile-icml list-sections remove-numbers compile-data scan-citations scan-hyperlinks scan-ref update-links update-book crossref-process fix-url-hyperlinks compile-all-r compile-all-u compile-all-ru reformat-bibliography update-toc validate-citations clean-validation validate-citations-watch test-citations ira-revision validate-crossreferences merge-all merge-parallel clean-merged merge-all-r merge-parallel-r
+.PHONY: help clean compile validate-section merge-section compile-icml compile-word list-sections remove-numbers compile-data scan-citations scan-hyperlinks scan-ref update-links update-book crossref-process fix-url-hyperlinks compile-all-r compile-all-u compile-all-ru reformat-bibliography update-toc validate-citations clean-validation validate-citations-watch test-citations ira-revision validate-crossreferences merge-all merge-parallel clean-merged merge-all-r merge-parallel-r
 
 # Generic compile target: make compile [section-folder]
 compile:
@@ -176,6 +180,29 @@ _compile-icml-internal:
 _compile-icml-all:
 	@python3 $(SCRIPTS_ROOT)/compile-icml-processor.py $(MARKDOWN_OUTPUT) $(ICML_OUTPUT) --target=all
 
+# Convert merged markdown to Word (docx)
+compile-word:
+	@mkdir -p $(WORD_OUTPUT)
+	@echo "📄 Converting markdown files to Word (.docx)..."
+	@SUCCESS=0; FAIL=0; \
+	for md_file in $(MARKDOWN_OUTPUT)/*.md; do \
+		if [ -f "$$md_file" ]; then \
+			BASENAME=$$(basename "$$md_file" .md); \
+			echo "   🔄 Converting: $$BASENAME"; \
+			if pandoc $(PANDOC_WORD_FLAGS) "$$md_file" -o "$(WORD_OUTPUT)/$$BASENAME.docx" 2>/dev/null; then \
+				echo "   ✅ $$BASENAME.docx"; \
+				SUCCESS=$$((SUCCESS + 1)); \
+			else \
+				echo "   $(RED)❌ Failed: $$BASENAME$(RESET)"; \
+				FAIL=$$((FAIL + 1)); \
+			fi; \
+		fi; \
+	done; \
+	echo ""; \
+	echo "📊 Results: $$SUCCESS converted, $$FAIL failed"; \
+	if [ $$FAIL -gt 0 ]; then exit 1; fi
+	@echo "✅ Word files saved to: $(WORD_OUTPUT)/"
+
 # List all available sections
 list-sections:
 	@python3 $(SCRIPTS_ROOT)/list-thesis-sections.py $(SECTIONS_ROOT)
@@ -297,6 +324,7 @@ clean:
 	@echo "🧹 Cleaning generated files..."
 	@rm -f $(MARKDOWN_OUTPUT)/*.md 2>/dev/null || true
 	@rm -f $(ICML_OUTPUT)/*.icml 2>/dev/null || true
+	@rm -f $(WORD_OUTPUT)/*.docx 2>/dev/null || true
 	@rm -f $(GENERATED_ROOT)/data/*.ctcr.md 2>/dev/null || true
 	@rm -f $(GENERATED_ROOT)/data/crossref-registry.json 2>/dev/null || true
 	@rm -f $(GENERATED_ROOT)/data/url-registry.json 2>/dev/null || true
@@ -475,6 +503,7 @@ help:
 	@echo "  $(YELLOW)make validate-section <section>$(RESET)  - Validate section structure"
 	@echo "  $(YELLOW)make merge-section <section>$(RESET)     - Merge markdown files only"
 	@echo "  $(YELLOW)make compile-icml [section]$(RESET)      - Convert to ICML (all sections if no param)"
+	@echo "  $(YELLOW)make compile-word$(RESET)                - Convert all merged markdown to Word (.docx)"
 	@echo "  $(YELLOW)make extract-citations$(RESET)          - Extract citations from thesis content only"
 	@echo "  $(YELLOW)make process-bibliography$(RESET)       - Process bibliography entries only"
 	@echo "  $(YELLOW)make generate-validation-report$(RESET) - Generate validation report only"

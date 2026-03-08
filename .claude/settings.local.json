@@ -22,7 +22,8 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(node -e:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(make compile-word:*)"
     ],
     "deny": [],
     "ask": []
