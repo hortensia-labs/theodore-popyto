@@ -168,7 +168,22 @@ make list-sections      # Shows all sections with file counts and status
 
 - **IRA (Intelligent Revision Assistant)** - Text analysis and revision workflows
 - **CRV (Citation Reference Validator)** - Citation validation and processing
-- **DRS (Document Revision System)** - Document comparison and revision tracking
+- **DRS (Document Revision System)** - Triple-Lens Peer Review system with three reviewer perspectives
+
+### Triple-Lens Peer Review (TLR) System
+
+The DRS component provides a multi-perspective peer review system for the thesis. When the user asks to run a peer review, thesis review, or TLR review:
+
+1. **Read the reviewer prompts** from `lib/components/drs/prompts/` (advocate.md, analyst.md, adversary.md)
+2. **Read the evaluation dimensions** from `lib/components/drs/prompts/dimensions.md`
+3. **Read section content** from `generated/markdown/<section>.md`
+4. **Run three parallel review agents** (Advocate, Analyst, Adversary) applying each prompt to the section
+5. **Save individual reviews** to `generated/reports/drs/reviews/<reviewer>/<section>.md`
+6. **Synthesize** using `lib/components/drs/prompts/synthesizer.md` and save to `generated/reports/drs/synthesis/<section>.md`
+
+Reviewable sections: 1-introduccion, 2-metodologia, 3-fundamentos-1, 4-fundamentos-2, 5-marco-resistencia, 6-discusion, 7-conclusiones
+
+Makefile commands: `make peer-review`, `make peer-review-prepare`, `make peer-review-section <section>`, `make peer-review-status`
 
 ### Testing and Quality Assurance
 

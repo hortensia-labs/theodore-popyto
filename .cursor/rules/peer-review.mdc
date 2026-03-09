@@ -1,0 +1,65 @@
+---
+description: Triple-Lens Peer Review (TLR) system for PhD thesis evaluation
+globs:
+alwaysApply: false
+---
+
+# Triple-Lens Peer Review (TLR) System
+
+When the user asks you to perform a peer review, thesis review, TLR review, or revision of thesis sections, follow this workflow.
+
+## System Overview
+
+The TLR system uses three reviewer perspectives to evaluate thesis sections:
+- **Advocate** (constructive): Identifies strengths and growth opportunities
+- **Analyst** (neutral): Systematic, criteria-based evaluation
+- **Adversary** (devil's advocate): Stress-tests arguments, finds blind spots
+
+## File Locations
+
+- Reviewer prompts: `lib/components/drs/prompts/` (advocate.md, analyst.md, adversary.md)
+- Evaluation dimensions: `lib/components/drs/prompts/dimensions.md`
+- Synthesis prompt: `lib/components/drs/prompts/synthesizer.md`
+- Global context: `lib/components/drs/prompts/global.md`
+- Orchestrator: `lib/components/drs/peer_review.py`
+- Output directory: `generated/reports/drs/`
+- Source content: `generated/markdown/` (merged section files)
+
+## Workflow
+
+### For a Single Section Review
+
+1. Read the reviewer prompt from `lib/components/drs/prompts/<reviewer>.md`
+2. Read the evaluation dimensions from `lib/components/drs/prompts/dimensions.md`
+3. Read the section content from `generated/markdown/<section>.md`
+4. Apply the reviewer's perspective and format to produce a review
+5. Save the review to `generated/reports/drs/reviews/<reviewer>/<section>.md`
+
+### For All Three Perspectives
+
+Run all three reviewers (advocate, analyst, adversary) on the same section, ideally in parallel. Then synthesize using the synthesizer prompt.
+
+### For Synthesis
+
+1. Read all three completed reviews from `generated/reports/drs/reviews/`
+2. Read the synthesizer prompt from `lib/components/drs/prompts/synthesizer.md`
+3. Produce a unified synthesis report
+4. Save to `generated/reports/drs/synthesis/<section>.md`
+
+## Reviewable Sections
+
+- 1-introduccion (Introduccion)
+- 2-metodologia (Metodologia)
+- 3-fundamentos-1 (Fundamentos Teoricos I)
+- 4-fundamentos-2 (Fundamentos Teoricos II)
+- 5-marco-resistencia (Marco de Resistencia)
+- 6-discusion (Discusion)
+- 7-conclusiones (Conclusiones)
+
+## Important Notes
+
+- All reviews must be written in Spanish
+- Use the exact output format specified in each reviewer prompt
+- Each reviewer scores 8 dimensions on a 1-10 scale
+- The synthesis must identify consensus, majority, and divergent findings
+- Save all outputs as markdown files in the correct directory structure

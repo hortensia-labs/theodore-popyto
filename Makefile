@@ -35,7 +35,7 @@ define load_env
 endef
 
 # Phony targets
-.PHONY: help clean compile validate-section merge-section compile-icml compile-word list-sections remove-numbers compile-data scan-citations scan-hyperlinks scan-ref update-links update-book crossref-process fix-url-hyperlinks compile-all-r compile-all-u compile-all-ru reformat-bibliography update-toc validate-citations clean-validation validate-citations-watch test-citations ira-revision validate-crossreferences merge-all merge-parallel clean-merged merge-all-r merge-parallel-r
+.PHONY: help clean compile validate-section merge-section compile-icml compile-word list-sections remove-numbers compile-data scan-citations scan-hyperlinks scan-ref update-links update-book crossref-process fix-url-hyperlinks compile-all-r compile-all-u compile-all-ru reformat-bibliography update-toc validate-citations clean-validation validate-citations-watch test-citations ira-revision validate-crossreferences merge-all merge-parallel clean-merged merge-all-r merge-parallel-r peer-review peer-review-prepare peer-review-section peer-review-status peer-review-list
 
 # Generic compile target: make compile [section-folder]
 compile:
@@ -491,6 +491,11 @@ help:
 	@echo "  $(GREEN)make validate-crossreferences$(RESET) - Validate internal cross-references against anchor registry"
 	@echo "  $(GREEN)make test-citations$(RESET)        - Run citation validation tests"
 	@echo "  $(GREEN)make ira-revision <file>$(RESET)    - Apply IRA (Iterative Refinement and Authenticity) revision workflow"
+	@echo "  $(GREEN)make peer-review$(RESET)            - Show Triple-Lens Peer Review system info and commands"
+	@echo "  $(GREEN)make peer-review-prepare$(RESET)    - Prepare peer review prompts for all sections"
+	@echo "  $(GREEN)make peer-review-section <s>$(RESET) - Prepare peer review prompts for a specific section"
+	@echo "  $(GREEN)make peer-review-status$(RESET)     - Check peer review progress"
+	@echo "  $(GREEN)make peer-review-list$(RESET)       - List sections available for peer review"
 	@echo "  $(GREEN)make remove-numbers$(RESET)        - Remove hardcoded heading numbers from generated files"
 	@echo "  $(GREEN)make merge-all$(RESET)             - Parallel merge all sections (optimized)"
 	@echo "  $(GREEN)make merge-parallel$(RESET)        - Parallel merge with verbose output and verification"
@@ -671,6 +676,78 @@ generate-validation-report:
 	@echo "$(CYAN)📊 Generating validation report...$(RESET)"
 	@python3 $(SCRIPTS_ROOT)/components/crv/generate_report.py
 	@echo "$(GREEN)✅ Report generated at generated/reports/crv/final/$(RESET)"
+
+# ═══════════════════════════════════════════════════════════════
+# Peer Review System (Triple-Lens Review)
+# ═══════════════════════════════════════════════════════════════
+
+DRS_SCRIPT = $(SCRIPTS_ROOT)/components/drs/peer_review.py
+
+# Prepare review prompts for all sections
+peer-review-prepare:
+	@echo "$(CYN)🔍 Preparing Triple-Lens Peer Review Prompts$(RESET)"
+	@echo "$(CYN)══════════════════════════════════════════════$(RESET)"
+	@python3 $(DRS_SCRIPT) prepare --section all
+	@echo ""
+	@echo "$(GRN)✅ Review prompts ready!$(RESET)"
+	@echo "$(BOLD)📂 Prompts saved to:$(RESET) $(WHT)generated/reports/drs/reviews/$(RESET)"
+	@echo ""
+	@echo "$(BOLD)$(YLW)Next steps:$(RESET)"
+	@echo "  1. Use Claude Code or Cursor to run reviews with the prepared prompts"
+	@echo "  2. Save review outputs to generated/reports/drs/reviews/<reviewer>/<section>.md"
+	@echo "  3. Run 'make peer-review-status' to check progress"
+
+# Prepare review prompts for a specific section
+peer-review-section:
+	@if [ "$(filter-out $@,$(MAKECMDGOALS))" = "" ]; then \
+		echo "$(RED)❌ Error: Please specify a section$(RESET)"; \
+		echo "$(BOLD)Usage:$(RESET) $(WHT)make peer-review-section <section>$(RESET)"; \
+		echo "$(BOLD)Example:$(RESET) $(GRN)make peer-review-section 1-introduccion$(RESET)"; \
+		echo ""; \
+		python3 $(DRS_SCRIPT) list; \
+		exit 1; \
+	fi
+	@echo "$(CYN)🔍 Preparing Peer Review for: $(filter-out $@,$(MAKECMDGOALS))$(RESET)"
+	@python3 $(DRS_SCRIPT) prepare --section $(filter-out $@,$(MAKECMDGOALS))
+	@echo ""
+	@echo "$(GRN)✅ Review prompts ready for $(filter-out $@,$(MAKECMDGOALS))!$(RESET)"
+
+# Show review session status
+peer-review-status:
+	@python3 $(DRS_SCRIPT) status
+
+# List available sections for review
+peer-review-list:
+	@python3 $(DRS_SCRIPT) list
+
+# Full peer review workflow info
+peer-review:
+	@echo "$(CYN)╔══════════════════════════════════════════════════════════════╗$(RESET)"
+	@echo "$(CYN)║$(RESET)          $(BOLD)$(WHT)🔍 Triple-Lens Peer Review (TLR)$(RESET)                $(CYN)║$(RESET)"
+	@echo "$(CYN)╚══════════════════════════════════════════════════════════════╝$(RESET)"
+	@echo ""
+	@echo "$(BOLD)$(BLU)Three Perspectives:$(RESET)"
+	@echo "  $(GRN)Advocate$(RESET)   - Constructive: identifies strengths and growth opportunities"
+	@echo "  $(YLW)Analyst$(RESET)    - Neutral: systematic, criteria-based evaluation"
+	@echo "  $(RED)Adversary$(RESET)  - Devil's advocate: stress-tests arguments"
+	@echo ""
+	@echo "$(BOLD)$(BLU)Commands:$(RESET)"
+	@echo "  $(WHT)make peer-review-prepare$(RESET)              - Prepare prompts for all sections"
+	@echo "  $(WHT)make peer-review-section <section>$(RESET)    - Prepare prompts for one section"
+	@echo "  $(WHT)make peer-review-status$(RESET)               - Check review progress"
+	@echo "  $(WHT)make peer-review-list$(RESET)                 - List available sections"
+	@echo ""
+	@echo "$(BOLD)$(BLU)Workflow:$(RESET)"
+	@echo "  $(BOLD)1.$(RESET) $(CYN)Prepare$(RESET)    make peer-review-prepare"
+	@echo "  $(BOLD)2.$(RESET) $(YLW)Review$(RESET)     Use Claude Code or Cursor agents with the prompts"
+	@echo "  $(BOLD)3.$(RESET) $(PRP)Synthesize$(RESET) Run synthesis after all 3 reviews per section"
+	@echo "  $(BOLD)4.$(RESET) $(GRN)Act$(RESET)        Follow the prioritized action plan"
+	@echo ""
+	@echo "$(BOLD)$(PRP)Agent Integration:$(RESET)"
+	@echo "  $(WHT)Claude Code$(RESET): Use the prompt files or ask Claude to run a peer review"
+	@echo "  $(WHT)Cursor$(RESET):     Reference .cursor/rules/peer-review.mdc for agent rules"
+	@echo ""
+	@python3 $(DRS_SCRIPT) list
 
 # Allow section names to be passed as targets
 %:
