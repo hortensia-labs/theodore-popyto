@@ -173,14 +173,14 @@ Esta separación explícita desarma la pregunta de defensa #13 antes de que se f
 
 ## 5. Criterios de completitud
 
-- [ ] Inventario de hedging completado para Caps. 1, 5, 7
-- [ ] Cada instancia clasificada (evasivo/acumulativo/legítimo/impersonal)
-- [ ] Cap. 7 contiene 3–4 afirmaciones fuertes sin hedging
-- [ ] Cap. 5 usa indicativo para definiciones del marco
-- [ ] Cap. 1 usa lenguaje que proyecta confianza en el planteamiento
-- [ ] Subsección de separación explícita (afirma/propone/pregunta) añadida a Cap. 7
-- [ ] Hedging legítimo conservado donde corresponde (no se eliminó toda atenuación)
-- [ ] El texto no suena arrogante (el hedging legítimo modera el tono)
+- [x] Inventario de hedging completado para Caps. 1, 5, 7
+- [x] Cada instancia clasificada (evasivo/acumulativo/legítimo/impersonal)
+- [x] Cap. 7 contiene 3–4 afirmaciones fuertes sin hedging
+- [x] Cap. 5 usa indicativo para definiciones del marco
+- [x] Cap. 1 usa lenguaje que proyecta confianza en el planteamiento
+- [x] Subsección de separación explícita (afirma/propone/pregunta) añadida a Cap. 7
+- [x] Hedging legítimo conservado donde corresponde (no se eliminó toda atenuación)
+- [x] El texto no suena arrogante (el hedging legítimo modera el tono)
 
 ---
 
