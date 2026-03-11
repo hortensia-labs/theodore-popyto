@@ -1,0 +1,97 @@
+{
+  "version": "1.0",
+  "books": {
+    "phdbook": {
+      "id": "phdbook",
+      "title": "PhD Book",
+      "prefix": "CH",
+      "source": {
+        "type": "sections",
+        "root": "sections",
+        "content_subdir": "content",
+        "paratextuales": ""
+      },
+      "output": {
+        "root": "generated/",
+        "markdown": "generated/markdown",
+        "icml": "generated/icml",
+        "data": "generated/data"
+      },
+      "chapters": {
+        "order": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "pattern": "*.md",
+        "sections": [
+          "0-covermatter",
+          "1-introduccion",
+          "2-metodologia",
+          "3-fundamentos-1",
+          "4-fundamentos-2",
+          "5-marco-resistencia",
+          "6-discusion",
+          "7-conclusiones",
+          "8-bibliografia",
+          "9-anexos"
+        ]
+      },
+      "paratextuales": [],
+      "styles": {
+        "bibliography": "Paragraph Bibliography",
+        "glossary": "Definition Term",
+        "glossary_definition": "Definition Description"
+      },
+      "indesign": {
+        "bookFile": "ポピトのPhD.indb",
+        "tocDocument": "0-TOC",
+        "tocStyle": "PopytoPhD-TOC",
+        "bibliographyFile": "8-bibliografia",
+        "tableMaxWidth": 360
+      },
+      "styleMappings": [
+        {
+          "file": "8-bibliografia",
+          "mappings": [
+            {
+              "source": "Header2",
+              "target": "Bibliography Subheader"
+            },
+            {
+              "source": "Header3",
+              "target": "Bibliography Subsubheader"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "indesign": {
+    "tempConfigPath": "/tmp/indesign-runner-config.json",
+    "bibliographyStyle": "Paragraph Bibliography",
+    "reportTimestampFormat": "YYYY-MM-DD-HHmmss"
+  },
+  "pandoc": {
+    "input_format": "markdown+footnotes+definition_lists+smart",
+    "output_format": "icml",
+    "flags": [
+      "--wrap=none",
+      "--reference-links"
+    ],
+    "id_prefix": "book-"
+  },
+  "processing": {
+    "remove_heading_numbers": true,
+    "normalize_unicode": true,
+    "parallel_workers": "auto",
+    "tab_placeholder": "␉"
+  }
+}

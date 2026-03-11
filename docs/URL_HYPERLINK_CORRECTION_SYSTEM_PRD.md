@@ -414,8 +414,8 @@ For each URL extracted, record:
 
 ```javascript
 var CONFIG = {
-    REGISTRY_PATH: "/Users/henry/Workbench/PopytoNoPhd/theodore-popyto/generated/data/url-registry.json",
-    REPORTS_DIR: "/Users/henry/Workbench/PopytoNoPhd/theodore-popyto/generated/reports/url-hyperlinks",
+    REGISTRY_PATH: "/Users/henry/Workbench/PopytoNoPhd/theodore-popyto-no-phd/generated/data/url-registry.json",
+    REPORTS_DIR: "/Users/henry/Workbench/PopytoNoPhd/theodore-popyto-no-phd/generated/reports/url-hyperlinks",
     VERSION: "1.0.0"
 };
 ```

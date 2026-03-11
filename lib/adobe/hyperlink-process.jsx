@@ -5,22 +5,121 @@
  * in the hyperlink's name property.
  *
  * Compatible with ECMAScript 3 (ExtendScript)
+ *
+ * Configuration:
+ * This script reads configuration from a temporary file written by runner.applescript.
+ * The config chain is:
+ *   /tmp/indesign-runner-config.json -> generated/{book}/data/indesign-config.json
+ *
+ * If no config is found, falls back to legacy hardcoded paths for compatibility.
  */
 
 // Include essential modules
 #include "modules/json2.js"
 #include "modules/indesign/book-manager.jsx"
 
-var reportsDir = "/Users/henry/Workbench/PopytoNoPhd/theodore-popyto/generated/reports/url-hyperlinks";
+// ============================================================================
+// DYNAMIC CONFIGURATION LOADING
+// ============================================================================
 
-var CONFIG = {
-    REGISTRY_PATH: "/Users/henry/Workbench/PopytoNoPhd/theodore-popyto/generated/data/url-registry.json",
-    VERSION: "1.1.0"
-    // Note: Placeholder detection removed in v1.1.0
-    // Pandoc may use placeholders OR the first URL for all destinations.
-    // The new approach trusts the hyperlink NAME as the source of truth,
-    // correcting any destination whose URL differs from its hyperlink name.
-};
+/**
+ * Loads book configuration from the runner config chain.
+ * Returns null if config cannot be loaded (legacy mode).
+ */
+function loadBookConfig() {
+    var RUNNER_CONFIG_PATH = "/tmp/indesign-runner-config.json";
+
+    try {
+        // Step 1: Read runner config
+        var runnerFile = new File(RUNNER_CONFIG_PATH);
+        if (!runnerFile.exists) {
+            $.writeln("[CONFIG] No runner config found at " + RUNNER_CONFIG_PATH + " (legacy mode)");
+            return null;
+        }
+
+        runnerFile.encoding = "UTF-8";
+        if (!runnerFile.open("r")) {
+            $.writeln("[CONFIG] Cannot open runner config file");
+            return null;
+        }
+
+        var runnerContent = runnerFile.read();
+        runnerFile.close();
+
+        var runnerConfig = JSON.parse(runnerContent);
+        if (!runnerConfig || !runnerConfig.configPath) {
+            $.writeln("[CONFIG] Invalid runner config structure");
+            return null;
+        }
+
+        $.writeln("[CONFIG] Book ID: " + runnerConfig.bookId);
+        $.writeln("[CONFIG] Config path: " + runnerConfig.configPath);
+
+        // Step 2: Read actual InDesign config
+        var configFile = new File(runnerConfig.configPath);
+        if (!configFile.exists) {
+            $.writeln("[CONFIG] InDesign config not found: " + runnerConfig.configPath);
+            return null;
+        }
+
+        configFile.encoding = "UTF-8";
+        if (!configFile.open("r")) {
+            $.writeln("[CONFIG] Cannot open InDesign config file");
+            return null;
+        }
+
+        var configContent = configFile.read();
+        configFile.close();
+
+        var bookConfig = JSON.parse(configContent);
+        if (!bookConfig || !bookConfig.paths) {
+            $.writeln("[CONFIG] Invalid InDesign config structure");
+            return null;
+        }
+
+        $.writeln("[CONFIG] Loaded config for: " + bookConfig.book.title);
+        return bookConfig;
+
+    } catch (error) {
+        $.writeln("[CONFIG] Error loading config: " + error.message);
+        return null;
+    }
+}
+
+// Load dynamic configuration
+var BOOK_CONFIG = loadBookConfig();
+
+// Initialize paths from config or use legacy fallbacks
+var reportsDir;
+var CONFIG = {};
+
+if (BOOK_CONFIG) {
+    // New mode: use dynamic configuration
+    reportsDir = BOOK_CONFIG.reports.hyperlinks;
+    CONFIG.REGISTRY_PATH = BOOK_CONFIG.registries.hyperlink;
+    CONFIG.VERSION = "1.2.0-multibook";
+    CONFIG.BOOK_ID = BOOK_CONFIG.book.id;
+    CONFIG.BOOK_PREFIX = BOOK_CONFIG.book.prefix;
+    $.writeln("[CONFIG] Using dynamic config - Registry: " + CONFIG.REGISTRY_PATH);
+    $.writeln("[CONFIG] Using dynamic config - Reports: " + reportsDir);
+} else {
+    // Legacy mode: use hardcoded paths for backward compatibility
+    reportsDir = "/Users/henry/Workbench/PopytoNoPhd/theodore-popyto-no-phd/generated/reports/url-hyperlinks";
+    CONFIG.REGISTRY_PATH = "/Users/henry/Workbench/PopytoNoPhd/theodore-popyto-no-phd/generated/data/url-registry.json";
+    CONFIG.VERSION = "1.1.0";
+    CONFIG.BOOK_ID = null;
+    CONFIG.BOOK_PREFIX = null;
+    $.writeln("[CONFIG] Using legacy hardcoded paths (no runner config found)");
+}
+
+// ============================================================================
+// END CONFIGURATION
+// ============================================================================
+
+// Note: Placeholder detection removed in v1.1.0
+// Pandoc may use placeholders OR the first URL for all destinations.
+// The new approach trusts the hyperlink NAME as the source of truth,
+// correcting any destination whose URL differs from its hyperlink name.
 
 var sessionState = {
     currentBook: null,
@@ -590,6 +689,28 @@ function removeOrphanedDestinations(doc) {
 }
 
 /**
+ * Gets timestamp for filename
+ */
+function getTimestamp() {
+    var now = new Date();
+    var year = now.getFullYear();
+    var month = String(now.getMonth() + 1);
+    var day = String(now.getDate());
+    var hours = String(now.getHours());
+    var minutes = String(now.getMinutes());
+    var seconds = String(now.getSeconds());
+
+    // Pad with zeros
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+    if (hours.length < 2) hours = "0" + hours;
+    if (minutes.length < 2) minutes = "0" + minutes;
+    if (seconds.length < 2) seconds = "0" + seconds;
+
+    return year + month + day + "_" + hours + minutes + seconds;
+}
+
+/**
  * Generate comprehensive JSON report
  * @param {boolean} isSuccess - Whether processing was successful
  * @param {number} duration - Processing duration in milliseconds
@@ -601,7 +722,9 @@ function generateJSONReport(isSuccess, duration) {
                 version: CONFIG.VERSION,
                 timestamp: new Date().toString(),
                 duration: duration,
-                processingTimeSeconds: (duration / 1000).toFixed(1)
+                processingTimeSeconds: (duration / 1000).toFixed(1),
+                bookId: CONFIG.BOOK_ID || "legacy",
+                bookPrefix: CONFIG.BOOK_PREFIX || null
             },
             results: {
                 status: isSuccess ? "SUCCESS" : "COMPLETED_WITH_ISSUES",
@@ -633,7 +756,10 @@ function generateJSONReport(isSuccess, duration) {
         };
 
         var jsonString = JSON.stringify(report, null, 2);
-        var filename = "fix-report.json";
+        // Include book prefix in filename if available
+        var timestamp = getTimestamp();
+        var filenamePrefix = CONFIG.BOOK_PREFIX ? CONFIG.BOOK_PREFIX + "-" : "";
+        var filename = filenamePrefix + "hyperlink-fix-report-" + timestamp + ".json";
         var filepath = reportsDir + "/" + filename;
 
         createDirectoryIfNeeded(reportsDir);

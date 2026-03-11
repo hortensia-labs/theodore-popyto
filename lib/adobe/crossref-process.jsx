@@ -2,6 +2,13 @@
  * Working Cross-Reference Processing Script
  * Full functionality with simplified, reliable logging
  * Compatible with ECMAScript 3 (ExtendScript)
+ *
+ * Configuration:
+ * This script reads configuration from a temporary file written by runner.applescript.
+ * The config chain is:
+ *   /tmp/indesign-runner-config.json -> generated/{book}/data/indesign-config.json
+ *
+ * If no config is found, falls back to legacy hardcoded paths for compatibility.
  */
 
 // Include essential modules only
@@ -11,12 +18,103 @@
 #include "modules/indesign/destination-manager.jsx"
 #include "modules/indesign/hyperlink-manager.jsx"
 
-var reportsDir = "/Users/henry/Workbench/PopytoNoPhd/theodore-popyto/generated/reports/crossref";
+// ============================================================================
+// DYNAMIC CONFIGURATION LOADING
+// ============================================================================
 
+/**
+ * Loads book configuration from the runner config chain.
+ * Returns null if config cannot be loaded (legacy mode).
+ */
+function loadBookConfig() {
+    var RUNNER_CONFIG_PATH = "/tmp/indesign-runner-config.json";
+
+    try {
+        // Step 1: Read runner config
+        var runnerFile = new File(RUNNER_CONFIG_PATH);
+        if (!runnerFile.exists) {
+            $.writeln("[CONFIG] No runner config found at " + RUNNER_CONFIG_PATH + " (legacy mode)");
+            return null;
+        }
+
+        runnerFile.encoding = "UTF-8";
+        if (!runnerFile.open("r")) {
+            $.writeln("[CONFIG] Cannot open runner config file");
+            return null;
+        }
+
+        var runnerContent = runnerFile.read();
+        runnerFile.close();
+
+        var runnerConfig = JSON.parse(runnerContent);
+        if (!runnerConfig || !runnerConfig.configPath) {
+            $.writeln("[CONFIG] Invalid runner config structure");
+            return null;
+        }
+
+        $.writeln("[CONFIG] Book ID: " + runnerConfig.bookId);
+        $.writeln("[CONFIG] Config path: " + runnerConfig.configPath);
+
+        // Step 2: Read actual InDesign config
+        var configFile = new File(runnerConfig.configPath);
+        if (!configFile.exists) {
+            $.writeln("[CONFIG] InDesign config not found: " + runnerConfig.configPath);
+            return null;
+        }
+
+        configFile.encoding = "UTF-8";
+        if (!configFile.open("r")) {
+            $.writeln("[CONFIG] Cannot open InDesign config file");
+            return null;
+        }
+
+        var configContent = configFile.read();
+        configFile.close();
+
+        var bookConfig = JSON.parse(configContent);
+        if (!bookConfig || !bookConfig.paths) {
+            $.writeln("[CONFIG] Invalid InDesign config structure");
+            return null;
+        }
+
+        $.writeln("[CONFIG] Loaded config for: " + bookConfig.book.title);
+        return bookConfig;
+
+    } catch (error) {
+        $.writeln("[CONFIG] Error loading config: " + error.message);
+        return null;
+    }
+}
+
+// Load dynamic configuration
+var BOOK_CONFIG = loadBookConfig();
+
+// Initialize paths from config or use legacy fallbacks
+var reportsDir;
 var CONFIG = {
-    REGISTRY_PATH: "/Users/henry/Workbench/PopytoNoPhd/theodore-popyto/generated/data/crossref-registry.json",
-    VERSION: "2.0.0-working"
+    VERSION: "2.1.0-multibook"
 };
+
+if (BOOK_CONFIG) {
+    // New mode: use dynamic configuration
+    reportsDir = BOOK_CONFIG.reports.crossref;
+    CONFIG.REGISTRY_PATH = BOOK_CONFIG.registries.crossref;
+    CONFIG.BOOK_ID = BOOK_CONFIG.book.id;
+    CONFIG.BOOK_PREFIX = BOOK_CONFIG.book.prefix;
+    $.writeln("[CONFIG] Using dynamic config - Registry: " + CONFIG.REGISTRY_PATH);
+    $.writeln("[CONFIG] Using dynamic config - Reports: " + reportsDir);
+} else {
+    // Legacy mode: use hardcoded paths for backward compatibility
+    reportsDir = "/Users/henry/Workbench/PopytoNoPhd/theodore-popyto-no-phd/generated/reports/crossref";
+    CONFIG.REGISTRY_PATH = "/Users/henry/Workbench/PopytoNoPhd/theodore-popyto-no-phd/generated/data/crossref-registry.json";
+    CONFIG.BOOK_ID = null;
+    CONFIG.BOOK_PREFIX = null;
+    $.writeln("[CONFIG] Using legacy hardcoded paths (no runner config found)");
+}
+
+// ============================================================================
+// END CONFIGURATION
+// ============================================================================
 
 var sessionState = {
     currentBook: null,
@@ -778,7 +876,9 @@ function generateJSONReport(isPublicationReady, verification, duration) {
                 version: CONFIG.VERSION,
                 timestamp: new Date().toString(),
                 duration: duration,
-                processingTimeSeconds: (duration / 1000).toFixed(1)
+                processingTimeSeconds: (duration / 1000).toFixed(1),
+                bookId: CONFIG.BOOK_ID || "legacy",
+                bookPrefix: CONFIG.BOOK_PREFIX || null
             },
             
             // Processing results (structured version of return message)
@@ -827,7 +927,9 @@ function generateJSONReport(isPublicationReady, verification, duration) {
         
         // Write to reports directory
         var timestamp = getTimestamp();
-        var filename = "crossref-report.json";
+        // Include book prefix in filename if available
+        var filenamePrefix = CONFIG.BOOK_PREFIX ? CONFIG.BOOK_PREFIX + "-" : "";
+        var filename = filenamePrefix + "crossref-report-" + timestamp + ".json";
         var filepath = reportsDir + "/" + filename;
         
         // Ensure directory exists
