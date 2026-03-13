@@ -4,7 +4,7 @@
     "phdbook": {
       "id": "phdbook",
       "title": "PhD Book",
-      "prefix": "CH",
+      "prefix": "",
       "source": {
         "type": "sections",
         "root": "sections",
@@ -55,7 +55,23 @@
         "tocDocument": "0-TOC",
         "tocStyle": "PopytoPhD-TOC",
         "bibliographyFile": "8-bibliografia",
-        "tableMaxWidth": 360
+        "tableMaxWidth": 450,
+        "imageSettings": {
+          "defaults": {
+            "maxWidth": 450,
+            "fitMode": "proportional"
+          },
+          "overrides": {
+            "fig-E-estructura-tesis": {
+              "width": 450,
+              "height": 660,
+              "offsetX": 250,
+              "offsetY": -200,
+              "imageWidth": 450,
+              "imageHeight": 550
+            }
+          }
+        }
       },
       "styleMappings": [
         {

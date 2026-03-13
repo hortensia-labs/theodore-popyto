@@ -72,6 +72,31 @@ class FileStyleMapping:
 
 
 @dataclass
+class ImageDefaults:
+    """Default image sizing for anchored images in ICML."""
+    max_width: float
+    fit_mode: str = "proportional"
+
+
+@dataclass
+class ImageOverride:
+    """Per-image sizing override, keyed by filename stem."""
+    width: Optional[float] = None
+    height: Optional[float] = None
+    offset_x: Optional[float] = None
+    offset_y: Optional[float] = None
+    image_width: Optional[float] = None
+    image_height: Optional[float] = None
+
+
+@dataclass
+class ImageSettings:
+    """Image sizing configuration for anchored images."""
+    defaults: ImageDefaults
+    overrides: Dict[str, ImageOverride] = field(default_factory=dict)
+
+
+@dataclass
 class InDesignBookConfig:
     """InDesign-specific configuration for a book."""
     book_file: str
@@ -95,6 +120,7 @@ class BookConfig:
     indesign: Optional[InDesignBookConfig] = None
     style_mappings: List[FileStyleMapping] = field(default_factory=list)
     table_max_width: Optional[float] = None
+    image_settings: Optional[ImageSettings] = None
 
 
 @dataclass
@@ -329,6 +355,27 @@ def _parse_book_config(book_id: str, data: Dict[str, Any], project_root: Path) -
             table_max_width=table_max_width
         )
 
+    # Parse image settings
+    image_settings = None
+    image_settings_data = indesign_data.get('imageSettings')
+    if image_settings_data:
+        defaults_data = image_settings_data.get('defaults', {})
+        image_defaults = ImageDefaults(
+            max_width=float(defaults_data['maxWidth']),
+            fit_mode=defaults_data.get('fitMode', 'proportional')
+        )
+        overrides: Dict[str, ImageOverride] = {}
+        for stem, ovr_data in image_settings_data.get('overrides', {}).items():
+            overrides[stem] = ImageOverride(
+                width=ovr_data.get('width'),
+                height=ovr_data.get('height'),
+                offset_x=ovr_data.get('offsetX'),
+                offset_y=ovr_data.get('offsetY'),
+                image_width=ovr_data.get('imageWidth'),
+                image_height=ovr_data.get('imageHeight'),
+            )
+        image_settings = ImageSettings(defaults=image_defaults, overrides=overrides)
+
     return BookConfig(
         id=data['id'],
         title=data['title'],
@@ -340,7 +387,8 @@ def _parse_book_config(book_id: str, data: Dict[str, Any], project_root: Path) -
         styles=styles,
         indesign=indesign_config,
         style_mappings=style_mappings,
-        table_max_width=table_max_width
+        table_max_width=table_max_width,
+        image_settings=image_settings,
     )
 
 
@@ -476,7 +524,8 @@ def resolve_paths(config: Config, project_root: Path) -> Config:
             styles=book.styles,
             indesign=book.indesign,
             style_mappings=book.style_mappings,
-            table_max_width=book.table_max_width
+            table_max_width=book.table_max_width,
+            image_settings=book.image_settings,
         )
 
     return Config(

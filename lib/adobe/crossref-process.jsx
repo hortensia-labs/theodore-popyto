@@ -664,10 +664,12 @@ function performHyperlinkConversions(registry) {
                                     stats.warnings++;
                                 }
                             } else {
+                                var unresolvedEntry = registry.anchors[hyperlinkItem.cleanAnchorId];
+                                var unresolvedFile = (unresolvedEntry && typeof unresolvedEntry === "object") ? unresolvedEntry.file : String(unresolvedEntry || "not_in_registry");
                                 log("WARN", "Could not resolve target destination", {
                                     document: documentName,
                                     anchor: hyperlinkItem.cleanAnchorId,
-                                    targetDoc: registry.anchors[hyperlinkItem.cleanAnchorId] || "not_in_registry"
+                                    targetFile: unresolvedFile
                                 });
                                 stats.warnings++;
                             }
@@ -732,26 +734,30 @@ function performHyperlinkConversions(registry) {
 function resolveTargetDestination(doc, hyperlinkItem, registry) {
     try {
         var cleanAnchorId = hyperlinkItem.cleanAnchorId;
-        var targetDocument = registry.anchors[cleanAnchorId];
+        var registryEntry = registry.anchors[cleanAnchorId];
         
-        if (!targetDocument) {
+        if (!registryEntry) {
             return null;
         }
         
-        var qualifiedName = targetDocument + ":" + cleanAnchorId;
         var currentDocName = doc.name.replace(/\.indd$/, "");
         
-        if (targetDocument === currentDocName) {
-            // Internal reference
-            var targetDestination = doc.paragraphDestinations.itemByName(qualifiedName);
-            if (targetDestination && targetDestination.isValid) {
-                return targetDestination;
-            }
-        } else {
-            // Cross-document reference
-            if (sessionState.globalDestinationRegistry.hasOwnProperty(qualifiedName)) {
-                var globalEntry = sessionState.globalDestinationRegistry[qualifiedName];
-                return globalEntry.destination;
+        // Try internal reference first using current document name
+        var internalQualifiedName = currentDocName + ":" + cleanAnchorId;
+        var targetDestination = doc.paragraphDestinations.itemByName(internalQualifiedName);
+        
+        if (targetDestination && targetDestination.isValid) {
+            return targetDestination;
+        }
+        
+        // Search globalDestinationRegistry by anchorId directly,
+        // avoiding reliance on registry file names matching InDesign doc names
+        for (var key in sessionState.globalDestinationRegistry) {
+            if (sessionState.globalDestinationRegistry.hasOwnProperty(key)) {
+                var entry = sessionState.globalDestinationRegistry[key];
+                if (entry.anchorId === cleanAnchorId && entry.destination && entry.destination.isValid) {
+                    return entry.destination;
+                }
             }
         }
         

@@ -29,7 +29,7 @@ The system compiles Markdown source files into ICML (InDesign’s native format)
 **Key characteristics:**
 
 - **Configuration-driven** — Books defined in `build.config.json`; the list of books is derived at runtime.
-- **Pipeline stages** — Merge → ICML conversion → Style mapping → Scan (registries) → Validate.
+- **Pipeline stages** — Merge → ICML conversion → Style mapping → Image resize → Scan (registries) → Validate.
 - **InDesign integration** — AppleScript + JSX scripts for link updates, hyperlink fixes, cross-reference processing, TOC generation.
 - **Platform** — macOS (AppleScript required for InDesign); compilation works on any OS.
 
@@ -179,6 +179,54 @@ Example:
 | `tocStyle` | string | `"TOC Style"` | InDesign paragraph style for the generated TOC. |
 | `bibliographyFile` | string | `"{prefix}_BIBLIOGRAFIA"` | ICML document name for the bibliography in the book. |
 | `tableMaxWidth` | number | — | Optional maximum table width in points. Used by JSX for table layout. |
+| `imageSettings` | object | — | Anchored image sizing configuration. Contains `defaults` and `overrides`. |
+
+#### Book `indesign.imageSettings` object
+
+Controls how Pandoc-generated anchored images are resized in ICML files. Images exported by Pandoc use their native SVG dimensions, which are typically far too large for InDesign text frames. This setting drives the `resize-images` step.
+
+**`defaults` (required when `imageSettings` is present):**
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `maxWidth` | number | — | Target frame width in points, matching the InDesign column/text-frame width. Height is derived from the native aspect ratio when `fitMode` is `"proportional"`. |
+| `fitMode` | string | `"proportional"` | `"proportional"` calculates height from native aspect ratio; `"explicit"` requires per-image `width`+`height` in overrides. |
+
+**`overrides` (optional, keyed by image filename stem):**
+
+Each key is the image filename without extension (e.g. `fig-E-estructura-tesis` for `fig-E-estructura-tesis.svg`). Images are matched by the stem extracted from the `LinkResourceURI` attribute in ICML.
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `width` | number | — | Frame width (PathPointArray). Both `width` and `height` required if present. |
+| `height` | number | — | Frame height (PathPointArray). |
+| `offsetX` | number | `width/2` | Rectangle ItemTransform tx. |
+| `offsetY` | number | `-height/2` | Rectangle ItemTransform ty. |
+| `imageWidth` | number | `width` | GraphicBounds Right (rendered image width). |
+| `imageHeight` | number | `height` | GraphicBounds Bottom (rendered image height). |
+
+Example:
+
+```json
+{
+  "imageSettings": {
+    "defaults": {
+      "maxWidth": 450,
+      "fitMode": "proportional"
+    },
+    "overrides": {
+      "fig-E-estructura-tesis": {
+        "width": 450,
+        "height": 660,
+        "offsetX": 250,
+        "offsetY": -200,
+        "imageWidth": 450,
+        "imageHeight": 550
+      }
+    }
+  }
+}
+```
 
 ---
 
@@ -280,7 +328,7 @@ All commands use **just**. Replace `libro1` with any book ID from `build.config.
 
 | Command | Description |
 |---------|-------------|
-| `just compile libro1` | Full compile (merge → ICML → restyle → scan → validate) |
+| `just compile libro1` | Full compile (merge → ICML → restyle → resize-images → scan → validate) |
 | `just compile-all` | Compile all books |
 | `just compile-if-needed libro1` | Compile only if sources changed |
 | `just compile-all-if-needed` | Compile stale books only |
@@ -292,6 +340,7 @@ All commands use **just**. Replace `libro1` with any book ID from `build.config.
 |---------|-------------|
 | `just merge libro1` | Merge Markdown only |
 | `just icml libro1` | Convert Markdown to ICML |
+| `just resize-images libro1` | Resize anchored images in ICML |
 | `just scan libro1` | Build crossref/hyperlink/citation registries |
 | `just validate libro1` | Validate cross-references |
 
@@ -349,8 +398,9 @@ All commands use **just**. Replace `libro1` with any book ID from `build.config.
 │  1. merge         → Copy/normalize Markdown from content + paratextuales │
 │  2. icml          → Pandoc: Markdown → ICML                              │
 │  3. restyle-icml  → Apply styleMappings (source → target)               │
-│  4. scan          → Build registries (crossref, hyperlink, citation)     │
-│  5. validate      → Check cross-reference integrity                     │
+│  4. resize-images → Resize anchored images to configured dimensions     │
+│  5. scan          → Build registries (crossref, hyperlink, citation)     │
+│  6. validate      → Check cross-reference integrity                     │
 └─────────────────────────────────────────────────────────────────────────┘
                                       │
                                       ▼
@@ -419,6 +469,8 @@ dev/
 | `merge-book.py` | Merge and normalize Markdown from content + paratextuales |
 | `compile-icml.py` | Convert Markdown to ICML via Pandoc |
 | `restyle-icml.py` | Apply `styleMappings` to ICML files |
+| `resize-icml-images.py` | Resize anchored images in ICML files |
+| `icml_images.py` | Image resizing logic (used by `resize-icml-images.py`) |
 | `scan-book.py` | Build crossref, hyperlink, citation registries |
 | `validate-book.py` | Validate cross-references against registries |
 | `format-bibliography-icml.py` | Apply bibliography style to bibliography ICML |
@@ -541,7 +593,11 @@ Quick reference. See [Configuration (§4)](#4-configuration) for full property d
         "tocDocument": "L1_TOC",
         "tocStyle": "TOC Style",
         "bibliographyFile": "L1_BIBLIOGRAFIA",
-        "tableMaxWidth": 360
+        "tableMaxWidth": 360,
+        "imageSettings": {
+          "defaults": { "maxWidth": 450, "fitMode": "proportional" },
+          "overrides": { }
+        }
       },
       "styles": { },
       "styleMappings": [ ]

@@ -51,6 +51,7 @@ help:
     ## Compilación Granular
     - `just merge <book>` — Solo merge markdown
     - `just icml <book>` — Solo conversión ICML
+    - `just resize-images <book>` — Ajusta dimensiones de imágenes ICML
     - `just scan <book>` — Solo escaneo de registros
 
     ## Capítulos Individuales
@@ -104,6 +105,7 @@ help:
     COMPILACIÓN GRANULAR:
       just merge <book>           Solo merge markdown
       just icml <book>            Solo conversión ICML
+      just resize-images <book>   Ajusta dimensiones de imágenes ICML
       just scan <book>            Solo escaneo de registros
 
     CAPÍTULOS INDIVIDUALES:
@@ -180,23 +182,27 @@ compile book: (_validate-book book)
     info "Compilando {{book}}..."
     echo ""
 
-    step "1/5" "Merge de archivos markdown..."
+    step "1/6" "Merge de archivos markdown..."
     just merge {{book}}
     echo ""
 
-    step "2/5" "Conversión a ICML..."
+    step "2/6" "Conversión a ICML..."
     just icml {{book}}
     echo ""
 
-    step "3/5" "Aplicando mappings de estilos..."
+    step "3/6" "Aplicando mappings de estilos..."
     just restyle-icml {{book}}
     echo ""
 
-    step "4/5" "Escaneo de registros..."
+    step "4/6" "Ajustando dimensiones de imágenes..."
+    just resize-images {{book}}
+    echo ""
+
+    step "5/6" "Escaneo de registros..."
     just scan {{book}}
     echo ""
 
-    step "5/5" "Validación de cross-references..."
+    step "6/6" "Validación de cross-references..."
     just validate {{book}}
     echo ""
 
@@ -613,6 +619,12 @@ reformat-bibliography book: (_validate-book book)
 restyle-icml book: (_validate-book book)
     @bash {{log}} info "Aplicando mappings de estilos de {{book}}..."
     @python3 {{lib_dir}}/restyle-icml.py {{book}} --config {{config_file}}
+
+# Ajusta dimensiones de imágenes ancladas en archivos ICML
+[group('indesign')]
+resize-images book: (_validate-book book)
+    @bash {{log}} info "Ajustando imágenes ICML de {{book}}..."
+    @python3 {{lib_dir}}/resize-icml-images.py {{book}} --config {{config_file}}
 
 # Pipeline InDesign completo (requiere InDesign abierto con libro)
 [group('indesign')]
