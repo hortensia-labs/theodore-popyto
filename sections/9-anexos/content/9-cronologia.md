@@ -134,7 +134,7 @@ Organismos como la UNESCO, con su Recomendación sobre la Ética de la IA (2021)
 ### Tabla Cronológica de Síntesis
 
 | Año | Hito | Tipo de tecnología | Relación humano-IA | Período |
-|-----|------|-------------------|---------------------|---------|
+|------|--------|-----------------|------------------|---------|
 | 1964 | Coreografías computacionales (Beaman) | Computación aleatoria | Herramienta | Pioneros |
 | 1967 | "Choreography and Computers" (Noll) | Animación computacional | Herramienta | Pioneros |
 | ~1970s | Digitalización de Labanotation | Notación digital | Herramienta | Pioneros |

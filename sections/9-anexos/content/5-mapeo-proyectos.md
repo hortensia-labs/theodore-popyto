@@ -335,7 +335,7 @@ Proyectos donde robots, androides, avatares o entidades virtuales actúan como p
 ### Tabla Resumen
 
 | Proyecto | Año | Categoría | Tipo IA | Relación humano-IA | Dimensiones más relevantes |
-|----------|-----|-----------|---------|---------------------|---------------------------|
+| -------- | ------ | --------- | ---------- | ------------------- | ------------------- |
 | LifeForms/DanceForms | 1989–2000s | 1. Generación | Software composición (pre-IA) | Asistencia | D2, D4 |
 | Motion Bank | 2010–2013 | 3. Análisis | Documentación digital (pre-IA) | Asistencia | D2, D4 |
 | Sayonara/Geminoid F | 2010 | 4. Ejecutante no humano | Androide preprogramado | Sustitución | D1, D3 |

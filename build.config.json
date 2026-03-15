@@ -75,6 +75,15 @@
       },
       "styleMappings": [
         {
+          "file": "0-covermatter",
+          "mappings": [
+            {
+              "source": "Header1",
+              "target": "Cover Heading"
+            }
+          ]
+        },
+        {
           "file": "8-bibliografia",
           "mappings": [
             {
